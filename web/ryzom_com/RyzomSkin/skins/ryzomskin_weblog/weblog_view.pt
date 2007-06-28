@@ -1,0 +1,128 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+  lang="en-US"
+  metal:use-macro="here/main_template/macros/master"
+  i18n:domain="quills">
+
+  <metal:block fill-slot="css_slot">
+    <style type="text/css" media="screen"
+      tal:content="string:@import url(${portal_url}/Quills.css);">
+    </style>
+  </metal:block>
+
+  <metal:block fill-slot="head_slot">
+        <link
+                rel="alternate"
+                type="application/rdf+xml"
+                title="RDF 1.0 feed"
+                i18n:attributes="title"
+                tal:attributes="href string:${here/absolute_url}/feed.rdf" />
+  </metal:block>
+
+  <body>
+    <div metal:fill-slot="main">
+
+      <h1 class="documentFirstHeading"
+        tal:content="here/title_or_id"></h1>
+
+      <div class="documentDescription"
+        tal:content="here/Description">
+        description
+      </div>
+
+      <form method="post" action="" style="float:left;"
+        tal:attributes="action here_url"
+        tal:condition="here/getAddNewsButton">
+        <input type="hidden" name="type_name" value="WeblogEntry"/>
+        <input class="submit_news_button" type="submit" value="Submit Your News"
+          name="folder_factories:method" i18n:domain="RyzomSkin" i18n:attributes="value" />
+      </form>
+
+  <form style="text-align:right;">
+   <strong i18n:domain="RyzomSkin" i18n:translate="" 
+   tal:content="here/getMenuDescription">Trier par rubrique</strong>
+    <select onChange="document.location=this.options[this.selectedIndex].value" tal:define="parent python:here.quills_tool.getParentWeblog(here)">
+      <option value="#" i18n:domain="RyzomSkin" i18n:translate="" 
+      	tal:content="here/getMenuFirstItem">All</option>
+      <tal:loop repeat="topic here/getAvailableTopics">
+      	<option value="lien" tal:attributes="value string:${parent/absolute_url}/${topic/id}" 
+                               tal:content="topic/title_or_id">topic</option>
+      </tal:loop>
+    </select>
+  </form>
+
+<div class="documentActions">
+    <ul>
+        <li tal:define="lang python:here.portal_languages.getLanguageBindings()[0]">
+            <a href="" tal:attributes=" href string:news/feed.rdf?setlanguage=${lang}">
+                <img i18n:attributes="title" src="" alt="" title=""
+                     tal:attributes="src    string:rss.gif;
+                                     title  string:RSS feed of this listing;
+                                     alt    string:RSS feed of this listing;" />
+            </a>
+        </li>
+        <li>
+            <a href="sendto_form">
+                <img src="mail_icon.gif" alt="Send this page to somebody" title="Envoyer cette page à quelqu'un" />
+            </a>
+        </li>
+        <li>
+            <a href="javascript:this.print();">
+                <img src="print_icon.gif" alt="Print this page" title="Imprimer cette page" />
+            </a>
+        </li>
+        <li>
+            <a href="javascript:toggleFullScreenMode();">
+                <img src="fullscreenexpand_icon.gif" alt="Toggle full screen mode" title="Toggle full screen mode">
+            </a>
+        </li>
+    </ul>
+    
+    <ul>
+        <li>
+            <a href="?set_language=de" title="Switch language to Deutsch">
+                <span><img alt="Deutsch" src="flag-de.gif"/></span>
+            </a>
+        </li>
+        <li>
+            <a href="?set_language=en" title="Switch language to English">
+                <span><img alt="English" src="flag-en.gif"/></span>
+            </a>
+        </li>
+        <li>
+            <a href="?set_language=fr" title="Switch language to Français">
+                <span><img alt="Français" src="flag-fr.gif"/></span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+      <div id="content-weblog"
+        tal:define="results here/getEntries;
+                    portal_discussion nocall:here/portal_discussion;">
+        <metal:block
+            tal:repeat="day python:container.quills_tool.getWeblogEntriesDates(results)"
+            tal:define="localized_time nocall:here/toLocalizedTime;
+	                home_url python: here.portal_membership.getHomeUrl">
+            <tal:loop repeat="entry python:results[day]">
+              <metal:macro use-macro="here/weblog_macros/macros/entry-full"/>
+            </tal:loop>
+        </metal:block>
+
+        <div tal:condition="not: results">
+          <p i18n:translate="no_weblog_entries">
+            No weblog entries have been posted.
+          </p>
+        </div>
+        <div>
+          <a href=""
+             i18n:domain="RyzomSkin"
+             i18n:translate="weblog_archive_link"
+             tal:attributes="href string:${here/absolute_url}/archive">
+             Archive Links
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>
