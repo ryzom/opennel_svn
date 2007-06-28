@@ -491,7 +491,7 @@ int main(int argc, char* argv[])
 	NL_ALLOC_CONTEXT (Main);
 
 #ifdef LOG_ALLOCATION
-	StartAllocationLog ("alloc.memlog");
+	StartAllocationLog ("alloc.memlog", 1024);
 #endif // LOG_ALLOCATION
 
 

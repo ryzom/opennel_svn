@@ -26,12 +26,17 @@
 
 #include <stdlib.h>
 #include <string>
+#include <windows.h>
+#undef min
+#undef max
 
 #include "nel/misc/types_nl.h"
 
 // look at event example
 #include "nel/misc/event_emitter.h"
 #include "nel/misc/event_listener.h"
+
+#include "nel/misc/path.h"
 
 // look at 3dinit example
 #include "3d/nelu.h"
@@ -40,6 +45,7 @@
 #include "3d/font_manager.h"
 #include "3d/computed_string.h"
 #include "3d/text_context.h"
+#include "3d/driver_user.h"
 
 using namespace std;
 using namespace NL3D;
@@ -47,26 +53,30 @@ using namespace NLMISC;
 
 int main (int argc, char **argv)
 {
+	nlinfo("start");
+
+	CPath::addSearchPath("d:/code/nel/src/3d/driver/direct3d");
+
 	// look at 3dinit example
-	CNELU::init (800, 600, CViewport(), 32, true); 
+	CNELU::init (800, 600, CViewport(), 32, true, 0, false, false); 
 
 	// create a font manager
 	CFontManager fontManager;
 
 	// set the font cache to 2 megabytes (default is 1mb)
 	fontManager.setMaxMemory(2000000);
-	
+
 	CTextContext tc;
 
 	tc.init (CNELU::Driver, &fontManager);
 
 	// The first param is the font name (could be ttf, pfb, fon, etc...). The
-	// second one is optionnal, it's the font kerning file
-	tc.setFontGenerator ("n019003l.pfb", "n019003l.afm");
+	// second one is optional, it's the font kerning file
+	tc.setFontGenerator ("Cyberbit.ttf");
 
 	// create the first computed string.
 	// A computed string is a string with a format and it generates the string
-	// into a texture. First param is the string or ucstring (unicode string).
+	// into a texture. First param is the string or ucstring (Unicode string).
 	// Second is a pointer to a font generator. 3rd is the color of the font.
 	// 4th is the size of the font. 5th is a pointer to the video driver.
 	// 6th is the resulting computed string.
@@ -81,8 +91,8 @@ int main (int argc, char **argv)
 	ucs += 28108;
 	ucs += 28188;
 	ucs += 28858;
-	// generate an unicode string. You can see it only if you have an unicode font.
-	// we haven't find a GPL unicode font yet :(
+	// generate an Unicode string. You can see it only if you have an Unicode font.
+	// we haven't find a GPL Unicode font yet :(
 	CComputedString cptedString4;
 	fontManager.computeString (ucs, tc.getFontGenerator(), CRGBA(32,64,127), 75, CNELU::Driver, cptedString4);
 
@@ -91,8 +101,6 @@ int main (int argc, char **argv)
 	for (uint i = 0; i < 10; i++)
 		fontManager.computeString ("Nevrax", &fontGenerator, CRGBA(255,255,255), i*10, CNELU::Driver, cptedString[i]);
 */
-
-
 
 	// look at event example
 	CNELU::EventServer.addEmitter(CNELU::Driver->getEventEmitter());
@@ -115,7 +123,7 @@ int main (int argc, char **argv)
 		m.rotateZ(z);
 		// display a string in 3d
 		// first param is a pointer to the driver. second one is
-		// the matrix transormation for the string
+		// the matrix transformation for the string
 		cptedString3d.render3D (*CNELU::Driver, m);
 
 		// the first param is a pointer to a driver. second one is the x position
@@ -156,7 +164,7 @@ int main (int argc, char **argv)
 		angle+=0.01f;
 		cptedString1.render2D (*CNELU::Driver, 0.2f, 0.7f, CComputedString::MiddleMiddle, 1, 1, angle);
 
-		// display the unicode string
+		// display the Unicode string
 		tc.setColor (CRGBA (32, 64, 127));
 		tc.setFontSize (70);
 		tc.setHotSpot (CComputedString::MiddleRight);
@@ -182,7 +190,15 @@ int main (int argc, char **argv)
 		CNELU::screenshot();
 		
 		// look at event example
-		CNELU::EventServer.pump();
+		CNELU::EventServer.pump(true);
+
+/*		MSG	msg;
+		while ( PeekMessage(&msg,NULL,0,0,PM_REMOVE) )
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+*/
 	}
 	while(!CNELU::AsyncListener.isKeyPushed(KeyESCAPE));
 

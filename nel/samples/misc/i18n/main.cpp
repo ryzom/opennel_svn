@@ -34,15 +34,16 @@ using namespace NLMISC;
 
 int main (int argc, char **argv)
 {
-	// set the path were the .uxt are
-	CI18N::setPath("./");
-	
+
+// sample deprecated, the class CI18N is not working
+#if 0
+
 	// get all language names (you must call this before calling load())
 	const std::vector<ucstring> languages = CI18N::getLanguageNames ();
 
 	if (languages.empty())
 	{
-		printf ("No language evailable, can't do anything, press <return> to exit\n");
+		printf ("No language available, can't do anything, press <return> to exit\n");
 		getchar();
 		return EXIT_FAILURE;
 	}
@@ -54,23 +55,23 @@ int main (int argc, char **argv)
 	}
 	nlinfo ("Please, type a number between 0 and %d and then press <return>", languages.size()-1);
 
-	// Get the selected language (i know there s a potentiel buffer overflow)
+	// Get the selected language (i know there s a potential buffer overflow)
 	char  buf[1024];
 	gets (buf);
 
 	uint languageNumber = atoi (buf);
 
 	// load the language
-	CI18N::load (languageNumber);
+	CI18N::load (CI18N::getLanguageCodes()[languageNumber]);
 
-	// display "Salut" that is the "hi" string in the selected language (french).
 	nlinfo (CI18N::get("hi").toString().c_str ());
 
-	// display "rms est un master", the french version of the string
-	nlinfo (CI18N::get("%s is proud to present you NeL Internationalisation system").toString().c_str (), "Ace");
+	nlinfo (CI18N::get("%s is proud to present you NeL Internationalization system").toString().c_str (), "Ace");
 
 	nlinfo (CI18N::get("press <return> to exit").toString().c_str ());
 	getchar ();
+
+#endif
 
 	return EXIT_SUCCESS;
 }
