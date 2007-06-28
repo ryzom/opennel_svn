@@ -26,7 +26,7 @@
 
 #include "../zone_lib/zone_utility.h"
 
-#include <iostream.h>
+#include <iostream>
 #include "nel/misc/types_nl.h"
 #include "nel/misc/file.h"
 #include "nel/3d/quad_tree.h"
