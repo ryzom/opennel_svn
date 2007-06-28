@@ -37,7 +37,7 @@ namespace NLMISC
 NL_LIB_HANDLE nlLoadLibrary(const std::string &libName)
 {
 #if defined NL_OS_WINDOWS
-	return LoadLibraryA(libName.c_str());
+	return LoadLibrary(libName.c_str());
 #elif defined (NL_OS_UNIX)
 	return dlopen(libName.c_str(), RTLD_NOW);
 #else
@@ -88,7 +88,7 @@ void *nlGetSymbolAddress(NL_LIB_HANDLE libHandle, const std::string &procName)
    const string	NL_LIB_SUFFIX("_d");
  #elif defined (NL_RELEASE_DEBUG)
    const string	NL_LIB_SUFFIX("_rd");
-#elif defined (NL_RELEASE)
+ #elif defined (NL_RELEASE)
    const string	NL_LIB_SUFFIX("_r");
  #else
    #error "Unknown compilation mode, can't build suffix"

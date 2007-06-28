@@ -934,11 +934,11 @@ bool CHTimer::CStatSorter::operator()(const CHTimer::CStats *lhs, const CHTimer:
 {
 	switch(Criterion)
 	{
-		case CHTimer::TotalTime:				return lhs->TotalTime > rhs->TotalTime;
-		case CHTimer::TotalTimeWithoutSons:		return lhs->TotalTimeWithoutSons > rhs->TotalTimeWithoutSons;
-		case CHTimer::MeanTime:					return lhs->MeanTime > rhs->MeanTime;
-		case CHTimer::NumVisits:				return lhs->NumVisits > rhs->NumVisits;
-		case CHTimer::MaxTime:					return lhs->MaxTime > rhs->MaxTime;
+		case CHTimer::TotalTime:				return lhs->TotalTime >= rhs->TotalTime;
+		case CHTimer::TotalTimeWithoutSons:		return lhs->TotalTimeWithoutSons >= rhs->TotalTimeWithoutSons;
+		case CHTimer::MeanTime:					return lhs->MeanTime >= rhs->MeanTime;
+		case CHTimer::NumVisits:				return lhs->NumVisits >= rhs->NumVisits;
+		case CHTimer::MaxTime:					return lhs->MaxTime >= rhs->MaxTime;
 		case CHTimer::MinTime:					return lhs->MinTime < rhs->MinTime;	
 		case CHTimer::MaxSession:				return lhs->SessionMaxTime > rhs->SessionMaxTime;
 		default:

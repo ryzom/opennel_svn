@@ -182,7 +182,7 @@ public:
 	  * create the window. call activate(). Return true if mode activated, false if it failed.
 	  * \param show show or hide the window in window mode.
 	  */
-	virtual	bool			setDisplay(const CMode &mode, bool show = true, bool resizeable = true) =0;
+	virtual	bool			setDisplay(const CMode &mode, bool show = true) =0;
 	virtual bool			setMode(const CMode& mode)=0;
 	virtual bool			getModes(std::vector<CMode> &modes)=0;
 	virtual bool			getCurrentScreenMode(CMode &mode)=0;

@@ -217,7 +217,6 @@ uint32 CTextContextUser::textPush(const char *format, ...)
 {
 	NL_ALLOC_CONTEXT( 3dTCPh0 )
 	NL3D_HAUTO_RENDER_2D_TEXTCONTEXT;
-	H_AUTO(textrender1);
 
 	char *str;
 	NLMISC_CONVERT_VARGS (str, format, NLMISC::MaxCStringSize);
@@ -228,7 +227,6 @@ uint32 CTextContextUser::textPush(const ucstring &str)
 {
 	NL_ALLOC_CONTEXT( 3dTCPh1 )
 	NL3D_HAUTO_RENDER_2D_TEXTCONTEXT;
-	H_AUTO(textrender2);
 
 	return _TextContext.textPush(str) ;
 }
@@ -264,7 +262,6 @@ void CTextContextUser::erase(uint32 i)
 {
 	NL_ALLOC_CONTEXT( 3dTCErs )
 	NL3D_HAUTO_RENDER_2D_TEXTCONTEXT;
-	H_AUTO(textrender3);
 
 	_TextContext.erase(i);
 }
@@ -272,7 +269,6 @@ UTextContext::CStringInfo		CTextContextUser::getStringInfo(uint32 i)
 {
 	NL_ALLOC_CONTEXT( 3dTCIfo )
 	NL3D_HAUTO_RENDER_2D_TEXTCONTEXT;
-	H_AUTO(textrender4);
 
 	CComputedString		*cstr= _TextContext.getComputedString(i);
 	if(!cstr)
@@ -284,7 +280,6 @@ UTextContext::CStringInfo		CTextContextUser::getStringInfo(const ucstring &str)
 {
 	NL_ALLOC_CONTEXT( 3dTCIfo )
 	NL3D_HAUTO_RENDER_2D_TEXTCONTEXT;
-	H_AUTO(textrender5);
 
 	_TextContext.computeStringInfo(str, _CacheString);
 	return CStringInfo (_CacheString.StringWidth, _CacheString.StringHeight, _CacheString.StringLine);
@@ -293,7 +288,6 @@ void CTextContextUser::clear()
 {
 	NL_ALLOC_CONTEXT( 3dTCClr )
 	NL3D_HAUTO_RENDER_2D_TEXTCONTEXT;
-	H_AUTO(textrender6);
 
 	_TextContext.clear();
 }
@@ -301,7 +295,6 @@ void CTextContextUser::printAt(float x, float y, uint32 i)
 {
 	NL_ALLOC_CONTEXT( 3dTCPt0 )
 	NL3D_HAUTO_RENDER_2D_TEXTCONTEXT;
-	H_AUTO(textrender7);
 
 	_TextContext.printAt(x, y, i);
 	_DriverUser->restoreMatrixContext();
@@ -310,7 +303,6 @@ void CTextContextUser::printClipAt(URenderStringBuffer &renderBuffer, float x, f
 {
 	NL_ALLOC_CONTEXT( 3dTCPt1 )
 	NL3D_HAUTO_RENDER_2D_TEXTCONTEXT;
-	H_AUTO(textrender8);
 
 	_TextContext.printClipAt(static_cast<CRenderStringBuffer&>(renderBuffer), x, y, i, xmin, ymin, xmax, ymax);
 	// Don't need to restore Matrix context here since no driver change
@@ -319,8 +311,7 @@ void CTextContextUser::printClipAtUnProjected(URenderStringBuffer &renderBuffer,
 {
 	NL_ALLOC_CONTEXT( 3dTCPt1 )
 		NL3D_HAUTO_RENDER_2D_TEXTCONTEXT;
-	H_AUTO(textrender9);
-
+	
 	_TextContext.printClipAtUnProjected(static_cast<CRenderStringBuffer&>(renderBuffer), frustum, scaleMatrix, x, y, depth, i, xmin, ymin, xmax, ymax);
 	// Don't need to restore Matrix context here since no driver change
 }
@@ -335,7 +326,6 @@ void CTextContextUser::printAt(float x, float y, const ucstring &ucstr)
 {
 	NL_ALLOC_CONTEXT( 3dTCPt3 )
 	NL3D_HAUTO_RENDER_2D_TEXTCONTEXT;
-	H_AUTO(textrender10);
 
 	_TextContext.printAt(x, y, ucstr);
 	_DriverUser->restoreMatrixContext();
@@ -344,7 +334,6 @@ void CTextContextUser::printfAt(float x, float y, const char * format, ...)
 {
 	NL_ALLOC_CONTEXT( 3dTCPt4 )
 	NL3D_HAUTO_RENDER_2D_TEXTCONTEXT;
-	H_AUTO(textrender11);
 
 	char *str;
 	NLMISC_CONVERT_VARGS (str, format, NLMISC::MaxCStringSize);
@@ -383,7 +372,6 @@ float CTextContextUser::getLastXBound() const
 {
 	NL3D_MEM_TEXT_CONTEXT
 	NL3D_HAUTO_RENDER_2D_TEXTCONTEXT;
-	H_AUTO(textrender12);
 
 	return 0.0f;
 }

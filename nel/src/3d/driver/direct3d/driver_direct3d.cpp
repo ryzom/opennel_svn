@@ -27,8 +27,6 @@
 
 #include "stddirect3d.h"
 
-#include <tchar.h>
-
 #include "../../vertex_buffer.h"
 #include "../../light.h"
 #include "../../index_buffer.h"
@@ -45,11 +43,14 @@ using namespace std;
 using namespace NLMISC;
 
 
+
 #define RASTERIZER D3DDEVTYPE_HAL
 //#define RASTERIZER D3DDEVTYPE_REF
 
 #define D3D_WINDOWED_STYLE (WS_OVERLAPPED|WS_CAPTION|WS_SYSMENU|WS_THICKFRAME|WS_MINIMIZEBOX|WS_MAXIMIZEBOX)
 #define D3D_FULLSCREEN_STYLE (WS_POPUP)
+
+HINSTANCE HInstDLL = NULL;
 
 // ***************************************************************************
 
@@ -71,18 +72,12 @@ using namespace NLMISC;
 
 // ***************************************************************************
 
-#ifndef NL_STATIC
-
-HINSTANCE HInstDLL = NULL;
-
 BOOL WINAPI DllMain(HINSTANCE hinstDLL,ULONG fdwReason,LPVOID lpvReserved)
 {
 	HInstDLL = hinstDLL;
-
 	return true;
 }
 
-#endif
 
 // ***************************************************************************
 
@@ -98,24 +93,12 @@ const uint32		CDriverD3D::ReleaseVersion = 0xc; // nico
 
 // ***************************************************************************
 
-#ifdef NL_STATIC
-
-#	pragma comment(lib, "d3dx9")
-#	pragma comment(lib, "d3d9")
-#	pragma comment(lib, "dinput")
-#	pragma comment(lib, "dxguid")
-
-IDriver* createIDriverInstance ()
-{
-	return new CDriverD3D;
-}
-
-#endif
-
 __declspec(dllexport) IDriver* NL3D_createIDriverInstance ()
 {
 	return new CDriverD3D;
 }
+
+// ***************************************************************************
 
 __declspec(dllexport) uint32 NL3D_interfaceVersion ()
 {
@@ -213,17 +196,7 @@ CDriverD3D::CDriverD3D()
 	// Create a Direct 3d object
     if ( NULL == (_D3D = Direct3DCreate9(D3D_SDK_VERSION)))
 	{
-		nlwarning ("Can't create the direct 3d 9 object.");
-
-#ifdef NL_OS_WINDOWS
-		sint val = MessageBoxA(NULL, "Your DirectX version is too old. You need to install the latest one.\r\n\r\nPressing OK will quit the game and automatically open your browser to download the latest version of DirectX.\r\nPress Cancel will just quit the game.\r\n", "Mtp Target Error", MB_OKCANCEL);
-		if(val == IDOK)
-		{
-			openURL("http://www.microsoft.com/downloads/details.aspx?FamilyID=4b1f5d0c-5e44-4864-93cd-464ef59da050");
-		}
-#endif
-		exit(EXIT_FAILURE);
-
+		nlwarning ("CDriverD3D::setDisplay: Can't create the direct 3d 9 object.");
 	}
 	_DepthRangeNear = 0.f;
 	_DepthRangeNear = 1.f;
@@ -1044,13 +1017,7 @@ void CDriverD3D::updateRenderVariablesInternal()
 static void D3DWndProc(CDriverD3D *driver, HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	H_AUTO_D3D(D3DWndProc);
-
-	// ace: if we receive close, exit to not assert after
-	if(message == WM_CLOSE)
-		exit(0);
-
 	// Check this message in parents
-
 	if ((message == WM_SIZE) || (message == WM_EXITSIZEMOVE) || (message == WM_MOVE))
 	{
 		if (driver != NULL)
@@ -1162,7 +1129,6 @@ bool CDriverD3D::handlePossibleSizeChange()
 		GfxMode mode = _CurrentMode;
 		mode.Width = newWidth;
 		mode.Height = newHeight;
-
 		if ( ( (mode.Width != _CurrentMode.Width) || (mode.Height != _CurrentMode.Height) ) &&
 			( mode.Width != 0 ) &&
 			( mode.Height != 0 ) )		
@@ -1179,19 +1145,12 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 {
 	H_AUTO_D3D(WndProc);
 	// Get the driver pointer..
-	CDriverD3D *pDriver=(CDriverD3D*)GetWindowLongW (hWnd, GWL_USERDATA);
+	CDriverD3D *pDriver=(CDriverD3D*)GetWindowLong (hWnd, GWL_USERDATA);
 	if (pDriver != NULL)
 	{
 		D3DWndProc (pDriver, hWnd, message, wParam, lParam);
 	}
-
-#ifdef NL_DISABLE_MENU
-	// disable menu (F10, ALT and ALT+SPACE key doesn't freeze or open the menu)
-	if(message == WM_SYSCOMMAND && wParam == SC_KEYMENU)
-		return 0;
-#endif // NL_DISABLE_MENU
-
-	return DefWindowProcW(hWnd, message, wParam, lParam);
+	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
 // ***************************************************************************
@@ -1200,23 +1159,23 @@ bool CDriverD3D::init (uint windowIcon)
 {
 	H_AUTO_D3D(CDriver3D_init );
 	// Register a window class
-	WNDCLASSW		wc;
+	WNDCLASS		wc;
 
 	memset(&wc,0,sizeof(wc));
 	wc.style			= 0; // CS_HREDRAW | CS_VREDRAW ;//| CS_DBLCLKS;
 	wc.lpfnWndProc		= (WNDPROC)WndProc;
 	wc.cbClsExtra		= 0;
 	wc.cbWndExtra		= 0;
-	wc.hInstance		= GetModuleHandleW(NULL);
+	wc.hInstance		= GetModuleHandle(NULL);
 	wc.hIcon			= (HICON)windowIcon;
-	wc.hCursor			= LoadCursorW(NULL,(LPCWSTR)IDC_ARROW);
+	wc.hCursor			= LoadCursor(NULL,IDC_ARROW);
 	wc.hbrBackground	= WHITE_BRUSH;
 	_WindowClass = "NLD3D" + toString(windowIcon);
-	ucstring us = _WindowClass;
-	wc.lpszClassName	= (LPCWSTR)us.c_str();
+	wc.lpszClassName	= _WindowClass.c_str();
 	wc.lpszMenuName		= NULL;
-	if ( !RegisterClassW(&wc) )
+	if ( !RegisterClass(&wc) )
 		nlwarning ("CDriverD3D::init: Can't register windows class %s", wc.lpszClassName);
+		
 
 	return true;
 }
@@ -1272,8 +1231,8 @@ const D3DFORMAT FinalPixelFormat[ITexture::UploadFormatCount][CDriverD3D::FinalP
 
 // ***************************************************************************
 
-bool CDriverD3D::setDisplay(void* wnd, const GfxMode& mode, bool show, bool resizeable) throw(EBadDisplay)
-{
+bool CDriverD3D::setDisplay(void* wnd, const GfxMode& mode, bool show) throw(EBadDisplay)
+{	
 	H_AUTO_D3D(CDriver3D_setDisplay);
 	if (!_D3D)
 		return false;
@@ -1281,7 +1240,7 @@ bool CDriverD3D::setDisplay(void* wnd, const GfxMode& mode, bool show, bool resi
 	// Release the driver if already setuped
 	release ();
 
-	// Should be initialized
+	// Sould be initialized
 	nlassert (!_WindowClass.empty());
 
 	// Should be released
@@ -1289,7 +1248,7 @@ bool CDriverD3D::setDisplay(void* wnd, const GfxMode& mode, bool show, bool resi
 	nlassert (_HWnd == NULL);
 
 	// memorize desktop gamma ramp
-	HDC dc = CreateDCW (L"DISPLAY", NULL, NULL, NULL);
+	HDC dc = CreateDC ("DISPLAY", NULL, NULL, NULL);
 	if (dc)
 	{		
 		_DesktopGammaRampValid = GetDeviceGammaRamp (dc, _DesktopGammaRamp) != FALSE;		
@@ -1327,22 +1286,7 @@ bool CDriverD3D::setDisplay(void* wnd, const GfxMode& mode, bool show, bool resi
 		_DestroyWindow = true;
 
 		// Window flags
-		//ULONG WndFlags=(mode.Windowed?D3D_WINDOWED_STYLE:D3D_FULLSCREEN_STYLE)&~WS_VISIBLE;
-		ULONG WndFlags;
-		if(mode.Windowed)
-		{
-			WndFlags = D3D_WINDOWED_STYLE;
-			if(!resizeable)
-			{
-				WndFlags &= ~(WS_THICKFRAME|WS_MAXIMIZEBOX);
-			}
-		}
-		else
-		{
-			WndFlags = D3D_FULLSCREEN_STYLE;
-		}
-
-		WndFlags &= ~WS_VISIBLE;
+		ULONG WndFlags=(mode.Windowed?D3D_WINDOWED_STYLE:D3D_FULLSCREEN_STYLE)&~WS_VISIBLE;
 
 		// Window rect
 		RECT	WndRect;
@@ -1353,18 +1297,17 @@ bool CDriverD3D::setDisplay(void* wnd, const GfxMode& mode, bool show, bool resi
 		AdjustWindowRect(&WndRect,WndFlags,FALSE);
 
 		// Create
-		ucstring ustr(_WindowClass);
-		_HWnd = CreateWindowW((LPCWSTR)ustr.c_str(), L"", WndFlags, CW_USEDEFAULT,CW_USEDEFAULT, WndRect.right-WndRect.left,WndRect.bottom-WndRect.top, NULL, NULL, 
-			GetModuleHandleW(NULL), NULL);
+		_HWnd = CreateWindow(_WindowClass.c_str(), "", WndFlags, CW_USEDEFAULT,CW_USEDEFAULT, WndRect.right-WndRect.left,WndRect.bottom-WndRect.top, NULL, NULL, 
+			GetModuleHandle(NULL), NULL);
 		if (!_HWnd) 
 		{
-			nlwarning ("CreateWindowW failed");
+			nlwarning ("CDriverD3D::setDisplay: CreateWindow failed");
 			release();
 			return false;
 		}
 
 		// Set the window long integer
-		SetWindowLongW (_HWnd, GWL_USERDATA, (LONG)this);
+		SetWindowLong (_HWnd, GWL_USERDATA, (LONG)this);
 
 		// Show the window
 		if (show || !_CurrentMode.Windowed)
@@ -1378,15 +1321,15 @@ bool CDriverD3D::setDisplay(void* wnd, const GfxMode& mode, bool show, bool resi
     D3DDISPLAYMODE adapterMode;
 	if (_D3D->GetAdapterDisplayMode (adapter, &adapterMode) != D3D_OK)
 	{
-		nlwarning ("GetAdapterDisplayMode failed");
+		nlwarning ("CDriverD3D::setDisplay: GetAdapterDisplayMode failed");
 		release();
 		return false;
 	}
 	
 	// The following code is taken from the NVPerfHud user guide
-	// Set default settings
+	// Set default settings	
 	_Rasterizer = RASTERIZER;
-#ifdef NL_D3D_USE_NV_PERF_HUD
+	#ifdef NL_D3D_USE_NV_PERF_HUD
 		// Look for 'NVIDIA NVPerfHUD' adapter
 		// If it is present, override default settings
 		for (UINT adapterIndex = 0; adapterIndex < _D3D->GetAdapterCount(); adapterIndex++)
@@ -1400,8 +1343,8 @@ bool CDriverD3D::setDisplay(void* wnd, const GfxMode& mode, bool show, bool resi
 				_Rasterizer = D3DDEVTYPE_REF;
 				break;
 			}
-		}
-#endif
+		}	
+	#endif
 
 	// Create device options
 	D3DPRESENT_PARAMETERS parameters;
@@ -1412,31 +1355,14 @@ bool CDriverD3D::setDisplay(void* wnd, const GfxMode& mode, bool show, bool resi
 		return false;
 	}
 
-	// Create the D3D device
+	// Create the D3D device	
 	HRESULT result = _D3D->CreateDevice (adapter, _Rasterizer, (HWND)_HWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING|D3DCREATE_PUREDEVICE, &parameters, &_DeviceInterface);
 	if (result != D3D_OK)
 	{
-		nlwarning ("Can't create device hr:0x%x adap:0x%x rast:0x%x ", result, adapter, _Rasterizer);
-
-		// Create the D3D device without puredevice
-		HRESULT result = _D3D->CreateDevice (adapter, _Rasterizer, (HWND)_HWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, &parameters, &_DeviceInterface);
-		if (result != D3D_OK)
-		{
-			nlwarning ("Can't create device without puredevice hr:0x%x adap:0x%x rast:0x%x ", result, adapter, _Rasterizer);
-
-			// Create the D3D device without puredevice and hardware
-			HRESULT result = _D3D->CreateDevice (adapter, _Rasterizer, (HWND)_HWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &parameters, &_DeviceInterface);
-			if (result != D3D_OK)
-			{
-				nlwarning ("Can't create device without puredevice and hardware hr:0x%x adap:0x%x rast:0x%x ", result, adapter, _Rasterizer);
-				release();
-				return false;
-			}
-		}
-	}
-
-//	_D3D->CreateDevice (adapter, _Rasterizer, (HWND)_HWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &parameters, &_DeviceInterface);
-
+		nlwarning ("CDriverD3D::setDisplay: Can't create device.");
+		release();
+		return false;
+	}	
 	// Check some caps	
 	D3DCAPS9 caps;
 	if (_DeviceInterface->GetDeviceCaps(&caps) == D3D_OK)
@@ -1490,8 +1416,6 @@ bool CDriverD3D::setDisplay(void* wnd, const GfxMode& mode, bool show, bool resi
 	_PixelShader = !_DisableHardwarePixelShader && (caps.PixelShaderVersion&0xffff) >= 0x0101;
 	_MaxVerticesByVertexBufferHard = caps.MaxVertexIndex;
 	_MaxLight = caps.MaxActiveLights;
-
-	if(_MaxLight > 0xFF) _MaxLight = 3;
 
 	if (_PixelShader)
 	{
@@ -1651,7 +1575,7 @@ bool CDriverD3D::release()
 		_QuadIB = NULL;
 	}
 
-	// delete queries
+	// delete querries
 	while (!_OcclusionQueryList.empty())
 	{
 		deleteOcclusionQuery(_OcclusionQueryList.front());
@@ -1695,7 +1619,7 @@ bool CDriverD3D::release()
 	// restore desktop gamma ramp
 	if (_DesktopGammaRampValid)
 	{
-		HDC dc = CreateDCW (L"DISPLAY", NULL, NULL, NULL);
+		HDC dc = CreateDC ("DISPLAY", NULL, NULL, NULL);
 		if (dc)
 		{		
 			SetDeviceGammaRamp (dc, _DesktopGammaRamp);
@@ -2267,18 +2191,16 @@ bool CDriverD3D::setMode (const GfxMode& mode)
     if( mode.Windowed )
     {
         // Set windowed-mode style
-        SetWindowLongW( _HWnd, GWL_STYLE, D3D_WINDOWED_STYLE|WS_VISIBLE);
+        SetWindowLong( _HWnd, GWL_STYLE, D3D_WINDOWED_STYLE|WS_VISIBLE);
 		_FullScreen = false;
     }
     else
     {
         // Set fullscreen-mode style
-        SetWindowLongW( _HWnd, GWL_STYLE, D3D_FULLSCREEN_STYLE|WS_VISIBLE);
+        SetWindowLong( _HWnd, GWL_STYLE, D3D_FULLSCREEN_STYLE|WS_VISIBLE);
 		_FullScreen = true;
     }
-
-	SetWindowLongW(_HWnd, GWL_WNDPROC, GetWindowLong(_HWnd, GWL_WNDPROC));
-
+		
 	// Reset the driver
 	if (reset (mode))
 	{
@@ -2291,7 +2213,7 @@ bool CDriverD3D::setMode (const GfxMode& mode)
 			WndRect.top=_WindowY;
 			WndRect.right=_WindowX+_CurrentMode.Width;
 			WndRect.bottom=_WindowY+_CurrentMode.Height;
-			AdjustWindowRect(&WndRect, GetWindowLongW (_HWnd, GWL_STYLE), FALSE);
+			AdjustWindowRect(&WndRect, GetWindowLong (_HWnd, GWL_STYLE), FALSE);
 
 			SetWindowPos( _HWnd, HWND_NOTOPMOST,
 				std::max ((int)WndRect.left, 0), std::max ((int)WndRect.top, 0),
@@ -2374,7 +2296,7 @@ bool CDriverD3D::reset (const GfxMode& mode)
 		iteVb = iteVbNext;
 	}
 
-	// Restore non managed index buffer in system memory
+	// Restaure non managed index buffer in system memory
 	ItIBDrvInfoPtrList iteIb = _IBDrvInfos.begin();
 	while (iteIb != _IBDrvInfos.end())
 	{
@@ -2422,8 +2344,8 @@ bool CDriverD3D::reset (const GfxMode& mode)
 		_BackBuffer->Release();
 	_BackBuffer = NULL;
 
-	// Invalidate all occlusion queries.
-	// TODO nico : for now, even if a result has been retrieved successfully by the query, the query is put in the lost state. See if its worth improving...
+	// Invalidate all occlusion querries.
+	// TODO nico : for now, even if a result has been retrieved succesfully by the query, the query is put in the lost state. See if its worth improving...
 	for(TOcclusionQueryList::iterator it = _OcclusionQueryList.begin(); it != _OcclusionQueryList.end(); ++it)
 	{
 		if ((*it)->Query)
@@ -2464,9 +2386,10 @@ bool CDriverD3D::reset (const GfxMode& mode)
 	{
 		CFpuRestorer fpuRestorer; // fpu control word is changed by "Reset"
 		if (_DeviceInterface->Reset (&parameters) != D3D_OK)
-		{
+		{		
 			// tmp
-			nlstopex(("CDriverD3D::reset: Reset on _DeviceInterface"));
+			nlassert(0); // Fatal ...
+			nlwarning ("CDriverD3D::reset: Reset on _DeviceInterface");
 			return false;
 		}
 	}
@@ -2477,12 +2400,18 @@ bool CDriverD3D::reset (const GfxMode& mode)
 	{
 		//nldebug("BeginScene");
 		beginScene();
-	}
+	}	
+
 
 	notifyAllShaderDrvOfResetDevice();
 
 	// Reset internal caches
 	resetRenderVariables();
+
+
+	
+
+
 
 	// Init shaders
 	//initInternalShaders();
@@ -2535,7 +2464,7 @@ bool CDriverD3D::fillPresentParameter (D3DPRESENT_PARAMETERS &parameters, D3DFOR
 	}
 	parameters.Flags |= D3DPRESENTFLAG_LOCKABLE_BACKBUFFER;
 
-	// Build a depth index
+	// Builda depth index
 	const uint depthIndex = (mode.Depth==16)?0:(mode.Depth==24)?1:2;
 	
 	// Choose a back buffer format
@@ -2627,8 +2556,8 @@ const char *CDriverD3D::getVideocardInformation ()
 	H_AUTO_D3D(CDriverD3D_getVideocardInformation);
 	static char name[1024];
 
-//	if (!_DeviceInterface) 
-//		return "Direct3d isn't initialized";
+	if (!_DeviceInterface) 
+		return "Direct3d isn't initialized";
 
 	D3DADAPTER_IDENTIFIER9 identifier;
 	UINT adapter = (_Adapter==0xffffffff)?D3DADAPTER_DEFAULT:(UINT)_Adapter;
@@ -2637,7 +2566,7 @@ const char *CDriverD3D::getVideocardInformation ()
 		uint64 version = ((uint64)identifier.DriverVersion.HighPart) << 32;
 		version |= identifier.DriverVersion.LowPart;
 		smprintf (name, 1024, "Direct3d / %s / %s / %s / driver version : %d.%d.%d.%d", identifier.Driver, identifier.Description, identifier.DeviceName, 
-			(uint16)((version>>48)&0xFFFF),(uint16)((version>>32)&0xFFFF),(uint16)((version>>16)&0xFFFF),(uint16)(version&0xffff));
+			(uint16)(version>>48),(uint16)(version>>32),(uint16)(version>>16),(uint16)(version&0xffff));
 		return name;
 	}
 	else
@@ -2737,7 +2666,7 @@ IDirect3DSurface9 * CDriverD3D::getSurfaceTexture(ITexture * text)
 	CTextureDrvInfosD3D* rdvInfosD3D = (NLMISC::safe_cast<CTextureDrvInfosD3D*>(text->TextureDrvShare->DrvTexture.getPtr()));
 	
 	IDirect3DTexture9 * texture = rdvInfosD3D->Texture2d;
-	nlassert(texture);
+	nlassert(texture)
 	
 	IDirect3DSurface9 * surface;
 	HRESULT hr = texture->GetSurfaceLevel(0, &surface);
@@ -2953,7 +2882,7 @@ bool CDriverD3D::setMonitorColorProperties (const CMonitorColorProperties &prope
 	// It would be better to apply the gamma ramp only to the window and not to the whole desktop when playing in windowed mode.
 	// This require to switch to D3D 9.0c which has a flag for that purpose in the 'Present' function.
 	// Currently the SetGammaRamp only works in fullscreen mode, so we rely to the classic 'SetDeviceGammaRamp' instead.
-	HDC dc = CreateDCW (L"DISPLAY", NULL, NULL, NULL);
+	HDC dc = CreateDC ("DISPLAY", NULL, NULL, NULL);
 	if (dc)
 	{
 		// The ramp
@@ -3532,7 +3461,7 @@ void CDriverD3D::CVertexDeclState::apply(CDriverD3D *driver)
 void CDriverD3D::CLightState::apply(CDriverD3D *driver)
 {				
 	H_AUTO_D3D(CDriverD3D_CLightState);
-	// Enable state modified ?
+	// Enabel state modified ?
 	{
 		H_AUTO_D3D(CDriverD3D_CLightStateEnabled);
 		if (EnabledTouched)
@@ -3586,71 +3515,6 @@ void CDriverD3D::endDialogMode()
 {	
 	if (_FullScreen && _HWnd)
 		ShowWindow(_HWnd, SW_MAXIMIZE);
-}
-
-bool CDriverD3D::clipRect(NLMISC::CRect &rect)
-{
-	// Clip the wanted rectangle with window.
-	uint32 width, height;
-	getWindowSize(width, height);
-
-	sint32	xr=rect.right() ,yr=rect.bottom();
-
-	clamp((sint32&)rect.X, (sint32)0, (sint32)width);
-	clamp((sint32&)rect.Y, (sint32)0, (sint32)height);
-	clamp((sint32&)xr, (sint32)rect.X, (sint32)width);
-	clamp((sint32&)yr, (sint32)rect.Y, (sint32)height);
-	rect.Width= xr-rect.X;
-	rect.Height= yr-rect.Y;
-
-	return rect.Width>0 && rect.Height>0;
-}
-
-void CDriverD3D::getZBufferPart (std::vector<float>  &zbuffer, NLMISC::CRect &rect)
-{
-/* ace: currently not working
-	zbuffer.clear();
-
-	if(clipRect(rect))
-	{
-		IDirect3DSurface9 *surface;
-		if(_DeviceInterface->GetDepthStencilSurface(&surface)== D3D_OK)
-		{
-			// Surface desc
-			D3DSURFACE_DESC desc;
-			if (surface->GetDesc(&desc) == D3D_OK)
-			{	
-				// 32 bits format supported
-				if (desc.Format == D3DFMT_D24S8)
-				{
-					// Lock the surface
-					D3DLOCKED_RECT lock;
-					::RECT winRect;
-					winRect.left = rect.left();
-					winRect.right = rect.right();
-					winRect.top = rect.top();
-					winRect.bottom = rect.bottom();
-					const uint lineCount = rect.Height;
-					const uint width = rect.Width;
-					HRESULT hr = surface->LockRect (&lock, &winRect, D3DLOCK_READONLY);
-					if (hr == D3D_OK)
-					{
-						zbuffer.resize(rect.Width*rect.Height);
-						// Line count
-						float *dest = &(zbuffer[0]);
-						uint i;
-						for (i=0; i<lineCount; i++)
-						{
-							memcpy (dest+(4*i*width), ((uint8*)lock.pBits)+(i*lock.Pitch), width*4);
-						}
-						surface->UnlockRect ();
-					}
-				}
-			}
-			surface->Release();
-		}
-	}
-*/
 }
 
 

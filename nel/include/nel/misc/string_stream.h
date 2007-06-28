@@ -47,7 +47,7 @@ class CStringStream : public CMemStream
 public:
 
 	/// Initialization constructor
-	CStringStream( bool inputStream=false, uint32 defaultcapacity=0 ) : CMemStream( inputStream, false, defaultcapacity ) {}
+	CStringStream( bool inputStream=false, uint32 defaultcapacity=0 ) : CMemStream( inputStream, defaultcapacity ) {}
 
 	/// Copy constructor
 	CStringStream( const CStringStream& other ) : CMemStream( other ) {}

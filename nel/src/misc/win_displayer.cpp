@@ -71,7 +71,7 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			if (LOWORD(wParam) != WA_INACTIVE)
 			{
-				CWinDisplayer *cwd=(CWinDisplayer *)GetWindowLongW (hWnd, GWL_USERDATA);
+				CWinDisplayer *cwd=(CWinDisplayer *)GetWindowLong (hWnd, GWL_USERDATA);
 				if (cwd != NULL)
 					SetFocus(cwd->_HInputEdit);
 				return 0;
@@ -80,7 +80,7 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_SIZE:
 		{
-			CWinDisplayer *cwd=(CWinDisplayer *)GetWindowLongW (hWnd, GWL_USERDATA);
+			CWinDisplayer *cwd=(CWinDisplayer *)GetWindowLong (hWnd, GWL_USERDATA);
 			if (cwd != NULL)
 			{
 				int w = lParam & 0xFFFF;
@@ -95,7 +95,7 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_DESTROY:	PostQuitMessage (0); break;
 	case WM_CLOSE:
 		{
-			CWinDisplayer *cwd=(CWinDisplayer *)GetWindowLongW (hWnd, GWL_USERDATA);
+			CWinDisplayer *cwd=(CWinDisplayer *)GetWindowLong (hWnd, GWL_USERDATA);
 			if (cwd != NULL)
 				cwd->_Continue = false;
 		}
@@ -104,7 +104,7 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			if (HIWORD(wParam) == BN_CLICKED)
 			{
-				CWinDisplayer *cwd=(CWinDisplayer *)GetWindowLongW (hWnd, GWL_USERDATA);
+				CWinDisplayer *cwd=(CWinDisplayer *)GetWindowLong (hWnd, GWL_USERDATA);
 				// find the button and execute the command
 				CSynchronized<std::vector<CWindowDisplayer::CLabelEntry> >::CAccessor access (&cwd->_Labels);
 				for (uint i = 0; i < access.value().size(); i++)
@@ -196,7 +196,7 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					WCHAR	wText[20000];
 
 
-					CWinDisplayer *cwd=(CWinDisplayer *)GetWindowLongW (hWnd, GWL_USERDATA);
+					CWinDisplayer *cwd=(CWinDisplayer *)GetWindowLong (hWnd, GWL_USERDATA);
 
 					// get the text as unicode string
 					GetWindowTextW(cwd->_HInputEdit, wText, 20000);
@@ -216,7 +216,7 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			{
 				if (pmf->wParam == VK_UP)
 				{
-					CWinDisplayer *cwd=(CWinDisplayer *)GetWindowLongW (hWnd, GWL_USERDATA);
+					CWinDisplayer *cwd=(CWinDisplayer *)GetWindowLong (hWnd, GWL_USERDATA);
 
 					if (cwd->_PosInHistory > 0)
 						cwd->_PosInHistory--;
@@ -233,7 +233,7 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				}
 				else if (pmf->wParam == VK_DOWN)
 				{
-					CWinDisplayer *cwd=(CWinDisplayer *)GetWindowLongW (hWnd, GWL_USERDATA);
+					CWinDisplayer *cwd=(CWinDisplayer *)GetWindowLong (hWnd, GWL_USERDATA);
 
 					if (cwd->_PosInHistory < cwd->_History.size()-1)
 						cwd->_PosInHistory++;
@@ -252,7 +252,7 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 	}
 	
-	return DefWindowProcW (hWnd, message, wParam, lParam);
+	return DefWindowProc (hWnd, message, wParam, lParam);
 }
 
 void CWinDisplayer::updateLabels ()
@@ -269,11 +269,11 @@ void CWinDisplayer::updateLabels ()
 					// create a button for command and label for variables
 					if (access.value()[i].Value[0] == '@')
 					{
-						access.value()[i].Hwnd = CreateWindowW (L"BUTTON", L"", WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON, 0, 0, 0, 0, _HWnd, (HMENU) NULL, (HINSTANCE) GetWindowLong(_HWnd, GWL_HINSTANCE), NULL);
+						access.value()[i].Hwnd = CreateWindow ("BUTTON", "", WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON, 0, 0, 0, 0, _HWnd, (HMENU) NULL, (HINSTANCE) GetWindowLong(_HWnd, GWL_HINSTANCE), NULL);
 					}
 					else
 					{
-						access.value()[i].Hwnd = CreateWindowW (L"STATIC", L"", WS_CHILD | WS_VISIBLE | SS_SIMPLE, 0, 0, 0, 0, _HWnd, (HMENU) NULL, (HINSTANCE) GetWindowLong(_HWnd, GWL_HINSTANCE), NULL);
+						access.value()[i].Hwnd = CreateWindow ("STATIC", "", WS_CHILD | WS_VISIBLE | SS_SIMPLE, 0, 0, 0, 0, _HWnd, (HMENU) NULL, (HINSTANCE) GetWindowLong(_HWnd, GWL_HINSTANCE), NULL);
 					}
 					SendMessage ((HWND)access.value()[i].Hwnd, WM_SETFONT, (LONG) _HFont, TRUE);
 					needResize = true;
@@ -370,9 +370,7 @@ void CWinDisplayer::setTitleBar (const string &titleBar)
 #endif
 	wn += "Nel Service Console (compiled " __DATE__ " " __TIME__ " in " + mode + " mode)";
 
-	nldebug("set title bar to '%s'", wn.c_str());
-
-	SetWindowTextW (_HWnd, (LPWSTR)ucstring::makeFromUtf8(wn).c_str());
+	SetWindowText (_HWnd, wn.c_str());
 }
 
 void CWinDisplayer::open (string titleBar, bool iconified, sint x, sint y, sint w, sint h, sint hs, sint fs, const std::string &fn, bool ww, CLog *log)
@@ -388,19 +386,19 @@ void CWinDisplayer::open (string titleBar, bool iconified, sint x, sint y, sint 
 
 	_HistorySize = hs;
 	
-	WNDCLASSW wc;
+	WNDCLASS wc;
 	memset (&wc,0,sizeof(wc));
 	wc.style			= CS_HREDRAW | CS_VREDRAW ;//| CS_DBLCLKS;
 	wc.lpfnWndProc		= (WNDPROC)WndProc;
 	wc.cbClsExtra		= 0;
 	wc.cbWndExtra		= 0;
-	wc.hInstance		= GetModuleHandleW(NULL);
+	wc.hInstance		= GetModuleHandle(NULL);
 	wc.hIcon			= NULL;
-	wc.hCursor			= LoadCursorW(NULL,(LPWSTR)IDC_ARROW);
+	wc.hCursor			= LoadCursor(NULL,IDC_ARROW);
 	wc.hbrBackground	= (HBRUSH)COLOR_WINDOW;
-	wc.lpszClassName	= L"NLDisplayerClass";
+	wc.lpszClassName	= "NLDisplayerClass";
 	wc.lpszMenuName		= NULL;
-	if ( !RegisterClassW(&wc) ) return;
+	if ( !RegisterClass(&wc) ) return;
 
 	ULONG	WndFlags;
 	RECT	WndRect;
@@ -412,10 +410,10 @@ void CWinDisplayer::open (string titleBar, bool iconified, sint x, sint y, sint 
 	AdjustWindowRect(&WndRect,WndFlags,FALSE);
 	
 	// create the window
-	_HWnd = CreateWindowW (L"NLDisplayerClass", L"", WndFlags, CW_USEDEFAULT,CW_USEDEFAULT, WndRect.right,WndRect.bottom, NULL, NULL, GetModuleHandle(NULL), NULL);
-	SetWindowLongW (_HWnd, GWL_USERDATA, (LONG)this);
+	_HWnd = CreateWindow ("NLDisplayerClass", "", WndFlags, CW_USEDEFAULT,CW_USEDEFAULT, WndRect.right,WndRect.bottom, NULL, NULL, GetModuleHandle(NULL), NULL);
+	SetWindowLong (_HWnd, GWL_USERDATA, (LONG)this);
 
-	_HLibModule = LoadLibraryW(L"RICHED20.DLL");
+	_HLibModule = LoadLibrary("RICHED20.DLL");
 	if (_HLibModule == NULL)
 	{
 		nlerror ("RichEdit 2.0 library not found!");
@@ -433,7 +431,7 @@ void CWinDisplayer::open (string titleBar, bool iconified, sint x, sint y, sint 
 	else
 		rfs = fs;
 
-	_HFont = CreateFontW (-MulDiv(rfs, GetDeviceCaps(GetDC(0),LOGPIXELSY), 72), 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, (LPCWSTR)ucstring::makeFromUtf8(rfn).c_str());
+	_HFont = CreateFont (-MulDiv(rfs, GetDeviceCaps(GetDC(0),LOGPIXELSY), 72), 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, rfn.c_str());
 
 
 	// create the edit control
@@ -444,7 +442,7 @@ void CWinDisplayer::open (string titleBar, bool iconified, sint x, sint y, sint 
 	else
 		dwStyle |= WS_HSCROLL;
 
-	_HEdit = CreateWindowExW(WS_EX_OVERLAPPEDWINDOW, RICHEDIT_CLASSW, L"", dwStyle, 0, _ToolBarHeight, w, h-_ToolBarHeight-_InputEditHeight, _HWnd, (HMENU) NULL, (HINSTANCE) GetWindowLong(_HWnd, GWL_HINSTANCE), NULL);
+	_HEdit = CreateWindowEx(WS_EX_OVERLAPPEDWINDOW, RICHEDIT_CLASS, "", dwStyle, 0, _ToolBarHeight, w, h-_ToolBarHeight-_InputEditHeight, _HWnd, (HMENU) NULL, (HINSTANCE) GetWindowLong(_HWnd, GWL_HINSTANCE), NULL);
 	SendMessage (_HEdit, WM_SETFONT, (LONG) _HFont, TRUE);
 
 	// set the edit text limit to lot of :)
@@ -456,7 +454,7 @@ void CWinDisplayer::open (string titleBar, bool iconified, sint x, sint y, sint 
 	CharFormat.dwEffects &= ~CFE_AUTOCOLOR;
 
 	// create the input edit control
-	_HInputEdit = CreateWindowExW(WS_EX_OVERLAPPEDWINDOW, RICHEDIT_CLASSW, L"", WS_CHILD | WS_VISIBLE
+	_HInputEdit = CreateWindowEx(WS_EX_OVERLAPPEDWINDOW, RICHEDIT_CLASS, "", WS_CHILD | WS_VISIBLE
 		/*| ES_MULTILINE*/ | ES_WANTRETURN | ES_NOHIDESEL | ES_AUTOHSCROLL, 0, h-_InputEditHeight, w, _InputEditHeight,
 		_HWnd, NULL, (HINSTANCE) GetWindowLong(_HWnd, GWL_HINSTANCE), NULL);
 	SendMessage (_HInputEdit, WM_SETFONT, (LONG) _HFont, TRUE);
@@ -485,7 +483,7 @@ void CWinDisplayer::open (string titleBar, bool iconified, sint x, sint y, sint 
 	else
 		ShowWindow(_HWnd,SW_SHOW);
 	
-	SetFocus (_HInputEdit);
+	SetFocus(_HInputEdit);
 
 	_Init = true;
 }
@@ -603,13 +601,13 @@ void CWinDisplayer::display_main ()
 
 				for (it = access.value().begin(); it != access.value().end(); )
 				{
-					ucstring str = ucstring::makeFromUtf8((*it).second);
+					string str = (*it).second;
 					uint32 col = (*it).first;
 
 					// get all string that have the same color
 					for (it++; it != access.value().end() && (*it).first == col; it++)
 					{
-						str += ucstring::makeFromUtf8((*it).second);
+						str += (*it).second;
 					}
 
 					SendMessage (_HEdit, EM_SETSEL, -1, -1);
@@ -622,7 +620,7 @@ void CWinDisplayer::display_main ()
 					}
 
 					// add the string to the edit control
-					SendMessageW (_HEdit, EM_REPLACESEL, FALSE, (LONG) str.c_str());
+					SendMessage (_HEdit, EM_REPLACESEL, FALSE, (LONG) str.c_str());
 				}
 
 				// restore old selection
@@ -655,10 +653,10 @@ void CWinDisplayer::display_main ()
 		//
 
 		MSG	msg;
-		while (PeekMessageW(&msg,NULL,0,0,PM_REMOVE))
+		while (PeekMessage(&msg,NULL,0,0,PM_REMOVE))
 		{
 			TranslateMessage(&msg);
-			DispatchMessageW(&msg);
+			DispatchMessage(&msg);
 		}
 
 		//

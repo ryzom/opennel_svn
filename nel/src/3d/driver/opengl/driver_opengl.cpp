@@ -75,7 +75,6 @@ using namespace NLMISC;
 
 // ***************************************************************************
 #ifdef NL_OS_WINDOWS
-#ifndef NL_STATIC
 // dllmain::
 BOOL WINAPI DllMain(HINSTANCE hinstDLL,ULONG fdwReason,LPVOID lpvReserved)
 {
@@ -86,7 +85,6 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL,ULONG fdwReason,LPVOID lpvReserved)
 	}
 	return true;
 }
-#endif
 #endif
 
 
@@ -108,15 +106,6 @@ const uint CDriverGL::_EVSNumConstant = 97;
 
 #ifdef NL_OS_WINDOWS
 
-#ifdef NL_STATIC
-
-IDriver* createIDriverInstance ()
-{
-	return new CDriverGL;
-}
-
-#endif
-
 __declspec(dllexport) IDriver* NL3D_createIDriverInstance ()
 {
 	return new CDriverGL;
@@ -127,7 +116,7 @@ __declspec(dllexport) uint32 NL3D_interfaceVersion ()
 	return IDriver::InterfaceVersion;
 }
 
-static bool GlWndProc(CDriverGL *driver, HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+static void GlWndProc(CDriverGL *driver, HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	H_AUTO_OGL(GlWndProc)
 	if(message == WM_SIZE)
@@ -165,15 +154,13 @@ static bool GlWndProc(CDriverGL *driver, HWND hWnd, UINT message, WPARAM wParam,
 		}
 	}
 
-	bool trapMessage = false;
 	if (driver->_EventEmitter.getNumEmitters() > 0)
 	{
 		CWinEventEmitter *we = NLMISC::safe_cast<CWinEventEmitter *>(driver->_EventEmitter.getEmitter(0));
 		// Process the message by the emitter
 		we->setHWnd((uint32)hWnd);
-		trapMessage = we->processMessage ((uint32)hWnd, message, wParam, lParam);
+		we->processMessage ((uint32)hWnd, message, wParam, lParam);
 	}
-	return trapMessage;
 }
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -181,35 +168,17 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 	H_AUTO_OGL(DriverGL_WndProc)
 	// Get the driver pointer..
 	CDriverGL *pDriver=(CDriverGL*)GetWindowLong (hWnd, GWL_USERDATA);
-	bool trapMessage = false;
 	if (pDriver != NULL)
 	{
-		trapMessage = GlWndProc (pDriver, hWnd, message, wParam, lParam);
+		GlWndProc (pDriver, hWnd, message, wParam, lParam);
 	}
-
-#ifdef NL_DISABLE_MENU
-	// disable menu (F10, ALT and ALT+SPACE key doesn't freeze or open the menu)
-	if(message == WM_SYSCOMMAND && wParam == SC_KEYMENU)
-		return 0;
-#endif // NL_DISABLE_MENU
-
-	return trapMessage ? 0 : DefWindowProc(hWnd, message, wParam, lParam);
+	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
 #elif defined (NL_OS_UNIX)
 
 extern "C"
 {
-
-#ifdef NL_STATIC
-
-IDriver* createIDriverInstance ()
-{
-	return new CDriverGL;
-}
-
-#else
-
 IDriver* NL3D_createIDriverInstance ()
 {
 	return new CDriverGL;
@@ -219,9 +188,6 @@ uint32 NL3D_interfaceVersion ()
 {
 	return IDriver::InterfaceVersion;
 }
-
-#endif
-
 }
 /*
 static Bool WndProc(Display *d, XEvent *e, char *arg)
@@ -510,12 +476,13 @@ void CDriverGL::disableHardwareTextureShader()
 
 // --------------------------------------------------
 
-bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resizeable) throw(EBadDisplay)
+bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show) throw(EBadDisplay)
 {
 	H_AUTO_OGL(CDriverGL_setDisplay)
 	
 	uint width = mode.Width;
 	uint height = mode.Height;
+
 
 #ifdef NL_OS_WINDOWS
 	
@@ -847,10 +814,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 			_DestroyWindow=true;
 
 			if(mode.Windowed)
-				if(resizeable)
-					WndFlags=WS_OVERLAPPEDWINDOW+WS_CLIPCHILDREN+WS_CLIPSIBLINGS;
-				else
-					WndFlags=WS_SYSMENU+WS_DLGFRAME+WS_CLIPCHILDREN+WS_CLIPSIBLINGS;
+				WndFlags=WS_OVERLAPPEDWINDOW+WS_CLIPCHILDREN+WS_CLIPSIBLINGS;
 			else
 			{
 				WndFlags=WS_POPUP;

@@ -49,7 +49,15 @@ public:
 
 	ucstring (const std::string &str) : ucstringbase ()
 	{
-		rawCopy(str);
+		// We need to convert the char into 8bits unsigned int before promotion to 16 bits
+		// otherwise, as char are signed on some compiler (MSCV for ex), the sign bit is extended to 16 bits.
+		resize(str.size());
+		std::string::const_iterator first(str.begin()), last(str.end());
+		iterator dest(begin());
+		for (;first != last; ++first, ++dest)
+		{
+			*dest = uint8(*first);
+		}
 	}
 
 	~ucstring () {}
@@ -243,9 +251,7 @@ public:
 			}
 			else if ((code & 0x80) == 0x80)
 			{
-				// If it's not a valid UTF8 string, just copy the line without utf8 conversion
-				rawCopy(stringUtf8);
-				return;
+				nlwarning ("UCS: Invalid UTF-8 character");
 			}
 			else
 			{
@@ -259,8 +265,7 @@ public:
 				{
 					if (first == last)
 					{
-						// If it's not a valid UTF8 string, just copy the line without utf8 conversion
-						rawCopy(stringUtf8);
+						nlwarning ("UCS: Invalid UTF-8 character");
 						return;
 					}
 
@@ -269,9 +274,9 @@ public:
 
 					if ((ch & 0xC0) != 0x80)
 					{
-						// If it's not a valid UTF8 string, just copy the line without utf8 conversion
-						rawCopy(stringUtf8);
-						return;
+						nlwarning ("UCS: Invalid UTF-8 character");
+						code = '?';
+						break;
 					}
 
 					code <<= 6;
@@ -288,21 +293,6 @@ public:
 		ret.fromUtf8(stringUtf8);
 
 		return ret;
-	}
-
-private:
-
-	void rawCopy(const std::string &str)
-	{
-		// We need to convert the char into 8bits unsigned int before promotion to 16 bits
-		// otherwise, as char are signed on some compiler (MSCV for ex), the sign bit is extended to 16 bits.
-		resize(str.size());
-		std::string::const_iterator first(str.begin()), last(str.end());
-		iterator dest(begin());
-		for (;first != last; ++first, ++dest)
-		{
-			*dest = uint8(*first);
-		}
 	}
 };
 

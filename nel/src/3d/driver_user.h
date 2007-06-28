@@ -147,7 +147,7 @@ public:
 	virtual void			disableHardwareTextureShader();
 
 	/// create the window.
-	virtual	bool			setDisplay(const CMode &mode, bool show, bool resizeable);
+	virtual	bool			setDisplay(const CMode &mode, bool show);
 	virtual bool			setMode(const CMode& mode);
 	virtual bool			getModes(std::vector<CMode> &modes);
 	virtual bool			getCurrentScreenMode(CMode &mode);

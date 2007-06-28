@@ -30,6 +30,7 @@
 #include "nel/misc/check_fpu.h"
 #include "nel/misc/fast_floor.h"
 
+
 #pragma optimize("", off )
 
 

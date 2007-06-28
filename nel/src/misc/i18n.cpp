@@ -68,6 +68,9 @@ void CI18N::setLoadProxy(ILoadProxy *loadProxy)
 
 void CI18N::load (const std::string &languageCode)
 {
+//	nlassert (lid < _NbLanguages);
+//	nlassert (_LanguagesNamesLoaded);
+
 	uint i;
 	for (i=0; i<_NbLanguages; ++i)
 	{

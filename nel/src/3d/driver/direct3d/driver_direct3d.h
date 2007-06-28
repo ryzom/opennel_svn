@@ -74,16 +74,16 @@
 	
 
 // Define this to disable hardware vertex program (default is undefined)
-//#define NL_DISABLE_HARDWARE_VERTEX_PROGAM
+// #define NL_DISABLE_HARDWARE_VERTEX_PROGAM
 
 // Define this to disable hardware pixel shaders program (default is undefined)
-//#define NL_DISABLE_HARDWARE_PIXEL_SHADER
+// #define NL_DISABLE_HARDWARE_PIXEL_SHADER
 
 // Define this to disable hardware vertex array AGP (default is undefined)
-//#define NL_DISABLE_HARDWARE_VERTEX_ARRAY_AGP
+// #define NL_DISABLE_HARDWARE_VERTEX_ARRAY_AGP
 
 // Define this to force the texture stage count (default is undefined)
-//#define NL_FORCE_TEXTURE_STAGE_COUNT 2
+// #define NL_FORCE_TEXTURE_STAGE_COUNT 2
 
 // Define this to force the use of pixel shader in the normal shaders (default is undefined)
 //#define NL_FORCE_PIXEL_SHADER_USE_FOR_NORMAL_SHADERS
@@ -95,11 +95,15 @@
 // Define this to enable profiling of driver functions (default is undefined).
 //#define NL_PROFILE_DRIVER_D3D
 
+
+
 #ifdef NL_PROFILE_DRIVER_D3D
 	#define H_AUTO_D3D(label) H_AUTO(label)
 #else
 	#define H_AUTO_D3D(label)
 #endif
+
+
 
 class CFpuRestorer
 {
@@ -747,7 +751,7 @@ public:
 
 	// Mode initialisation, requests
 	virtual bool			init (uint windowIcon = 0);
-	virtual bool			setDisplay(void* wnd, const GfxMode& mode, bool show, bool resizeable) throw(EBadDisplay);
+	virtual bool			setDisplay(void* wnd, const GfxMode& mode, bool show) throw(EBadDisplay);
 	virtual bool			release();
 	virtual bool			setMode(const GfxMode& mode);
 	virtual bool			getModes(std::vector<GfxMode> &modes);
@@ -830,7 +834,7 @@ public:
 	void					getDirect3DRect(NLMISC::CRect &rect, RECT & d3dRect);
 	
 	// todo hulud d3d buffers
-	virtual void			getZBufferPart (std::vector<float>  &zbuffer, NLMISC::CRect &rect);
+	virtual void			getZBufferPart (std::vector<float>  &zbuffer, NLMISC::CRect &rect) {};
 	virtual bool			setRenderTarget (ITexture *tex, uint32 x, uint32 y, uint32 width, uint32 height, uint32 mipmapLevel, uint32 cubeFace);
 	virtual bool			copyTargetToTexture (ITexture *tex, uint32 offsetx, uint32 offsety, uint32 x, uint32 y, uint32 width, 
 													uint32 height, uint32 mipmapLevel);
@@ -2406,10 +2410,6 @@ public:
 	}
 
 	bool hasSceneBegun() const { return _SceneBegun; }	
-
-	// Clip the wanted rectangle with window. return true if rect is not NULL.
-	bool					clipRect(NLMISC::CRect &rect);
-
 };
 
 #define NL_D3DCOLOR_RGBA(rgba) (D3DCOLOR_ARGB(rgba.A,rgba.R,rgba.G,rgba.B))
@@ -2517,8 +2517,6 @@ void fillQuadIndexes (uint16 *indexes, uint first, uint last);
 
 } // NL3D
 
-#ifndef NL_STATIC
 extern HINSTANCE HInstDLL;
-#endif
 
 #endif // NL_DRIVER_DIRECT3D_H

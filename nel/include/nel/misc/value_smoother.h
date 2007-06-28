@@ -64,7 +64,6 @@ public:
 		_CurFrame = 0;
 		_NumFrame = 0;
 		_FrameSum = 0;
-		_CurrentValue = 0;
 	}
 	
 	/// reset only the ValueSmoother
@@ -75,7 +74,6 @@ public:
 		_CurFrame = 0;
 		_NumFrame = 0;
 		_FrameSum = 0;
-		_CurrentValue = 0;
 	}
 
 	/// add a new value to be smoothed.
@@ -90,8 +88,7 @@ public:
 		
 		// backup this value in the array.
 		_LastFrames[_CurFrame]= dt;
-		_CurrentValue = dt;
-
+		
 		// next frame.
 		_CurFrame++;
 //		_CurFrame%=_LastFrames.size();
@@ -108,14 +105,6 @@ public:
 	{
 		if(_NumFrame>0)
 			return T(_FrameSum) / T(_NumFrame);
-		else
-			return T(0);
-	}
-
-	T		getCurrentValue() const
-	{
-		if (_NumFrame>0)
-			return T(_CurrentValue);
 		else
 			return T(0);
 	}
@@ -140,7 +129,6 @@ private:
 	uint					_CurFrame;
 	uint					_NumFrame;
 	T						_FrameSum;
-	T						_CurrentValue;
 };
 
 // ***************************************************************************

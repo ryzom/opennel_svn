@@ -973,8 +973,31 @@ inline	void	CMemStream::serialHex(uint32 &b)
 	}
 }
 
+
+
 }
 
 #endif // NL_MEM_STREAM_H
 
 /* End of mem_stream.h */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

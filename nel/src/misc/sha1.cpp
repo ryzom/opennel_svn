@@ -232,7 +232,7 @@ CHashKey getSHA1(const string &filename)
 }
 
 
-#pragma runtime_checks( "", off )
+
 
 /*
  *  Define the SHA1 circular left shift macro

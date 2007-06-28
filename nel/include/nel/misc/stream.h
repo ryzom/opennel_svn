@@ -947,7 +947,7 @@ protected:
 	virtual uint			getDbgStreamSize() const {return 0;}
 
 	/**
-	 * Elementarily check at least n bytes can be serialized from this stream (or throw EStreamOverflow)
+	 * Elementarly check at least n bytes can be serialised from this stream (or throw EStreamOverflow)
 	 */
 	void				checkStreamSize(uint numBytes) const
 	{

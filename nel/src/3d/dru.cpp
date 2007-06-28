@@ -36,9 +36,9 @@
 
 
 #ifdef NL_OS_WINDOWS
-#	include <windows.h>
+# include <windows.h>
 #else // NL_OS_WINDOWS
-#	include <dlfcn.h>
+# include <dlfcn.h>
 #endif // NL_OS_WINDOWS
 
 using namespace NLMISC;
@@ -54,19 +54,10 @@ const char *IDRV_CREATE_PROC_NAME = "NL3D_createIDriverInstance";
 typedef uint32 (*IDRV_VERSION_PROC)(void); 
 const char *IDRV_VERSION_PROC_NAME = "NL3D_interfaceVersion";
 
-#ifdef NL_STATIC
-extern IDriver* createIDriverInstance ();
-#endif
 
 // ***************************************************************************
 IDriver		*CDRU::createGlDriver() throw (EDru)
 {
-#ifdef NL_STATIC
-
-	return createIDriverInstance ();
-
-#else
-
 	IDRV_CREATE_PROC	createDriver = NULL;
 	IDRV_VERSION_PROC	versionDriver = NULL;
 
@@ -142,22 +133,13 @@ IDriver		*CDRU::createGlDriver() throw (EDru)
 		throw EDruOpenglDriverCantCreateDriver();
 	}
 	return ret;
-
-#endif
 }
 
 // ***************************************************************************
 
 #ifdef NL_OS_WINDOWS
-
 IDriver		*CDRU::createD3DDriver() throw (EDru)
 {
-#ifdef NL_STATIC
-
-	return createIDriverInstance ();
-
-#else
-
 	IDRV_CREATE_PROC	createDriver = NULL;
 	IDRV_VERSION_PROC	versionDriver = NULL;
 
@@ -201,8 +183,6 @@ IDriver		*CDRU::createD3DDriver() throw (EDru)
 		throw EDruDirect3dDriverCantCreateDriver();
 	}
 	return ret;
-
-#endif
 }
 #endif // NL_OS_WINDOWS
 
@@ -613,3 +593,4 @@ void			CDRU::drawWiredBox(const CVector &corner, const CVector &vi, const CVecto
 
 
 } // NL3D
+
