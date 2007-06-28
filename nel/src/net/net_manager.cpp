@@ -37,12 +37,9 @@
 #include "nel/misc/time_nl.h"
 
 #include "nel/net/naming_client.h"
-
 #include "nel/net/callback_client.h"
 #include "nel/net/callback_server.h"
-
 #include "nel/net/naming_client.h"
-
 #include "nel/net/net_manager.h"
 
 using namespace std;
@@ -121,7 +118,7 @@ void CNetManager::createConnection(CBaseStruct &Base, const CInetAddress &Addr, 
 
 void RegistrationBroadcast (const std::string &name, TServiceId sid, const vector<CInetAddress> &addr)
 {
-	nldebug("HNETL4: RegistrationBroadcast() of service %s-%hu", name.c_str (), (uint16)sid);
+	nldebug("HNETL4: RegistrationBroadcast() of service %s-%hu", name.c_str (), (uint16)sid.get());
 
 	// find if this new service is interesting
 	for (CNetManager::ItBaseMap itbm = CNetManager::_BaseMap.begin (); itbm != CNetManager::_BaseMap.end (); itbm++)
@@ -154,7 +151,7 @@ void RegistrationBroadcast (const std::string &name, TServiceId sid, const vecto
 
 static void UnregistrationBroadcast (const std::string &name, TServiceId sid, const vector<CInetAddress> &addr)
 {
-	nldebug("HNETL4: UnregistrationBroadcast() of service %s-%hu", name.c_str (), (uint16)sid);
+	nldebug("HNETL4: UnregistrationBroadcast() of service %s-%hu", name.c_str (), (uint16)sid.get());
 }
 
 void CNetManager::init (const CInetAddress *addr, CCallbackNetBase::TRecordingState rec )
@@ -191,7 +188,7 @@ void CNetManager::release ()
 
 void CNetManager::addServer (const std::string &serviceName, uint16 servicePort, bool external)
 {
-	TServiceId sid = 0;
+	TServiceId sid;
 	addServer (serviceName, servicePort, sid, external);
 }
 
@@ -231,7 +228,7 @@ void CNetManager::addServer (const std::string &serviceName, uint16 servicePort,
 		for (uint i = 0; i < addr.size(); i++)
 			addr[i].setPort(servicePort);
 
-		if (sid == 0)
+		if (sid.get() == 0)
 		{
 			CNamingClient::registerService (serviceName, addr, sid);
 		}
@@ -322,7 +319,7 @@ void CNetManager::addGroup (const std::string &groupName, const std::string &ser
 }
 
 
-void CNetManager::addCallbackArray (const std::string &serviceName, const TCallbackItem *callbackarray, NLMISC::CStringIdArray::TStringId arraysize)
+void CNetManager::addCallbackArray (const std::string &serviceName, const TCallbackItem *callbackarray, CStringIdArray::TStringId arraysize)
 {
 	nldebug ("HNETL4: addingCallabckArray() for service '%s'", serviceName.c_str ());
 	ItBaseMap itbm = find (serviceName);
