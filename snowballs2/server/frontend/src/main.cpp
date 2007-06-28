@@ -104,7 +104,7 @@ void cbChatClient ( CMessage& msgin, TSockId from, CCallbackNetBase& clientcb )
  *
  * Receive chat messages from the Chat Service to send it to all the clients.
  ****************************************************************************/
-void cbChatService (CMessage &msgin, const std::string &serviceName, uint16 sid)
+void cbChatService (CMessage &msgin, const std::string &serviceName, TServiceId sid)
 {
 	string  message;
 
@@ -163,7 +163,7 @@ void cbPosClient ( CMessage& msgin, TSockId from, CCallbackNetBase& clientcb )
  * Receive position messages from the Position Service to send it to all the
  * clients.
  ****************************************************************************/
-void cbPosService (CMessage &msgin, const std::string &serviceName, uint16 sid)
+void cbPosService (CMessage &msgin, const std::string &serviceName, TServiceId sid)
 {
 	uint32  id;
 	CVector pos;
@@ -232,7 +232,7 @@ void cbAddClient ( CMessage& msgin, TSockId from, CCallbackNetBase& clientcb )
  * Receive an ADD_ENTITY messages from the Position Service to send it to all
  * the clients.
  ****************************************************************************/
-void cbAddService (CMessage &msgin, const std::string &serviceName, uint16 sid)
+void cbAddService (CMessage &msgin, const std::string &serviceName, TServiceId sid)
 {
 	bool    all;
 	uint32  to;
@@ -317,7 +317,7 @@ void cbRemoveClient ( CMessage& msgin, TSockId from, CCallbackNetBase& clientcb 
  * Receive an REMOVE_ENTITY messages from the Position Service to send it to all
  * the clients.
  ****************************************************************************/
-void cbRemoveService (CMessage &msgin, const std::string &serviceName, uint16 sid)
+void cbRemoveService (CMessage &msgin, const std::string &serviceName, TServiceId sid)
 {
 	uint32  id;
 
@@ -341,7 +341,7 @@ void cbRemoveService (CMessage &msgin, const std::string &serviceName, uint16 si
  * Receive an SNOWBALL messages from the Position Service to send it to all
  * the clients.
  ****************************************************************************/
-void cbSnowballService (CMessage &msgin, const std::string &serviceName, uint16 sid)
+void cbSnowballService (CMessage &msgin, const std::string &serviceName, TServiceId sid)
 {
 	uint32  id,
 			playerId;
@@ -419,7 +419,7 @@ void cbSnowballClient ( CMessage& msgin, TSockId from, CCallbackNetBase& clientc
  * Receive an HIT messages from the Position Service to send it to all
  * the clients.
  ****************************************************************************/
-void cbHitService (CMessage &msgin, const std::string &serviceName, uint16 sid)
+void cbHitService (CMessage &msgin, const std::string &serviceName, TServiceId sid)
 {
 	uint32  snowballId,
 			victimId;
@@ -473,7 +473,7 @@ TUnifiedCallbackItem CallbackArray[] =
 /****************************************************************************
  * Connection callback for the Chat service
  ****************************************************************************/
-void onReconnectChat (const std::string &serviceName, uint16 sid, void *arg)
+void onReconnectChat (const std::string &serviceName, TServiceId sid, void *arg)
 {
 	nldebug( "SB: Chat Service reconnected" );
 }
@@ -482,7 +482,7 @@ void onReconnectChat (const std::string &serviceName, uint16 sid, void *arg)
 /****************************************************************************
  * Disonnection callback for the Chat service
  ****************************************************************************/
-void onDisconnectChat (const std::string &serviceName, uint16 sid, void *arg)
+void onDisconnectChat (const std::string &serviceName, TServiceId sid, void *arg)
 {
 	/* Note: messages already forwarded should get no reply, but it may occure
 	 * (e.g. if the server reconnects before the forwarding of a message and
@@ -498,7 +498,7 @@ void onDisconnectChat (const std::string &serviceName, uint16 sid, void *arg)
 /****************************************************************************
  * Connection callback for the Position service
  ****************************************************************************/
-void onReconnectPosition (const std::string &serviceName, uint16 sid, void *arg)
+void onReconnectPosition (const std::string &serviceName, TServiceId sid, void *arg)
 {
 	nldebug( "SB: Position Service reconnected" );
 }
@@ -507,7 +507,7 @@ void onReconnectPosition (const std::string &serviceName, uint16 sid, void *arg)
 /****************************************************************************
  * Disonnection callback for the Position service
  ****************************************************************************/
-void onDisconnectPosition (const std::string &serviceName, uint16 sid, void *arg)
+void onDisconnectPosition (const std::string &serviceName, TServiceId sid, void *arg)
 {
 	/* Note: messages already forwarded should get no reply, but it may occure
 	 * (e.g. if the server reconnects before the forwarding of a message and
