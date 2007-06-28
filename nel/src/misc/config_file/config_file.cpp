@@ -410,7 +410,7 @@ void CConfigFile::reparse (bool lookupPaths)
 		if (!CPath::lookup(fn, false).empty())
 		{
 			ucstring content;
-			CI18N::readTextFile(fn, content, false, true, true);
+			CI18N::readTextFile(fn, content, true, true, true);
 			string utf8 = content.toUtf8();
 
 			CMemStream stream;

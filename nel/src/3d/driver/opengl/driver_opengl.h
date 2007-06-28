@@ -106,7 +106,6 @@ void displayGLError(GLenum error);
 
 #define UNSUPPORTED_INDEX_OFFSET_MSG "Unsupported by driver, check IDriver::supportIndexOffset."
 
-
 namespace NL3D {
 
 using NLMISC::CMatrix;
@@ -306,7 +305,7 @@ public:
 	virtual void			disableHardwareVertexArrayAGP();
 	virtual void			disableHardwareTextureShader();
 
-	virtual bool			setDisplay(void* wnd, const GfxMode& mode, bool show) throw(EBadDisplay);
+	virtual bool			setDisplay(void* wnd, const GfxMode& mode, bool show, bool resizeable) throw(EBadDisplay);
 	virtual bool			setMode(const GfxMode& mode);
 	virtual bool			getModes(std::vector<GfxMode> &modes);
 	virtual bool			getCurrentScreenMode(GfxMode &mode);
@@ -666,7 +665,7 @@ private:
 
 #ifdef NL_OS_WINDOWS
 
-	friend static void GlWndProc(CDriverGL *driver, HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	friend static bool GlWndProc(CDriverGL *driver, HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	
 	HWND						_hWnd;
 	sint32						_WindowWidth, _WindowHeight, _WindowX, _WindowY;
@@ -1339,7 +1338,6 @@ public:
 	// The gl id is auto created here.
 	CVertexProgamDrvInfosGL (CDriverGL *drv, ItVtxPrgDrvInfoPtrList it);
 };
-
 
 } // NL3D
 

@@ -167,7 +167,9 @@ bool	CTextureFar::getUpperSize(uint &width, uint &height)
 			return true;
 		}
 		else
+		{
 			return false;
+		}
 	}
 }
 

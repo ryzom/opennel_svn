@@ -209,10 +209,7 @@ bool CCommandRegistry::execute (const std::string &commandWithArgs, CLog &log, b
 {
 	if (!quiet)
 	{
-		ucstring temp;
-		temp.fromUtf8(commandWithArgs);
-		string disp = temp.toString();
-		log.displayNL ("Executing command : '%s'", disp.c_str());
+		log.displayNL ("Executing command : '%s'", commandWithArgs.c_str());
 	}
 
 	// true to indicate that '"', ';' and '\' are special character sequence control

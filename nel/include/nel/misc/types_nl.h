@@ -48,8 +48,20 @@
 	#include "nelconfig.h"
 #endif // HAVE_NELCONFIG_H
 
+
+// Uncomment this define if you want only one driver inside the exe (no .dll at all)
+//#define NL_STATIC 1
+
+// Uncomment this define if you to disable to MENU key on Windows (F10, ALT and ALT+SPACE key doesn't freeze or open the menu)
+#define NL_DISABLE_MENU 1
+
+// Uncomment this define if you don't want generation of nel debug file (report_*, exception_catched, breakpointed, ...)
+#define NL_NO_DEBUG_FILES 1
+
+
+
 #ifdef FINAL_VERSION
-	// If the FINAL_VERSION is defined externaly, check that the value is 0 or 1
+	// If the FINAL_VERSION is defined externally, check that the value is 0 or 1
 	#if FINAL_VERSION != 1 && FINAL_VERSION != 0
 		#error "Bad value for FINAL_VERSION, it must be 0 or 1"
 	#endif
@@ -133,16 +145,16 @@
 // Remove stupid Visual C++ warnings
 
 #ifdef NL_OS_WINDOWS
-	#pragma warning (disable : 4503)			// STL: Decorated name length exceeded, name was truncated
-	#pragma warning (disable : 4786)			// STL: too long identifier
-	#pragma warning (disable : 4290)			// throw() not implemented warning
-	#pragma warning (disable : 4250)			// inherits via dominance (informational warning).
-	#pragma warning (disable : 4390)			// don't warn in empty block "if(exp) ;"
-	// Debug : Sept 01 2006
-	#ifdef NL_COMP_VC8
-		#pragma warning (disable : 4005)			// don't warn on redefenitions caused by xp platform sdk
-		#pragma warning (disable : 4996)			// don't warn for deprecated function (sprintf, sscanf in VS8)
-	#endif // NL_COMP_VC8 
+#	pragma warning (disable : 4503)			// STL: Decorated name length exceeded, name was truncated
+#	pragma warning (disable : 4786)			// STL: too long identifier
+#	pragma warning (disable : 4290)			// throw() not implemented warning
+#	pragma warning (disable : 4250)			// inherits via dominance (informational warning).
+#	pragma warning (disable : 4390)			// don't warn in empty block "if(exp) ;"
+// Debug : Sept 01 2006
+#	ifdef NL_COMP_VC8
+#		pragma warning (disable : 4005)			// don't warn on redefinitions caused by xp platform sdk
+#		pragma warning (disable : 4996)			// don't warn for deprecated function (sprintf, sscanf in VS8)
+#	endif // NL_COMP_VC8 
 #endif // NL_OS_WINDOWS
 
 
@@ -236,7 +248,7 @@
 
 /**
  * \def NL_I64
- * Used to display a int64 in a platform independant way with printf like functions.
+ * Used to display a int64 in a platform independent way with printf like functions.
  \code
  sint64 myint64 = SINT64_CONSTANT(0x123456781234);
  printf("This is a 64 bits int: %"NL_I64"u", myint64);
@@ -283,7 +295,7 @@ typedef	unsigned	int			uint;			// at least 32bits (depend of processor)
 
 /**
  * \typedef ucchar
- * An unicode character (16 bits)
+ * An Unicode character (16 bits)
  */
 typedef	uint16	ucchar;
 
@@ -317,7 +329,7 @@ extern "C" long _ftol2( double dblSource );
 #  define for if(false) {} else for
 #endif
 
-// Define a macro to write template function according to compiler weaknes
+// Define a macro to write template function according to compiler weakness
 #ifdef NL_COMP_NEED_PARAM_ON_METHOD
  #define NL_TMPL_PARAM_ON_METHOD_1(p1)	<p1>
  #define NL_TMPL_PARAM_ON_METHOD_2(p1, p2)	<p1, p2>
