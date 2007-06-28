@@ -51,3 +51,4 @@
 #ifdef max
 #undef max
 #endif
+#include "nel/misc/bsphere.h"
