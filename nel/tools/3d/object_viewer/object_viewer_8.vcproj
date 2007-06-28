@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="object_viewer"
 	ProjectGUID="{A10DFC7C-B9E1-47D3-B3D8-3EE15AEBDAEC}"
 	RootNamespace="object_viewer"
@@ -80,10 +80,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libxml2.lib freetype231.lib shlwapi.lib version.lib jpeg.lib"
+				AdditionalDependencies="libxml2.lib freetype.lib libjpeg.lib Version.lib"
 				OutputFile="../../../lib/object_viewer_rd.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
+				IgnoreDefaultLibraryNames="libcmtd.lib;libcmt.lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\ReleaseDebug/object_viewer_rd.pdb"
 				SubSystem="2"
@@ -181,10 +182,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="mfcs42.lib msvcrt.lib libc.lib libxml2.lib freetype231.lib shlwapi.lib version.lib jpeg.lib"
+				AdditionalDependencies="libxml2.lib freetype.lib libjpeg.lib Version.lib"
 				OutputFile="../../../lib/object_viewer.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
+				IgnoreDefaultLibraryNames="libcmtd.lib;libcmt.lib"
 				ProgramDatabaseFile=".\Release/object_viewer.pdb"
 				SubSystem="2"
 				ImportLibrary=".\Release/object_viewer.lib"
@@ -284,10 +286,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libxml2_a.lib freetype231_D.lib shlwapi.lib version.lib jpeg.lib"
+				AdditionalDependencies="libxml2.lib freetype.lib libjpeg.lib Version.lib"
 				OutputFile="../../../lib/object_viewer_debug.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
+				IgnoreDefaultLibraryNames="libcmtd.lib;libcmt.lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/object_viewer_debug.pdb"
 				SubSystem="2"
@@ -383,10 +386,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib freetype231_D.lib libxml2_debug.lib version.lib jpeg.lib"
+				AdditionalDependencies="libxml2.lib freetype.lib libjpeg.lib Version.lib"
 				OutputFile="../../../lib/object_viewer_debug_fast.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
+				IgnoreDefaultLibraryNames="libcmtd.lib;libcmt.lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\DebugFast/object_viewer_debug_fast.pdb"
 				SubSystem="2"
@@ -1646,6 +1650,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\snapshot_tool_dlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath="sound_system.cpp"
 				>
 				<FileConfiguration
@@ -1944,6 +1952,10 @@
 			</File>
 			<File
 				RelativePath="slot_dlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\snapshot_tool_dlg.h"
 				>
 			</File>
 			<File
