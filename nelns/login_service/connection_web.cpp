@@ -68,7 +68,7 @@ map<uint32, CLoginCookie> TempCookies;
 // Callbacks
 //
 
-static void cbWSShardChooseShard/* (CMessage &msgin, TSockId from, CCallbackNetBase &netbase)*/ (CMessage &msgin, const std::string &serviceName, uint16 sid)
+static void cbWSShardChooseShard/* (CMessage &msgin, TSockId from, CCallbackNetBase &netbase)*/ (CMessage &msgin, const std::string &serviceName, TServiceId sid)
 {
 	nlassert(WebServer != NULL);
 

@@ -465,7 +465,7 @@ NLMISC_COMMAND (shards, "displays the list of all registered shards", "")
 	log.displayNL ("Display the %d registered shards :", Shards.size());
 	for (uint i = 0; i < Shards.size(); i++)
 	{
-		log.displayNL ("* ShardId: %d SId: %d NbPlayers: %d", Shards[i].ShardId, Shards[i].SId, Shards[i].NbPlayers);
+		log.displayNL ("* ShardId: %d SId: %d NbPlayers: %d", Shards[i].ShardId, Shards[i].SId.get(), Shards[i].NbPlayers);
 		CUnifiedNetwork::getInstance()->displayUnifiedConnection (Shards[i].SId, &log);
 	}
 	log.displayNL ("End of the list");
