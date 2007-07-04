@@ -28,6 +28,7 @@
 #ifdef NL_OS_WINDOWS
 #  include <windows.h>
 #  include <io.h>
+#  include <tchar.h>
 #  undef min
 #  undef max
 #elif defined NL_OS_UNIX
@@ -673,7 +674,7 @@ bool launchProgram (const std::string &programName, const std::string &arguments
 {
 
 #ifdef NL_OS_WINDOWS
-	STARTUPINFO         si;
+	STARTUPINFOA         si;
     PROCESS_INFORMATION pi;
 	
     memset(&si, 0, sizeof(si));
@@ -700,7 +701,7 @@ bool launchProgram (const std::string &programName, const std::string &arguments
 */
 
 	// Enable nlassert/nlstop to display the error reason & callstack
-	const char *SE_TRANSLATOR_IN_MAIN_MODULE = "NEL_SE_TRANS";
+	const TCHAR *SE_TRANSLATOR_IN_MAIN_MODULE = _T("NEL_SE_TRANS");
 	TCHAR envBuf [2];
 	if ( GetEnvironmentVariable( SE_TRANSLATOR_IN_MAIN_MODULE, envBuf, 2 ) != 0)
 	{
@@ -708,7 +709,7 @@ bool launchProgram (const std::string &programName, const std::string &arguments
 	}
 	
 	string arg = " " + arguments;
-	BOOL res = CreateProcess(programName.c_str(), (char*)arg.c_str(), 0, 0, FALSE, CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW, 0, 0, &si, &pi);
+	BOOL res = CreateProcessA(programName.c_str(), (char*)arg.c_str(), 0, 0, FALSE, CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW, 0, 0, &si, &pi);
 
 	if (res)
 	{
@@ -1010,17 +1011,17 @@ NLMISC_CATEGORISED_COMMAND(nel, killProgram, "kill a program given the pid", "<p
 }
 
 #ifdef NL_OS_WINDOWS
-LONG GetRegKey(HKEY key, LPCTSTR subkey, LPTSTR retdata)
+LONG GetRegKey(HKEY key, LPCSTR subkey, LPSTR retdata)
 {
     HKEY hkey;
-    LONG retval = RegOpenKeyEx(key, subkey, 0, KEY_QUERY_VALUE, &hkey);
+    LONG retval = RegOpenKeyExA(key, subkey, 0, KEY_QUERY_VALUE, &hkey);
 
     if (retval == ERROR_SUCCESS) 
 	{
         long datasize = MAX_PATH;
-        TCHAR data[MAX_PATH];
-        RegQueryValue(hkey, NULL, data, &datasize);
-        lstrcpy(retdata,data);
+        char data[MAX_PATH];
+        RegQueryValueA(hkey, NULL, data, &datasize);
+        lstrcpyA(retdata,data);
         RegCloseKey(hkey);
     }
 
@@ -1031,27 +1032,27 @@ LONG GetRegKey(HKEY key, LPCTSTR subkey, LPTSTR retdata)
 bool openURL (const char *url)
 {
 #ifdef NL_OS_WINDOWS
-    TCHAR key[MAX_PATH + MAX_PATH];
+    char key[MAX_PATH + MAX_PATH];
     if (GetRegKey(HKEY_CLASSES_ROOT, ".html", key) == ERROR_SUCCESS) 
 	{
-        lstrcat(key, "\\shell\\open\\command");
+        lstrcatA(key, "\\shell\\open\\command");
 
         if (GetRegKey(HKEY_CLASSES_ROOT,key,key) == ERROR_SUCCESS) 
 		{
-            TCHAR *pos;
+            char *pos;
             pos = strstr(key, "\"%1\"");
             if (pos == NULL) {                     // No quotes found
                 pos = strstr(key, "%1");       // Check for %1, without quotes 
                 if (pos == NULL)                   // No parameter at all...
-                    pos = key+lstrlen(key)-1;
+                    pos = key+lstrlenA(key)-1;
                 else
                     *pos = '\0';                   // Remove the parameter
             }
             else
                 *pos = '\0';                       // Remove the parameter
 
-            lstrcat(pos, " ");
-            lstrcat(pos, url);
+            lstrcatA(pos, " ");
+            lstrcatA(pos, url);
             int res = WinExec(key,SW_SHOWDEFAULT);
 			return (res>31);
         }
@@ -1064,34 +1065,34 @@ bool openDoc (const char *document)
 {
 #ifdef NL_OS_WINDOWS
 	string ext = CFile::getExtension (document);
-    TCHAR key[MAX_PATH + MAX_PATH];
+    char key[MAX_PATH + MAX_PATH];
 
     // First try ShellExecute()
-    HINSTANCE result = ShellExecute(NULL, "open", document, NULL,NULL, SW_SHOWDEFAULT);
+    HINSTANCE result = ShellExecuteA(NULL, "open", document, NULL,NULL, SW_SHOWDEFAULT);
 
     // If it failed, get the .htm regkey and lookup the program
     if ((UINT)result <= HINSTANCE_ERROR) 
 	{
         if (GetRegKey(HKEY_CLASSES_ROOT, ext.c_str(), key) == ERROR_SUCCESS) 
 		{
-            lstrcat(key, "\\shell\\open\\command");
+            lstrcatA(key, "\\shell\\open\\command");
 
             if (GetRegKey(HKEY_CLASSES_ROOT,key,key) == ERROR_SUCCESS) 
 			{
-                TCHAR *pos;
+                char *pos;
                 pos = strstr(key, "\"%1\"");
                 if (pos == NULL) {                     // No quotes found
                     pos = strstr(key, "%1");       // Check for %1, without quotes 
                     if (pos == NULL)                   // No parameter at all...
-                        pos = key+lstrlen(key)-1;
+                        pos = key+lstrlenA(key)-1;
                     else
                         *pos = '\0';                   // Remove the parameter
                 }
                 else
                     *pos = '\0';                       // Remove the parameter
 
-                lstrcat(pos, " ");
-                lstrcat(pos, document);
+                lstrcatA(pos, " ");
+                lstrcatA(pos, document);
                 int res = WinExec(key,SW_SHOWDEFAULT);
 				return (res>31);
             }
