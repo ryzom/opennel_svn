@@ -42,7 +42,7 @@ namespace NLNET {
 /** This class encapsulate the serviceId format. */
 class TServiceId
 {
-	/// Service are identied by a 16 bits integer
+	/// Service are identified by a 16 bits integer
 	uint16	_ServiceId;
 public:
 	typedef uint16	size_type;
