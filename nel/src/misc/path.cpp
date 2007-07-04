@@ -790,12 +790,12 @@ dirent *readdir (DIR *dir)
 	if (hFind == NULL)
 	{
 		string fullPath = CPath::standardizePath(sDir) + "*";
-		hFind = FindFirstFile (fullPath.c_str(), &findData);
+		hFind = FindFirstFileA (fullPath.c_str(), &findData);
 	}
 	// directory already visited : FindNextFile()
 	else
 	{
-		if (!FindNextFile (hFind, &findData))
+		if (!FindNextFileA (hFind, &findData))
 			return NULL;
 	}
 
@@ -893,10 +893,10 @@ void CFileContainer::getPathContent (const string &path, bool recurse, bool want
 
 		if (isdirectory(de))
 		{
-			// skip CVS directory
-			if ((!showEverything) && (fn == "CVS"))
+			// skip CVS and .svn directory
+			if ((!showEverything) && (fn == "CVS" || fn == ".svn"))
 			{
-				NL_DISPLAY_PATH("PATH: CPath::getPathContent(%s, %d, %d, %d): skip CVS directory", path.c_str(), recurse, wantDir, wantFile);
+				NL_DISPLAY_PATH("PATH: CPath::getPathContent(%s, %d, %d, %d): skip CVS and .svn directory", path.c_str(), recurse, wantDir, wantFile);
 				continue;
 			}
 
