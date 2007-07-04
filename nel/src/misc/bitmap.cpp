@@ -340,7 +340,8 @@ uint8 CBitmap::readDDS(NLMISC::IStream &f, uint mipMapSkip)
 	//verify if file have linearsize set
 	if(!(flags & DDSD_LINEARSIZE)) 
     {
-		throw EDDSBadHeader();
+		nlwarning("A DDS doesn't have the flag DDSD_LINEARSIZE");
+		//throw EDDSBadHeader();
 	}
 	
 	//-------------- extracting and testing useful info
@@ -1515,7 +1516,6 @@ void CBitmap::buildMipMaps()
 		uint32	mulh= prech/h;
 
 		_Data[_MipMapCount].resize(w*h*4);
-		
 	
 		NLMISC::CRGBA *pRgba = (NLMISC::CRGBA*)&_Data[_MipMapCount][0];
 		NLMISC::CRGBA *pRgbaPrev = (NLMISC::CRGBA*)&_Data[_MipMapCount-1][0];
@@ -2980,7 +2980,8 @@ void	CBitmap::loadSize(NLMISC::IStream &f, uint32 &retWidth, uint32 &retHeight)
 		//verify if file have linearsize set
 		if(!(flags & DDSD_LINEARSIZE)) 
 		{
-			throw EDDSBadHeader();
+			nlwarning("A DDS doesn't have the flag DDSD_LINEARSIZE");
+			//throw EDDSBadHeader();
 		}
 		
 		//-------------- extracting and testing useful info
@@ -3760,7 +3761,7 @@ CRGBA CBitmap::getDXTC3Texel(sint x, sint y, uint32 numMipMap) const
 	CRGBA result = getDXTCColorFromBlock(block + 8, x, y);
 	// get alpha part
 	uint8 alphaByte = block[((y & 3) << 1) + ((x & 2) >> 1)];
-	result.A = (x & 1) ?  (alphaByte & 0xf0) : (alphaByte << 4);
+	result.A = (x & 1) ?  (alphaByte & 0xf0) : ((alphaByte & 0x0f) << 4);
 	return result;
 }
 
