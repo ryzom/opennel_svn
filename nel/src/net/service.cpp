@@ -198,7 +198,7 @@ static void sigHandler(int Sig)
 		{
 			if (getThreadId () != SignalisedThread)
 			{
-				nldebug ("SERVICE: Secondary thread received the signal (%s, %d), ignoring it", SignalName[i],Sig);
+				nldebug ("SERVICE: Not the main thread (%u, %u) received the signal (%s, %d), ignore it", getThreadId (), SignalisedThread, SignalName[i],Sig);
 				return;
 			}
 			else
@@ -245,7 +245,7 @@ static void initSignal()
 	SignalisedThread = getThreadId ();
 #ifdef NL_DEBUG
 	// in debug mode, we only trap the SIGINT signal (for ctrl-c handling)
-	signal(Signal[3], sigHandler);
+	//signal(Signal[3], sigHandler);
 	//nldebug("Signal : %s (%d) trapped", SignalName[3], Signal[3]);
 #else
 	// in release, redirect all signals
