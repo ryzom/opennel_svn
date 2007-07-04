@@ -74,6 +74,9 @@ string CSystemInfo::getOS()
 	case VER_PLATFORM_WIN32_NT:
 
 		// Test for the specific product family.
+		if ( osvi.dwMajorVersion == 6 )
+			OSString = "Microsoft Windows Vista ";
+
 		if ( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 2 )
 			OSString = "Microsoft Windows Server 2003 family ";
 
@@ -143,11 +146,11 @@ string CSystemInfo::getOS()
 			DWORD dwBufLen=BUFSIZE;
 			LONG lRet;
 
-			lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE, "SYSTEM\\CurrentControlSet\\Control\\ProductOptions", 0, KEY_QUERY_VALUE, &hKey );
+			lRet = RegOpenKeyExA( HKEY_LOCAL_MACHINE, "SYSTEM\\CurrentControlSet\\Control\\ProductOptions", 0, KEY_QUERY_VALUE, &hKey );
 			if( lRet != ERROR_SUCCESS )
 				return OSString + " Can't RegOpenKeyEx";
 
-			lRet = RegQueryValueEx( hKey, "ProductType", NULL, NULL, (LPBYTE) szProductType, &dwBufLen);
+			lRet = RegQueryValueExA( hKey, "ProductType", NULL, NULL, (LPBYTE) szProductType, &dwBufLen);
 			if( (lRet != ERROR_SUCCESS) || (dwBufLen > BUFSIZE) )
 				return OSString + " Can't ReQueryValueEx";
 
@@ -163,13 +166,13 @@ string CSystemInfo::getOS()
 
 		// Display service pack (if any) and build number.
 
-		if( osvi.dwMajorVersion == 4 && lstrcmpi( osvi.szCSDVersion, "Service Pack 6" ) == 0 )
+		if( osvi.dwMajorVersion == 4 && lstrcmpi( osvi.szCSDVersion, _T("Service Pack 6") ) == 0 )
 		{
 			HKEY hKey;
 			LONG lRet;
 
 			// Test for SP6 versus SP6a.
-			lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Hotfix\\Q246009", 0, KEY_QUERY_VALUE, &hKey );
+			lRet = RegOpenKeyExA( HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Hotfix\\Q246009", 0, KEY_QUERY_VALUE, &hKey );
 			if( lRet == ERROR_SUCCESS )
 				OSString += toString("Service Pack 6a (Build %d) ", osvi.dwBuildNumber & 0xFFFF );
 			else // Windows NT 4.0 prior to SP6a
@@ -381,7 +384,7 @@ string CSystemInfo::getProc ()
 	DWORD valueSize;
 	HKEY hKey;
 
-	result = ::RegOpenKeyEx (HKEY_LOCAL_MACHINE, "Hardware\\Description\\System\\CentralProcessor\\0", 0, KEY_QUERY_VALUE, &hKey);
+	result = ::RegOpenKeyExA (HKEY_LOCAL_MACHINE, "Hardware\\Description\\System\\CentralProcessor\\0", 0, KEY_QUERY_VALUE, &hKey);
 	if (result == ERROR_SUCCESS)
 	{
 		// get processor name
@@ -418,8 +421,11 @@ string CSystemInfo::getProc ()
 		result = ::RegQueryValueEx (hKey, _T("~MHz"), NULL, NULL, (LPBYTE)value, &valueSize);
 		if (result == ERROR_SUCCESS)
 		{
-			ProcString += itoa (*(int *)value, value, 10);
-			ProcString += "MHz";
+			uint32 freq = *(int *)value;
+			// discard the low value (not enough significant)
+			freq /= 10;
+			freq *= 10;
+			ProcString += toString("%uMHz", freq);
 		}
 		else
 			ProcString += "UnknownFreq";
@@ -435,7 +441,7 @@ string CSystemInfo::getProc ()
 		string	tmp= string("Hardware\\Description\\System\\CentralProcessor\\") + toString(i);
 
 		// try to open the key
-		result = ::RegOpenKeyEx (HKEY_LOCAL_MACHINE, tmp.c_str(), 0, KEY_QUERY_VALUE, &hKey);
+		result = ::RegOpenKeyExA (HKEY_LOCAL_MACHINE, tmp.c_str(), 0, KEY_QUERY_VALUE, &hKey);
 		// Make sure to close the reg key
 		RegCloseKey (hKey);
 
@@ -1062,12 +1068,12 @@ bool CSystemInfo::getVideoInfo (std::string &deviceName, uint64 &driverVersion)
 
 					// * Read the registry 
 					HKEY baseKey;
-					if (RegOpenKeyEx(keyRoot, keyPath.c_str(), 0, KEY_READ, &baseKey) == ERROR_SUCCESS)
+					if (RegOpenKeyExA(keyRoot, keyPath.c_str(), 0, KEY_READ, &baseKey) == ERROR_SUCCESS)
 					{
 						DWORD valueType;
 						char value[512];
 						DWORD size = 512;
-						if (RegQueryValueEx(baseKey, keyName.c_str(), NULL, &valueType, (unsigned char *)value, &size) == ERROR_SUCCESS)
+						if (RegQueryValueExA(baseKey, keyName.c_str(), NULL, &valueType, (unsigned char *)value, &size) == ERROR_SUCCESS)
 						{
 							// Null ?
 							if (value[0] != 0)
@@ -1077,10 +1083,10 @@ bool CSystemInfo::getVideoInfo (std::string &deviceName, uint64 &driverVersion)
 								{
 									// In Windows'XP we got service name -> not real driver name, so
 									string xpKey = string ("System\\CurrentControlSet\\Services\\")+value;
-									if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, xpKey.c_str(), 0, KEY_READ, &baseKey) == ERROR_SUCCESS)
+									if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, xpKey.c_str(), 0, KEY_READ, &baseKey) == ERROR_SUCCESS)
 									{
 										size = 512;
-										if (RegQueryValueEx(baseKey, "ImagePath", NULL, &valueType, (unsigned char *)value, &size) == ERROR_SUCCESS)
+										if (RegQueryValueExA(baseKey, "ImagePath", NULL, &valueType, (unsigned char *)value, &size) == ERROR_SUCCESS)
 										{
 											if (value[0] != 0)
 											{
@@ -1097,7 +1103,7 @@ bool CSystemInfo::getVideoInfo (std::string &deviceName, uint64 &driverVersion)
 								}
 
 								// Version dll link
-								HMODULE hmVersion = LoadLibrary ("version");
+								HMODULE hmVersion = LoadLibrary (_T("version"));
 								if (hmVersion)
 								{
 									BOOL (WINAPI* _GetFileVersionInfo)(LPTSTR, DWORD, DWORD, LPVOID) = NULL;
@@ -1112,11 +1118,11 @@ bool CSystemInfo::getVideoInfo (std::string &deviceName, uint64 &driverVersion)
 										string driverName = value;
 										if (atleastNT4)
 										{
-											nlverify (GetWindowsDirectory(value, 512) != 0);
+											nlverify (GetWindowsDirectoryA(value, 512) != 0);
 										}
 										else
 										{
-											nlverify (GetSystemDirectory(value, 512) != 0);
+											nlverify (GetSystemDirectoryA(value, 512) != 0);
 										}
 										driverName = string (value) + "\\" + driverName;
 
