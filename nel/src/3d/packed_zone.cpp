@@ -1290,7 +1290,7 @@ template <class T> bool raytrace(T &packedZone, const NLMISC::CVector &start, co
 		if (y < 0) continue;
 		if (y >= (sint) packedZone.Grid.getHeight()) continue;		
 		T::TIndexType triListIndex = packedZone.Grid(x, y);
-		if (triListIndex != (T::TIndexType) ~0)
+		if (triListIndex != ~0)
 		{
 			CTriangle tri;
 			CPlane triPlane;			
@@ -1317,7 +1317,7 @@ template <class T> bool raytrace(T &packedZone, const NLMISC::CVector &start, co
 				}
 				++ triListIndex;
 			}
-			while (packedZone.TriLists[triListIndex] != (T::TIndexType) ~0);			
+			while (packedZone.TriLists[triListIndex] != ~0);
 			if (bestInterDist != FLT_MAX)
 			{
 				if (normal)
