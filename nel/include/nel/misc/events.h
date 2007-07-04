@@ -80,6 +80,9 @@ const CClassId EventMouseWheelId (0x73ac4321, 0x4c273150);
 // Misc events
 const CClassId EventDisplayChangeId(0x1751559, 0x25b52b3c);
 
+// Input Mehod Editor (IME) events
+const CClassId EventIME (0x261f1ede, 0x1b0a6c3a);
+
 
 enum TKey 
 {
@@ -312,13 +315,19 @@ public:
 class CEventChar : public CEventKey
 {
 public:
-	CEventChar (ucchar c, TKeyButton button, IEventEmitter* emitter) : CEventKey (button, emitter, EventCharId)
+	CEventChar (ucchar c, TKeyButton button, IEventEmitter* emitter) : CEventKey (button, emitter, EventCharId), _Raw(true)
 	{
 		Char=c;
 	}
 	ucchar Char;
 
 	virtual	CEvent			*clone() const {return new CEventChar(*this);}
+	void					setRaw( bool raw ) { _Raw = raw; }
+	bool					isRaw() const { return _Raw; }
+
+private:
+	bool	_Raw; // true if raw, false if composed by an IME
+
 };
 
 
@@ -482,6 +491,20 @@ public:
 	virtual	CEvent			*clone() const {return new CEventDestroyWindow(*this);}
 };
 
+/**
+ * CEventIME
+ */
+class CEventIME : public CEvent
+{
+public:
+	CEventIME (uint32 msg, uint32 wParam, uint32 lParam, IEventEmitter* emitter) : CEvent (emitter, EventIME), EventMessage(msg), WParam(wParam), LParam(lParam)
+	{}
+
+	uint32	EventMessage;
+	uint32	WParam, LParam;
+
+	virtual CEvent			*clone() const {return new CEventIME(*this);}
+};
 
 /**
  * CEventDisplayChange : Called user has changed the desktop resolution
