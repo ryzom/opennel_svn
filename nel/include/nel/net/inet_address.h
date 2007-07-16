@@ -151,7 +151,7 @@ public:
 protected:
 
 	/// Constructor with ip address, port=0
-	CInetAddress( const in_addr *ip );
+	CInetAddress( const in_addr *ip, const char *hostname = 0);
 
 private:
 
