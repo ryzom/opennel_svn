@@ -612,6 +612,8 @@ extern PFNWGLGETSWAPINTERVALEXTPROC	wglGetSwapIntervalEXT;
 // WGL_ARB_extensions_string
 extern PFNWGFGETEXTENSIONSSTRINGARB			wglGetExtensionsStringARB;
 
+#endif
+
 // GL_EXT_framebuffer_object
 extern NEL_PFNGLISRENDERBUFFEREXTPROC			nglIsRenderbufferEXT;
 extern NEL_PFNGLISFRAMEBUFFEREXTPROC			nglIsFramebufferEXT;
@@ -625,8 +627,6 @@ extern NEL_PFNGLRENDERBUFFERSTORAGEEXTPROC		nglRenderbufferStorageEXT;
 extern NEL_PFNGLFRAMEBUFFERRENDERBUFFEREXTPROC	nglFramebufferRenderbufferEXT;
 extern NEL_PFNGLDELETERENDERBUFFERSEXTPROC		nglDeleteRenderbuffersEXT;
 extern NEL_PFNGLDELETEFRAMEBUFFERSEXTPROC		nglDeleteFramebuffersEXT;
-
-#endif
 
 
 #endif // NL_OPENGL_EXTENSION_H
