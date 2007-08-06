@@ -1289,16 +1289,16 @@ template <class T> bool raytrace(T &packedZone, const NLMISC::CVector &start, co
 		if (x >= (sint) packedZone.Grid.getWidth()) continue;
 		if (y < 0) continue;
 		if (y >= (sint) packedZone.Grid.getHeight()) continue;		
-		T::TIndexType triListIndex = packedZone.Grid(x, y);
+		uint32 triListIndex = packedZone.Grid(x, y);
 		if (triListIndex != ~0)
 		{
 			CTriangle tri;
-			CPlane triPlane;			
+			CPlane triPlane;
 			float bestInterDist = FLT_MAX;
 			NLMISC::CVector bestNormal;
-			CVector currInter;			
+			CVector currInter;
 			do
-			{			
+			{
 				packedZone.unpackTri(packedZone.Tris[packedZone.TriLists[triListIndex]], &tri.V0);
 				if (testedTriangles)
 				{
@@ -1311,7 +1311,7 @@ template <class T> bool raytrace(T &packedZone, const NLMISC::CVector &start, co
 					if (dist < bestInterDist)
 					{
 						bestInterDist = dist;
-						inter = currInter;						
+						inter = currInter;
 						bestNormal.set(triPlane.a, triPlane.b, triPlane.c);
 					}
 				}
@@ -1325,7 +1325,7 @@ template <class T> bool raytrace(T &packedZone, const NLMISC::CVector &start, co
 					*normal = bestNormal.normed();
 				}
 				return true;
-			}			
+			}
 		}
 	}
 	while(CGridTraversal::traverse(start2f, dir2f, x, y));
