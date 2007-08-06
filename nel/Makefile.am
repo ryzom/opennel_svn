@@ -1,20 +1,34 @@
 #
-# $Id: Makefile.am,v 1.11 2005-04-04 11:53:51 cado Exp $
+# $Id: Makefile.am,v 1.11 2005/04/04 11:53:51 cado Exp $
 #
 
-MAINTAINERCLEANFILES = Makefile.in configure libtool config.guess \
-                       config.sub ltconfig aclocal.m4 config.h.in \
-                       install-sh missing mkinstalldirs ltmain.sh \
-                       include/nelconfig.h include/nelconfig.h.in \
-                       include/nel/nelconfig.h
+MAINTAINERCLEANFILES	=	Makefile.in		\
+				configure		\
+				libtool			\
+				config.guess		\
+				config.sub		\
+				ltconfig		\
+				aclocal.m4		\
+				config.h.in		\
+				install-sh		\
+				missing			\
+				mkinstalldirs		\
+				ltmain.sh		\
+				include/nelconfig.h	\
+				include/nelconfig.h.in	\
+				include/nel/nelconfig.h
 
-DISTCLEANFILES       = include/stamp-h include/stamp-h.in 
+DISTCLEANFILES		=	include/stamp-h		\
+				include/stamp-h.in 
 
-SUBDIRS              = include src
+SUBDIRS = 	include src tools samples
 
-bin_SCRIPTS          = nel-config
+bin_SCRIPTS		=	nel-config
 
-EXTRA_DIST           = acconfig.h nel.dsw bootstrap doc tools
+EXTRA_DIST		=	nel.dsw			\
+				autogen.sh		\
+				doc			\
+				tools
 
 dist-hook:
 	find $(distdir) -name CVS -print | xargs rm -fr
