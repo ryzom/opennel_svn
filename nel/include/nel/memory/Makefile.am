@@ -6,8 +6,7 @@ MAINTAINERCLEANFILES = Makefile.in
 
 includedir           = ${prefix}/include/nel/memory
 
-include_HEADERS      = $(wildcard *.h)
-
+include_HEADERS      =	memory_config.h		\
+			memory_manager.h
 
 # End of Makefile.am
-
