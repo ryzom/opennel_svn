@@ -235,6 +235,8 @@ libnel3d_la_SOURCES  = \
 	ordering_table.h \
 	packed_zone.cpp \
 	packed_zone.h \
+	packed_world.cpp \
+	packed_world.h \
 	particle_system.cpp \
 	particle_system.h \
 	particle_system_manager.cpp \
