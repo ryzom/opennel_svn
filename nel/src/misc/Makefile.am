@@ -53,6 +53,7 @@ libnelmisc_la_SOURCES = \
 	game_device.cpp \
 	game_device_events.cpp \
 	geom_ext.cpp \
+	grid_traversal.cpp \
 	gtk_displayer.cpp \
 	heap_memory.cpp \
 	hierarchical_timer.cpp \
