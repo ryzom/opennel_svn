@@ -49,6 +49,50 @@ const char SEPARATOR = ' ';
 	serialSeparatedBufferOut( number_as_cstring );
 
 // ***************************************************************************
+// XML callbacks
+// ***************************************************************************
+
+int xmlOutputWriteCallbackForNeL ( void *context, const char *buffer, int len)
+{
+	// no need to save empty buffer
+	if(len == 0) return 0;
+
+	// Get the object
+	COXml *object = (COXml*) context;
+
+	// Serialise the buffer
+	object->_InternalStream->serialBuffer ((uint8*)buffer, len);
+
+	// Return the value
+	return len;
+}
+
+// ***************************************************************************
+
+int xmlOutputCloseCallbackForNeL ( void *context )
+{
+	// Get the object
+	// COXml *object = (COXml*) context;
+
+	// Does nothing
+	return 1;
+}
+
+// ***************************************************************************
+
+xmlDocPtr COXml::getDocument ()
+{
+	if (_Document)
+		return _Document;
+
+	// Initialise the document
+	_Document = xmlNewDoc ((const xmlChar *)_Version.c_str());
+
+	return _Document;
+}
+
+
+// ***************************************************************************
 
 inline void COXml::flushContentString ()
 {
@@ -637,51 +681,6 @@ void COXml::flush ()
 		xmlFreeDoc (_Document);
 		_Document = NULL;
 	}
-}
-
-// ***************************************************************************
-
-// XML callbacks
-
-// ***************************************************************************
-
-int xmlOutputWriteCallbackForNeL ( void *context, const char *buffer, int len)
-{
-	// no need to save empty buffer
-	if(len == 0) return 0;
-
-	// Get the object
-	COXml *object = (COXml*) context;
-
-	// Serialise the buffer
-	object->_InternalStream->serialBuffer ((uint8*)buffer, len);
-
-	// Return the value
-	return len;
-}
-
-// ***************************************************************************
-
-int xmlOutputCloseCallbackForNeL ( void *context )
-{
-	// Get the object
-	// COXml *object = (COXml*) context;
-
-	// Does nothing
-	return 1;
-}
-
-// ***************************************************************************
-
-xmlDocPtr COXml::getDocument ()
-{
-	if (_Document)
-		return _Document;
-
-	// Initialise the document
-	_Document = xmlNewDoc ((const xmlChar *)_Version.c_str());
-
-	return _Document;
 }
 
 // ***************************************************************************
