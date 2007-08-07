@@ -2,7 +2,7 @@
 # Configuration script for NeL
 # ====================================================================
 #
-# $Id: configure.ac,v 1.8 2005-04-14 15:54:32 cado Exp $
+# $Id: configure.ac,v 1.8 2005/04/14 15:54:32 cado Exp $
 # 
 
 # ====================================================================
@@ -26,16 +26,15 @@ AC_CANONICAL_HOST
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_CPP
+AC_PROG_YACC
+AC_PROG_LEX
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
-AC_PROG_YACC
 AC_PROG_LIBTOOL
 AM_PROG_LIBTOOL
-AM_PROG_LEX
 AM_SANITY_CHECK
 
-AM_PATH_CCACHE
 AM_MAINTAINER_MODE
 
 
@@ -170,6 +169,32 @@ if test $enable_sound = "yes"
 then
    AC_MSG_RESULT([enable NeL Sound])
    NEL_SUBDIRS="$NEL_SUBDIRS sound"
+fi
+
+# Unit Tests
+AC_ARG_ENABLE([tests],
+		AC_HELP_STRING([--enable-tests],
+				[enable unit tests of NeL]),
+		[],
+		[enable_tests=no])
+
+if test $enable_tests = "yes"
+then
+	AC_MSG_RESULT([enable NeL Unit Tests])
+fi
+
+# Code Coverage
+AC_ARG_ENABLE([coverage],
+	AC_HELP_STRING([--enable-coverage],
+			[enable code coverage generation]),
+		[]
+		[enable_coverage=no])
+
+if test $enable_coverage = "yes"
+then
+	AC_MSG_RESULT([enable Code Coverage generation])
+
+	CXXFLAGS="$CXXFLAGS -fprofile-arcs -ftest-coverage"
 fi
 
 AC_SUBST([enable_net])
@@ -336,8 +361,9 @@ AC_LANG([C++])
 # ====================================================================
 # STLPort
 
-AM_PATH_STLPORT
-
+AM_PATH_STLPORT('/usr/local /usr')
+LIBS="$IBSS $STLPORT_LIBS"
+CXXFLAGS="$CXXFLAGS $STLPORT_INCLUDES"
 
 # ====================================================================
 # Checks for libraries.
@@ -366,6 +392,11 @@ AM_PATH_XF86VIDMODE
 
 AM_PATH_FMOD($enable_sound)
 
+
+# ====================================================================
+# CppTest 
+
+#AM_PATH_CPPTEST($enable_tests)
 
 # ====================================================================
 # Arrange for the include directory to be in the search path even when
@@ -434,4 +465,12 @@ AC_CONFIG_FILES([Makefile                                        \
 ])
 AC_OUTPUT
 
+#	   samples/net/udp/Makefile                        \
+#	   samples/net/class_transport/Makefile            \
+#           tools/nel_unit_test/Makefile                    \
+#           tools/nel_unit_test/misc_ut/Makefile            \
+#           tools/nel_unit_test/ligo_ut/Makefile            \
+#           tools/nel_unit_test/net_ut/Makefile             \
+#           tools/nel_unit_test/net_ut/net_service_lib_test/Makefile \
+#           tools/nel_unit_test/net_ut/net_module_lib_test/Makefile  \
 # End of configure.in
