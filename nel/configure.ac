@@ -362,8 +362,9 @@ AC_LANG([C++])
 # STLPort
 
 AM_PATH_STLPORT('/usr/local /usr')
-LIBS="$IBSS $STLPORT_LIBS"
+LIBS="$LIBS $STLPORT_LIBS"
 CXXFLAGS="$CXXFLAGS $STLPORT_INCLUDES"
+LDFLAGS="$LDFLAGS $STLPORT_LDFLAGS"
 
 # ====================================================================
 # Checks for libraries.

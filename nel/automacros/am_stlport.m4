@@ -11,16 +11,16 @@ AC_DEFUN([AM_PATH_STLPORT], [
     have_stlport=0
  
     # Save the original values of the flags we tweak.
-    stlport_check_lib_save_libs="$LIBS"
+    stlport_check_lib_save_ldflags="$LDFLAGS"
     stlport_check_lib_save_cxxflags="$CXXFLAGS"
  
     found=not
     for stlport_place in $stlport_places;
     do
-      LIBS="$stlport_check_lib_save_libs"
+      LDFLAGS="$stlport_check_lib_save_ldflags"
       CXXFLAGS="$stlport_check_lib_save_cxxflags"
      
-      LIBS="$LIBS -L$stlport_place/lib"
+      LDFLAGS="$LDFLAGS -L$stlport_place/lib"
       CXXFLAGS="$CXXFLAGS -I$stlport_place/include/stlport"
       description="$stlport_place"
      
@@ -58,7 +58,7 @@ AC_DEFUN([AM_PATH_STLPORT], [
     done
 
     # Restore the original values of the flags we tweak.
-    LIBS="$stlport_check_lib_save_libs"
+    LDFLAGS="$stlport_check_lib_save_ldflags"
     CXXFLAGS="$stlport_check_lib_save_cxxflags"
 
     case "$found" in
@@ -68,10 +68,14 @@ AC_DEFUN([AM_PATH_STLPORT], [
       ;;
     *)
       STLPORT_INCLUDES="-I$found/include/stlport"
-      STLPORT_LIBS="-L$found/lib"
+      STLPORT_LIBS="-lstlport"
+      STLPORT_LDFLAGS="-L$found/lib"
       have_stlport=1
       ;;
     esac
+    AC_SUBST(STLPORT_INCLUDES)
+    AC_SUBST(STLPORT_LIBS)
+    AC_SUBST(STLPORT_LDFLAGS)
 ])
 
 # =========================================================================
