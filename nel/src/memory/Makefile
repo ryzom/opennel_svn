@@ -22,14 +22,15 @@ LDFLAGS      =
 # The bit that changes each time we cut paste and hack this file :o)
 
 # The list of targets to build
-TARGETS		= libnelmemory.a
+TARGET		= ../../libnelmemory.a
 DSP_TARGET	= memory.dsp
 
 # The default build rule
-all:			check-deps $(TARGETS)
+all:			check-deps $(TARGET)
 
-libnelmemory.a: $(OBJS)
-	ar r ../../libnelmemory.a $(OBJS)
+$(TARGET): $(OBJS)
+	ar r $@ $(OBJS)
+
 
 #############################################################################
 # Rules
