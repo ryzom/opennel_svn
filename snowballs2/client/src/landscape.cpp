@@ -148,7 +148,7 @@ void	initLandscape()
 		ConfigFile.getVar("LandscapeMultiplyFactor").asFloat());
 
 	CConfigFile::CVar igv = ConfigFile.getVar("InstanceGroups");
-	for (sint32 i = 0; i < igv.size (); i++)
+	for (uint32 i = 0; i < igv.size (); i++)
 	{
 		UInstanceGroup *inst = UInstanceGroup::createInstanceGroup (igv.asString (i));
 		if (inst == NULL)

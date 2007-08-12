@@ -204,7 +204,7 @@ int main(int argc, char **argv)
 	CPath::addSearchPath (ConfigFile.getVar("DataPath").asString (), true, false);
 
 	// Create a driver
-	Driver = UDriver::createDriver();
+	Driver = UDriver::createDriver(0, true);
 
 	// Create the window with config file values
 	Driver->setDisplay (UDriver::CMode(ConfigFile.getVar("ScreenWidth").asInt(), 
@@ -295,7 +295,7 @@ int main(int argc, char **argv)
 
 	// Creates the self entity
 	displayLoadingState ("Adding your entity");
-	srand (time(NULL));
+	srand (uint(time(NULL)));
 	uint32 id = rand();
 	addEntity(id, "Entity"+toString(id), CEntity::Self, CVector(ConfigFile.getVar("StartPoint").asFloat(0),
 												 ConfigFile.getVar("StartPoint").asFloat(1),
