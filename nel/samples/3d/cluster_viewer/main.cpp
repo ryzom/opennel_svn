@@ -24,30 +24,33 @@
  */
 
 
-// ---------------------------------------------------------------------------
+//
 // Includes
-// ---------------------------------------------------------------------------
-
+//
 
 #include "nel/misc/types_nl.h"
-#include "nel/misc/file.h"
-#include "nel/misc/bitmap.h"
-
-#include "3d/driver.h"
-#include "3d/nelu.h"
-#include "nel/misc/event_server.h"
-#include "nel/misc/event_listener.h"
-#include "nel/misc/events.h"
-#include "nel/misc/path.h"
-#include "nel/misc/time_nl.h"
-#include "3d/scene_group.h"
-#include "3d/transform_shape.h"
-#include "3d/event_mouse_listener.h"
-#include "3d/text_context.h"
 
 #ifdef NL_OS_WINDOWS
-#include <windows.h>
+#	include <windows.h>
+#	undef min
+#	undef max
 #endif
+
+#include "nel/misc/file.h"
+#include "nel/misc/path.h"
+#include "nel/misc/bitmap.h"
+#include "nel/misc/events.h"
+#include "nel/misc/time_nl.h"
+#include "nel/misc/event_server.h"
+#include "nel/misc/event_listener.h"
+
+#include "3d/nelu.h"
+#include "3d/driver.h"
+#include "3d/scene_group.h"
+#include "3d/text_context.h"
+#include "3d/transform_shape.h"
+#include "3d/event_mouse_listener.h"
+
 
 using namespace std;
 using namespace NL3D;
@@ -202,12 +205,7 @@ void LoadSceneScript (const char *ScriptName, CScene* pScene, vector<SDispCS> &D
 // Main
 // ---------------------------------------------------------------------------
 #ifdef NL_OS_WINDOWS
-int WINAPI WinMain(
-  HINSTANCE hInstance,      // handle to current instance
-  HINSTANCE hPrevInstance,  // handle to previous instance
-  LPSTR lpCmdLine,          // command line
-  int nCmdShow              // show state
-)
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 #else
 int main()
 #endif
@@ -229,8 +227,6 @@ int main()
 	// 2 dynamics objects
 	CTransformShape *pDynObj_InRoot;
 	CTransformShape *pDynObj_InCS;
-
-
 
 	CNELU::init (800, 600, CViewport(), 32, true);
 
@@ -255,16 +251,14 @@ int main()
 	// Force to automatically find the cluster system
 	CNELU::Camera->setClusterSystem ((CInstanceGroup*)-1); 
 
-
 	CClipTrav *pClipTrav = (CClipTrav*)&(CNELU::Scene->getClipTrav());
 	dcsTemp.Name = "Root";
 	dcsTemp.pIG = NULL;
 	DispCS.push_back (dcsTemp);
 
-	
 	// Add all instance that create the scene
 	// --------------------------------------	
-	// Begining of script reading
+	// Beginning of script reading
 	CVector CameraStart;
 
 	LoadSceneScript ("main.cvs", CNELU::Scene, DispCS, CameraStart, vAllIGs);
@@ -382,9 +376,7 @@ int main()
 				if (j < (vCluster.size()-1))
 					sAllClusters += ",  ";
 			}
-			TextContext.printfAt (0, 1-0.028f, sAllClusters.c_str());				
-
-
+			TextContext.printfAt (0, 1-0.028f, sAllClusters.c_str());
 		}
 
 		// -----------------------------------------------------
@@ -392,7 +384,7 @@ int main()
 
 		CNELU::Driver->swapBuffers ();
 
-		
+
 		// Keys management
 		// ---------------
 
@@ -450,5 +442,6 @@ int main()
 
 	}
 	while (!CNELU::AsyncListener.isKeyPushed (KeyESCAPE));
-	return 1;
+
+	return EXIT_SUCCESS;
 }
