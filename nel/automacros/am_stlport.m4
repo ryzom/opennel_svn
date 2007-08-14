@@ -70,12 +70,14 @@ AC_DEFUN([AM_PATH_STLPORT], [
       STLPORT_INCLUDES="-I$found/include/stlport"
       STLPORT_LIBS="-lstlport"
       STLPORT_LDFLAGS="-L$found/lib"
+      STLPORT_CXXFLAGS="-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64"
       have_stlport=1
       ;;
     esac
     AC_SUBST(STLPORT_INCLUDES)
     AC_SUBST(STLPORT_LIBS)
     AC_SUBST(STLPORT_LDFLAGS)
+    AC_SUBST(STLPORT_CXXFLAGS)
 ])
 
 # =========================================================================

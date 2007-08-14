@@ -142,21 +142,22 @@ else
    NEL_SUBDIRS="$NEL_SUBDIRS ligo"
 fi
 
+
+# NeL libraries that are disabled by default
+
 # Memory library
 AC_ARG_ENABLE([memory],
-              AC_HELP_STRING([--disable-memory],
+              AC_HELP_STRING([--enable-memory],
                              [disable compilation and install of NeL Memory]),
               [],
-              [enable_memory=yes])
+              [enable_memory=no])
 
-if test $enable_memory = "no"
+if test $enable_memory = "yes"
 then
-   AC_MSG_RESULT([disable NeL Memory])
+   AC_MSG_RESULT([enable NeL Memory])
 else
    NEL_SUBDIRS="$NEL_SUBDIRS memory"
 fi
-
-# NeL libraries that are disabled by default
 
 # Sound library
 AC_ARG_ENABLE([sound],
@@ -363,7 +364,7 @@ AC_LANG([C++])
 
 AM_PATH_STLPORT('/usr/local /usr')
 LIBS="$LIBS $STLPORT_LIBS"
-CXXFLAGS="$CXXFLAGS $STLPORT_INCLUDES"
+CXXFLAGS="$CXXFLAGS $STLPORT_CXXFLAGS $STLPORT_INCLUDES"
 LDFLAGS="$LDFLAGS $STLPORT_LDFLAGS"
 
 # ====================================================================
