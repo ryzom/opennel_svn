@@ -454,6 +454,14 @@ AC_CONFIG_FILES([Makefile                                        \
            tools/3d/zone_lib/Makefile                      \
            tools/3d/zone_lighter/Makefile                  \
            tools/3d/zone_welder/Makefile                   \
+           tools/misc/Makefile                             \
+           tools/misc/bnp_make/Makefile                    \
+           tools/misc/disp_sheet_id/Makefile               \
+           tools/misc/make_sheet_id/Makefile               \
+           tools/pacs/Makefile               \
+           tools/pacs/build_ig_boxes/Makefile               \
+           tools/pacs/build_indoor_rbank/Makefile               \
+           tools/pacs/build_rbank/Makefile               \
            samples/Makefile                                \
            samples/sound_sources/Makefile                  \
            samples/pacs/Makefile                           \

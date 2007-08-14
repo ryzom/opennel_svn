@@ -4,8 +4,7 @@
 
 MAINTAINERCLEANFILES = Makefile.in
 
-SUBDIRS              = 3d misc pacs
-
+SUBDIRS              = build_ig_boxes build_indoor_rbank build_rbank
 
 # End of Makefile.am
 

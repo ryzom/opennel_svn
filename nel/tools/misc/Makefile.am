@@ -4,8 +4,7 @@
 
 MAINTAINERCLEANFILES = Makefile.in
 
-SUBDIRS              = 3d misc pacs
-
+SUBDIRS              = bnp_make disp_sheet_id make_sheet_id
 
 # End of Makefile.am
 
