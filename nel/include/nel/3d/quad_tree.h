@@ -325,7 +325,7 @@ private:// Classes.
 			CBaseNode	*p;
 			while( (p=RootNode.QuadNexts[ListIndex]) )
 			{
-				p->clear();	// On clear les links. => RootNode.QuadNexts[ListIndex] modifié implicitement.
+				p->clear();	// On clear les links. => RootNode.QuadNexts[ListIndex] modifiï¿½ implicitement.
 				delete p;	// On delete cet element!!
 			}
 
@@ -444,7 +444,7 @@ private:// Classes.
 		{
 			if(Level==0)
 			{
-				// Tous les elements qui sortent du quadtree sont forcément dans le noeud root.
+				// Tous les elements qui sortent du quadtree sont forcï¿½ment dans le noeud root.
 				if(!includeBoxQuad(boxmin, boxmax))
 				{
 					// Il faut agrandir la BBox en Y du quadnode.
@@ -481,18 +481,18 @@ private:// Classes.
 				BBoxMax.y= std::max(boxmax.y, BBoxMax.y);
 			}
 
-			// Si on est au bon, niveau, on a plus qu'à l'insérer dans ce node.
+			// Si on est au bon, niveau, on a plus qu'ï¿½ l'insï¿½rer dans ce node.
 			if(wantdepth==Level)
 			{
 					addElement(newNode);
 			}
 			else
 			{
-				// Si le quad est une feuille, il faut le splitter (car on est pas encore arrivé au bon niveau).
+				// Si le quad est une feuille, il faut le splitter (car on est pas encore arrivï¿½ au bon niveau).
 				if(isLeaf())
 					split();
 
-				// Et on cherche à mettre l'élément dans un de ces noeuds.
+				// Et on cherche ï¿½ mettre l'ï¿½lï¿½ment dans un de ces noeuds.
 				Sons[0]->insert(boxmin, boxmax, wantdepth, newNode);
 				Sons[1]->insert(boxmin, boxmax, wantdepth, newNode);
 				Sons[2]->insert(boxmin, boxmax, wantdepth, newNode);
@@ -536,7 +536,7 @@ private:// Classes.
 		void	select(CBaseNode &selroot, const NLMISC::CVector &bboxmin, const NLMISC::CVector &bboxmax)
 		{
 			// TODO:
-			// ya un bug avec le level0: en effet la bbox n'a pas été agrandie pour contenir les elements.
+			// ya un bug avec le level0: en effet la bbox n'a pas ï¿½tï¿½ agrandie pour contenir les elements.
 			if(!intersectBox(bboxmin, bboxmax))
 				return;
 			selectLocalNodes(selroot);
@@ -552,7 +552,7 @@ private:// Classes.
 		void		select(CBaseNode &selroot, std::vector<NLMISC::CPlane> &BVolume)
 		{
 			// TODO:
-			// ya un bug avec le level0: en effet la bbox n'a pas été agrandie pour contenir les elements.
+			// ya un bug avec le level0: en effet la bbox n'a pas ï¿½tï¿½ agrandie pour contenir les elements.
 			if(!intersectBox(BVolume))
 				return;
 			selectLocalNodes(selroot);
@@ -620,23 +620,23 @@ public:
 	class CIterator : public const_iterator
 	{
 	public:
-		CIterator()			{_Ptr=NULL;}
+		CIterator()			{const_iterator::_Ptr=NULL;}
 		CIterator(CNode *p) : const_iterator(p) {}
 		T&	operator*() const
-			{return _Ptr->Value; }
+			{return const_iterator::_Ptr->Value; }
 		// Doesn't work...
 		/*T*	operator->() const
 			{return (&**this); }*/
 		CIterator& operator++()
-			{_Ptr = (CNode*)(_Ptr->Next); return (*this); }
+			{const_iterator::_Ptr = (CNode*)(const_iterator::_Ptr->Next); return (*this); }
 		CIterator operator++(int)
 			{CIterator tmp = *this; ++*this; return (tmp); }
 		CIterator& operator--()
-			{_Ptr = (CNode*)(_Ptr->Prev); return (*this); }
+			{const_iterator::_Ptr = (CNode*)(const_iterator::_Ptr->Prev); return (*this); }
 		CIterator operator--(int)
 			{CIterator tmp = *this; --*this; return (tmp); }
 		bool operator==(const const_iterator& x) const
-			{return (_Ptr == x._Ptr); }
+			{return (const_iterator::_Ptr == x._Ptr); }
 		bool operator!=(const const_iterator& x) const
 			{return (!(*this == x)); }
 	protected:
@@ -820,7 +820,7 @@ template<class T>	void		CQuadTree<T>::selectRay(const NLMISC::CVector& source, c
 	mat.identity ();
 
 	// Set a wrong matrix
-	NLMISC::CVector vTmp=dir^((fabs(vTmp*CVector(1,0,0))>0.f)?CVector(1,0,0):CVector(0,1,0));
+	NLMISC::CVector vTmp=dir^((fabs(vTmp*NLMISC::CVector(1,0,0))>0.f)?NLMISC::CVector(1,0,0):NLMISC::CVector(0,1,0));
 	mat.setRot (dir, vTmp, dir^vTmp);
 
 	// Normalize it Yoyo!
@@ -851,8 +851,8 @@ template<class T>	void		CQuadTree<T>::selectSegment(const NLMISC::CVector& sourc
 	mat.identity ();
 
 	// Set a wrong matrix
-	CVector dir=dest-source;
-	NLMISC::CVector vTmp=dir^((fabs(vTmp*CVector(1,0,0))>0.f)?CVector(1,0,0):CVector(0,1,0));
+	NLMISC::CVector dir=dest-source;
+	NLMISC::CVector vTmp=dir^((fabs(vTmp*NLMISC::CVector(1,0,0))>0.f)?NLMISC::CVector(1,0,0):NLMISC::CVector(0,1,0));
 	mat.setRot (dir, vTmp, dir^vTmp);
 
 	// Normalize it Yoyo!
