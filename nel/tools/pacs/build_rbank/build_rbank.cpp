@@ -111,7 +111,7 @@ uint32	getIdByCoord(uint x, uint y)
 	return y*256+x;
 }
 
-string	changeExt(string name, string &ext)
+string	changeExt(string name, const string &ext)
 {
 	string::iterator	it, last;
 	last = name.end();
