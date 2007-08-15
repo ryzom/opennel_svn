@@ -182,11 +182,9 @@ TTicks CTime::getPerformanceTime ()
 #else // NL_OS_WINDOWS
 
 #if defined(HAVE_X86_64)
-	unsigned long long int x;
-	unsigned hi, lo;
-	__asm__ volatile "rdtsc" : "=a"(lo), "=d"(hi));
-	x = ((unsigned long long)lo)|(((unsigned long long)hi)<<32);
-	return x
+	unsigned long long int hi, lo;
+	__asm__ volatile (".byte 0x0f, 0x31" : "=a" (lo), "=d" (hi));
+	return (hi << 32) | (lo & 0xffffffff)
 #elif defined(HAVE_X86)
 	unsigned long long int x;
 	__asm__ volatile (".byte 0x0f, 0x31" : "=A" (x));
