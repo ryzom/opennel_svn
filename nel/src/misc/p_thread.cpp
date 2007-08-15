@@ -69,6 +69,7 @@ static void *ProxyFunc( void *arg )
 
 	// Allow some clean
 //	pthread_exit(0);
+	return NULL;
 }
 
 
