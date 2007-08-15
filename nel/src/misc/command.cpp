@@ -432,10 +432,10 @@ void CCommandRegistry::expand (std::string &commandName, NLMISC::CLog &log)
 {
 	// Take out the string before the last separator and remember it as a prefix
 	string objectName;
-	uint32 lastseppos = commandName.find_last_of( " " );
+	string::size_type lastseppos = commandName.find_last_of( " " );
 	{
 		// eventually use the last dot as separator
-		uint32 lastDot = commandName.find_last_of( "." );
+		string::size_type lastDot = commandName.find_last_of( "." );
 		if (lastDot != string::npos 
 			&& (lastseppos == string::npos || lastDot > lastseppos))
 		{

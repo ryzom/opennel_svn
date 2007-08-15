@@ -409,7 +409,7 @@ void serviceGetView (uint32 rid, const string &rawvarpath, TAdminViewResult &ans
 			string cmd = varpath.Destination[j].first;
 
 			// replace = with space to execute the command
-			uint eqpos = cmd.find("=");
+			string::size_type eqpos = cmd.find("=");
 			if (eqpos != string::npos)
 			{
 				cmd[eqpos] = ' ';
@@ -496,7 +496,7 @@ void serviceGetView (uint32 rid, const string &rawvarpath, TAdminViewResult &ans
 				else
 				{
 					// replace = with space to execute the command
-					uint eqpos = cmd.find("=");
+					string::size_type eqpos = cmd.find("=");
 					if (eqpos != string::npos)
 					{
 						cmd[eqpos] = ' ';
@@ -516,7 +516,7 @@ void serviceGetView (uint32 rid, const string &rawvarpath, TAdminViewResult &ans
 					{
 						const string &str = strs[k];
 
-						uint32 pos = str.find(" ");
+						string::size_type pos = str.find(" ");
 						if(pos == string::npos)
 							continue;
 						

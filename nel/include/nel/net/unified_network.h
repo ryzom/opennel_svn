@@ -31,6 +31,7 @@
 
 #include <hash_map>
 #include <vector>
+#include <string>
 
 #include "nel/misc/time_nl.h"
 #include "callback_client.h"
@@ -608,10 +609,10 @@ private:
 				}
 			}
 			// find the default network
-			uint j;
+			std::vector<std::string>::size_type j;
 			for (j = 0; j < defaultNetwork.size (); j++)
 			{
-				uint32 pos = defaultNetwork[j].find(ServiceName);
+				std::string::size_type pos = defaultNetwork[j].find(ServiceName);
 				if (pos != std::string::npos && pos == 0 && ServiceName.size() == defaultNetwork[j].size ()-1)
 				{
 					uint8 nid = defaultNetwork[j][defaultNetwork[j].size ()-1] - '0';

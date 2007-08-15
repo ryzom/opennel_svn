@@ -924,9 +924,9 @@ int	nlfseek64( FILE *stream, sint64 offset, int origin )
 		// Get the size of the next fseek
 		sint nextSeek;
 		if (offset > 0)
-			nextSeek = (sint)std::min (SINT64_CONSTANT(2147483647), offset);
+			nextSeek = (sint)std::min ((sint64)SINT64_CONSTANT(2147483647), offset);
 		else
-			nextSeek = (sint)std::max (-SINT64_CONSTANT(2147483648), offset);
+			nextSeek = (sint)std::max ((sint64)-SINT64_CONSTANT(2147483648), offset);
 		
 		// Make a seek
 		int result = fseek ( stream, nextSeek, first?origin:SEEK_CUR );

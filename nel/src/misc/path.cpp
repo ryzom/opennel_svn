@@ -359,7 +359,7 @@ void CFileContainer::remapExtension (const string &ext1, const string &ext2, boo
 			if (!(*it).second.Remapped && ext == ext1lwr)
 			{
 				// find if already exist
-				uint32 pos = (*it).first.find_last_of (".");
+				string::size_type pos = (*it).first.find_last_of (".");
 				if (pos != string::npos)
 				{
 					string file = (*it).first.substr (0, pos + 1);
@@ -1760,7 +1760,7 @@ std::string CFileContainer::getWindowsDirectory()
 
 int CFile::getLastSeparator (const string &filename)
 {
-	uint32 pos = filename.find_last_of ('/');
+	string::size_type pos = filename.find_last_of ('/');
 	if (pos == string::npos)
 	{
 		pos = filename.find_last_of ('\\');
@@ -1774,7 +1774,7 @@ int CFile::getLastSeparator (const string &filename)
 
 string CFile::getFilename (const string &filename)
 {
-	uint32 pos = CFile::getLastSeparator(filename);
+	string::size_type pos = CFile::getLastSeparator(filename);
 	if (pos != string::npos)
 		return filename.substr (pos + 1);
 	else
@@ -1784,7 +1784,7 @@ string CFile::getFilename (const string &filename)
 string CFile::getFilenameWithoutExtension (const string &filename)
 {
 	string filename2 = getFilename (filename);
-	uint32 pos = filename2.find_last_of ('.');
+	string::size_type pos = filename2.find_last_of ('.');
 	if (pos == string::npos)
 		return filename2;
 	else
@@ -1793,7 +1793,7 @@ string CFile::getFilenameWithoutExtension (const string &filename)
 
 string CFile::getExtension (const string &filename)
 {
-	uint32 pos = filename.find_last_of ('.');
+	string::size_type pos = filename.find_last_of ('.');
 	if (pos == string::npos)
 		return "";
 	else
@@ -1802,7 +1802,7 @@ string CFile::getExtension (const string &filename)
 
 string CFile::getPath (const string &filename)
 {
-	uint32 pos = CFile::getLastSeparator(filename);
+	string::size_type pos = CFile::getLastSeparator(filename);
 	if (pos != string::npos)
 		return filename.substr (0, pos + 1);
 	else
@@ -1851,7 +1851,7 @@ bool CFile::fileExists (const string& filename)
 
 string CFile::findNewFile (const string &filename)
 {
-	uint32 pos = filename.find_last_of ('.');
+	string::size_type pos = filename.find_last_of ('.');
 	if (pos == string::npos)
 		return filename;
 	
@@ -1934,7 +1934,7 @@ uint32	CFile::getFileSize (FILE *f)
 
 uint32	CFile::getFileModificationDate(const std::string &filename)
 {
-	uint pos;
+	string::size_type pos;
 	string fn;
 	if ((pos=filename.find("@@")) != string::npos)
 	{
@@ -2014,7 +2014,7 @@ uint32	CFile::getFileModificationDate(const std::string &filename)
 
 bool	CFile::setFileModificationDate(const std::string &filename, uint32 modTime)
 {
-	uint pos;
+	string::size_type pos;
 	string fn;
 	if ((pos=filename.find('@')) != string::npos)
 	{
@@ -2102,7 +2102,7 @@ bool	CFile::setFileModificationDate(const std::string &filename, uint32 modTime)
 
 uint32	CFile::getFileCreationDate(const std::string &filename)
 {
-	uint pos;
+	string::size_type pos;
 	string fn;
 	if ((pos=filename.find('@')) != string::npos)
 	{
@@ -2454,8 +2454,8 @@ bool CPath::makePathRelative (const char *basePath, std::string &relativePath)
 			break;
 
 		// Remove last directory
-		uint lastPos = tmp.rfind ('/', tmp.length ()-2);
-		uint previousPos = tmp.find ('/');
+		string::size_type lastPos = tmp.rfind ('/', tmp.length ()-2);
+		string::size_type previousPos = tmp.find ('/');
 		if ((lastPos == previousPos) || (lastPos == string::npos))
 			break;
 
@@ -2543,4 +2543,5 @@ void CFile::getTemporaryOutputFilename (const std::string &originalFilename, std
 }
 
 } // NLMISC
+
 

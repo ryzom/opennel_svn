@@ -26,6 +26,8 @@
 #ifndef NL_HEAP_ALLOCATOR_INLINE_H
 #define NL_HEAP_ALLOCATOR_INLINE_H
 
+#include <stdint.h>
+
 #ifdef NL_HEAP_ALLOCATOR_INTERNAL_CHECKS
 #define internalAssert(a) memory_assert(a)
 #else // NL_HEAP_ALLOCATOR_INTERNAL_CHECKS
@@ -57,7 +59,7 @@
 #if defined (NL_OS_WINDOWS)
 #define NL_ALLOC_STOP(adr) { char _adr[512]; sprintf (_adr, "NLMEMORY stop on block 0x%x\n", (int)adr); OutputDebugString (_adr); _asm { int 3 } }
 #else
-#define NL_ALLOC_STOP(adr) { fprintf (stderr, "NLMEMORY stop on block 0x%x\n", (int)adr); abort(); }
+#define NL_ALLOC_STOP(adr) { fprintf (stderr, "NLMEMORY stop on block 0x%xt\n", (uintptr_t)adr); abort(); }
 #endif
 
 // *********************************************************
@@ -337,7 +339,7 @@ inline void CHeapAllocator::computeCRC32(uint32 &crc, const void* buffer, unsign
 inline const CHeapAllocator::CNodeBegin *CHeapAllocator::getFirstNode (const CMainBlock *mainBlock)
 {
 	// Align the node pointer
-	return (CNodeBegin*)(((uint32)mainBlock->Ptr&~(Align-1)) + ((((uint32)mainBlock->Ptr&(Align-1))==0)? 0 : Align));
+	return (CNodeBegin*)(((uintptr_t)mainBlock->Ptr&~(Align-1)) + ((((uintptr_t)mainBlock->Ptr&(Align-1))==0)? 0 : Align));
 }
 
 // *********************************************************
@@ -345,7 +347,7 @@ inline const CHeapAllocator::CNodeBegin *CHeapAllocator::getFirstNode (const CMa
 inline CHeapAllocator::CNodeBegin *CHeapAllocator::getFirstNode (CMainBlock *mainBlock)
 {
 	// todo align
-	return (CNodeBegin*)(((uint32)mainBlock->Ptr&~(Align-1)) + ((((uint32)mainBlock->Ptr&(Align-1))==0)? 0 : Align));
+	return (CNodeBegin*)(((uintptr_t)mainBlock->Ptr&~(Align-1)) + ((((uintptr_t)mainBlock->Ptr&(Align-1))==0)? 0 : Align));
 }
 
 // *********************************************************

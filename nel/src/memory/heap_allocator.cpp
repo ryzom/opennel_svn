@@ -32,6 +32,7 @@
 #include <cstdio>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 
 #ifdef NL_OS_WINDOWS
 #include <windows.h>
@@ -580,8 +581,9 @@ void CHeapAllocator::initEmptyBlock (CMainBlock& mainBlock)
 	CNodeBegin *node = getFirstNode (&mainBlock);
 
 	// Allocated size remaining after alignment
-	internalAssert ((uint32)node - (uint32)mainBlock.Ptr >= 0);
-	uint allocSize = mainBlock.Size - ((uint32)node - (uint32)mainBlock.Ptr);
+	internalAssert ((uintptr_t)node - (uintptr_t)mainBlock.Ptr >= 0);
+	// FIXME pointer arithmetic & type casts
+	uint allocSize = mainBlock.Size - (uint)((uintptr_t)node - (uintptr_t)mainBlock.Ptr);
 
 	// *** Fill the new node header
 
@@ -632,9 +634,9 @@ void CHeapAllocator::initEmptyBlock (CMainBlock& mainBlock)
 uint CHeapAllocator::getBlockSize (void *block)
 {
 	// Get the node pointer
-	CNodeBegin *node = (CNodeBegin*) ((uint)block - sizeof (CNodeBegin));
+	CNodeBegin *node = (CNodeBegin*) ((uintptr_t)block - (uintptr_t)sizeof (CNodeBegin));
 
-	return getNodeSize (((CNodeBegin*) ((uint)block - sizeof (CNodeBegin))));
+	return getNodeSize (((CNodeBegin*) ((uintptr_t)block - (uintptr_t)sizeof (CNodeBegin))));
 }
 
 // *********************************************************
@@ -642,7 +644,7 @@ uint CHeapAllocator::getBlockSize (void *block)
 const char * CHeapAllocator::getCategory (void *block)
 {
 	// Get the node pointer
-	CNodeBegin *node = (CNodeBegin*) ((uint)block - sizeof (CNodeBegin));
+	CNodeBegin *node = (CNodeBegin*) ((uintptr_t)block - (uintptr_t)sizeof (CNodeBegin));
 #ifndef NL_HEAP_ALLOCATION_NDEBUG
 	return node->Category;
 #else
@@ -855,7 +857,7 @@ void *CHeapAllocator::allocate (uint size, const char *sourceFile, uint line, co
 		//printf("CHeapAllocator::allocate (%d, %s, %d, %s) = %p\n", size, sourceFile, line, (category == NULL ? "" : category), (void*)((uint)node + sizeof (CNodeBegin)));
 
 		// Return the user pointer
-		finalPtr = (void*)((uint)node + sizeof (CNodeBegin));
+		finalPtr = (void*)((uintptr_t)node + (uintptr_t)sizeof (CNodeBegin));
 	}
 	else
 	{
@@ -1021,7 +1023,7 @@ void *CHeapAllocator::allocate (uint size, const char *sourceFile, uint line, co
 			//printf("CHeapAllocator::allocate (%d, %s, %d, %s) = %p\n", size, sourceFile, line, (category == NULL ? "" : category), (void*)((uint)node + sizeof (CNodeBegin)));
 
 			// Return the user pointer
-			finalPtr = (void*)((uint)node + sizeof (CNodeBegin));
+			finalPtr = (void*)((uintptr_t)node + (uintptr_t)sizeof (CNodeBegin));
 		}
 		else
 		{
@@ -1079,7 +1081,7 @@ void CHeapAllocator::free (void *ptr)
 #endif // NL_HEAP_ALLOCATION_NDEBUG
 		
 		// Get the node pointer
-		CNodeBegin *node = (CNodeBegin*) ((uint)ptr - sizeof (CNodeBegin));
+		CNodeBegin *node = (CNodeBegin*) ((uintptr_t)ptr - (uintptr_t)sizeof (CNodeBegin));
 
 #ifndef NL_HEAP_ALLOCATION_NDEBUG
 		// Check the node CRC
@@ -1092,9 +1094,9 @@ void CHeapAllocator::free (void *ptr)
 
 		// Large or small block ?
 #ifdef NL_HEAP_ALLOCATION_NDEBUG
-		uint size = (((CNodeBegin*) ((uint)ptr - sizeof (CNodeBegin))))->SizeAndFlags;
+		uint size = (((CNodeBegin*) ((uintptr_t)ptr - (uintptr_t)sizeof (CNodeBegin))))->SizeAndFlags;
 #else // NL_HEAP_ALLOCATION_NDEBUG
-		uint size = getNodeSize (((CNodeBegin*) ((uint)ptr - sizeof (CNodeBegin))));
+		uint size = getNodeSize (((CNodeBegin*) ((uintptr_t)ptr - (uintptr_t)sizeof (CNodeBegin))));
 #endif // NL_HEAP_ALLOCATION_NDEBUG
 		if (size <= LastSmallBlock)
 		{
@@ -1126,8 +1128,8 @@ void CHeapAllocator::free (void *ptr)
 
 				// Add in the free list
 				CNodeBegin **freeNode = (CNodeBegin **)_FreeSmallBlocks+NL_SIZE_TO_SMALLBLOCK_INDEX (size);
-				((CNodeBegin*) ((uint)ptr - sizeof (CNodeBegin)))->Previous = *freeNode;
-				*freeNode = ((CNodeBegin*) ((uint)ptr - sizeof (CNodeBegin)));
+				((CNodeBegin*) ((uintptr_t)ptr - (uintptr_t)sizeof (CNodeBegin)))->Previous = *freeNode;
+				*freeNode = ((CNodeBegin*) ((uintptr_t)ptr - (uintptr_t)sizeof (CNodeBegin)));
 
 				// Update smallblock crc
 				NL_UPDATE_MAGIC_NUMBER (node);
@@ -1139,11 +1141,11 @@ void CHeapAllocator::free (void *ptr)
 		{
 #ifdef NL_HEAP_ALLOCATION_NDEBUG
 			// Get the real size
-			size = getNodeSize (((CNodeBegin*) ((uint)ptr - sizeof (CNodeBegin))));
+			size = getNodeSize (((CNodeBegin*) ((uintptr_t)ptr - (uintptr_t)sizeof (CNodeBegin))));
 #endif // NL_HEAP_ALLOCATION_NDEBUG
 
 			// Get the node pointer
-			CNodeBegin *node = (CNodeBegin*) ((uint)ptr - sizeof (CNodeBegin));
+			CNodeBegin *node = (CNodeBegin*) ((uintptr_t)ptr - (uintptr_t)sizeof (CNodeBegin));
 
 			// Check the node has not been deleted
 			if (isNodeFree (node))
@@ -2684,9 +2686,9 @@ bool CHeapAllocator::checkNodeSB (const CSmallBlockPool *mainBlock, const CNodeB
 
 	// Check node
 	if	(
-			( (uint)current < ((uint)mainBlock) + sizeof (CSmallBlockPool)) ||
-			( (uint)current + getNodeSize (current) + sizeof(CNodeBegin) + NL_HEAP_NODE_END_SIZE >
-				((uint)mainBlock) + sizeof (CSmallBlockPool) + SmallBlockPoolSize * (sizeof(CNodeBegin)+ mainBlock->Size  + NL_HEAP_NODE_END_SIZE) )
+			( (uintptr_t)current < ((uintptr_t)mainBlock) + (uintptr_t)sizeof (CSmallBlockPool)) ||
+			( (uintptr_t)current + (uintptr_t)getNodeSize (current) + (uintptr_t)sizeof(CNodeBegin) + (uintptr_t)NL_HEAP_NODE_END_SIZE >
+				((uintptr_t)mainBlock) + (uintptr_t)sizeof (CSmallBlockPool) + (uintptr_t)(SmallBlockPoolSize * (sizeof(CNodeBegin)+ mainBlock->Size  + NL_HEAP_NODE_END_SIZE)) )
 		)
 	{
 		// Stop on error ?
@@ -2768,9 +2770,9 @@ bool CHeapAllocator::checkNodeLB (const CMainBlock *mainBlock, const CNodeBegin 
 
 	// Check node
 	if	(
-			( (uint)current < (uint)mainBlock->Ptr ) ||
-			( (uint)current + getNodeSize (current) + sizeof(CNodeBegin) + NL_HEAP_NODE_END_SIZE > 
-				(uint)mainBlock->Ptr + mainBlock->Size )
+			( (uintptr_t)current < (uintptr_t)mainBlock->Ptr ) ||
+			( (uintptr_t)current + (uintptr_t)getNodeSize (current) + (uintptr_t)sizeof(CNodeBegin) + (uintptr_t)NL_HEAP_NODE_END_SIZE > 
+				(uintptr_t)mainBlock->Ptr + (uintptr_t)mainBlock->Size )
 		)
 	{
 		// Stop on error ?
@@ -2795,8 +2797,8 @@ bool CHeapAllocator::checkNodeLB (const CMainBlock *mainBlock, const CNodeBegin 
 
 	// Check Previous node pointer
 	if ( !(current->Previous == NULL || 
-		( ((uint)current->Previous <= (uint)current - sizeof (CNodeBegin) - NL_HEAP_NODE_END_SIZE) && 
-		((uint)current->Previous >= (uint)mainBlock->Ptr) )
+		( ((uintptr_t)current->Previous <= (uintptr_t)current - (uintptr_t)sizeof (CNodeBegin) - (uintptr_t)NL_HEAP_NODE_END_SIZE) && 
+		((uintptr_t)current->Previous >= (uintptr_t)mainBlock->Ptr) )
 		) )
 	{
 		// Stop on error ?

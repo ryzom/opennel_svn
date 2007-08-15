@@ -1404,7 +1404,7 @@ namespace NLMISC
 
 	bool CSString::contains(const char *toFind) const
 	{
-		return find(toFind)!=std::string::npos;
+		return find(toFind)!=(unsigned)std::string::npos;
 	}
 
 	bool CSString::contains(int character) const
@@ -1800,5 +1800,6 @@ namespace NLMISC
 	}
 
 } // namespace NLMISC
+
 
 

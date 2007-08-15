@@ -321,7 +321,7 @@ void CVectorPacker::serialPackedVector16(std::vector<uint16> &v,NLMISC::IStream 
 		CBitMemStream bits(false);
 		uint32 numValues = v.size();
 		bits.serial(numValues);
-		_LastTag = -1;
+		_LastTag = UINT_MAX; //-1;
 		_LastDeltas.clear();
 		for(uint k = 0; k < v.size(); ++k)			
 		{
@@ -1317,7 +1317,7 @@ template <class T> bool raytrace(T &packedZone, const NLMISC::CVector &start, co
 				}
 				++ triListIndex;
 			}
-			while (packedZone.TriLists[triListIndex] != ~0);
+			while (packedZone.TriLists[triListIndex] != (typename T::TIndexType)~0);
 			if (bestInterDist != FLT_MAX)
 			{
 				if (normal)
@@ -1433,6 +1433,7 @@ void CPackedZone32::appendSelection(const NLMISC::CPolygon2D &poly, std::vector<
 }
 
 } // NL3D
+
 
 
 

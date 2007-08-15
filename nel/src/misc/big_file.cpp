@@ -344,7 +344,7 @@ void CBigFile::removeAll ()
 bool CBigFile::getFileInternal (const std::string &sFileName, BNP *&zeBnp, BNPFile *&zeBnpFile)
 {
 	string zeFileName, zeBigFileName, lwrFileName = toLower(sFileName);
-	uint32 i, nPos = sFileName.find ('@');
+	string::size_type i, nPos = sFileName.find ('@');
 	if (nPos == string::npos)
 	{
 		return false;

@@ -213,7 +213,7 @@ CInetAddress::~CInetAddress()
  */
 void CInetAddress::setNameAndPort( const std::string& hostNameAndPort )
 {
-	uint32 pos = hostNameAndPort.find_first_of (':');
+	string::size_type pos = hostNameAndPort.find_first_of (':');
 	if (pos != string::npos)
 	{
 		setPort( atoi(hostNameAndPort.substr(pos + 1).c_str()) );

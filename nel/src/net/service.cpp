@@ -484,7 +484,7 @@ void IService::setArgs (const char *args)
 	_Args.push_back ("<ProgramName>");
 
 	string sargs (args);
-	uint32 pos1 = 0, pos2 = 0;
+	string::size_type pos1 = 0, pos2 = 0;
 
 	do
 	{
@@ -510,7 +510,7 @@ void IService::setArgs (const char *args)
 		}
 
 		// Compute the size of the string to extract
-		int length = (pos2 != string::npos) ? pos2-pos1 : string::npos;
+		string::difference_type length = (pos2 != string::npos) ? pos2-pos1 : string::npos;
 
 		string tmp = sargs.substr (pos1, length);
 		_Args.push_back (tmp);
@@ -1469,7 +1469,7 @@ sint IService::main (const char *serviceShortName, const char *serviceLongName, 
 
 						string dispName = displayedVariables[i].first;
 						string varName = dispName;
-						uint32 pos = dispName.find("|");
+						string::size_type pos = dispName.find("|");
 						if (pos != string::npos)
 						{
 							varName = displayedVariables[i].first.substr(pos+1);
