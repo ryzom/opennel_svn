@@ -27,7 +27,6 @@
 
 #include "nel/misc/common.h"
 #include "nel/misc/path.h"
-#include "nel/misc/heap_allocator.h"
 
 // contains the service base class
 #include "nel/net/service.h"
