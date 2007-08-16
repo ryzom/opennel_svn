@@ -52,10 +52,10 @@
 // Define NL_STATIC to 1 in your project if you want only one driver inside the exe (no .dll at all)
 
 // Uncomment this define if you want to disable the MENU key on Windows (F10, ALT and ALT+SPACE key doesn't freeze or open the menu)
-//#define NL_DISABLE_MENU 1
+#define NL_DISABLE_MENU 1
 
 // Uncomment this define if you don't want generation of nel debug file (report_*, exception_catched, breakpointed, ...)
-//#define NL_NO_DEBUG_FILES 1
+#define NL_NO_DEBUG_FILES 1
 
 
 
