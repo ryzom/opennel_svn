@@ -60,8 +60,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="libxml2.lib ws2_32.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
+				IgnoreDefaultLibraryNames="libcmt.lib"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 			/>
@@ -133,6 +135,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="libxml2.lib ws2_32.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
@@ -209,7 +212,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="freetype.lib libxml2.lib odbc32.lib odbccp32.lib ws2_32.lib"
+				AdditionalDependencies="libxml2.lib ws2_32.lib"
 				OutputFile=".\georges_sample_rd.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
