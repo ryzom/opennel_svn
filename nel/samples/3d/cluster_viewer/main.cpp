@@ -230,6 +230,9 @@ int main()
 
 	CNELU::init (800, 600, CViewport(), 32, true);
 
+	CNELU::Scene->enableLightingSystem(true);
+	CNELU::Scene->setAmbientGlobal(CRGBA(128,128,128));
+
 	CPath::addSearchPath("shapes/");
 	CPath::addSearchPath("groups/");
 
