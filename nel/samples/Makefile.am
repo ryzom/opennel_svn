@@ -4,7 +4,9 @@
 
 MAINTAINERCLEANFILES = Makefile.in
 
-SUBDIRS              = sound_sources pacs georges 3d net
+DIST_SUBDIRS              = sound_sources pacs georges 3d net
+
+SUBDIRS              = pacs georges 3d net
 
 
 # End of Makefile.am
