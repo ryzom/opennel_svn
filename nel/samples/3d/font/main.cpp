@@ -50,6 +50,12 @@ int main (int argc, char **argv)
 	// look at 3dinit example
 	CNELU::init (800, 600, CViewport(), 32, true, 0, false, false); 
 
+#ifdef FONT_DIR
+	NLMISC::CPath::addSearchPath(FONT_DIR);
+#else
+	NLMISC::CPath::addSearchPath(".");
+#endif
+
 	// create a font manager
 	CFontManager fontManager;
 
@@ -62,7 +68,7 @@ int main (int argc, char **argv)
 
 	// The first param is the font name (could be ttf, pfb, fon, etc...). The
 	// second one is optional, it's the font kerning file
-	tc.setFontGenerator ("arlrdbd.ttf");
+	tc.setFontGenerator (NLMISC::CPath::lookup("arlrdbd.ttf"));
 
 	// create the first computed string.
 	// A computed string is a string with a format and it generates the string
