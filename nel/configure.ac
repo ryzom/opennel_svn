@@ -469,9 +469,13 @@ AC_CONFIG_FILES([Makefile                                        \
            samples/3d/Makefile                             \
            samples/3d/font/Makefile                        \
            samples/3d/cluster_viewer/Makefile              \
+           samples/3d/cluster_viewer/shapes/Makefile       \
+           samples/3d/cluster_viewer/groups/Makefile       \
+           samples/3d/cluster_viewer/fonts/Makefile       \
 	   samples/net/Makefile                            \
 	   samples/net/chat/Makefile                       \
-           nel-config                                      \
+           nel-config
+		
 ])
 AC_OUTPUT
 

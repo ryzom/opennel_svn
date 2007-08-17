@@ -30,6 +30,8 @@
 
 #include "nel/misc/types_nl.h"
 
+#include <sstream>
+
 #ifdef NL_OS_WINDOWS
 #	include <windows.h>
 #	undef min
@@ -51,6 +53,9 @@
 #include "3d/transform_shape.h"
 #include "3d/event_mouse_listener.h"
 
+#ifndef CV_DIR
+#define CV_DIR ""
+#endif
 
 using namespace std;
 using namespace NL3D;
@@ -233,14 +238,21 @@ int main()
 	CNELU::Scene->enableLightingSystem(true);
 	CNELU::Scene->setAmbientGlobal(CRGBA(128,128,128));
 
-	CPath::addSearchPath("shapes/");
-	CPath::addSearchPath("groups/");
+	std::stringstream strout;
+	strout << CV_DIR << "/" << "shapes/";
+	CPath::addSearchPath(strout.str());
+	strout.str("");
+	strout << CV_DIR << "/" << "groups/";
+	CPath::addSearchPath(strout.str());
+	strout.str("");
+	strout << CV_DIR << "/" << "fonts/";
+	CPath::addSearchPath(strout.str());
 
 	CFontManager FontManager;
 	CTextContext TextContext;
 
 	TextContext.init (CNELU::Driver, &FontManager);	
-	TextContext.setFontGenerator ("fonts/n019003l.pfb");
+	TextContext.setFontGenerator (NLMISC::CPath::lookup("n019003l.pfb"));
 	TextContext.setHotSpot (CComputedString::TopLeft);
 	TextContext.setColor (CRGBA(255,255,255));
 	TextContext.setFontSize (20);
@@ -272,10 +284,10 @@ int main()
 	// End of script reading
 
 	// Put a dynamic object in the root
-	pDynObj_InRoot = CNELU::Scene->createInstance ("Sphere01.shape");
+	pDynObj_InRoot = CNELU::Scene->createInstance ("sphere01.shape");
 	pDynObj_InRoot->setPos (0.0f, 0.0f, 0.0f);
 	// Put a dynamic object inside
-	pDynObj_InCS = CNELU::Scene->createInstance ("Sphere01.shape");
+	pDynObj_InCS = CNELU::Scene->createInstance ("sphere01.shape");
 	pDynObj_InCS->setPos (50.0f, 50.0f, 25.0f);
 	// No automatic detection for moving objects - setup in street
 	pDynObj_InCS->setClusterSystem (vAllIGs[0]);
