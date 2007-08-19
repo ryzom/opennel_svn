@@ -94,10 +94,8 @@ void	deleteSound (CEntity &entity)
 
 void	updateSound()
 {
-	/// \todo 
 }
 
 void	releaseSound()
 {
-	/// \todo 
 }
