@@ -1,8 +1,6 @@
 /** \file bitmap.cpp
  * Class managing bitmaps
  *
- * \todo yoyo: readDDS and decompressDXTC* must work in BigEndifan and LittleEndian.
- *
  * $Id$
  */
 

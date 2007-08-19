@@ -62,7 +62,6 @@ void UInstance::setBlendShapeFactor (const std::string &blendShapeName, float fa
 	if (mi)
 	{
 		mi->setBlendShapeFactor (blendShapeName, factor);
-		// \todo trap takes care of the dynamic flag
 	}
 }
 

@@ -92,10 +92,6 @@ void CCallbackClient::send (const CMessage &buffer, TSockId hostid, bool log)
 			_MR_Recorder.recordNext( _MR_UpdateCounter, Sending, hostid, const_cast<CMessage&>(buffer) );
 		}
 	}
-	else
-	{	
-		/// \todo cado: check that the next sending is the same
-	}
 #endif
 }
 

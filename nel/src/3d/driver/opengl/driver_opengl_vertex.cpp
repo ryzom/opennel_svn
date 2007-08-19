@@ -3,7 +3,6 @@
  *
  * $Id$
  *
- * \todo manage better the init/release system (if a throw occurs in the init, we must release correctly the driver)
  */
 
 /* Copyright, 2000 Nevrax Ltd.
@@ -1519,10 +1518,6 @@ void		CDriverGL::setupGlArrays(CVertexBufferInfo &vb)
 	H_AUTO_OGL(CDriverGL_setupGlArrays)
 	uint32	flags= vb.VertexFormat;
 	
-	/** \todo yoyo, or nico: this code should change with ATI VertexProgram.
-	 *	For now, ATI VBHard is only coded for non-VertexProgram case.
-	 */
-
 	// Standard case (NVVertexProgram or no vertex program case)
 	if (_Extensions.NVVertexProgram)
 	{	

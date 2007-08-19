@@ -189,7 +189,7 @@ bool operator<( const CInetAddress& a1, const CInetAddress& a2 )
  */
 void CInetAddress::init()
 {
-	CSock::initNetwork(); /// \todo cado: handle exception (because init() is called within a constructor)
+	CSock::initNetwork();
 	
 	_Valid = false;
 

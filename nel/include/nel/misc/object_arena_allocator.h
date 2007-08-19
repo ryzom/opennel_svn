@@ -38,8 +38,6 @@ class CFixedSizeAllocator;
   * One possible use is with a family of class for which new and delete have been redefined at the top of the hierarchy  
   * (which the NL_USES_DEFAULT_ARENA_OBJECT_ALLOCATOR macro does)
   *
-  * \todo thread safety
-  * 
   * \author Nicolas Vizerie
   * \author Nevrax France
   * \date 2004

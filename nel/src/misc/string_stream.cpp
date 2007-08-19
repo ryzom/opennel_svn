@@ -98,8 +98,6 @@ void CStringStream::serialSeparatedBufferOut( uint8 *buf, uint len )
 	sprintf( number_as_cstring, format, src ); \
 	serialSeparatedBufferOut( (uint8*)&number_as_cstring, strlen(number_as_cstring) );
 
-/// \todo cado: NLMISC::CStringStream: Use strtoul() functions instead of atoi(), to handle conversion errors
-
 /*
  * atoihex
  */

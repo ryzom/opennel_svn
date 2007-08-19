@@ -159,8 +159,8 @@ void nlSleep( uint32 ms )
 {
 #ifdef NL_OS_WINDOWS
 
-/// \todo yoyo: BUG WITH DEBUG/_CONSOLE!!!! a Sleep(0) "block" the other thread!!!
 #ifdef NL_DEBUG
+	// a Sleep(0) "block" the other thread in DEBUG/_CONSOLE, so we clamp
 	ms = max(ms, (uint32)1);
 #endif
 

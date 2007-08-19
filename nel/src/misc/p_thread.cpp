@@ -50,7 +50,6 @@ CPThread CurrentThread(NULL, 0);
  */
 IThread *IThread::getCurrentThread ()
 {
-	/// \todo: implement this functionality for POSIX thread
 	return &CurrentThread;
 } 
 
@@ -157,7 +156,6 @@ void CPThread::wait ()
  */
 bool CPThread::setCPUMask(uint64 cpuMask)
 {
-	/// \todo: handle processor selection under POSIX thread
 	return true;
 }
 
@@ -166,7 +164,6 @@ bool CPThread::setCPUMask(uint64 cpuMask)
  */
 uint64 CPThread::getCPUMask()
 {
-	/// \todo: handle processor selection under POSIX thread
 	return 1;
 }
 
@@ -175,7 +172,6 @@ uint64 CPThread::getCPUMask()
  */
 std::string CPThread::getUserName()
 {
-	/// \todo: return the thread user name
 	return "Not implemented";
 }
 
@@ -196,14 +192,12 @@ IProcess *IProcess::getCurrentProcess ()
  */
 uint64 CPProcess::getCPUMask()
 {
-	/// \todo: handle processor selection under POSIX thread
 	return 1;
 }
 
 /// set the CPU mask
 bool CPProcess::setCPUMask(uint64 mask)
 {
-	/// \todo: handle processor selection under POSIX thread
 	return 1;
 }
 

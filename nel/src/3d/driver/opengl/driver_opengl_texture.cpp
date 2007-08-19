@@ -1,10 +1,6 @@
 /** \file driver_opengl_texture.cpp
  * OpenGL driver implementation : setupTexture
  *
- * \todo yoyo: BUG with texture parameters. If parameters change are made between two renders, but the texture has not
- * changed (eg: only one texture in the whole world), those parameters are not bound!!! 
- * OPTIM: like the TexEnvMode style, a PackedParameter format should be done, to limit tests...
- *
  * $Id$
  */
 
@@ -880,7 +876,6 @@ bool CDriverGL::setupTextureEx (ITexture& tex, bool bUpload, bool &bAllUploaded,
 		}
 		// b. Load part of the texture case.
 		//==================================
-		// \todo yoyo: TODO_DXTC
 		// Replace parts of a compressed image. Maybe don't work with the actual system of invalidateRect()...
 		else if (mustLoadPart && !gltext->Compressed)
 		{

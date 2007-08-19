@@ -127,10 +127,6 @@ void CCallbackServer::send (const CMessage &buffer, TSockId hostid, bool log)
 			_MR_Recorder.recordNext( _MR_UpdateCounter, Sending, hostid, const_cast<CMessage&>(buffer) );
 		}
 	}
-	else
-	{	
-		/// \todo cado: check that the next sending is the same
-	}
 #endif
 }
 
@@ -394,10 +390,6 @@ void CCallbackServer::noticeConnection( TSockId hostid )
 			addrmsg.serial( const_cast<CInetAddress&>(hostAddress(hostid)) );
 			_MR_Recorder.recordNext( _MR_UpdateCounter, Accepting, hostid, addrmsg );
 		}
-	}
-	else
-	{
-		/// \todo cado: connection stats
 	}
 }
 

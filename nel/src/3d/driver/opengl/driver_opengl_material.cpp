@@ -1910,8 +1910,6 @@ void		CDriverGL::endCausticsMultiPass(const CMaterial &mat)
 }
 */
 
-/// \todo Optimize the cloud multipass with register combiner
-
 // ***************************************************************************
 sint		CDriverGL::beginCloudMultiPass ()
 {
@@ -2264,10 +2262,7 @@ void CDriverGL::setupWaterPassARB(const CMaterial &mat)
 			}
 			else
 			{
-				// \todo nico: test this pass when we got hardware to test it
 				nglProgramEnvParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 2, - 1.f/  (_FogEnd - _FogStart), _FogEnd / (_FogEnd - _FogStart), 0.f, 0.f);
-				
-					
 			}						
 		}				
 	}

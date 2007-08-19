@@ -41,7 +41,6 @@ namespace NLMEMORY
 /** NelAlloc: category can be NULL. Then, category string will be the last pushed category string. */
 #define NelAlloc(heap,size,category) ((heap).allocate (size))
 
-/** \todo NelRealloc: category can be NULL. Then, category string will be the last pushed category string. */
 #define NelRealloc(heap,size,ptr,category) (heap.reallocate (ptr, size))
 
 #else // NL_HEAP_ALLOCATION_NDEBUG
@@ -49,7 +48,6 @@ namespace NLMEMORY
 /** NelAlloc: category can be NULL. Then, category string will be the last pushed category string. */
 #define NelAlloc(heap,size,category) ((heap).allocate (size, __FILE__, __LINE__, category))
 
-/** \todo NelRealloc: category can be NULL. Then, category string will be the last pushed category string. */
 #define NelRealloc(heap,size,ptr,category) (heap.reallocate (ptr, size, __FILE__, __LINE__, category))
 
 #endif	//NL_HEAP_ALLOCATION_NDEBUG
@@ -107,7 +105,6 @@ public:
 	/** Free all the block allocated */
 	void					freeAll ();
 
-	/** \todo Free all the block allocated and release all the memory used by the allocator */
 	void					releaseMemory ();
 	
 	/** Get a block size with its pointer */
@@ -243,7 +240,6 @@ public:
 #ifndef	NL_HEAP_ALLOCATION_NDEBUG
 	/* Don't use it, use the NelAlloc macro */
 	void					*allocate (uint size, const char *sourceFile, uint line, const char *category);
-	/* \todo Don't use it, use the NelRealloc macro */
 	void					*reallocate (void *ptr, uint size, const char *sourceFile, uint line, const char *category);
 #else	// NL_HEAP_ALLOCATION_NDEBUG
 	void					*allocate (uint size);

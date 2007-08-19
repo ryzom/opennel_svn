@@ -463,7 +463,6 @@ bool CNamingClient::lookup (TServiceId sid, CInetAddress &addr)
 	return true;
 }
 
-/// \todo ace: now the lookupAlternate doesn't say to the naming service that this addr is bad so the NS can't remove it from his list. find a solution
 bool CNamingClient::lookupAlternate (const std::string &name, CInetAddress &addr)
 {
 	nlassert (_Connection != NULL && _Connection->connected ());

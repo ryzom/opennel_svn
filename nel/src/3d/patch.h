@@ -2,10 +2,6 @@
  * TODO: File description
  *
  * $Id$
- * \todo yoyo:
-		- "UV correction" infos.
-		- NOISE, or displacement map (ptr/index).
- *
  */
 
 /* Copyright, 2000 Nevrax Ltd.
@@ -327,11 +323,6 @@ public:
 	CVector3s		Vertices[4];
 	CVector3s		Tangents[8];
 	CVector3s		Interiors[4];
-	/*
-		\todo yoyo: TODO_NOISE: - displacement map (ptr/index).
-		\todo yoyo: TODO_UVCORRECT: - "UV correction" infos.
-		
-	*/
 
 	// Lumel array compressed.
 	std::vector<uint8>			CompressedLumels;

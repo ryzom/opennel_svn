@@ -837,8 +837,6 @@ public:
 
 //		nlinfo ("not parsed '%s'", parse.c_str());
 
-/// \todo ace it sometimes crash because try to access invalid address because the stack is not good (i don t know why)
-
 		// if there s parameter, parse them
 		if(i!=string::npos)
 		{

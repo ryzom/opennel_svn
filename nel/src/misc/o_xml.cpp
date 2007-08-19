@@ -402,7 +402,6 @@ void COXml::serial(ucstring &b)
 		}
 		else
 		{
-			/// \todo hulud: handle ucstring to utf-8.
 			nlwarning ("XML: handle ucstring to utf-8");
 			output[i]=(b[i]&0xff);
 		}

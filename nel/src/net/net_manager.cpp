@@ -76,8 +76,6 @@ static void nmNewDisconnection (TSockId from, void *arg)
 	// call the client callback if necessary
 	if (basest->DisconnectionCallback != NULL)
 		basest->DisconnectionCallback (basest->Name, from, basest->DisconnectionCbArg);
-
-	/// \todo ace: when a group is disconnected, we have to handle the problem
 }
 
 
@@ -369,7 +367,6 @@ void CNetManager::update (TTime timeout)
 		{
 			for (uint32 i = 0; i < (*itbm).second.NetBase.size(); i++)
 			{
-				/// \todo ace: update() only when connected () but cado must fix the problem before because if we don't update when we are not connected, we don't receive the disconnection
 				// we get and treat all messages in this connection
 				(*itbm).second.NetBase[i]->update (0);
 				if ((*itbm).second.NetBase[i]->connected())
