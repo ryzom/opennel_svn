@@ -523,14 +523,6 @@ void CBufServer::receive( CMemStream& buffer, TSockId* phostid )
 	*phostid = *((TSockId*)&(buffer.buffer()[buffer.size()-sizeof(TSockId)-1]));
 	nlassert( buffer.buffer()[buffer.size()-1] == CBufNetBase::User );
 
-	// debug features, we number all packet to be sure that they are all sent and received
-	// \todo remove this debug feature when ok
-#ifdef NL_BIG_ENDIAN
-	uint32 val = NLMISC_BSWAP32(*(uint32*)buffer.buffer());
-#else
-	uint32 val = *(uint32*)buffer.buffer();
-#endif
-
 	buffer.resize( buffer.size()-sizeof(TSockId)-1 );
 
 	// TODO OPTIM remove the nldebug for speed
@@ -1085,7 +1077,6 @@ void CServerReceiveTask::run()
 #ifdef NL_OS_WINDOWS
 			case  0 : continue; // time-out expired, no results
 #endif
-			/// \todo the error code is not properly retrieved
 			case -1 :
 				// we'll ignore message (Interrupted system call) caused by a CTRL-C
 				/*if (CSock::getLastError() == 4)

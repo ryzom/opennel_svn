@@ -91,7 +91,6 @@ CCallbackServer::CCallbackServer( TRecordingState rec, const string& recfilename
  */
 void CCallbackServer::send (const CMessage &buffer, TSockId hostid, bool log)
 {
-	checkThreadId ();
 	nlassert (connected ());
 	nlassert (buffer.length() != 0);
 	nlassert (buffer.typeIsSet());
@@ -140,7 +139,6 @@ void CCallbackServer::update2 ( sint32 timeout, sint32 mintime )
 {
 	H_AUTO(L3UpdateServer);
 
-	checkThreadId ();
 	nlassert (connected ());
 
 //	LNETL3_DEBUG ("LNETL3S: Client: update()");
@@ -168,7 +166,6 @@ void CCallbackServer::update ( sint32 timeout )
 {
 	H_AUTO(L3UpdateServer);
 
-	checkThreadId ();
 	nlassert (connected ());
 
 //	LNETL3_DEBUG ("LNETL3S: Client: update()");
@@ -194,7 +191,6 @@ void CCallbackServer::update ( sint32 timeout )
  */
 void CCallbackServer::receive (CMessage &buffer, TSockId *hostid)
 {
-	checkThreadId ();
 	nlassert (connected ());
 
 #ifdef USE_MESSAGE_RECORDER
@@ -235,8 +231,6 @@ void CCallbackServer::receive (CMessage &buffer, TSockId *hostid)
  */
 void CCallbackServer::disconnect( TSockId hostid )
 {
-	checkThreadId ();
-
 #ifdef USE_MESSAGE_RECORDER
 	if ( _MR_RecordingState != Replay )
 	{
@@ -258,7 +252,6 @@ void CCallbackServer::disconnect( TSockId hostid )
 TSockId CCallbackServer::getSockId (TSockId hostid)
 {
 	nlassert (hostid != InvalidSockId);	// invalid hostid
-	checkThreadId ();
 	nlassert (connected ());
 	nlassert (hostid != NULL);
 	return hostid;
@@ -272,8 +265,6 @@ TSockId CCallbackServer::getSockId (TSockId hostid)
  */
 bool CCallbackServer::dataAvailable ()
 {
-	checkThreadId ();
-
 #ifdef USE_MESSAGE_RECORDER
 	if ( _MR_RecordingState != Replay )
 	{

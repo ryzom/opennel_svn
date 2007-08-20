@@ -64,7 +64,6 @@ CCallbackClient::~CCallbackClient()
 void CCallbackClient::send (const CMessage &buffer, TSockId hostid, bool log)
 {
 	nlassert (hostid == InvalidSockId);	// should always be InvalidSockId on client
-	checkThreadId ();
 	nlassert (connected ());
 	nlassert (buffer.length() != 0);
 	nlassert (buffer.typeIsSet());
@@ -103,7 +102,6 @@ void CCallbackClient::send (const CMessage &buffer, TSockId hostid, bool log)
 bool CCallbackClient::flush (TSockId hostid, uint *nbBytesRemaining) 
 {
 	nlassert (hostid == InvalidSockId);	// should always be InvalidSockId on client
-	checkThreadId ();
 
 #ifdef USE_MESSAGE_RECORDER
 	if ( _MR_RecordingState != Replay )
@@ -135,8 +133,6 @@ void CCallbackClient::update2 ( sint32 timeout, sint32 mintime )
 
 	H_AUTO(L3UpdateClient2);
 
-	checkThreadId ();
-
 	baseUpdate2 (timeout, mintime); // first receive
 
 #ifdef USE_MESSAGE_RECORDER
@@ -167,8 +163,6 @@ void CCallbackClient::update ( sint32 timeout )
 
 	H_AUTO(L3UpdateClient);
 
-	checkThreadId ();
-
 	baseUpdate (timeout); // first receive
 
 #ifdef USE_MESSAGE_RECORDER
@@ -194,8 +188,6 @@ void CCallbackClient::update ( sint32 timeout )
  */
 bool CCallbackClient::dataAvailable ()
 {
-	checkThreadId ();
-
 #ifdef USE_MESSAGE_RECORDER
 	if ( _MR_RecordingState != Replay )
 	{
@@ -222,7 +214,6 @@ bool CCallbackClient::dataAvailable ()
  */
 void CCallbackClient::receive (CMessage &buffer, TSockId *hostid)
 {
-	checkThreadId ();
 //	nlassert (connected ());
 	*hostid = InvalidSockId;
 
@@ -233,14 +224,6 @@ void CCallbackClient::receive (CMessage &buffer, TSockId *hostid)
 		
 		// Receive
 		CBufClient::receive (buffer);
-
-		// debug features, we number all packet to be sure that they are all sent and received
-		// \todo remove this debug feature when ok
-#ifdef NL_BIG_ENDIAN
-		uint32 val = NLMISC_BSWAP32(*(uint32*)buffer.buffer ());
-#else
-		uint32 val = *(uint32*)buffer.buffer ();
-#endif
 
 #ifdef USE_MESSAGE_RECORDER
 		if ( _MR_RecordingState == Record )
@@ -266,7 +249,6 @@ void CCallbackClient::receive (CMessage &buffer, TSockId *hostid)
 TSockId	CCallbackClient::getSockId (TSockId hostid)
 {
 	nlassert (hostid == InvalidSockId);
-	checkThreadId ();
 
 	return id ();
 }
@@ -279,8 +261,6 @@ TSockId	CCallbackClient::getSockId (TSockId hostid)
  */
 void CCallbackClient::connect( const CInetAddress& addr )
 {
-	checkThreadId ();
-
 #ifdef USE_MESSAGE_RECORDER
 	if ( _MR_RecordingState != Replay )
 	{
@@ -346,7 +326,6 @@ void CCallbackClient::connect( const CInetAddress& addr )
 void CCallbackClient::disconnect( TSockId hostid )
 {
 	nlassert (hostid == InvalidSockId);	// should always be InvalidSockId on client
-	checkThreadId ();
 
 	// Disconnect only if connected (same as physically connected for the client)
 	if ( _BufSock->connectedState() )

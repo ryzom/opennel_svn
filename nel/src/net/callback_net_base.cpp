@@ -31,6 +31,7 @@
 #include "nel/net/callback_net_base.h"
 #include "nel/net/net_log.h"
 
+
 #ifdef USE_MESSAGE_RECORDER
 #ifdef NL_OS_WINDOWS
 #pragma message ( "NeL Net layer 3: message recorder enabled" )
@@ -83,7 +84,6 @@ CCallbackNetBase::CCallbackNetBase(  TRecordingState rec, const string& recfilen
 		, _MR_RecordingState(rec), _MR_UpdateCounter(0)
 #endif
 {
-	_ThreadId = getThreadId ();
 	_NewDisconnectionCallback = cbnbNewDisconnection;
 
 	_BytesSent = 0;
@@ -123,8 +123,6 @@ void *CCallbackNetBase::getUserData()
  */
 void CCallbackNetBase::addCallbackArray (const TCallbackItem *callbackarray, sint arraysize)
 {
-	checkThreadId ();
-
 	if (arraysize == 1 && callbackarray[0].Callback == NULL && string("") == callbackarray[0].Key)
 	{
 		// it's an empty array, ignore it
@@ -147,6 +145,7 @@ void CCallbackNetBase::addCallbackArray (const TCallbackItem *callbackarray, sin
 		_CallbackArray[ni] = callbackarray[i];
 
 	}
+
 //	LNETL3_DEBUG ("LNETL3NB_CB: Added %d callback Now, there're %d callback associated with message type", arraysize, _CallbackArray.size ());
 }
 
@@ -156,8 +155,6 @@ void CCallbackNetBase::addCallbackArray (const TCallbackItem *callbackarray, sin
  */
 void CCallbackNetBase::processOneMessage ()
 {
-	checkThreadId ();
-
 	// slow down the layer H_AUTO (CCallbackNetBase_processOneMessage);
 
 	CMessage msgin ("", true);
@@ -260,7 +257,6 @@ void CCallbackNetBase::processOneMessage ()
 void CCallbackNetBase::baseUpdate (sint32 timeout)
 {
 	H_AUTO(L3UpdateCallbackNetBase);
-	checkThreadId ();
 #ifdef NL_DEBUG
 	nlassert( timeout >= -1 );
 #endif
@@ -327,7 +323,6 @@ void CCallbackNetBase::baseUpdate (sint32 timeout)
 void CCallbackNetBase::baseUpdate2 (sint32 timeout, sint32 mintime)
 {
 	H_AUTO(L3UpdateCallbackNetBase2);
-	checkThreadId ();
 #ifdef NL_DEBUG
 	nlassert( timeout >= -1 );
 #endif
@@ -449,8 +444,6 @@ const	CInetAddress& CCallbackNetBase::hostAddress (TSockId hostid)
 
 void	CCallbackNetBase::authorizeOnly (const char *callbackName, TSockId hostid)
 {
-	checkThreadId ();
-
 	LNETL3_DEBUG ("LNETL3NB: authorizeOnly (%s, %s)", callbackName, hostid->asString().c_str());
 
 	hostid = getSockId (hostid);
@@ -503,23 +496,6 @@ void CCallbackNetBase::noticeDisconnection( TSockId hostid )
 }
 
 #endif // USE_MESSAGE_RECORDER
-
-
-
-/*
- * checkThreadId
- */
-void CCallbackNetBase::checkThreadId () const
-{
-/*	some people use this class in different thread but with a mutex to be sure to have
-	no concurent access
-	if (getThreadId () != _ThreadId)
-	{
-		nlerror ("You try to access to the same CCallbackClient or CCallbackServer with 2 differents thread (%d and %d)", _ThreadId, getThreadId());
-	}
-*/
-}
-
 
 } // NLNET
 
