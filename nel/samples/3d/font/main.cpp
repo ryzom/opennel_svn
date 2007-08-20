@@ -39,6 +39,9 @@
 #include "3d/text_context.h"
 #include "3d/driver_user.h"
 
+#ifndef FONT_DIR
+#	define FONT_DIR "."
+#endif
 
 using namespace std;
 using namespace NL3D;
@@ -50,11 +53,7 @@ int main (int argc, char **argv)
 	// look at 3dinit example
 	CNELU::init (800, 600, CViewport(), 32, true, 0, false, false); 
 
-#ifdef FONT_DIR
 	NLMISC::CPath::addSearchPath(FONT_DIR);
-#else
-	NLMISC::CPath::addSearchPath(".");
-#endif
 
 	// create a font manager
 	CFontManager fontManager;

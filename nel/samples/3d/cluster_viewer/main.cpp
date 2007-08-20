@@ -54,7 +54,7 @@
 #include "3d/event_mouse_listener.h"
 
 #ifndef CV_DIR
-#define CV_DIR ""
+#	define CV_DIR "."
 #endif
 
 using namespace std;
@@ -238,15 +238,9 @@ int main()
 	CNELU::Scene->enableLightingSystem(true);
 	CNELU::Scene->setAmbientGlobal(CRGBA(128,128,128));
 
-	std::stringstream strout;
-	strout << CV_DIR << "/" << "shapes/";
-	CPath::addSearchPath(strout.str());
-	strout.str("");
-	strout << CV_DIR << "/" << "groups/";
-	CPath::addSearchPath(strout.str());
-	strout.str("");
-	strout << CV_DIR << "/" << "fonts/";
-	CPath::addSearchPath(strout.str());
+	CPath::addSearchPath(CV_DIR"/shapes");
+	CPath::addSearchPath(CV_DIR"/groups");
+	CPath::addSearchPath(CV_DIR"/fonts");
 
 	CFontManager FontManager;
 	CTextContext TextContext;
