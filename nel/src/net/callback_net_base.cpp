@@ -159,7 +159,15 @@ void CCallbackNetBase::processOneMessage ()
 
 	CMessage msgin ("", true);
 	TSockId tsid;
-	receive (msgin, &tsid);
+	try
+	{
+		receive (msgin, &tsid);
+	}
+	catch (Exception &e)
+	{
+		nlwarning(e.what());
+		return;
+	}
 
 	_BytesReceived += msgin.length ();
 	
