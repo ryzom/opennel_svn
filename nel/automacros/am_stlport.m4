@@ -102,9 +102,22 @@ AC_DEFUN([AM_PATH_STLPORT], [
       AC_MSG_ERROR([STLport must be installed ( http://www.stlport.org).])
       ;;
     *)
-      STLPORT_INCLUDES="-I$found/include/stlport"
+      if test "$with_stlport_include"
+      then
+        STLPORT_INCLUDES="-I$with_stlport_include"
+      else
+        STLPORT_INCLUDES="-I$found/include/stlport"
+      fi
+
       STLPORT_LIBS="-lstlport"
-      STLPORT_LDFLAGS="-L$found/lib"
+
+      if test "$with_stlport_lib"
+      then
+        STLPORT_LDFLAGS="-L$with_stlport_lib"
+      else
+        STLPORT_LDFLAGS="-L$found/lib"
+      fi
+
       STLPORT_CXXFLAGS="-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64"
       have_stlport=1
       ;;
