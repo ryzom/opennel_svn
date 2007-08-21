@@ -7,23 +7,58 @@
 
 AC_DEFUN([AM_PATH_STLPORT], [
     stlport_places=$1
- 
+
     have_stlport=0
- 
+
     # Save the original values of the flags we tweak.
     stlport_check_lib_save_ldflags="$LDFLAGS"
     stlport_check_lib_save_cxxflags="$CXXFLAGS"
- 
+
+    AC_ARG_WITH( stlport,
+    [  --with-stlport=<path>   path to the STLport install files directory.
+                          e.g. /usr/local/stlport])
+
+    AC_ARG_WITH( stlport-include,
+    [  --with-stlport-include=<path>
+                          path to the STLport header files directory.
+                          e.g. /usr/local/stlport/include])
+
+    AC_ARG_WITH( stlport-lib,
+    [  --with-stlport-lib=<path>
+                          path to the STLport library files directory.
+                          e.g. /usr/local/stlport/lib])
+
+    if test "$with_stlport"
+    then
+        stlport_places="$with_stlport"
+    fi
+
     found=not
     for stlport_place in $stlport_places;
     do
       LDFLAGS="$stlport_check_lib_save_ldflags"
       CXXFLAGS="$stlport_check_lib_save_cxxflags"
-     
-      LDFLAGS="$LDFLAGS -L$stlport_place/lib"
-      CXXFLAGS="$CXXFLAGS -I$stlport_place/include/stlport"
+
+      # If the user specified --with-stlport-include, override the search.
+      if test "$with_stlport_include"
+      then
+        CXXFLAGS="$CXXFLAGS -I$with_stlport_include"
+      else
+        CXXFLAGS="$CXXFLAGS -I$stlport_place/include/stlport"
+      fi
+
+      # If the user specified --with-stlport-lib, override the search.
+      if test "$with_stlport_lib"
+      then
+        LDFLAGS="$LDFLAGS -L$with_stlport_lib"
+      else
+        LDFLAGS="$LDFLAGS -L$stlport_place/lib"
+      fi
+
+      # The description of where we are searching.
       description="$stlport_place"
-     
+
+
       AC_MSG_NOTICE([checking for STLport in $description])
       # Clear the header cache variable for each location
       changequote(,)
