@@ -246,8 +246,17 @@ bool			CDriverUser::setDisplay(const CMode &mode, bool show, bool resizeable)
 	NL3D_MEM_DRIVER
 	NL3D_HAUTO_UI_DRIVER;
 
+	return setDisplay(NULL, mode, show, resizeable);
+}
+
+// ***************************************************************************
+bool			CDriverUser::setDisplay(void *wnd, const CMode &mode, bool show, bool resizeable)
+{
+	NL3D_MEM_DRIVER
+	NL3D_HAUTO_UI_DRIVER;
+
 	// window init.
-	if (_Driver->setDisplay(NULL, GfxMode(mode.Width, mode.Height, mode.Depth, mode.Windowed, false, mode.Frequency), show, resizeable))
+	if (_Driver->setDisplay(wnd, GfxMode(mode.Width, mode.Height, mode.Depth, mode.Windowed, false, mode.Frequency), show, resizeable))
 	{
 		// Always true
 		nlverify (activate());
