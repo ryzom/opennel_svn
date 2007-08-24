@@ -1,4 +1,4 @@
-/** \file service/chat_service.cpp
+/** \file samples/net/chat/server.cpp
  * example of the IService class
  *
  * $Id$
