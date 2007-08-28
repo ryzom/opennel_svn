@@ -463,10 +463,10 @@ CSock::TSockResult CSock::send( const uint8 *buffer, uint32& len, bool throw_exc
 		{
 			H_AUTO(L0SendWouldBlock);
 			len = 0;
-			nlSleep(10);
+			//nlSleep(10);
 			if (!_Blocking)
 			{
-				nldebug("SendWouldBlock - %s / %s Entering snooze mode",_LocalAddr.asString().c_str(),_RemoteAddr.asString().c_str());
+				//nldebug("SendWouldBlock - %s / %s Entering snooze mode",_LocalAddr.asString().c_str(),_RemoteAddr.asString().c_str());
 				_Blocking= true;
 			}
 			return Ok;
@@ -485,7 +485,7 @@ CSock::TSockResult CSock::send( const uint8 *buffer, uint32& len, bool throw_exc
 	
 	if (_Blocking)
 	{
-		nldebug("SendWouldBlock - %s / %s Leaving snooze mode",_LocalAddr.asString().c_str(),_RemoteAddr.asString().c_str());
+		//nldebug("SendWouldBlock - %s / %s Leaving snooze mode",_LocalAddr.asString().c_str(),_RemoteAddr.asString().c_str());
 		_Blocking= false;
 	}
 	return Ok;
