@@ -1392,11 +1392,12 @@ bool CDriverD3D::setDisplay(void* wnd, const GfxMode& mode, bool show, bool resi
 		{
 			D3DADAPTER_IDENTIFIER9 identifier;
 			HRESULT res = _D3D->GetAdapterIdentifier(adapterIndex, 0, &identifier);
-			if (strcmp(identifier.Description, "NVIDIA NVPerfHUD") == 0)
+			if (strstr(identifier.Description, "PerfHUD") != 0)
 			{
 				adapter = adapterIndex;
 				_Adapter = adapter;
 				_Rasterizer = D3DDEVTYPE_REF;
+				nlinfo("Using NVIDIA NVPerfHUD adapter");
 				break;
 			}
 		}
