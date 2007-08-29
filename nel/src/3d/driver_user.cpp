@@ -256,7 +256,7 @@ bool			CDriverUser::setDisplay(void *wnd, const CMode &mode, bool show, bool res
 	NL3D_HAUTO_UI_DRIVER;
 
 	// window init.
-	if (_Driver->setDisplay(wnd, GfxMode(mode.Width, mode.Height, mode.Depth, mode.Windowed, false, mode.Frequency), show, resizeable))
+	if (_Driver->setDisplay(wnd, GfxMode(mode.Width, mode.Height, mode.Depth, mode.Windowed, false, mode.Frequency, mode.AntiAlias), show, resizeable))
 	{
 		// Always true
 		nlverify (activate());
