@@ -32,7 +32,6 @@
 #include <cstdio>
 #include <stdlib.h>
 #include <string.h>
-#include <stdint.h>
 
 #ifdef NL_OS_WINDOWS
 #include <windows.h>
