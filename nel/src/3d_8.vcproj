@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="3d"
-	ProjectGUID="{2B48BE83-108B-4E8E-8A55-6627CF09AC5A}"
+	ProjectGUID="{64145258-1F80-4E02-9B75-1A9A1514CD17}"
 	RootNamespace="3d"
 	>
 	<Platforms>

@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="ligo"
-	ProjectGUID="{005838BE-F505-4C8C-958A-5719BC0BD5E4}"
+	ProjectGUID="{1DDC11C7-AF79-40F3-A6D4-F84BA8644B5C}"
 	RootNamespace="ligo"
 	>
 	<Platforms>

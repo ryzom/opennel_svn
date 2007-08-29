@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="sound"
-	ProjectGUID="{EDB369A3-D7A4-4593-982C-96DEF4F9D485}"
+	ProjectGUID="{4AF7ADB2-DAF8-4F04-9793-F92010001470}"
 	RootNamespace="sound"
 	>
 	<Platforms>

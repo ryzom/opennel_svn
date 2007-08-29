@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="georges"
-	ProjectGUID="{D430A4D6-9DCF-4252-B9D3-20EE5C2650A5}"
+	ProjectGUID="{9D284C6B-BE12-4549-87E5-2337D64F31BE}"
 	RootNamespace="georges"
 	>
 	<Platforms>
