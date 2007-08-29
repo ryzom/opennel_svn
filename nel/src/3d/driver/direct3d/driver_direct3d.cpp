@@ -1386,7 +1386,7 @@ bool CDriverD3D::setDisplay(void* wnd, const GfxMode& mode, bool show, bool resi
 	// Set default settings
 	_Rasterizer = RASTERIZER;
 #ifdef NL_D3D_USE_NV_PERF_HUD
-		// Look for 'NVIDIA NVPerfHUD' adapter
+/*		// Look for 'NVIDIA NVPerfHUD' adapter
 		// If it is present, override default settings
 		for (UINT adapterIndex = 0; adapterIndex < _D3D->GetAdapterCount(); adapterIndex++)
 		{
@@ -1400,7 +1400,7 @@ bool CDriverD3D::setDisplay(void* wnd, const GfxMode& mode, bool show, bool resi
 				nlinfo("Using NVIDIA NVPerfHUD adapter");
 				break;
 			}
-		}
+		}*/
 #endif
 
 	// Create device options
@@ -1923,16 +1923,14 @@ bool CDriverD3D::swapBuffers()
 	}
 
 	// End now
-	//nldebug("EndScene");
 	if (!endScene())
 	{
-		// tmp
-		nlassert(0);
+		nlstop;
 		return false;	
 	}
 
-	HRESULT result;
-	if ((result=_DeviceInterface->Present( NULL, NULL, NULL, NULL)) != D3D_OK)
+	HRESULT result = _DeviceInterface->Present( NULL, NULL, NULL, NULL);
+	if (result != D3D_OK)
 	{
 		// Device lost ?
 		if (result == D3DERR_DEVICELOST)
@@ -1946,7 +1944,7 @@ bool CDriverD3D::swapBuffers()
 			}
 		}
 	}	
-	
+
 	// Check window size
 	handlePossibleSizeChange ();
 
@@ -1971,14 +1969,8 @@ bool CDriverD3D::swapBuffers()
 		++ _NumIBProfileFrame;
 	}	
 
-
-
-
 	// Begin now
-	//nldebug("BeginScene");
 	return beginScene();
-
-	
 };
 
 // ***************************************************************************
@@ -2347,7 +2339,6 @@ bool CDriverD3D::reset (const GfxMode& mode)
 	if (!fillPresentParameter (parameters, adapterFormat, mode, adapterMode))
 		return false;
 
-
 	// Current mode
 	_CurrentMode = mode;
 	_CurrentMaterial = NULL;
@@ -2533,7 +2524,6 @@ bool CDriverD3D::fillPresentParameter (D3DPRESENT_PARAMETERS &parameters, D3DFOR
 		parameters.PresentationInterval = D3DPRESENT_INTERVAL_FOUR;
 		break;
 	}
-	parameters.Flags |= D3DPRESENTFLAG_LOCKABLE_BACKBUFFER;
 
 	// Build a depth index
 	const uint depthIndex = (mode.Depth==16)?0:(mode.Depth==24)?1:2;
@@ -2586,7 +2576,7 @@ bool CDriverD3D::fillPresentParameter (D3DPRESENT_PARAMETERS &parameters, D3DFOR
 	// Not found ?
 	if (!found)
 	{
-		nlwarning ("CDriverD3D::fillPresentParameter: Can't create backbuffer");
+		nlwarning ("Can't create backbuffer");
 		return false;
 	}
 
@@ -2610,12 +2600,40 @@ bool CDriverD3D::fillPresentParameter (D3DPRESENT_PARAMETERS &parameters, D3DFOR
 
 	if (i>=zbufferFormatCount)
 	{
-		nlwarning ("CDriverD3D::fillPresentParameter: Can't create zbuffer");
+		nlwarning ("Can't create zbuffer");
 		return false;
 	}
 
 	// Set the zbuffer format
 	parameters.AutoDepthStencilFormat = zbufferFormats[i];
+
+	if(mode.AntiAlias == -1)
+	{
+		parameters.Flags |= D3DPRESENTFLAG_LOCKABLE_BACKBUFFER;
+	}
+	else
+	{
+		DWORD aa = 0;
+		if(mode.AntiAlias == 0)
+		{
+			if(SUCCEEDED(_D3D->CheckDeviceMultiSampleType(adapter, _Rasterizer, adapterFormat, mode.Windowed, D3DMULTISAMPLE_NONMASKABLE, &aa)))
+			{
+				parameters.MultiSampleType = D3DMULTISAMPLE_NONMASKABLE;
+				parameters.MultiSampleQuality = aa - 1;
+				nlinfo("Use AntiAlias with %d sample", aa);
+			}
+			else
+			{
+				nlwarning("No AntiAlias support found");
+			}
+		}
+		else
+		{
+			parameters.MultiSampleType = D3DMULTISAMPLE_NONMASKABLE;
+			parameters.MultiSampleQuality = mode.AntiAlias - 1;
+			nlinfo("Use AntiAlias with %d sample", mode.AntiAlias);
+		}
+	}
 
 	return true;
 }

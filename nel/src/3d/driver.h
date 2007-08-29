@@ -81,26 +81,27 @@ struct IOcclusionQuery;
 
 //****************************************************************************
 /// A Graphic Mode descriptor.
-class GfxMode 
+struct GfxMode
 {
-public:
 	bool				OffScreen;
 	bool				Windowed;
 	uint16				Width;
 	uint16				Height;
 	uint8				Depth;
-	uint				Frequency;	// In hz. Used only in fullscreen, default is windows selection
+	uint				Frequency;	// In hz. Default is Windows selection
+	sint8				AntiAlias;	// -1 = no AA, 0 = max, 2 = 2x sample, 4 = 4x sample, ...
 
-						GfxMode(void) 
-						{ 
-							OffScreen=false;
-							Windowed=false;
-							Width=0;
-							Height=0;
-							Depth=0;
-							Frequency=0;
-						}
-						GfxMode(uint16 w, uint16 h, uint8 d, bool windowed= true, bool offscreen=false, uint frequency = 60);
+	GfxMode()
+	{
+		OffScreen=false;
+		Windowed=false;
+		Width = 0;
+		Height = 0;
+		Depth = 0;
+		Frequency = 0;
+		AntiAlias = -1;
+	}
+	GfxMode(uint16 w, uint16 h, uint8 d, bool windowed = true, bool offscreen = false, uint frequency = 0, sint8 aa = -1);
 };
 
 //****************************************************************************
