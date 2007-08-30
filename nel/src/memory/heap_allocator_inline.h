@@ -26,6 +26,12 @@
 #ifndef NL_HEAP_ALLOCATOR_INLINE_H
 #define NL_HEAP_ALLOCATOR_INLINE_H
 
+#include "nel/misc/types_nl.h"
+
+#ifndef NL_OS_WINDOWS
+#include <stdint.h>
+#endif
+
 #ifdef NL_HEAP_ALLOCATOR_INTERNAL_CHECKS
 #define internalAssert(a) memory_assert(a)
 #else // NL_HEAP_ALLOCATOR_INTERNAL_CHECKS
