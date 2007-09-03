@@ -372,6 +372,33 @@ LDFLAGS="$LDFLAGS $STLPORT_LDFLAGS"
 # ====================================================================
 
 # ====================================================================
+# GTK 2.0+
+
+AC_ARG_WITH([gtk],
+            AC_HELP_STRING([--with-gtk],
+                           [add GTK dependent code like GTK displayer]),
+            [],
+            [with_gtk=no])
+
+if test "$with_gtk" = "yes"
+then
+  AC_LANG([C])
+
+  AM_PATH_GTK_2_0([2.0.0],
+    CFLAGS="$CFLAGS $GTK_CFLAGS"
+    CXXFLAGS="$CXXFLAGS $GTK_CFLAGS"
+    LIBS="$LIBS $GTK_LIBS"
+    AC_DEFINE(NL_USE_GTK, [], [Undef if you don't want to use anything GTK based like the GTK Displayer]
+)
+  )
+
+  AC_LANG([C++])
+
+  AC_SUBST([with_gtk])
+fi
+
+
+# ====================================================================
 # FreeType 2
 
 AM_PATH_FREETYPE($enable_3d)

@@ -183,7 +183,7 @@
 // Define this if you want to use GTK for gtk_displayer
 
 //#define NL_USE_GTK
-#undef NL_USE_GTK
+//#undef NL_USE_GTK
 
 
 // Standard types
