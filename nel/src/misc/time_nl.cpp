@@ -261,52 +261,34 @@ std::string	CTime::getHumanRelativeTime(sint32 nbSeconds)
 		delta = -delta;
 
 	// some constants of time duration in seconds
-	const uint32 oneMinute = 60;
-	const uint32 oneHour = oneMinute * 60;
-	const uint32 oneDay = oneHour * 24;
-	const uint32 oneWeek = oneDay * 7;
-	const uint32 oneMonth = oneDay * 30; // aprox, a more precise value is 30.416666... but no matter
-	const uint32 oneYear = oneDay * 365; // aprox, a more precise value is 365.26.. who care?
+	const sint32 oneMinute = 60;
+	const sint32 oneHour = oneMinute * 60;
+	const sint32 oneDay = oneHour * 24;
+	const sint32 oneWeek = oneDay * 7;
+	const sint32 oneMonth = oneDay * 30; // aprox, a more precise value is 30.416666... but no matter
+	const sint32 oneYear = oneDay * 365; // aprox, a more precise value is 365.26.. who care?
 
-	uint32 year, month, week, day, hour, minute;
+	sint32 year, month, week, day, hour, minute;
 	year = month = week = day = hour = minute = 0;
 
 	/// compute the different parts
-	while (delta > oneYear)
-	{
-		++year;
-		delta -= oneYear;
-	}
+	year = delta / oneYear;
+	delta %= oneYear;
 
-	while (delta > oneMonth)
-	{
-		++month;
-		delta -= oneMonth;
-	}
+	month = delta / oneMonth;
+	delta %= oneMonth;
+	
+	week = delta / oneWeek;
+	delta %= oneWeek;
 
-	while (delta > oneWeek)
-	{
-		++week;
-		delta -= oneWeek;
-	}
+	day = delta / oneDay;
+	delta %= oneDay;
 
-	while (delta > oneDay)
-	{
-		++day;
-		delta -= oneDay;
-	}
+	hour = delta / oneHour;
+	delta %= oneHour;
 
-	while (delta > oneHour)
-	{
-		++hour;
-		delta -= oneHour;
-	}
-
-	while (delta > oneMinute)
-	{
-		++minute;
-		delta -= oneMinute;
-	}
+	minute = delta / oneMinute;
+	delta %= oneMinute;
 
 	// compute the string
 	CSString ret;

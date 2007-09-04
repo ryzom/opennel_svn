@@ -1363,7 +1363,7 @@ namespace NLMISC
 
 		// just bypass the problems that can cause a crash...
 		if (toFind==NULL || *toFind==0 || startLocation>=size())
-			return std::string::npos;
+			return (unsigned)std::string::npos;
 
 		unsigned i,j;
 		for (i=startLocation;i<size();++i)
@@ -1376,7 +1376,7 @@ namespace NLMISC
 			if (toFind[j]==0)
 				return i;
 		}
-		return std::string::npos;
+		return (unsigned)std::string::npos;
 	}
 
 	/// Find index at which a sub-string starts (case NOT sensitive) - if sub-string not found then returns string::npos
@@ -1386,7 +1386,7 @@ namespace NLMISC
 
 		// just bypass the problems that can cause a crash...
 		if (toFind==NULL || *toFind==0 || startLocation>=size())
-			return std::string::npos;
+			return (unsigned)std::string::npos;
 
 		unsigned i,j;
 		for (i=startLocation;i<size();++i)
@@ -1399,7 +1399,7 @@ namespace NLMISC
 			if (toFind[j]==0)
 				return i;
 		}
-		return std::string::npos;
+		return (unsigned)std::string::npos;
 	}
 
 	bool CSString::contains(const char *toFind) const

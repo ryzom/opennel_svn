@@ -2303,6 +2303,8 @@ bool CBitmap::writeTGA( NLMISC::IStream &f, uint32 d, bool upsideDown)
 		case Alpha:
 			d = 8;
 			break;
+		default:
+			;
 		}
 	}
 	if(d!=24 && d!=32 && d!=16 && d!=8) return false;
@@ -3705,6 +3707,8 @@ CRGBA CBitmap::getDXTCColorFromBlock(const uint8 *block, sint x, sint y)
 				uncompress(col1, c1);
 				result.blendFromui(c0, c1, 171);
 			break;
+		default:
+			;
 		}
 		result.A = 255;
 	}
@@ -3891,7 +3895,7 @@ void CBitmap::unattachPixels(CObjectVector<uint8> *mipmapDestArray, uint maxMipM
 void CBitmap::getData(uint8*& extractData)
 {
 	
-	uint32 size;
+	uint32 size=0;
 	if(PixelFormat==RGBA)
 		size=_Width*_Height*4;
 	else if(PixelFormat==Alpha||PixelFormat==Luminance)
@@ -3909,7 +3913,7 @@ void CBitmap::getData(uint8*& extractData)
 void CBitmap::getDibData(uint8*& extractData)
 {
 	
-	uint32 lineSize,size;
+	uint32 lineSize=0,size;
 	uint8** buf;
 	buf=new uint8*[_Height];
 	if(PixelFormat==RGBA)

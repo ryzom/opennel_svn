@@ -751,7 +751,7 @@ bool launchProgram (const std::string &programName, const std::string &arguments
 
 	// convert one arg into several args
 	vector<string> args;
-	uint32 pos1 = 0, pos2 = 0;
+	string::size_type pos1 = 0, pos2 = 0;
 	do
 	{
 		pos1 = arguments.find_first_not_of (" ", pos2);

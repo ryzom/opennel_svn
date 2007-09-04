@@ -368,7 +368,7 @@ void CMemDisplayer::doDisplay ( const CLog::TDisplayInfo& args, const char *mess
 #ifdef NL_OS_WINDOWS
 		str += NLMISC::toString("%5x", args.ThreadId);
 #else
-		str += NLMISC::toString("%d", args.ThreadId);
+		str += NLMISC::toString("%08x", args.ThreadId);
 #endif
 		needSpace = true;
 	}

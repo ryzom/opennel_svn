@@ -82,7 +82,7 @@ bool		testWildCard(const char *strIn, const char *wildCard)
 
 				// in strIn, search all the occurence of token. For each solution, recurs test.
 				string	sCopy= strIn;
-				uint	pos= sCopy.find(token, 0);
+				string::size_type pos= sCopy.find(token, 0);
 				while(pos!=string::npos)
 				{
 					// do a testWildCard test on the remaining string/wildCard

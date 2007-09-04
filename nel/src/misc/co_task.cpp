@@ -41,7 +41,9 @@
 #endif
 
 #if defined(NL_USE_THREAD_COTASK)
+	#ifndef __GNUC__
 	#pragma message(NL_LOC_MSG "Using threaded coroutine")
+	#endif
 	# include "nel/misc/thread.h"
 #else //NL_USE_THREAD_COTASK
 // some platform specifics
