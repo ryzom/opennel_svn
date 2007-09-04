@@ -19331,6 +19331,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\3d\bloom_effect.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\3d\bloom_effect.h"
+			>
+		</File>
+		<File
 			RelativePath="3d\debug_vb.cpp"
 			>
 			<FileConfiguration
