@@ -113,18 +113,18 @@ UAudioMixer	*UAudioMixer::createAudioMixer()
 
 // ******************************************************************
 
-CAudioMixerUser::CAudioMixerUser() : _SoundDriver(NULL),
-									 _ListenPosition(CVector::Null),
-									 _NbTracks(0),
-									 _Leaving(false),
+CAudioMixerUser::CAudioMixerUser() : _AutoLoadSample(false),
+									 _UseADPCM(true),
+									 _SoundDriver(NULL),
 									 _BackgroundSoundManager(0),
+									 _ClusteredSound(0),
+									 _ListenPosition(CVector::Null),
+									 _PackedSheetPath(""),
 									 _BackgroundMusicManager(0),
 									 _PlayingSources(0),
 									 _PlayingSourcesMuted(0),
-									 _ClusteredSound(0),
-									_PackedSheetPath(""),
-									_UseADPCM(true),
-									_AutoLoadSample(false)
+									 _NbTracks(0),
+									 _Leaving(false)
 {
 	if ( _Instance == NULL )
 	{

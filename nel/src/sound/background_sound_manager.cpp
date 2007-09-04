@@ -58,7 +58,7 @@ const float BACKGROUND_SOUND_ALTITUDE = 5.0f;
 
 
 CBackgroundSoundManager::CBackgroundSoundManager()
-: _LastPosition(0,0,0), _Playing(false), _DoFade(false)
+: _Playing(false), _DoFade(false), _LastPosition(0,0,0) 
 {
 	for (uint i=0; i<UAudioMixer::TBackgroundFlags::NB_BACKGROUND_FLAGS; ++i)
 	{
@@ -157,7 +157,7 @@ void CBackgroundSoundManager::addSound(const std::string &rawSoundName, const st
 	if (n == 2)
 	{
 		// no layer spec, default to layer A
-		uint32 pos1 = rawSoundName.find ("-");
+		string::size_type pos1 = rawSoundName.find ("-");
 		if(pos1 == string::npos)
 		{
 			nlwarning ("zone have the malformated name '%s' missing -name-", rawSoundName.c_str());
@@ -165,7 +165,7 @@ void CBackgroundSoundManager::addSound(const std::string &rawSoundName, const st
 		}
 		pos1++;
 
-		uint32 pos2 = rawSoundName.find ("-", pos1);
+		string::size_type pos2 = rawSoundName.find ("-", pos1);
 		if(pos2 == string::npos)
 		{
 			nlwarning ("zone have the malformated name '%s' missing -name-", rawSoundName.c_str());
@@ -177,8 +177,8 @@ void CBackgroundSoundManager::addSound(const std::string &rawSoundName, const st
 	else if (n == 3)
 	{
 		// layer spec !
-		uint32 pos1 = rawSoundName.find ("-");
-		uint32 pos2 = rawSoundName.find ("-", pos1+1);
+		string::size_type pos1 = rawSoundName.find ("-");
+		string::size_type pos2 = rawSoundName.find ("-", pos1+1);
 		if(pos1 == string::npos || pos2 == string::npos)
 		{
 			nlwarning ("zone have the malformated name '%s' missing -layerId- or -name-", rawSoundName.c_str());
@@ -186,7 +186,7 @@ void CBackgroundSoundManager::addSound(const std::string &rawSoundName, const st
 		}
 		pos1++;
 
-		uint32 pos3 = rawSoundName.find ("-", pos2+1);
+		string::size_type pos3 = rawSoundName.find ("-", pos2+1);
 		if(pos3 == string::npos)
 		{
 			nlwarning ("zone have the malformated name '%s' missing -name-", rawSoundName.c_str());

@@ -122,8 +122,7 @@ public:
 		/// Constructor. Init all default value.
 		CSoundTravContext(const NLMISC::CVector &listenerPos, 
 			bool filterUnvisibleChild, bool filterUnvisibleFather)
-			:	ListenerPos(listenerPos),
-				Gain(1.0f),
+			:	Gain(1.0f),
 				Occlusion(0),
 				OcclusionLFFactor(1.0f),
 				OcclusionRoomRatio(1.0f),
@@ -137,7 +136,8 @@ public:
 				Direction2(NLMISC::CVector::Null),
 				Direction(NLMISC::CVector::Null),
 				PreviousCluster(0),
-				PreviousVector(NLMISC::CVector::Null)
+				PreviousVector(NLMISC::CVector::Null),
+				ListenerPos(listenerPos)
 		{}
 
 		/// Assignment operator.

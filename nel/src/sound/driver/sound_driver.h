@@ -103,6 +103,7 @@ public:
 	class IStringMapperProvider
 	{
 	public:
+		virtual ~IStringMapperProvider() {}
 		/// map a string
 		virtual const NLMISC::TStringId map(const std::string &str) =0;
 		/// unmap a string

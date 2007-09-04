@@ -298,6 +298,8 @@ AC_HEADER_TIME
 AC_STRUCT_TM
 AC_C_VOLATILE
 AC_CHECK_TYPES([ptrdiff_t])
+AC_CHECK_TYPES([size_t])
+AC_CHECK_TYPES([uintptr_t])
 
 
 # ====================================================================
@@ -417,9 +419,28 @@ AM_PATH_XF86VIDMODE
 
 
 # ====================================================================
-# FMOD
-
-AM_PATH_FMOD($enable_sound)
+# FMOD, OpenAL
+ 
+if test "$enable_sound" = "yes"
+then
+  AM_PATH_FMOD("no")
+  AM_PATH_OPENAL("no")
+  if test "$have_fmod" = "no" -a "$have_openal" = "no"
+  then
+    AC_MSG_ERROR([Either FMod or OpenAL must be installed to use sound.])
+  fi
+  if test "$have_fmod" = "yes"
+  then
+    SOUND_SUBDIRS="fmod"
+  else
+    SOUND_SUBDIRS=""
+  fi
+  if test "$have_openal" = "yes"
+  then
+    SOUND_SUBDIRS="$SOUND_SUBDIRS openal"
+  fi
+  AC_SUBST([SOUND_SUBDIRS])
+fi
 
 
 # ====================================================================
@@ -466,6 +487,7 @@ AC_CONFIG_FILES([Makefile                                        \
            src/sound/Makefile                              \
            src/sound/driver/Makefile                       \
            src/sound/driver/fmod/Makefile                  \
+           src/sound/driver/openal/Makefile                \
            src/georges/Makefile                            \
            src/ligo/Makefile                               \
            tools/Makefile                                  \

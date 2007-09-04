@@ -137,7 +137,7 @@ void CAsyncFileManagerSound::cancelSignal (bool *pSgn)
 
 // Load task.
 CAsyncFileManagerSound::CLoadWavFile::CLoadWavFile (IBuffer *pdestBuffer, const std::string &filename)
-:_Filename(filename), _pDestbuffer(pdestBuffer)
+: _pDestbuffer(pdestBuffer), _Filename(filename) 
 {
 	if (_Filename.empty())
 	{

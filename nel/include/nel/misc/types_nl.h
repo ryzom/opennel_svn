@@ -273,6 +273,7 @@ typedef	unsigned	int			uint;			// at least 32bits (depend of processor)
 #elif defined (NL_OS_UNIX)
 
 #include <sys/types.h>
+#include <stdint.h>
 
 typedef	int8_t		sint8;
 typedef	u_int8_t	uint8;

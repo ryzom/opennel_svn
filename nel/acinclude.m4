@@ -696,6 +696,7 @@ AC_ARG_WITH( openal-lib,
                           e.g. /usr/local/lib])
 
 openal_lib="openal"
+alut_lib="alut"
 
 if test $with_openal
 then
@@ -725,14 +726,15 @@ if test "$openal_libraries"
 then
     OPENAL_LIBS="-L$openal_libraries"
 fi
-OPENAL_LIBS="$OPENAL_LIBS -l$openal_lib"
+OPENAL_LIBS="$OPENAL_LIBS -l$openal_lib -l$alut_lib"
 
 _CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CXXFLAGS $OPENAL_CFLAGS"
 
 AC_MSG_CHECKING(for OpenAL headers)
 AC_EGREP_CPP( yo_openal,
-[#include <AL/altypes.h>
+[#include <AL/al.h>
+#include <AL/alut.h>
 #ifdef AL_VERSION
    yo_openal
 #endif],
@@ -789,7 +791,7 @@ fi
 
 AC_SUBST(OPENAL_CFLAGS)
 AC_SUBST(OPENAL_LIBS)
-
+AC_SUBST([have_openal])
 
 ])
 
@@ -1208,6 +1210,7 @@ fi
 
 AC_SUBST(FMOD_CFLAGS)
 AC_SUBST(FMOD_LIBS)
+AC_SUBST([have_fmod])
 
 ])
 
