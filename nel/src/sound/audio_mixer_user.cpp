@@ -385,7 +385,7 @@ void				CAudioMixerUser::init(uint maxTrack, bool useEax, bool useADPCM, IProgre
 	try
 	{
 		// create the wanted driver
-		nlctassert(NumDrivers == ISoundDriver::NumDrivers);
+		nlctassert(NumDrivers == UAudioMixer::TDriver(ISoundDriver::NumDrivers));
 		_SoundDriver = ISoundDriver::createDriver(useEax, this, (ISoundDriver::TDriver)driverType, forceSoftwareBuffer);
 		if(_SoundDriver)
 		{
