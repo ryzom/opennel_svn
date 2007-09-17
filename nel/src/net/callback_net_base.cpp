@@ -75,20 +75,19 @@ void cbnbNewDisconnection (TSockId from, void *data)
  * Constructor
  */
 CCallbackNetBase::CCallbackNetBase(  TRecordingState rec, const string& recfilename, bool recordall ) 
-	:	_FirstUpdate (true), 
+	:	_BytesSent(0),
+		_BytesReceived(0),
+		_NewDisconnectionCallback(cbnbNewDisconnection),
+		_DefaultCallback(NULL),
+		_PreDispatchCallback(NULL),
+		_FirstUpdate (true), 
 		_UserData(NULL),
 		_DisconnectionCallback(NULL), 
-		_DisconnectionCbArg(NULL),
-		_PreDispatchCallback(NULL)
+		_DisconnectionCbArg(NULL)
 #ifdef USE_MESSAGE_RECORDER
 		, _MR_RecordingState(rec), _MR_UpdateCounter(0)
 #endif
 {
-	_NewDisconnectionCallback = cbnbNewDisconnection;
-
-	_BytesSent = 0;
-	_BytesReceived = 0;
-
 	createDebug(); // for addNegativeFilter to work even in release and releasedebug modes
 
 #ifdef USE_MESSAGE_RECORDER

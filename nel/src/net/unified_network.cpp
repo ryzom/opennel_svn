@@ -442,7 +442,7 @@ public:
 
 	struct CCheckAddress
 	{
-		CCheckAddress() : NeedCheck(false), AddressValid(false), ConnectionId(0xDEAD)	{ }
+		CCheckAddress() : ConnectionId(0xDEAD), NeedCheck(false), AddressValid(false) { }
 		CInetAddress	Address;
 		std::string		ServiceName;
 		TServiceId		ServiceId;
@@ -702,7 +702,7 @@ void	CUnifiedNetwork::release(bool mustFlushSendQueues, const std::vector<std::s
 	if ( mustFlushSendQueues )
 	{
 		nlinfo( "HNETL5: Flushing sending queues..." );
-		float totalBytes;
+		float totalBytes = 0;
 		uint bytesRemaining, i=0;
 		while ( (bytesRemaining = tryFlushAllQueues( namesOfOnlyServiceToFlushSending )) != 0 )
 		{
