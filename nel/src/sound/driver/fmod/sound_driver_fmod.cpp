@@ -108,8 +108,10 @@ uint32 NLSOUND_interfaceVersion ()
 #endif // NL_OS_UNIX
 
 // ******************************************************************
-#pragma warning( push )
-#pragma warning( disable : 4355 )
+#ifdef NL_OS_WINDOWS
+#	pragma warning( push )
+#	pragma warning( disable : 4355 )
+#endif
 CSoundDriverFMod::CSoundDriverFMod()
 :	_StringMapper(0)
 {
@@ -123,11 +125,12 @@ CSoundDriverFMod::CSoundDriverFMod()
     }
 	else
 	{
-		nlerror("Sound driver singleton instanciated twice");
+		nlerror("Sound driver singleton instantiated twice");
 	}
 }
-#pragma warning( pop )
-
+#ifdef NL_OS_WINDOWS
+#	pragma warning( pop )
+#endif
 
 // ******************************************************************
 
