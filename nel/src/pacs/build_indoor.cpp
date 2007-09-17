@@ -121,8 +121,8 @@ void	floodFillSurfaces(CCollisionMeshBuild &cmb, vector<CInteriorSurface> &surfa
 		if (face.Surface == CCollisionFace::ExteriorSurface || face.InternalSurface != -1)
 			continue;
 
-		vector<uint>	stack;
-		stack.push_back(i);
+		vector<sint32>	stack;
+		stack.push_back(sint32(i));
 		face.InternalSurface = currentId;
 
 		surfaces.resize(surfaces.size()+1);
@@ -138,7 +138,7 @@ void	floodFillSurfaces(CCollisionMeshBuild &cmb, vector<CInteriorSurface> &surfa
 			surfaces.back().Faces.push_back(pop);
 			CCollisionFace	&popFace = cmb.Faces[pop];
 
-			uint	edge, neighb;
+			sint32	edge, neighb;
 			for (edge=0; edge<3; ++edge)
 			{
 				if ((neighb = popFace.Edge[edge]) != -1 && 
