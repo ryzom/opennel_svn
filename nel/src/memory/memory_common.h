@@ -98,8 +98,11 @@ typedef	int16_t		sint16;
 typedef	u_int16_t	uint16;
 typedef	int32_t		sint32;
 typedef	u_int32_t	uint32;
-typedef	int64_t		sint64;
-typedef	u_int64_t	uint64;
+//typedef	int64_t		sint64;
+//typedef	u_int64_t	uint64;
+// to comply with types_nl.h:
+typedef long long int sint64;
+typedef unsigned long long int uint64;
 
 typedef	signed		int			sint;			// at least 32bits (depend of processor)
 typedef	unsigned	int			uint;			// at least 32bits (depend of processor)
