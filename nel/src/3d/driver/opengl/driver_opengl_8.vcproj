@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="driver_opengl"
-	ProjectGUID="{1D9576F6-3321-4036-8C86-B5361CCCD4FB}"
+	ProjectGUID="{6EBC5C17-A42F-4EA2-B790-D97E3DA72AC7}"
 	RootNamespace="driver_opengl"
 	>
 	<Platforms>
