@@ -1423,6 +1423,7 @@ struct CSpecCubeMapFunctor : ICubeMapFunctor
 		return NLMISC::CRGBA(intensity, intensity, intensity, intensity); 		
 		//return Exp == 1.f ? CRGBA((uint8)(v.x*127+127), (uint8)(v.y*127+127), (uint8)(v.z*127+127), 0): CRGBA::Black;
 	}
+	virtual ~CSpecCubeMapFunctor() {}
 	float Exp;
 };
 

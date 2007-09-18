@@ -151,7 +151,7 @@ public:
 	/// Constructor
 	CLandscape();
 	/// Destructor. clear().
-	~CLandscape();
+	virtual ~CLandscape();
 
 
 	/// \name Init/Build.

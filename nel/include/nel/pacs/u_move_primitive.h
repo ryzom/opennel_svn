@@ -130,6 +130,8 @@ public:
 	  */
 	TUserData		UserData;
 
+	virtual ~UMovePrimitive() {};
+
 	/// \name Setup the primitive static parts.
 
 	/**

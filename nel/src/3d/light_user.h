@@ -52,6 +52,7 @@ protected:
 	friend class	CDriverUser;
 
 public:
+	virtual ~CLightUser() {}
 
 	/// \name Quick setup.
 	//@{

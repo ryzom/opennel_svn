@@ -62,6 +62,9 @@ public:
 		NL3D_MEM_PS_SOUND
 	}
 
+	// TODO needs "NL3D_MEM_PS_SOUND" ?
+	virtual ~CPSSoundInstanceImpl() {}
+
 	/// init this sound instance parameters
 	void init(NLSOUND::USource *source, CPSSoundServImpl *soundServImp, bool spawned)
 	{
@@ -166,7 +169,7 @@ public:
 	{
 	}
 
-	
+	virtual ~CPSSoundServImpl() {}
 
 	/// init this particle system sound server, using the given audio mixer
 	void init(NLSOUND::UAudioMixer *audioMixer)

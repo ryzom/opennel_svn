@@ -74,6 +74,8 @@ public:
 	  */
 	enum TMouseMode { nelStyle, edit3d, firstPerson };
 
+	virtual ~U3dMouseListener() {};
+
 	/// \name Setup
 
 	/** 

@@ -98,6 +98,7 @@ public:
 	 */
 	struct ILoadProxy
 	{
+		virtual ~ILoadProxy() = 0;
 		virtual void loadStringFile(const std::string &filename, ucstring &text) =0;
 	};
 

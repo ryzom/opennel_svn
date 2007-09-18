@@ -57,6 +57,7 @@ template <class BaseClass>
 class IFactoryRegister
 {
 public:
+	virtual ~IFactoryRegister() = 0;
 	/// This method is called to create an instance of the factored object.
 	virtual BaseClass *createObject(const typename BaseClass::TCtorParam &ctorParam) = 0;
 };

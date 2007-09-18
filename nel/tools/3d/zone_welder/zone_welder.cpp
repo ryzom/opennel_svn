@@ -678,7 +678,7 @@ void weldZones(const char *center)
 				uint	idVert= pa.BaseVertices[corner];
 
 				// write this vertex in array.
-				centerVertices.resize( max(centerVertices.size(), idVert+1) );
+				centerVertices.resize( max((uint)centerVertices.size(), idVert+1) );
 				centerVertices[idVert]= pa.Patch.Vertices[corner];
 			}
 		}
@@ -703,7 +703,7 @@ void weldZones(const char *center)
 					uint	idVert= pa.BaseVertices[corner];
 
 					// write this vertex in array.
-					verts.resize( max(verts.size(), idVert+1) );
+					verts.resize( max((uint)verts.size(), idVert+1) );
 					verts[idVert].Vertex= pa.Patch.Vertices[corner];
 					verts[idVert].OnBorder= false;
 				}

@@ -49,6 +49,9 @@ public:
 
 	// duplicate the object
 	virtual	CEvent		*clone() const =0;
+	
+	virtual ~CEvent() {}
+
 protected:
 	/** Constructor.
 	  * \param emitter is the emitter of the event. Can be NULL if the event is posted directly to the CEventServer.
