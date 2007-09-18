@@ -12,10 +12,10 @@ AM_LFLAGS = -f -8 -Pcf -olex.yy.c
 
 EXTRA_DIST = cf_gramatical.h
 
-#libconfig_la_SOURCES    = cf_lexical.lxx             \
-#                          cf_gramatical.yxx          \
-#                          config_file.cpp 
+libconfig_la_SOURCES    = cf_lexical.lxx             \
+                          cf_gramatical.yxx          \
+                          config_file.cpp 
 
-libconfig_la_SOURCES    = config_file.cpp 
+#libconfig_la_SOURCES    = config_file.cpp 
 
 # End of Makefile.am
