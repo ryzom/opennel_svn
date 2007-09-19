@@ -503,7 +503,7 @@ private:
 class IVariableChangedCallback
 {
 public:
-	virtual ~IVariableChangedCallback() = 0;
+	virtual ~IVariableChangedCallback() {};
 	virtual void onVariableChanged(NLMISC::IVariable& var) = 0;
 };
 

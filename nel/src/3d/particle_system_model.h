@@ -116,7 +116,7 @@ public:
 		/// interface for object that observe this model. They will be notified when it becomes invalid
 		struct IPSModelObserver
 		{
-			virtual ~IPSModelObserver() = 0;
+			virtual ~IPSModelObserver() {};
 			/// called when a system has been invalidated
 			virtual void invalidPS(CParticleSystemModel *psm) = 0;
 		};

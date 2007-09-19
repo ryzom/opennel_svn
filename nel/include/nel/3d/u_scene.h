@@ -63,7 +63,7 @@ class UWaterEnvMap;
 class IAsyncLoadCallback
 {
 public:
-	virtual ~IAsyncLoadCallback() = 0;
+	virtual ~IAsyncLoadCallback() {};
 	/// Because the async loader set the pointer of the user after the whole loading (ig+shapes)
 	/// what is passed through this method is the value that will be affected
 	virtual void InstanceGroupCreated(UInstanceGroup *newVal) = 0;
@@ -73,7 +73,7 @@ public:
 class IWaterSurfaceAddedCallback
 {
 public:
-	virtual ~IWaterSurfaceAddedCallback() = 0;
+	virtual ~IWaterSurfaceAddedCallback() {};
 	// A water surface with the given height has been added. 	 
 	virtual void waterSurfaceAdded(const NLMISC::CPolygon2D &shape, const NLMISC::CMatrix &worldMatrix, bool splashEnabled, bool usesSceneWaterenvmap) = 0;
 	virtual void waterSurfaceRemoved(bool usesSceneWaterenvmap) = 0;
@@ -83,7 +83,7 @@ public:
 class ILandscapePolyDrawingCallback
 {
 public:
-	virtual ~ILandscapePolyDrawingCallback() = 0;
+	virtual ~ILandscapePolyDrawingCallback() {};
 	virtual void beginPolyDrawing() = 0;
 	virtual void endPolyDrawing() = 0;
 };
