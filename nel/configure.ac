@@ -14,7 +14,7 @@
 
 AC_PREREQ(2.57)
 AC_INIT([nel],[0.4.0],[nel-all@nevrax.org])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([tar-ustar])
 
 AC_CONFIG_SRCDIR(include/nel/misc/types_nl.h)
 AM_CONFIG_HEADER(include/nelconfig.h)
