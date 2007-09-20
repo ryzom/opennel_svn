@@ -4,7 +4,7 @@
 
 MAINTAINERCLEANFILES      = Makefile.in
 
-EXTRA_DIST                = disp_sheet_id.dsp
+EXTRA_DIST                = disp_sheet_id.dsp disp_sheet_id_8.vcproj disp_sheet_id.dsw disp_sheet_id.sln disp_sheet_id.vcproj
 
 bin_PROGRAMS              = disp_sheet_id 
 

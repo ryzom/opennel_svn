@@ -4,7 +4,7 @@
 
 MAINTAINERCLEANFILES      = Makefile.in
 
-EXTRA_DIST                = bnp_make.dsp
+EXTRA_DIST                = bnp_make.dsw bnp_make.dsp bnp_make_8.vcproj 
 
 bin_PROGRAMS              = bnp_make
 

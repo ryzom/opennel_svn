@@ -4,7 +4,7 @@
 
 MAINTAINERCLEANFILES      = Makefile.in
 
-EXTRA_DIST                = make_sheet_id.dsp
+EXTRA_DIST                = make_sheet_id.dsp make_sheet_id.dsw
 
 bin_PROGRAMS              = make_sheet_id 
 

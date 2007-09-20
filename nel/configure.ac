@@ -24,7 +24,6 @@ AC_SUBST(LIBTOOL_VERSION, [0:4:0])
 # Checks for programs.
 AC_CANONICAL_HOST
 AC_PROG_CXX
-AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_YACC
 AC_PROG_LEX
@@ -35,6 +34,8 @@ AC_PROG_LIBTOOL
 AM_PROG_LIBTOOL
 AM_SANITY_CHECK
 
+AC_SYS_LARGEFILE
+
 AM_MAINTAINER_MODE
 
 
@@ -43,6 +44,7 @@ AH_TEMPLATE([NEL_DEFAULT_DISPLAYER],[Define to 1 if you want log on standard out
 AH_TEMPLATE([NEL_LOG_IN_FILE],[Define to 1 if you want a debug log.log file in the current directory])
 AH_TEMPLATE([HAVE_X86],[Define to 1 if you are on a INTEL compatible processor])
 AH_TEMPLATE([HAVE_X86_64],[Define to 1 if you are on AMD opteron 64bits processor])
+AH_TEMPLATE([NL_USE_GTK], [Define to 1 if you want GTK support])
 
 # Get host type info
 if test "$host_cpu" = "i386" -o "$host_cpu" = "i486" -o "$host_cpu" = "i586" \
@@ -366,7 +368,7 @@ AC_LANG([C++])
 
 AM_PATH_STLPORT('/usr/local /usr')
 LIBS="$LIBS $STLPORT_LIBS"
-CXXFLAGS="$CXXFLAGS $STLPORT_CXXFLAGS $STLPORT_INCLUDES"
+CPPFLAGS="$CPPFLAGS $STLPORT_INCLUDES"
 LDFLAGS="$LDFLAGS $STLPORT_LDFLAGS"
 
 # ====================================================================
@@ -464,7 +466,7 @@ CXXFLAGS="$CXXFLAGS -I\${top_srcdir}/include -DHAVE_NELCONFIG_H"
 # Output files to generate.
 # ====================================================================
 
-AC_CONFIG_FILES([Makefile                                        \
+AC_CONFIG_FILES([Makefile                                  \
            include/Makefile                                \
            include/nel/Makefile                            \
            include/nel/ligo/Makefile                       \
@@ -481,8 +483,10 @@ AC_CONFIG_FILES([Makefile                                        \
            src/net/Makefile                                \
            src/memory/Makefile                             \
            src/3d/Makefile                                 \
+           src/3d/nel-3d.pc                                \
            src/3d/driver/Makefile                          \
            src/3d/driver/opengl/Makefile                   \
+           src/3d/driver/direct3d/Makefile                 \
            src/pacs/Makefile                               \
            src/sound/Makefile                              \
            src/sound/driver/Makefile                       \
@@ -505,12 +509,28 @@ AC_CONFIG_FILES([Makefile                                        \
            tools/3d/zone_welder/Makefile                   \
            tools/misc/Makefile                             \
            tools/misc/bnp_make/Makefile                    \
+           tools/misc/branch_patcher/Makefile              \
+           tools/misc/branch_patcher/res/Makefile          \
+           tools/misc/data_mirror/Makefile                 \
+           tools/misc/data_mirror/res/Makefile             \
            tools/misc/disp_sheet_id/Makefile               \
+           tools/misc/exec_timeout/Makefile                \
+           tools/misc/extract_filename/Makefile            \
+           tools/misc/lock/Makefile                        \
+           tools/misc/log_analyser/Makefile                \
+           tools/misc/log_analyser/res/Makefile            \
+           tools/misc/log_analyser_plug_ins/Makefile       \
+           tools/misc/log_analyser_plug_ins/extract_warnings/Makefile \
            tools/misc/make_sheet_id/Makefile               \
-           tools/pacs/Makefile               \
-           tools/pacs/build_ig_boxes/Makefile               \
-           tools/pacs/build_indoor_rbank/Makefile               \
-           tools/pacs/build_rbank/Makefile               \
+           tools/misc/message_box/Makefile                 \
+           tools/misc/multi_cd_setup_fix/Makefile          \
+           tools/misc/words_dic/Makefile                   \
+           tools/misc/words_dic/res/Makefile               \
+           tools/misc/xml_packer/Makefile                  \
+           tools/pacs/Makefile                             \
+           tools/pacs/build_ig_boxes/Makefile              \
+           tools/pacs/build_indoor_rbank/Makefile          \
+           tools/pacs/build_rbank/Makefile                 \
            samples/Makefile                                \
            samples/sound_sources/Makefile                  \
            samples/pacs/Makefile                           \
@@ -520,7 +540,7 @@ AC_CONFIG_FILES([Makefile                                        \
            samples/3d/cluster_viewer/Makefile              \
            samples/3d/cluster_viewer/shapes/Makefile       \
            samples/3d/cluster_viewer/groups/Makefile       \
-           samples/3d/cluster_viewer/fonts/Makefile       \
+           samples/3d/cluster_viewer/fonts/Makefile        \
 	   samples/net/Makefile                            \
 	   samples/net/chat/Makefile                       \
            nel-config

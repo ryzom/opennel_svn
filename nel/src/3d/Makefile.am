@@ -605,4 +605,7 @@ libnel3d_la_LIBADD   = @FREETYPE_LIBS@ -lc -ldl -lpthread
 
 libnel3d_la_LDFLAGS  = -version-info @LIBTOOL_VERSION@
 
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = nel-3d.pc
+
 # End of Makefile.am

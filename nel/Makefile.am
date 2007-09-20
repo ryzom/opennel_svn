@@ -26,12 +26,18 @@ SUBDIRS = 	include src tools samples
 bin_SCRIPTS		=	nel-config
 
 EXTRA_DIST		=	nel.dsw			\
+				nel.sln			\
+				nel_8.sln		\
 				autogen.sh		\
 				doc			\
 				tools
 
 dist-hook:
 	find $(distdir) -name CVS -print | xargs rm -fr
+	find $(distdir) -name .svn -print | xargs rm -fr
+
+m4datadir = $(datadir)/aclocal
+m4data_DATA = nel.m4
 
 # End of Makefile.am
 
