@@ -3,7 +3,7 @@
 #
 #    Option:      none.
 #    Description: check the instalation of the STLPort library and set the
-#                 CXXFLAGS and LIBS variables to use it.
+#                 CPPFLAGS and LIBS variables to use it.
 
 AC_DEFUN([AM_PATH_STLPORT], [
     stlport_places=$1
@@ -12,7 +12,7 @@ AC_DEFUN([AM_PATH_STLPORT], [
 
     # Save the original values of the flags we tweak.
     stlport_check_lib_save_ldflags="$LDFLAGS"
-    stlport_check_lib_save_cxxflags="$CXXFLAGS"
+    stlport_check_lib_save_cppflags="$CPPFLAGS"
 
     AC_ARG_WITH( stlport,
     [  --with-stlport=<path>   path to the STLport install files directory.
@@ -37,14 +37,14 @@ AC_DEFUN([AM_PATH_STLPORT], [
     for stlport_place in $stlport_places;
     do
       LDFLAGS="$stlport_check_lib_save_ldflags"
-      CXXFLAGS="$stlport_check_lib_save_cxxflags"
+      CPPFLAGS="$stlport_check_lib_save_cppflags"
 
       # If the user specified --with-stlport-include, override the search.
       if test "$with_stlport_include"
       then
-        CXXFLAGS="$CXXFLAGS -I$with_stlport_include"
+        CPPFLAGS="$CPPFLAGS -I$with_stlport_include"
       else
-        CXXFLAGS="$CXXFLAGS -I$stlport_place/include/stlport"
+        CPPFLAGS="$CPPFLAGS -I$stlport_place/include/stlport"
       fi
 
       # If the user specified --with-stlport-lib, override the search.
@@ -94,7 +94,7 @@ AC_DEFUN([AM_PATH_STLPORT], [
 
     # Restore the original values of the flags we tweak.
     LDFLAGS="$stlport_check_lib_save_ldflags"
-    CXXFLAGS="$stlport_check_lib_save_cxxflags"
+    CPPFLAGS="$stlport_check_lib_save_cppflags"
 
     case "$found" in
     "not")
@@ -118,14 +118,12 @@ AC_DEFUN([AM_PATH_STLPORT], [
         STLPORT_LDFLAGS="-L$found/lib"
       fi
 
-      STLPORT_CXXFLAGS="-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64"
       have_stlport=1
       ;;
     esac
     AC_SUBST(STLPORT_INCLUDES)
     AC_SUBST(STLPORT_LIBS)
     AC_SUBST(STLPORT_LDFLAGS)
-    AC_SUBST(STLPORT_CXXFLAGS)
 ])
 
 # =========================================================================
