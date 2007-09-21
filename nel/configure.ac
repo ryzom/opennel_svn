@@ -81,7 +81,7 @@ AC_ARG_ENABLE([net],
               [],
               [enable_net=yes])
 
-if test $enable_net = "no"
+if test "$enable_net" = "no"
 then
    AC_MSG_RESULT([disable NeL Network])
 else
@@ -95,7 +95,7 @@ AC_ARG_ENABLE([3d],
               [],
               [enable_3d=yes])
 
-if test $enable_3d = "no"
+if test "$enable_3d" = "no"
 then
    AC_MSG_RESULT([disable NeL 3D])
 else
@@ -109,7 +109,7 @@ AC_ARG_ENABLE([pacs],
               [],
               [enable_pacs=yes])
 
-if test $enable_pacs = "no"
+if test "$enable_pacs" = "no"
 then
    AC_MSG_RESULT([disable NeL PACS])
 else
@@ -123,7 +123,7 @@ AC_ARG_ENABLE([georges],
               [],
               [enable_georges=yes])
 
-if test $enable_georges = "no"
+if test "$enable_georges" = "no"
 then
    AC_MSG_RESULT([disable NeL Georges])
 else
@@ -137,7 +137,7 @@ AC_ARG_ENABLE([ligo],
               [],
               [enable_ligo=yes])
 
-if test $enable_ligo = "no"
+if test "$enable_ligo" = "no"
 then
    AC_MSG_RESULT([disable NeL Ligo])
 else
@@ -154,7 +154,7 @@ AC_ARG_ENABLE([memory],
               [],
               [enable_memory=no])
 
-if test $enable_memory = "yes"
+if test "$enable_memory" = "yes"
 then
    AC_MSG_RESULT([enable NeL Memory])
 else
@@ -168,7 +168,7 @@ AC_ARG_ENABLE([sound],
               [],
               [enable_sound=no])
 
-if test $enable_sound = "yes"
+if test "$enable_sound" = "yes"
 then
    AC_MSG_RESULT([enable NeL Sound])
    NEL_SUBDIRS="$NEL_SUBDIRS sound"
@@ -181,7 +181,7 @@ AC_ARG_ENABLE([tests],
 		[],
 		[enable_tests=no])
 
-if test $enable_tests = "yes"
+if test "$enable_tests" = "yes"
 then
 	AC_MSG_RESULT([enable NeL Unit Tests])
 fi
@@ -193,7 +193,7 @@ AC_ARG_ENABLE([coverage],
 		[]
 		[enable_coverage=no])
 
-if test $enable_coverage = "yes"
+if test "$enable_coverage" = "yes"
 then
 	AC_MSG_RESULT([enable Code Coverage generation])
 
