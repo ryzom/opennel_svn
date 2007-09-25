@@ -30,6 +30,7 @@
 
 #ifdef NL_OS_WINDOWS
 
+#define NOMINMAX
 #include <windows.h>
 typedef sint socklen_t;
 

@@ -309,17 +309,17 @@ private:
 
 
 		// Debug : Sept 01 2006
-		#if _STLPORT_VERSION >= 0x510
+//		#if _STLPORT_VERSION >= 0x510
 			bool operator()( const CMCFileEntry &fe, const CMCFileEntry &rhs )
 			{
 				return specialCompare( fe, rhs.Name ) < 0;
 			}
-		#else
-			bool operator()( const CMCFileEntry &fe, const char *rhs )
-			{
-				return specialCompare( fe, rhs ) < 0;
-			}
-		#endif //_STLPORT_VERSION
+// 		#else
+// 			bool operator()( const CMCFileEntry &fe, const char *rhs )
+// 			{
+// 				return specialCompare( fe, rhs ) < 0;
+// 			}
+// 		#endif //_STLPORT_VERSION
 
 	};
 

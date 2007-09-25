@@ -29,14 +29,15 @@
 
 #include "nel/misc/win_thread.h"
 #include "nel/misc/path.h"
+#define NOMINMAX
 #include <windows.h>
 
 // Debug : Sept 01 2006
-#if _STLPORT_VERSION >= 0x510
+//#if _STLPORT_VERSION >= 0x510
 	#include <typeinfo>
-#else
-	#include <typeinfo.h>
-#endif
+// #else
+// 	#include <typeinfo.h>
+// #endif
 
 namespace NLMISC {
 

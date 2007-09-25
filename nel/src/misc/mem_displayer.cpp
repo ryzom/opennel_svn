@@ -41,6 +41,7 @@
 #include "nel/misc/debug.h"
 
 #ifdef NL_OS_WINDOWS
+#	define NOMINMAX
 #	include <windows.h>
 #	include <imagehlp.h>
 #	pragma comment(lib, "imagehlp.lib")

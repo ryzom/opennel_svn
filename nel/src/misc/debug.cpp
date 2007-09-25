@@ -40,6 +40,7 @@
 #ifdef NL_OS_WINDOWS
 #	define _WIN32_WINDOWS	0x0410
 #	define WINVER			0x0400
+#	define NOMINMAX
 #	include <windows.h>
 #	include <direct.h>
 #	include <tchar.h>

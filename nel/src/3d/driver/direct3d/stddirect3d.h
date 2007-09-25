@@ -52,9 +52,6 @@
 #include <d3d9.h>
 #include <d3dx9math.h>
 
-#undef min
-#undef max
-
 // NeL includes
 #include "nel/misc/common.h"
 #include "nel/misc/debug.h"

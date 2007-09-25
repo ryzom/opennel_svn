@@ -28,9 +28,9 @@
 #define NL_NET_LOG_H
 
 #include "nel/misc/types_nl.h"
+
 #include "nel/misc/log.h"
 #include "nel/misc/variable.h"
-#include <string>
 
 namespace NLNET {
 

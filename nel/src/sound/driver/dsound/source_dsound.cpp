@@ -33,9 +33,7 @@
 #include "../sound_driver.h"
 
 #if EAX_AVAILABLE == 1
-#include <eax.h>
-#undef min
-#undef max
+#	include <eax.h>
 #endif
 
 #include <algorithm>

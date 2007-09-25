@@ -28,6 +28,7 @@
 #include <ctime>
 
 #ifdef NL_OS_WINDOWS
+#	define NOMINMAX
 #	include <windows.h>
 #elif defined (NL_OS_UNIX)
 #	include <sys/time.h>

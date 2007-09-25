@@ -29,6 +29,7 @@
 
 #ifdef NL_OS_WINDOWS
 
+#define NOMINMAX
 #include <windows.h>
 
 #endif // NL_OS_WINDOWS

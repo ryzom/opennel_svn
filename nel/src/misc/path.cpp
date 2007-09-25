@@ -27,7 +27,6 @@
 #include "stdmisc.h"
 
 #include <fstream>
-#include <hash_set>
 
 #include "nel/misc/big_file.h"
 #include "nel/misc/path.h"
@@ -37,6 +36,7 @@
 #include "nel/misc/xml_pack.h"
 
 #ifdef NL_OS_WINDOWS
+#	define NOMINMAX
 #	include <windows.h>
 #	include <sys/types.h>
 #	include <sys/stat.h>
@@ -260,13 +260,13 @@ CFileContainer::CMCFileEntry *CFileContainer::MCfind (const std::string &filenam
 {
 	nlassert(_MemoryCompressed);
 	vector<CMCFileEntry>::iterator it;
-	#if _STLPORT_VERSION >= 0x510
+//	#if _STLPORT_VERSION >= 0x510
 		CMCFileEntry temp_cmc_file;
 		temp_cmc_file.Name = (char*)filename.c_str();
 		it = lower_bound(_MCFiles.begin(), _MCFiles.end(), temp_cmc_file, CMCFileComp());
-	#else
-		it = lower_bound(_MCFiles.begin(), _MCFiles.end(), filename.c_str(), CMCFileComp());
-	#endif //_STLPORT_VERSION
+// 	#else
+// 		it = lower_bound(_MCFiles.begin(), _MCFiles.end(), filename.c_str(), CMCFileComp());
+// 	#endif //_STLPORT_VERSION
 	if (it != _MCFiles.end())
 	{
 		CMCFileComp FileComp;
@@ -1582,7 +1582,7 @@ void CFileContainer::removeBigFiles(const std::vector<std::string> &bnpFilenames
 {
 	NL_ALLOC_CONTEXT (MiPath);
 	nlassert(!isMemoryCompressed());
-	std::hash_set<TSStringId> bnpStrIds;
+	CHashSet<TSStringId> bnpStrIds;
 	TFiles::iterator fileIt, fileCurrIt;
 	for (uint k = 0; k < bnpFilenames.size(); ++k)
 	{

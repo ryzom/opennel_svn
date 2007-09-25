@@ -29,12 +29,13 @@
 #include "nel/net/net_log.h"
 
 #ifdef NL_OS_WINDOWS
-# ifdef NL_COMP_VC8
-#  include <WinSock2.h>
-# endif
-# include <windows.h>
-# define socklen_t int
-# define ERROR_NUM WSAGetLastError()
+#	ifdef NL_COMP_VC8
+#		include <winsock2.h>
+#	endif
+#	define NOMINMAX
+#	include <windows.h>
+#	define socklen_t int
+#	define ERROR_NUM WSAGetLastError()
 
 #elif defined NL_OS_UNIX
 # include <unistd.h>

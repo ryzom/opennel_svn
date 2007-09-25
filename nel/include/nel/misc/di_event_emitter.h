@@ -43,6 +43,7 @@
 #include "events.h"
 #include "rect.h"
 #include "game_device.h"
+#define NOMINMAX
 #include <windows.h>
 #include <dinput.h>
 

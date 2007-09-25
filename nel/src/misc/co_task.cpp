@@ -58,12 +58,13 @@
 #  define _WIN32_WINNT 0x0400
 # endif
 
-# include <windows.h>
+#	define NOMINMAX
+#	include <windows.h>
 #elif defined (NL_OS_UNIX)
-# define NL_WIN_CALLBACK 
-# include <ucontext.h>
+#	define NL_WIN_CALLBACK 
+#	include <ucontext.h>
 #else
-# error "Coroutine task are not supported yet by your platform, do it ?"
+#	error "Coroutine task are not supported yet by your platform, do it ?"
 #endif
 #endif //NL_USE_THREAD_COTASK
 

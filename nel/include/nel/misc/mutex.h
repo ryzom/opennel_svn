@@ -39,6 +39,11 @@
 #define __forceinline
 #endif
 
+#ifdef NL_OS_WINDOWS
+#	define NOMINMAX
+#	include <windows.h>
+#endif
+
 #undef MUTEX_DEBUG
 
 

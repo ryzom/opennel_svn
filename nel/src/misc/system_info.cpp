@@ -26,14 +26,15 @@
 #include "stdmisc.h"
 
 #ifdef NL_OS_WINDOWS
-	#include <windows.h>
-	#include <tchar.h>
+#	define NOMINMAX
+#	include <windows.h>
+#	include <tchar.h>
 #else
-	#include <sys/types.h>
-	#include <sys/stat.h>
-	#include <fcntl.h>
-	#include <unistd.h>
-	#include <cerrno>
+#	include <sys/types.h>
+#	include <sys/stat.h>
+#	include <fcntl.h>
+#	include <unistd.h>
+#	include <cerrno>
 #endif // NL_OS_WINDOWS
 
 #include "nel/misc/system_info.h"

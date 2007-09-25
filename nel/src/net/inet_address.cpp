@@ -33,21 +33,16 @@
 
 
 #ifdef NL_OS_WINDOWS
-
-#include <winsock2.h>
-#include <ws2tcpip.h>
-
+#	include <winsock2.h>
+#	include <ws2tcpip.h>
 #elif defined NL_OS_UNIX
-
-#include <unistd.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <netdb.h>
-
-#define WSAGetLastError() 0
-#define SOCKET_ERROR -1
-
+#	include <unistd.h>
+#	include <sys/socket.h>
+#	include <arpa/inet.h>
+#	include <netinet/in.h>
+#	include <netdb.h>
+#	define WSAGetLastError() 0
+#	define SOCKET_ERROR -1
 #endif
 
 

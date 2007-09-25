@@ -34,6 +34,7 @@
 #include <csignal>
 #include <cstring>
 
+#define NOMINMAX
 #include <windows.h>
 #include <windowsx.h>
 #include <winuser.h>

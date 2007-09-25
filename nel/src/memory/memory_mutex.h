@@ -29,8 +29,9 @@
 #include "memory_common.h"
 
 #ifdef NL_OS_WINDOWS
-#include <windows.h>
-#include <winbase.h>
+#	define NOMINMAX
+#	include <windows.h>
+#	include <winbase.h>
 #endif
 
 #ifdef NL_OS_UNIX

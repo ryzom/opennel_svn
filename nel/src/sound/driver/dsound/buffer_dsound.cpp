@@ -31,10 +31,9 @@
 #include "sound_driver_dsound.h"
 
 
+#define NOMINMAX
 #include <windows.h>
 #include <mmsystem.h>
-#undef min
-#undef max
 
 using namespace NLMISC;
 using namespace std;

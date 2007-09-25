@@ -164,11 +164,11 @@
 
 // Check the STLPort presence
 
-#ifdef NL_OS_WINDOWS
-#	ifndef __SGI_STL_PORT
-#		error "You need STLPort to compile this project ( visit http://sourceforge.net/projects/stlport )"
-#	endif // __SGI_STL_PORT
-#endif // NL_OS_WINDOWS
+// #ifdef NL_OS_WINDOWS
+// #	ifndef __SGI_STL_PORT
+// #		error "You need STLPort to compile this project ( visit http://sourceforge.net/projects/stlport )"
+// #	endif // __SGI_STL_PORT
+// #endif // NL_OS_WINDOWS
 
 
 // Setup extern asm functions.
@@ -269,6 +269,12 @@ typedef				int			sint;			// at least 32bits (depend of processor)
 typedef	unsigned	int			uint;			// at least 32bits (depend of processor)
 
 #define	NL_I64 "I64"
+
+#include <hash_map>
+#include <hash_set>
+#define CHashMap stdext::hash_map
+#define CHashSet stdext::hash_set
+#define CHashMultiMap stdext::hash_multimap
 
 #elif defined (NL_OS_UNIX)
 

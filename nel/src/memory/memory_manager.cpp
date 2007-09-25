@@ -34,7 +34,8 @@
 #include <stdlib.h>
 
 #ifdef NL_OS_WINDOWS
-#include <windows.h>
+#	define NOMINMAX
+#	include <windows.h>
 #endif // NL_OS_WINDOWS
 
 #undef new

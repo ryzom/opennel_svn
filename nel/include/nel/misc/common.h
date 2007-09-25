@@ -575,10 +575,10 @@ inline int nlisprint(int c)
 
 
 // hash function for 64 bits integer
-struct CHashFunctionUInt64
-{
-	size_t operator()(const uint64 &x) const { return (size_t)x; }
-};
+// struct CHashFunctionUInt64
+// {
+// 	size_t operator()(const uint64 &x) const { return (size_t)x; }
+// };
 
 // Open an url in a browser
 bool openURL (const char *url);
