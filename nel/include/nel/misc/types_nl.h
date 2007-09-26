@@ -79,6 +79,9 @@
 #   ifndef _WIN32_WINNT
 #		define _WIN32_WINNT 0x0400
 #   endif
+#   ifdef __SGI_STL_PORT
+#       define NL_COMP_STLPORT
+#   endif
 #	if _MSC_VER >= 1400
 #		define NL_COMP_VC8
 #		undef nl_time
@@ -163,7 +166,6 @@
 #include <exception>
 
 // Check the STLPort presence
-
 // #ifdef NL_OS_WINDOWS
 // #	ifndef __SGI_STL_PORT
 // #		error "You need STLPort to compile this project ( visit http://sourceforge.net/projects/stlport )"
@@ -178,13 +180,6 @@
 #		define NL_NO_ASM						// Don't use extern ASM. Full C++ code.
 #	endif // NL_CPU_INTEL
 #endif // NL_NO_ASM
-
-
-// Define this if you want to use GTK for gtk_displayer
-
-//#define NL_USE_GTK
-//#undef NL_USE_GTK
-
 
 // Standard types
 
@@ -270,13 +265,48 @@ typedef	unsigned	int			uint;			// at least 32bits (depend of processor)
 
 #define	NL_I64 "I64"
 
+
 #include <hash_map>
 #include <hash_set>
-#define CHashMap stdext::hash_map
-#define CHashSet stdext::hash_set
-#define CHashMultiMap stdext::hash_multimap
+
+#if defined(NL_COMP_VC7) || defined(NL_COMP_VC71) || defined(NL_COMP_VC8) // VC7 through 8
+#    define CHashMap ::stdext::hash_map
+#    define CHashSet ::stdext::hash_set
+#    define CHashMultiMap ::stdext::hash_multimap
+#else // MSVC6
+#    define CHashMap ::std::hash_map
+#    define CHashSet ::std::hash_set
+#    define CHashMultiMap ::std::hash_multimap
+#endif
 
 #elif defined (NL_OS_UNIX)
+
+#if defined(NL_COMP_GCC)  // GCC4
+#   include <ext/hash_map>
+#   include <ext/hash_set>
+#   define CHashMap ::__gnu_cxx::hash_map
+
+namespace __gnu_cxx {
+
+template<> struct hash<std::string>
+{
+  size_t operator()(const std::string &s) const
+  {
+    return __stl_hash_string(s.c_str());
+  }
+};
+
+template<> struct hash<uint64>
+{
+  size_t operator()(const uint64 x) const
+  {
+    return x;
+  }
+};
+
+}
+
+#endif
 
 #include <sys/types.h>
 #include <stdint.h>
