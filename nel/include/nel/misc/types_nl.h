@@ -281,6 +281,24 @@ typedef	unsigned	int			uint;			// at least 32bits (depend of processor)
 
 #elif defined (NL_OS_UNIX)
 
+#include <sys/types.h>
+#include <stdint.h>
+
+typedef	int8_t		sint8;
+typedef	u_int8_t	uint8;
+typedef	int16_t		sint16;
+typedef	u_int16_t	uint16;
+typedef	int32_t		sint32;
+typedef	u_int32_t	uint32;
+typedef	long long int		sint64;
+typedef	unsigned long long int	uint64;
+
+typedef			int			sint;			// at least 32bits (depend of processor)
+typedef	unsigned	int			uint;			// at least 32bits (depend of processor)
+
+#define	NL_I64	\
+		"ll"
+
 #if defined(NL_COMP_GCC)  // GCC4
 #   include <ext/hash_map>
 #   include <ext/hash_set>
@@ -307,24 +325,6 @@ template<> struct hash<uint64>
 }
 
 #endif
-
-#include <sys/types.h>
-#include <stdint.h>
-
-typedef	int8_t		sint8;
-typedef	u_int8_t	uint8;
-typedef	int16_t		sint16;
-typedef	u_int16_t	uint16;
-typedef	int32_t		sint32;
-typedef	u_int32_t	uint32;
-typedef	long long int		sint64;
-typedef	unsigned long long int	uint64;
-
-typedef			int			sint;			// at least 32bits (depend of processor)
-typedef	unsigned	int			uint;			// at least 32bits (depend of processor)
-
-#define	NL_I64	\
-		"ll"
 
 #endif // NL_OS_UNIX
 
