@@ -303,6 +303,8 @@ typedef	unsigned	int			uint;			// at least 32bits (depend of processor)
 #   include <ext/hash_map>
 #   include <ext/hash_set>
 #   define CHashMap ::__gnu_cxx::hash_map
+#   define CHashSet ::__gnu_cxx::hash_set
+#   define CHashMultiMap ::__gnu_cxx::hash_multimap
 
 namespace __gnu_cxx {
 
