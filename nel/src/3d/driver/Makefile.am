@@ -4,7 +4,7 @@
 
 MAINTAINERCLEANFILES	= Makefile.in
 
-DIST_SUBDIRS		= direct3d opengl
+EXTRA_DIST		= direct3d
 
 SUBDIRS			= opengl
 

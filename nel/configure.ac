@@ -486,7 +486,6 @@ AC_CONFIG_FILES([Makefile                                  \
            src/3d/nel-3d.pc                                \
            src/3d/driver/Makefile                          \
            src/3d/driver/opengl/Makefile                   \
-           src/3d/driver/direct3d/Makefile                 \
            src/pacs/Makefile                               \
            src/sound/Makefile                              \
            src/sound/driver/Makefile                       \
@@ -509,23 +508,8 @@ AC_CONFIG_FILES([Makefile                                  \
            tools/3d/zone_welder/Makefile                   \
            tools/misc/Makefile                             \
            tools/misc/bnp_make/Makefile                    \
-           tools/misc/branch_patcher/Makefile              \
-           tools/misc/branch_patcher/res/Makefile          \
-           tools/misc/data_mirror/Makefile                 \
-           tools/misc/data_mirror/res/Makefile             \
            tools/misc/disp_sheet_id/Makefile               \
-           tools/misc/exec_timeout/Makefile                \
-           tools/misc/extract_filename/Makefile            \
-           tools/misc/lock/Makefile                        \
-           tools/misc/log_analyser/Makefile                \
-           tools/misc/log_analyser/res/Makefile            \
-           tools/misc/log_analyser_plug_ins/Makefile       \
-           tools/misc/log_analyser_plug_ins/extract_warnings/Makefile \
            tools/misc/make_sheet_id/Makefile               \
-           tools/misc/message_box/Makefile                 \
-           tools/misc/multi_cd_setup_fix/Makefile          \
-           tools/misc/words_dic/Makefile                   \
-           tools/misc/words_dic/res/Makefile               \
            tools/misc/xml_packer/Makefile                  \
            tools/pacs/Makefile                             \
            tools/pacs/build_ig_boxes/Makefile              \

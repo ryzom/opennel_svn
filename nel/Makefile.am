@@ -21,7 +21,7 @@ MAINTAINERCLEANFILES	=	Makefile.in		\
 DISTCLEANFILES		=	include/stamp-h		\
 				include/stamp-h.in 
 
-SUBDIRS = 	include src tools samples
+SUBDIRS			= 	include src tools samples
 
 bin_SCRIPTS		=	nel-config
 
@@ -29,8 +29,11 @@ EXTRA_DIST		=	nel.dsw			\
 				nel.sln			\
 				nel_8.sln		\
 				autogen.sh		\
+				automacros		\
 				doc			\
-				tools
+				kdevelop		\
+				tools			\
+				samples
 
 dist-hook:
 	find $(distdir) -name CVS -print | xargs rm -fr
