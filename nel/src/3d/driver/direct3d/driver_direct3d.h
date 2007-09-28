@@ -89,11 +89,12 @@
 //#define NL_FORCE_PIXEL_SHADER_USE_FOR_NORMAL_SHADERS
 
 // Define this to enable profiling by the NV Perf HUD tool (default is undefined)
-//#define NL_D3D_USE_NV_PERF_HUD
-
+#define NL_D3D_USE_NV_PERF_HUD
 
 // Define this to enable profiling of driver functions (default is undefined).
 //#define NL_PROFILE_DRIVER_D3D
+
+
 
 #ifdef NL_PROFILE_DRIVER_D3D
 	#define H_AUTO_D3D(label) H_AUTO(label)

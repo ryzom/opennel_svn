@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="sound_lowlevel"
-	ProjectGUID="{89064E9B-14E9-4FB2-8536-A9151DF55C68}"
+	ProjectGUID="{AE9529CA-CA90-44D0-ADDA-6B26CD945FFF}"
 	RootNamespace="sound_lowlevel"
 	>
 	<Platforms>

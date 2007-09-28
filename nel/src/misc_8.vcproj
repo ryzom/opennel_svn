@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="misc"
-	ProjectGUID="{D7CB0575-6FB4-4D2F-9958-BF83D8F729CA}"
+	ProjectGUID="{44B21233-EFCC-4825-B5E5-3A3BD6CC5516}"
 	RootNamespace="misc"
 	>
 	<Platforms>
