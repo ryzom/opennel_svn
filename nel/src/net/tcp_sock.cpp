@@ -29,7 +29,7 @@
 #include "nel/net/net_log.h"
 
 #ifdef NL_OS_WINDOWS
-# ifdef NL_COMP_VC8
+# if defined(NL_COMP_VC7) || defined(NL_COMP_VC71) || defined(NL_COMP_VC8)
 #   include <WinSock2.h>
 # endif
 # include <windows.h>
