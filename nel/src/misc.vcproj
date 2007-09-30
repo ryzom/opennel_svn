@@ -2944,6 +2944,12 @@
 				RelativePath="..\include\nel\misc\geom_ext.h">
 			</File>
 			<File
+				RelativePath=".\misc\grid_traversal.cpp">
+			</File>
+			<File
+				RelativePath="..\include\nel\misc\grid_traversal.h">
+			</File>
+			<File
 				RelativePath="misc\line.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
