@@ -36,6 +36,7 @@ libnelnet_la_SOURCES = buf_client.cpp                      \
                        email.cpp                           \
                        admin.cpp                           \
 		       stdin_monitor_thread.cpp		   \
+		       stdin_monitor_thread.h		   \
                        module.cpp                          \
                        module_common.cpp                   \
                        module_gateway.cpp                  \

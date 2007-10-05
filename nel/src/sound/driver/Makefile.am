@@ -4,7 +4,8 @@
 
 MAINTAINERCLEANFILES          = Makefile.in
 
-DISTSUBDIRS                   = fmod openal
+EXTRA_DIST			= fmod openal dsound
+
 SUBDIRS                       = @SOUND_SUBDIRS@
 
 noinst_LTLIBRARIES            = libnelsnd_lowlevel.la
