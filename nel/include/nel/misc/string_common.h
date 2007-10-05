@@ -215,7 +215,7 @@ inline std::string toString(const std::string &val) { return val; }
 // stl vectors of bool use bit reference and not real bools, so define the operator for bit reference
 
 // Debug : Sept 01 2006
-#if _STLPORT_VERSION >= 0x510
+#if _STLPORT_VERSION >= 0x501
 	//inline std::string toString(const std::priv::_Bit_reference &val) { return toString( bool(val)); }
 #else
 	inline std::string toString(const std::_Bit_reference &val) { return toString( bool(val)); }
@@ -248,7 +248,7 @@ inline void fromString(const std::string &str, std::string &val) { val = str; }
 // stl vectors of bool use bit reference and not real bools, so define the operator for bit reference
 
 // Debug : Sept 01 2006
-#if _STLPORT_VERSION >= 0x510
+#if _STLPORT_VERSION >= 0x501
 //	inline void fromString(const std::string &str, std::priv::_Bit_reference &val) { uint32 v; fromString(str, v); val = (v==1); }
 #else
 	inline void fromString(const std::string &str, std::_Bit_reference &val) { uint32 v; fromString(str, v); val = (v==1); }

@@ -525,14 +525,22 @@ AC_CONFIG_FILES([Makefile                                  \
            samples/3d/cluster_viewer/shapes/Makefile       \
            samples/3d/cluster_viewer/groups/Makefile       \
            samples/3d/cluster_viewer/fonts/Makefile        \
+	   samples/misc/Makefile                           \
+	   samples/misc/command/Makefile                   \
+	   samples/misc/configfile/Makefile                \
+	   samples/misc/debug/Makefile                     \
+	   samples/misc/i18n/Makefile                      \
+	   samples/misc/log/Makefile                       \
+	   samples/misc/strings/Makefile                   \
+	   samples/misc/types_check/Makefile               \
 	   samples/net/Makefile                            \
 	   samples/net/chat/Makefile                       \
+	   samples/net/udp/Makefile                        \
            nel-config
 		
 ])
 AC_OUTPUT
 
-#	   samples/net/udp/Makefile                        \
 #	   samples/net/class_transport/Makefile            \
 #           tools/nel_unit_test/Makefile                    \
 #           tools/nel_unit_test/misc_ut/Makefile            \
