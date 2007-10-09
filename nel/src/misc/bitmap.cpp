@@ -2186,6 +2186,7 @@ uint8 CBitmap::readTGA( NLMISC::IStream &f)
 			uint8 pixel[4];
 			uint32 imageSize = width*height;
 			uint32 readSize = 0;
+			uint8 upSideDown = ((desc & (1 << 5))==0);
 			_Data[0].resize(_Width*_Height*4);
 			uint	dstId= 0;
 
@@ -2237,6 +2238,8 @@ uint8 CBitmap::readTGA( NLMISC::IStream &f)
 				readSize += (packet & 0x7F) + 1;
 			}
 			PixelFormat = RGBA;
+			
+			if (upSideDown) flipV();
 		};
 		break;
 
