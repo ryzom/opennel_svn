@@ -358,12 +358,13 @@ void CBloomEffect::initBloom()
 		}
 	}
 
-	if(!((CDriverUser *) Driver)->setRenderTarget(_InitBloomEffect?CTextureUser(_InitText):CTextureUser(), 
-		0, 0, _WndWidth, _WndHeight))
+	NL3D::CTextureUser *txt = (_InitBloomEffect) ? (new CTextureUser(_InitText)) : (new CTextureUser());
+	if(!((CDriverUser *) Driver)->setRenderTarget(*txt, 0, 0, _WndWidth, _WndHeight))
 	{
 		nlwarning("setRenderTarget return false with initial texture for bloom effect\n");
 		return;
 	}
+	delete txt;
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -376,9 +377,13 @@ void CBloomEffect::endBloom()
 	if(Driver->getWindowWidth()==0 || Driver->getWindowHeight()==0)
 		return;
 
+	CTextureUser *txt1 = (_InitBloomEffect) ? (new CTextureUser(_InitText)) : (new CTextureUser());
+	CTextureUser *txt2 = new CTextureUser(_BlurFinalTex);
+	CRect *rect1 = new CRect(0, 0, _WndWidth, _WndHeight);
+	CRect *rect2 = new CRect(0, 0, _BlurWidth, _BlurHeight);
 	// stretch rect
-	((CDriverUser *) Driver)->stretchRect(Scene, _InitBloomEffect?CTextureUser(_InitText):CTextureUser() , CRect(0, 0, _WndWidth, _WndHeight), 
-		CTextureUser(_BlurFinalTex), CRect(0, 0, _BlurWidth, _BlurHeight));
+	((CDriverUser *) Driver)->stretchRect(Scene, *txt1 , *rect1, 
+		*txt2, *rect2);
 	
 	// horizontal blur pass
 	doBlur(true);
@@ -388,6 +393,10 @@ void CBloomEffect::endBloom()
 
 	// apply blur with a blend operation
 	applyBlur();
+	delete txt1;
+	delete txt2;
+	delete rect1;
+	delete rect2;
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -399,11 +408,13 @@ void CBloomEffect::applyBlur()
 	// in opengl, display in init texture
 	if(_InitBloomEffect)
 	{
-		if(!((CDriverUser *) Driver)->setRenderTarget(CTextureUser(_InitText), 0, 0, _WndWidth, _WndHeight))
+		CTextureUser *txt = new CTextureUser(_InitText);
+		if(!((CDriverUser *) Driver)->setRenderTarget(*txt, 0, 0, _WndWidth, _WndHeight))
 		{
 			nlwarning("setRenderTarget return false with initial texture for bloom effect\n");
 			return;
 		}
+		delete txt;
 	}
 
 	// display blur texture
@@ -467,8 +478,9 @@ void CBloomEffect::endInterfacesDisplayBloom()
 			return;
 
 		NL3D::IDriver *drvInternal = ((CDriverUser *) Driver)->getDriver();
-
-		((CDriverUser *)Driver)->setRenderTarget(CTextureUser(), 0, 0, 0, 0);
+		CTextureUser *txt = new CTextureUser();
+		((CDriverUser *)Driver)->setRenderTarget(*txt, 0, 0, 0, 0);
+		delete txt;
 
 		// initialize texture coordinates
 		float newU = drvInternal->isTextureRectangle(_InitText) ? (float)_WndWidth : 1.f;
@@ -514,13 +526,14 @@ void CBloomEffect::doBlur(bool horizontalBlur)
 	}
 
 	NL3D::IDriver *drvInternal = ((CDriverUser *) Driver)->getDriver();
-
+	CTextureUser *txt = new CTextureUser(endTexture);
 	// initialize render target
-	if(!((CDriverUser *) Driver)->setRenderTarget(CTextureUser(endTexture), 0, 0, _BlurWidth, _BlurHeight))
+	if(!((CDriverUser *) Driver)->setRenderTarget(*txt, 0, 0, _BlurWidth, _BlurHeight))
 	{
 		nlwarning("setRenderTarget return false with blur texture for bloom effect\n");
 		return;
 	}
+	delete txt;
 
 	// initialize vertex program
 	drvInternal->activeVertexProgram(&TextureOffsetVertexProgram);
@@ -569,8 +582,10 @@ void CBloomEffect::doBlur(bool horizontalBlur)
 	
 	// disable render target and vertex program
 	drvInternal->activeVertexProgram(NULL);
-	((CDriverUser *)Driver)->setRenderTarget(CTextureUser(), 0, 0, 0, 0);	
+	txt = new CTextureUser();
+	((CDriverUser *)Driver)->setRenderTarget(*txt, 0, 0, 0, 0);	
 	Driver->setMatrixMode3D(pCam);	
+	delete txt;
 }
 
 }; // NL3D

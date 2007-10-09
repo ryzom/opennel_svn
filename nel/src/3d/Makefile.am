@@ -43,6 +43,8 @@ libnel3d_la_SOURCES  = \
 	async_texture_manager.h \
 	bezier_patch.cpp \
 	bezier_patch.h \
+	bloom_effect.cpp \
+	bloom_effect.h \
 	bone.cpp \
 	bone.h \
 	bsp_tree.h \
@@ -232,6 +234,7 @@ libnel3d_la_SOURCES  = \
 	nelu.h \
 	noise_3d.cpp \
 	noise_3d.h \
+	occlusion_query.h \
 	ordering_table.h \
 	packed_zone.cpp \
 	packed_zone.h \
