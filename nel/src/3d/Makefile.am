@@ -350,6 +350,7 @@ libnel3d_la_SOURCES  = \
 	ps_ribbon_look_at.h \
 	ps_shockwave.cpp \
 	ps_shockwave.h \
+	ps_spawn_info.h \
 	ps_sound.cpp \
 	ps_sound.h \
 	ps_tail_dot.cpp \
@@ -448,6 +449,8 @@ libnel3d_la_SOURCES  = \
 	texture.h \
 	texture_blank.cpp \
 	texture_blank.h \
+	texture_bloom.cpp \
+	texture_bloom.h \
 	texture_blend.cpp \
 	texture_blend.h \
 	texture_bump.cpp \

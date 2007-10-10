@@ -8,7 +8,8 @@ SUBDIRS              = driver
 
 lib_LTLIBRARIES      = libnelsnd.la
 
-libnelsnd_la_SOURCES = \
+libnelsnd_la_SOURCES = ambiant_source.cpp \
+	ambiant_source.h \
 	async_file_manager_sound.cpp \
 	async_file_manager_sound.h \
 	audio_mixer_user.cpp \
@@ -27,6 +28,10 @@ libnelsnd_la_SOURCES = \
 	complex_source.h \
 	context_sound.cpp \
 	context_sound.h \
+	env_effect.cpp \
+	env_effect.h \
+	env_sound_user.cpp \
+	env_sound_user.h \
 	listener_user.cpp \
 	listener_user.h \
 	mixing_track.cpp \

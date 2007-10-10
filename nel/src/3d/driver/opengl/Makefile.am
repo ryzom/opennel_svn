@@ -40,6 +40,8 @@ AM_CXXFLAGS                  = -I$(top_srcdir)/src \
 libnel_drv_opengl_la_LIBADD  = @OPENGL_LIBS@ @XF86VIDMODE_LIBS@ -lXmu
 libnel_drv_opengl_la_LDFLAGS = -no-undefined
 
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = nel-driverogl.pc
 
 # End of Makefile.am
 

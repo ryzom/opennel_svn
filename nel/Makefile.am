@@ -29,6 +29,7 @@ EXTRA_DIST		=	nel.dsw			\
 				nel.sln			\
 				nel_8.sln		\
 				autogen.sh		\
+				nel.m4			\
 				automacros		\
 				doc			\
 				kdevelop		\
