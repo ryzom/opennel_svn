@@ -3,10 +3,10 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: nel-3d
+Name: nel-driverogl
 Version: @VERSION@
 Description: NeL @VERSION@
 Reqiures:
 Libs: -L${libdir}
-Libs.private: @LIBS@ @FREETYPE_LIBS@ -lc
-Cflags: -I${includedir} @FREETYPE_CFLAGS@
+Libs.private: @LIBS@ @OPENGL_LIBS@ @XF86VIDMODE_LIBS@ -lXmu
+Cflags: -I${includedir} @OPENGL_CFLAGS@ @XF86VIDMODE_CFLAGS@

@@ -486,6 +486,7 @@ AC_CONFIG_FILES([Makefile                                  \
            src/3d/nel-3d.pc                                \
            src/3d/driver/Makefile                          \
            src/3d/driver/opengl/Makefile                   \
+           src/3d/driver/opengl/nel-driverogl.pc           \
            src/pacs/Makefile                               \
            src/sound/Makefile                              \
            src/sound/driver/Makefile                       \
