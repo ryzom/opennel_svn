@@ -10,11 +10,11 @@ bin_PROGRAMS              = i18n
 
 i18n_SOURCES = main.cpp
 
-i18ndir = $(datadir)/nel/samples/configfile
+i18ndir = $(datadir)/nel/samples/i18n
 
-i18n_DATA = english.uxt french.uxt
+i18n_DATA = en.uxt fr.uxt de.uxt
 
-AM_CXXFLAGS               = -DCF_DIR="\"$(i18ndir)\"" -I$(top_srcdir)/src 
+AM_CXXFLAGS               = -DI18N_DIR="\"$(i18ndir)\"" -I$(top_srcdir)/src 
 
 i18n_LDADD   = ../../../src/misc/libnelmisc.la 
 
