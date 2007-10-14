@@ -204,7 +204,8 @@ int main(int argc, char **argv)
 	CPath::addSearchPath (ConfigFile.getVar("DataPath").asString (), true, false);
 
 	// Create a driver
-	Driver = UDriver::createDriver(0, true);
+	bool useD3D = ConfigFile.getVar("OpenGL").asInt()==0;
+	Driver = UDriver::createDriver(0, useD3D);
 
 	// Create the window with config file values
 	Driver->setDisplay (UDriver::CMode(ConfigFile.getVar("ScreenWidth").asInt(), 
