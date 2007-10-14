@@ -207,11 +207,13 @@ test "x$prefix" = xNONE && prefix=$ac_default_prefix
 
 AC_ARG_WITH(database,
     [  --with-database[=DIR]
-                          use DIR instead of the default datadir/games/snowballs],
+                          use DIR instead of the default prefix/share//games/snowballs],
     [database=$withval],
-    [database='${datadir}/games/snowballs'])
-eval eval SNOWBALLS_DATABASE=\"$database/\"
-AC_SUBST(SNOWBALLS_DATABASE)
+    [database="${prefix}/share/games/snowballs"])
+AC_SUBST(database)
+
+SNOWBALLS_DATABASE='$database'
+AC_SUBST([SNOWBALLS_DATABASE])
 
 AC_ARG_WITH(sysconfdir,
     [  --with-sysconfdir[=DIR]
@@ -220,9 +222,8 @@ AC_ARG_WITH(sysconfdir,
     [pkgsysconfdir='${sysconfdir}/snowballs'])
 AC_SUBST(pkgsysconfdir)
 
-eval eval SNOWBALLS_CONFIG=\"$pkgsysconfdir/\"
-AH_TEMPLATE([SNOWBALLS_CONFIG], [The path to the Snowballs config files.])
-AC_DEFINE([SNOWBALLS_CONFIG], "$SNOWBALLS_CONFIG")
+SNOWBALLS_CONFIG='$pkgsysconfdir'
+AC_SUBST([SNOWBALLS_CONFIG])
 
 AC_ARG_WITH(logdir,
     [  --with-logdir[=DIR]
@@ -231,9 +232,10 @@ AC_ARG_WITH(logdir,
     [logdir='${localstatedir}/log/snowballs'])
 AC_SUBST(logdir)
 
-eval eval SNOWBALLS_LOGS=\"$logdir/\"
-AH_TEMPLATE([SNOWBALLS_LOGS], [The path to where Snowballs logs should be stored.])
-AC_DEFINE([SNOWBALLS_LOGS], "$SNOWBALLS_LOGS")
+SNOWBALLS_LOGS='$logdir'
+#AH_TEMPLATE([SNOWBALLS_LOGS], [The path to where Snowballs logs should be stored.])
+#AC_DEFINE_UNQUOTED([SNOWBALLS_LOGS], "$log_dir")
+AC_SUBST([SNOWBALLS_LOGS])
 
 dnl ====================================================================
 dnl Output files to generate.
