@@ -10,16 +10,33 @@ dnl ====================================================================
 dnl Process this file with autoconf to produce a configure script.
 dnl ====================================================================
 
-AC_INIT(client/src/client.cpp)
+# If you want to change the version, must must change AC_INIT
+# *and* AC_SUBST(LIBTOOL_VERSION)
 
-MAJOR_VERSION=0
-MINOR_VERSION=2
-PICO_VERSION=0
-
-AM_INIT_AUTOMAKE(snowballs, $MAJOR_VERSION.$MINOR_VERSION.$PICO_VERSION)
+AC_PREREQ(2.57)
+AC_INIT([snowballs],[0.2.0],[nel-all@nevrax.org])
+AM_INIT_AUTOMAKE([tar-ustar])
 
 AM_CONFIG_HEADER(config.h)
 
+AC_SUBST(LIBTOOL_VERSION, [0:2:0])
+
+dnl ====================================================================
+dnl Checks for programs.
+dnl ====================================================================
+AC_CANONICAL_HOST
+AC_PROG_CXX
+AC_PROG_CPP
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_LIBTOOL
+AM_PROG_LIBTOOL
+AM_SANITY_CHECK
+
+AC_SYS_LARGEFILE
+
+AM_MAINTAINER_MODE
 
 dnl The following hack should ensure that configure doesn't add optimizing
 dnl or debugging flags to CFLAGS or CXXFLAGS
@@ -48,22 +65,6 @@ AC_ARG_ENABLE( server,
       enable_server="yes" ] )
 
 AC_SUBST(SNO_SUBDIRS)
-
-
-dnl ====================================================================
-dnl Checks for programs.
-dnl ====================================================================
-
-AC_PROG_MAKE_SET
-
-AC_PROG_CC
-AC_PROG_CXX
-
-AM_SANITY_CHECK
-
-AC_PROG_INSTALL
-
-AM_PATH_CCACHE
 
 
 dnl ====================================================================
@@ -170,7 +171,8 @@ AC_ARG_WITH(sysconfdir,
 AC_SUBST(pkgsysconfdir)
 
 eval eval SNOWBALLS_CONFIG=\"$pkgsysconfdir/\"
-AC_DEFINE_UNQUOTED(SNOWBALLS_CONFIG, "$SNOWBALLS_CONFIG")
+AH_TEMPLATE([SNOWBALLS_CONFIG], [The path to the Snowballs config files.])
+AC_DEFINE([SNOWBALLS_CONFIG], "$SNOWBALLS_CONFIG")
 
 AC_ARG_WITH(logdir,
     [  --with-logdir[=DIR]
@@ -180,13 +182,14 @@ AC_ARG_WITH(logdir,
 AC_SUBST(logdir)
 
 eval eval SNOWBALLS_LOGS=\"$logdir/\"
-AC_DEFINE_UNQUOTED(SNOWBALLS_LOGS, "$SNOWBALLS_LOGS")
+AH_TEMPLATE([SNOWBALLS_LOGS], [The path to where Snowballs logs should be stored.])
+AC_DEFINE([SNOWBALLS_LOGS], "$SNOWBALLS_LOGS")
 
 dnl ====================================================================
 dnl Output files to generate.
 dnl ====================================================================
 
-AC_OUTPUT( Makefile                                         \
+AC_CONFIG_FILES([Makefile                                         \
            client/Makefile                                  \
            client/client.cfg                                \
            client/src/Makefile                              \
@@ -197,8 +200,8 @@ AC_OUTPUT( Makefile                                         \
            server/chat/src/Makefile                         \
            server/position/Makefile                         \
            server/position/src/Makefile                     \
-)
-
+])
+AC_OUTPUT
 
 dnl End of configure.in
 

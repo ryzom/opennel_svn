@@ -1,19 +1,15 @@
-#! /bin/sh
+#!/bin/sh -
 
-set -x
+WANT_AUTOMAKE="1.6"
 
-rm -f config.cache
-
-# This is to avoid atomake to complain about the fact that there is no
-# ChangeLog File at the moment
-if  test ! -f ChangeLog
-then
-	touch ChangeLog
-fi
-
-
-aclocal \
-&& autoheader \
-&& automake --gnu --add-missing --copy \
-&& autoconf
-
+echo "Creating macros..." && \
+aclocal -I automacros/ && \
+echo "Creating library tools..." && \
+libtoolize --force && \
+echo "Creating header templates..." && \
+autoheader && \
+echo "Creating Makefile templates..." && \
+automake --gnu --add-missing && \
+echo "Creating 'configure'..." && \
+autoconf && \
+echo -e "\nRun: ./configure; make; make install\n"
