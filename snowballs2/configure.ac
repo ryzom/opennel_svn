@@ -40,9 +40,11 @@ AM_MAINTAINER_MODE
 
 dnl The following hack should ensure that configure doesn't add optimizing
 dnl or debugging flags to CFLAGS or CXXFLAGS
-CFLAGS="$CFLAGS "
-CXXFLAGS="$CXXFLAGS "
+CFLAGS="$CFLAGS -ftemplate-depth-24"
+CXXFLAGS="$CXXFLAGS -ftemplate-depth-24"
 
+AC_CHECK_LIB([pthread], [pthread_create])
+AC_CHECK_LIB([dl], [dlopen])
 
 dnl ====================================================================
 dnl Checks Snowballs modules (Client / Server) to install / Disable
@@ -87,14 +89,59 @@ dnl ====================================================================
 dnl Checks for typedefs, structures, and compiler characteristics.
 dnl ====================================================================
 
+# Test endianness
+AC_C_BIGENDIAN
+
+# Supress GCC "multi-character character constant" warnings.
+if test "X$CC" = "Xgcc";
+then
+    if test "$with_debug" = "yes"
+    then
+        #
+        # When debugging variables are declared for the sole purpose of
+        # inspecting their content with a debugger. They are not used
+        # in the code itself and this is legitimate, hence the -Wno-unused
+        #
+        CXXFLAGS="$CXXFLAGS -Wno-unused"
+    fi
+fi
+
+# Add some common define
+if test "X$CC" = "Xgcc";
+then
+    CFLAGS="$CFLAGS -D_REENTRANT -Wall -ansi -W -Wpointer-arith -Wsign-compare -Wno-deprecated-declarations -Wno-multichar -Wno-long-long -Wno-unused"
+    CXXFLAGS="$CXXFLAGS -D_REENTRANT -Wall -ansi -W -Wpointer-arith -Wsign-compare -Wno-deprecated-declarations -Wno-multichar -Wno-long-long -Wno-unused"
+#    CFLAGS="$CFLAGS -D_REENTRANT -Wno-multichar -Wno-long-long"
+#    CXXFLAGS="$CXXFLAGS -D_REENTRANT -Wno-multichar -Wno-long-long"
+fi
+
 
 dnl ====================================================================
-dnl Checks for header files.
+dnl Checks for header and lib files.
 dnl ====================================================================
 
-AC_STDC_HEADERS
-AC_CHECK_HEADERS(fcntl.h unistd.h)
+AC_FUNC_ALLOCA
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_HEADER_TIME
+AC_CHECK_HEADERS([arpa/inet.h fcntl.h float.h malloc.h netdb.h netinet/in.h stddef.h stdlib.h string.h sys/ioctl.h sys/socket.h unistd.h sys/time.h])
+AC_CHECK_LIB([pthread], [pthread_create])
+AC_CHECK_LIB([dl], [dlopen])
 
+dnl ====================================================================
+dnl Checks for typedefs, structures, and compiler characteristics.
+dnl ====================================================================
+
+AC_HEADER_STDBOOL
+AC_C_CONST
+AC_C_INLINE
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+AC_STRUCT_TM
+AC_C_VOLATILE
+AC_CHECK_TYPES([ptrdiff_t])
+AC_CHECK_TYPES([size_t])
+AC_CHECK_TYPES([uintptr_t])
 
 dnl ====================================================================
 dnl X11
@@ -125,7 +172,10 @@ dnl ====================================================================
 dnl ====================================================================
 dnl STLPort
 
-AM_PATH_STLPORT
+AM_PATH_STLPORT('/usr/local /usr')
+LIBS="$LIBS $STLPORT_LIBS"
+CPPFLAGS="$CPPFLAGS $STLPORT_INCLUDES"
+LDFLAGS="$LDFLAGS $STLPORT_LDFLAGS"
 
 
 dnl ====================================================================
