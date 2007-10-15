@@ -538,7 +538,7 @@ void onConnectionClient (TSockId from, const CLoginCookie &cookie)
 
 	_pmap::iterator it = player.first;
 	CPlayer *p = &((*it).second);
-	from->setAppId((uint64)(uint)p);
+	from->setAppId((uint64)(uintptr_t)p);
 
 	// Output: send the IDENTIFICATION number to the new connected client
 	CMessage msgout( "IDENTIFICATION" );
