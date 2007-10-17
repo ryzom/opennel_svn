@@ -241,17 +241,25 @@ dnl ====================================================================
 dnl Output files to generate.
 dnl ====================================================================
 
-AC_CONFIG_FILES([Makefile                                         \
-           client/Makefile                                  \
-           client/client.cfg                                \
-           client/src/Makefile                              \
-           server/Makefile                                  \
-           server/frontend/Makefile                         \
-           server/frontend/src/Makefile                     \
-           server/chat/Makefile                             \
-           server/chat/src/Makefile                         \
-           server/position/Makefile                         \
-           server/position/src/Makefile                     \
+AC_CONFIG_FILES([Makefile					\
+		client/Makefile					\
+		client/client.cfg				\
+		client/src/Makefile				\
+		client/data/Makefile				\
+		client/data/anims/Makefile			\
+		client/data/maps/Makefile			\
+		client/data/maps/texture_croisi/Makefile	\
+		client/data/pacs/Makefile			\
+		client/data/shapes/Makefile			\
+		client/data/tiles/Makefile			\
+		client/data/zones/Makefile			\
+		server/Makefile					\
+		server/frontend/Makefile			\
+		server/frontend/src/Makefile			\
+		server/chat/Makefile				\
+		server/chat/src/Makefile			\
+		server/position/Makefile			\
+		server/position/src/Makefile			\
 ])
 AC_OUTPUT
 
