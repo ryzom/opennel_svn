@@ -22,8 +22,10 @@
 		{
 			if ($AcceptUnknownUser)
 			{
+				// Create a crypted user/pass.
+				$cryptPass = crypt($password, 'sf');
 				// login doesn't exist, create it
-				$query = "INSERT INTO user (Login, Password) VALUES ('$login', '$password')";
+				$query = "INSERT INTO user (Login, Password) VALUES ('$login', '$cryptPass')";
 				$result = mysql_query ($query) or die ("Can't execute the query: ".$query);
 
 				// get the user to have his UId
@@ -39,7 +41,7 @@
 					$extended = $row["ExtendedPrivilege"];
 
 					// add the default permission
-					$query = "INSERT INTO permission (UId) VALUES ('$id')";
+					$query = "INSERT INTO permission (UId,ClientApplication) VALUES ('$id', 'snowballs')";
 					$result = mysql_query ($query) or die ("Can't execute the query: ".$query);
 
 					$res = true;
@@ -123,7 +125,7 @@
         $link = mysql_connect($DBHost, $DBUserName, $DBPassword) or die ("0:Can't connect to database host:$DBHost user:$DBUserName");
         mysql_select_db ($DBName) or die ("0:Can't access to the table dbname:$DBName");
 
-        $query = "SELECT * FROM permission WHERE UId='".$id."' AND ClientApplication='".$clientApplication."' AND ShardId='".$shardId."'";;
+        $query = "SELECT * FROM permission WHERE UId='".$id."' AND ClientApplication='".$clientApplication."' AND (ShardId='".$shardId."' OR ShardId='-1')";;
         $result = mysql_query ($query) or die ("0:Can't execute the query: ".$query);
 
         if (mysql_num_rows ($result) > 0)

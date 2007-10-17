@@ -106,8 +106,9 @@ static void cbWSShardChooseShard/* (CMessage &msgin, TSockId from, CCallbackNetB
 		msgin.serial (addr);
 		msgout.serial (addr);
 
-		uint32 nbPendingUser;
-		msgin.serial(nbPendingUser);
+		// MTR: No longer sent by WS?
+		//uint32 nbPendingUser;
+		//msgin.serial(nbPendingUser);
 
 		// read patch addresses sent by WS
 		/*
