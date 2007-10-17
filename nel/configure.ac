@@ -479,6 +479,7 @@ AC_CONFIG_FILES([Makefile                                  \
            include/nel/georges/Makefile                    \
            src/Makefile                                    \
            src/misc/Makefile                               \
+           src/misc/nel-misc.pc                            \
            src/misc/config_file/Makefile                   \
            src/net/Makefile                                \
            src/memory/Makefile                             \

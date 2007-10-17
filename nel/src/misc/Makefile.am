@@ -137,5 +137,8 @@ libnelmisc_la_LIBADD  = config_file/libconfig.la -lc -lpthread -lrt -ldl
 
 libnelmisc_la_LDFLAGS = -version-info @LIBTOOL_VERSION@
 
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = nel-misc.pc
+
 # End of Makefile.am
 
