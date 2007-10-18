@@ -28,7 +28,8 @@
 
 // we have to include windows.h because mysql.h uses it but not include it
 #ifdef NL_OS_WINDOWS
-#include <windows.h>
+#	define NOMINMAX
+#	include <windows.h>
 #endif
 
 #include <mysql.h>

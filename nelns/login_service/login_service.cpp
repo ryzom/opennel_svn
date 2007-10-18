@@ -42,9 +42,9 @@
 
 #include "nel/misc/types_nl.h"
 
-#include <stdio.h>
+#include <cstdio>
 #include <ctype.h>
-#include <math.h>
+#include <cmath>
 
 #include <vector>
 #include <map>
