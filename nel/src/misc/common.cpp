@@ -1032,7 +1032,7 @@ LONG GetRegKey(HKEY key, LPCSTR subkey, LPSTR retdata)
 bool openURL (const char *url)
 {
 #ifdef NL_OS_WINDOWS
-    char key[MAX_PATH + MAX_PATH];
+    char key[1024];
     if (GetRegKey(HKEY_CLASSES_ROOT, ".html", key) == ERROR_SUCCESS) 
 	{
         lstrcatA(key, "\\shell\\open\\command");
