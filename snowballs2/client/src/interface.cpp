@@ -27,7 +27,7 @@
 // Includes
 //
 
-#include <math.h>
+#include <cmath>
 #include <nel/misc/vectord.h>
 #include <nel/misc/event_listener.h>
 

@@ -27,7 +27,7 @@
 // Includes
 //
 
-#include <math.h>
+#include <cmath>
 #include <map>
 
 #include <nel/misc/types_nl.h>

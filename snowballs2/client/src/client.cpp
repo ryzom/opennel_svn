@@ -38,12 +38,11 @@
 #include <nel/misc/types_nl.h>
 
 #ifdef NL_OS_WINDOWS
+#	define NOMINMAX
 #	include <windows.h>
-#	undef min
-#	undef max
 #endif
 
-#include <time.h>
+#include <ctime>
 #include <string>
 #include <vector>
 

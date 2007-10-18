@@ -27,7 +27,7 @@
 // Includes
 //
 
-#include <math.h>
+#include <cmath>
 #include <vector>
 
 #include <nel/misc/vector.h>
