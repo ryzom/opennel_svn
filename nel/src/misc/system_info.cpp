@@ -26,14 +26,15 @@
 #include "stdmisc.h"
 
 #ifdef NL_OS_WINDOWS
-	#include <windows.h>
-	#include <tchar.h>
+#	define NOMINMAX
+#	include <windows.h>
+#	include <tchar.h>
 #else
-	#include <sys/types.h>
-	#include <sys/stat.h>
-	#include <fcntl.h>
-	#include <unistd.h>
-	#include <cerrno>
+#	include <sys/types.h>
+#	include <sys/stat.h>
+#	include <fcntl.h>
+#	include <unistd.h>
+#	include <cerrno>
 #endif // NL_OS_WINDOWS
 
 #include "nel/misc/system_info.h"
@@ -958,7 +959,7 @@ bool CSystemInfo::getVideoInfo (std::string &deviceName, uint64 &driverVersion)
 	/* Get the device name with EnumDisplayDevices (doesn't work under win95).
 	 * Look for driver information for this device in the registry
 	 *
-	 * Follow the recommandations in the news group comp.os.ms-windows.programmer.nt.kernel-mode : "Get Video Driver ... Need Version"
+	 * Follow the recommendations in the news group comp.os.ms-windows.programmer.nt.kernel-mode : "Get Video Driver ... Need Version"
 	 */
 
 	bool debug = false;

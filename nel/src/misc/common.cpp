@@ -26,18 +26,17 @@
 #include "stdmisc.h"
 
 #ifdef NL_OS_WINDOWS
-#  include <windows.h>
-#  include <io.h>
-#  include <tchar.h>
-#  undef min
-#  undef max
+#	define NOMINMAX
+#	include <windows.h>
+#	include <io.h>
+#	include <tchar.h>
 #elif defined NL_OS_UNIX
-#  include <unistd.h>
-#  include <cstring>
-#  include <cerrno>
-#  include <csignal>
-#  include <pthread.h>
-#  include <sched.h>
+#	include <unistd.h>
+#	include <cstring>
+#	include <cerrno>
+#	include <csignal>
+#	include <pthread.h>
+#	include <sched.h>
 #endif
 
 #include "nel/misc/command.h"

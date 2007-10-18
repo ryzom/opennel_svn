@@ -31,6 +31,7 @@
 #include "nel/misc/event_server.h"
 
 #ifdef NL_OS_WINDOWS
+#define NOMINMAX
 #include <windows.h>
 #include <windowsx.h>
 

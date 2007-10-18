@@ -397,7 +397,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Shaders"
+			Name="shaders"
 			Filter="*.fx"
 			>
 			<File

@@ -26,10 +26,11 @@
 #include "stdmisc.h"
 
 #ifdef NL_OS_WINDOWS
-#include <process.h>
-#include <windows.h>
+#	define NOMINMAX
+#	include <process.h>
+#	include <windows.h>
 #else
-#include <unistd.h>
+#	include <unistd.h>
 #endif
 
 #include <ctime>

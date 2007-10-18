@@ -35,19 +35,10 @@
 #include "nel/misc/report.h"
 
 #ifdef NL_OS_WINDOWS
-
-#include <windows.h>
-#include <windowsx.h>
-#include <winuser.h>
-
-#ifdef min
-#	undef min
-#endif // min
-
-#ifdef max
-#	undef max
-#endif // max
-
+#	define NOMINMAX
+#	include <windows.h>
+#	include <windowsx.h>
+#	include <winuser.h>
 #endif // NL_OS_WINDOWS
 
 using namespace std;

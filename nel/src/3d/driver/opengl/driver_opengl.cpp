@@ -29,19 +29,13 @@
 #include "driver_opengl_extension.h"
 
 #ifdef NL_OS_WINDOWS
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <windowsx.h>
-#include <string>
-
-#undef min
-#undef max
-
+#	define WIN32_LEAN_AND_MEAN
+#	define NOMINMAX
+#	include <windows.h>
+#	include <windowsx.h>
+#	include <string>
 #else // NL_OS_UNIX
-
-#include <GL/glx.h>
-
+#	include <GL/glx.h>
 #endif // NL_OS_UNIX
 
 #include <vector>

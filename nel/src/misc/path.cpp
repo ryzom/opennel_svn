@@ -37,6 +37,7 @@
 #include "nel/misc/xml_pack.h"
 
 #ifdef NL_OS_WINDOWS
+#	define NOMINMAX
 #	include <windows.h>
 #	include <sys/types.h>
 #	include <sys/stat.h>
@@ -50,7 +51,7 @@
 #   include <sys/stat.h>
 #	include <dirent.h>
 #   include <unistd.h>
-#	include <stdio.h>
+#	include <cstdio>
 #   include <cerrno>
 #   include <sys/types.h>
 #   include <utime.h>

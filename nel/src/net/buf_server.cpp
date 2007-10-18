@@ -31,13 +31,12 @@
 #include "nel/net/net_log.h"
 
 #ifdef NL_OS_WINDOWS
-#include <windows.h>
-//typedef sint socklen_t;
-
+#	define NOMINMAX
+#	include <windows.h>
 #elif defined NL_OS_UNIX
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/time.h>
+#	include <unistd.h>
+#	include <sys/types.h>
+#	include <sys/time.h>
 #endif
 
 /*

@@ -35,6 +35,7 @@
 # if defined(NL_COMP_VC7) || defined(NL_COMP_VC71) || defined(NL_COMP_VC8)
 #	include <WinSock2.h>
 # endif
+#	define NOMINMAX
 #	include <windows.h>
 #	define socklen_t int
 #	define ERROR_NUM WSAGetLastError()

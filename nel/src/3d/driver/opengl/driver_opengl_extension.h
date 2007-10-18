@@ -32,6 +32,7 @@
 #ifdef NL_OS_WINDOWS
 
 #define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
 #include <windows.h>
 
 #else // NL_OS_UNIX

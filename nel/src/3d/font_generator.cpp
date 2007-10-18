@@ -280,6 +280,7 @@ uint32	 CFontGenerator::getCharIndex (ucchar c)
 
 #else // NL_DONT_USE_EXTERNAL_CODE
 
+#define NOMINMAX
 #include <windows.h>
 
 using namespace NLMISC;
