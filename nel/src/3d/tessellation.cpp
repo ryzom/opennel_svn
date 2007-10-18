@@ -711,8 +711,8 @@ void		CTessFace::computeTileMaterial()
 	{
 		sint	i;
 		TileMaterial= Patch->getLandscape()->newTileMaterial();
-		TileMaterial->TileS= ts;
-		TileMaterial->TileT= tt;
+		TileMaterial->TileS= uint8(ts);
+		TileMaterial->TileT= uint8(tt);
 
 		// Add this new material to the render list.
 		Patch->appendTileMaterialToRenderList(TileMaterial);
