@@ -190,6 +190,9 @@ void addEntity (uint32 eid, std::string name, CEntity::TType type, const CVector
 		// use the instance on the skeleton
 		entity.Skeleton.bindSkin (entity.Instance);
 
+		// Allow the skeleton to cast shadows.
+		entity.Skeleton.enableCastShadowMap(true);
+
 		entity.Instance.hide ();
 
 		entity.Angle = MouseListener->getOrientation();
