@@ -18,7 +18,6 @@ CREATE TABLE `permission` (
 ) TYPE=MyISAM;
 
 
-
 #
 # Table structure for table 'shard'
 #
@@ -31,9 +30,9 @@ CREATE TABLE `shard` (
   `Online` tinyint(1) unsigned default '0',
   `ClientApplication` varchar(64) default 'ryzom',
   `Version` varchar(64) default NULL,
+  `DynPatchURL` varchar(255) default '',
   PRIMARY KEY  (`ShardId`)
 ) TYPE=MyISAM COMMENT='contains all shards informations for login system';
-
 
 
 #
@@ -47,6 +46,7 @@ CREATE TABLE `user` (
   `ShardId` int(10) NOT NULL default '-1',
   `State` enum('Offline','Online') NOT NULL default 'Offline',
   `Privilege` varchar(255) default NULL,
+  `ExtendedPrivilege` varchar(45) default '',
   PRIMARY KEY  (`UId`)
 ) TYPE=MyISAM COMMENT='contains all users informations for login system';
 
