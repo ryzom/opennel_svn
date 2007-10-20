@@ -47,7 +47,7 @@ namespace NLMISC
  */
 uint32 CTime::getSecondsSince1970 ()
 {
-	return nl_time (NULL);
+	return uint32(time(NULL));
 }
 
 /** Return the number of second since midnight (00:00:00), January 1, 1970,

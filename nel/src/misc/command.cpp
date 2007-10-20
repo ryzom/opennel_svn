@@ -539,7 +539,7 @@ void CCommandRegistry::expand (std::string &commandName, NLMISC::CLog &log)
 	{
 		// Stop loop when a name size is i or names[i] are different
 		string commonstr = commandName;
-		uint i = commandName.size();
+		size_t i = commandName.size();
 		while ( true )
 		{
 			char letter = 0;

@@ -284,7 +284,7 @@ inline	void		IStream::serial(std::string &b)
 	}
 	else
 	{
-		len= b.size();
+		len= uint32(b.size());
 		if (len>1000000)
 			throw NLMISC::EInvalidDataStream( "IStream: Trying to write a string of %u bytes", len );
 		serial(len);
@@ -317,7 +317,7 @@ inline	void		IStream::serial(ucstring &b)
 	}
 	else
 	{
-		len= b.size();
+		len= uint32(b.size());
 		if (len>1000000)
 			throw NLMISC::EInvalidDataStream( "IStream: Trying to write an ucstring of %u bytes", len );
 		serial(len);

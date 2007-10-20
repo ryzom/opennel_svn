@@ -101,7 +101,7 @@ public:
 
 	ucstring &operator+= (const char *str)
 	{
-		uint s = size();
+		size_t s = size();
 		resize (s + strlen(str));
 		for (uint i = 0; i < strlen(str); i++)
 		{
@@ -112,7 +112,7 @@ public:
 
 	ucstring &operator+= (const std::string &str)
 	{
-		uint s = size();
+		size_t s = size();
 		resize (s + str.size());
 		for (uint i = 0; i < str.size(); i++)
 		{
