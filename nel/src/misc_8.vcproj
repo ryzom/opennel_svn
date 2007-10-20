@@ -472,7 +472,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Stream"
+			Name="streams"
 			>
 			<File
 				RelativePath=".\misc\big_file.cpp"
@@ -951,7 +951,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="ConfigFile"
+			Name="config_file"
 			>
 			<File
 				RelativePath="misc\config_file\cf_gramatical.cpp"
@@ -1268,7 +1268,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Events"
+			Name="events"
 			>
 			<File
 				RelativePath="misc\event_emitter.cpp"
@@ -2222,7 +2222,7 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="Memory"
+			Name="memory"
 			>
 			<File
 				RelativePath="misc\block_memory.cpp"
@@ -3014,7 +3014,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Displayer"
+			Name="displayers"
 			>
 			<File
 				RelativePath="misc\displayer.cpp"
@@ -3408,7 +3408,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Strings"
+			Name="strings"
 			>
 			<File
 				RelativePath="misc\diff_tool.cpp"
@@ -3879,7 +3879,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Threads"
+			Name="threads"
 			>
 			<File
 				RelativePath=".\misc\co_task.cpp"
@@ -4236,7 +4236,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Time"
+			Name="time"
 			>
 			<File
 				RelativePath="misc\hierarchical_timer.cpp"
@@ -4435,7 +4435,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Files"
+			Name="files"
 			>
 			<File
 				RelativePath="misc\async_file_manager.cpp"
@@ -4699,7 +4699,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Identifiers"
+			Name="identifiers"
 			>
 			<File
 				RelativePath="misc\eid_translator.cpp"
@@ -4898,7 +4898,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Math and 3d"
+			Name="math_and_3d"
 			>
 			<File
 				RelativePath="misc\aabbox.cpp"
@@ -6494,7 +6494,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Admin and info"
+			Name="admin_and_info"
 			>
 			<File
 				RelativePath=".\misc\app_context.cpp"
@@ -6904,7 +6904,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="C++ extensions"
+			Name="cpp_extensions"
 			>
 			<File
 				RelativePath="misc\bit_set.cpp"
@@ -7139,7 +7139,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Misc"
+			Name="miscanelous"
 			>
 			<File
 				RelativePath="misc\algo.cpp"

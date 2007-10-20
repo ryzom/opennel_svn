@@ -465,7 +465,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Static Collisions"
+			Name="static_collisions"
 			>
 			<File
 				RelativePath="pacs\chain_quad.cpp"
@@ -802,7 +802,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Dynamic Collisions"
+			Name="dynamic_collisions"
 			>
 			<File
 				RelativePath="pacs\collision_callback.cpp"
@@ -1399,7 +1399,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Pathfinding"
+			Name="path_finding"
 			>
 			<File
 				RelativePath="pacs\chain.cpp"
@@ -1858,7 +1858,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="User"
+			Name="user"
 			>
 			<File
 				RelativePath="..\include\nel\pacs\u_collision_desc.h"
@@ -1890,7 +1890,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Build"
+			Name="build"
 			>
 			<File
 				RelativePath="pacs\build_indoor.cpp"
@@ -1959,7 +1959,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="UserImp"
+			Name="user_imp"
 			>
 		</Filter>
 		<File

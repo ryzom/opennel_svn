@@ -474,7 +474,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Traversals"
+			Name="traversals"
 			>
 			<File
 				RelativePath="3d\anim_detail_trav.cpp"
@@ -933,7 +933,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Models"
+			Name="models"
 			>
 			<File
 				RelativePath="3d\camera.cpp"
@@ -1977,7 +1977,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Landscape"
+			Name="landscape"
 			>
 			<File
 				RelativePath="3d\bezier_patch.cpp"
@@ -4313,7 +4313,7 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="Driver"
+			Name="miscanelous"
 			>
 			<File
 				RelativePath="3d\driver.cpp"
@@ -4975,7 +4975,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Font"
+			Name="font"
 			>
 			<File
 				RelativePath="3d\computed_string.cpp"
@@ -5239,7 +5239,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Container"
+			Name="container"
 			>
 			<File
 				RelativePath="3d\bsp_tree.h"
@@ -5523,7 +5523,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Tiles"
+			Name="tiles"
 			>
 			<File
 				RelativePath="3d\tile_bank.cpp"
@@ -5787,7 +5787,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Shapes"
+			Name="shapes"
 			>
 			<File
 				RelativePath="3d\flare_shape.cpp"
@@ -7619,7 +7619,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Textures"
+			Name="textures"
 			>
 			<File
 				RelativePath="3d\async_texture_block.cpp"
@@ -8736,7 +8736,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Mrm"
+			Name="mrm"
 			>
 			<File
 				RelativePath="3d\mrm_builder.cpp"
@@ -9000,7 +9000,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Animation"
+			Name="animation"
 			>
 			<File
 				RelativePath="3d\anim_ctrl.cpp"
@@ -10625,7 +10625,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="UserImp"
+			Name="user_imp"
 			>
 			<File
 				RelativePath="3d\animation_set_user.cpp"
@@ -12946,7 +12946,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="User"
+			Name="user"
 			>
 			<File
 				RelativePath="..\include\nel\3d\anim_ctrl.h"
@@ -13130,7 +13130,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Fx"
+			Name="fx"
 			>
 			<Filter
 				Name="particles"
@@ -15879,7 +15879,7 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="Collisions"
+			Name="collisions"
 			>
 			<File
 				RelativePath="3d\camera_col.cpp"
@@ -16305,7 +16305,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="ClipAccelerator"
+			Name="clip_accelerator"
 			>
 			<File
 				RelativePath="3d\cluster.cpp"
@@ -16569,7 +16569,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Water"
+			Name="water"
 			>
 			<File
 				RelativePath="3d\water_env_map.cpp"
@@ -16768,7 +16768,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Stripifier"
+			Name="stripifier"
 			>
 			<File
 				RelativePath="3d\stripifier.cpp"
@@ -17621,7 +17621,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Util"
+			Name="utils"
 			>
 			<File
 				RelativePath="3d\matrix_3x4.cpp"
@@ -17755,7 +17755,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Lighting"
+			Name="lighting"
 			>
 			<File
 				RelativePath="3d\ig_surface_light.cpp"
@@ -18344,7 +18344,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="LodSystems"
+			Name="lod_systems"
 			>
 			<File
 				RelativePath="3d\coarse_mesh_build.cpp"
@@ -18868,7 +18868,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="CloudScape"
+			Name="cloud_scape"
 			>
 			<File
 				RelativePath="3d\cloud.cpp"
@@ -19067,7 +19067,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Shadows"
+			Name="shadows"
 			>
 			<File
 				RelativePath="3d\shadow_map.cpp"
