@@ -99,7 +99,7 @@ AC_DEFUN([AM_PATH_STLPORT], [
     case "$found" in
     "not")
       have_stlport=0
-      AC_MSG_ERROR([STLport must be installed ( http://www.stlport.org).])
+      AC_MSG_ERROR([STLport must be installed ( http://stlport.sourceforge.net ).])
       ;;
     *)
       if test "$with_stlport_include"

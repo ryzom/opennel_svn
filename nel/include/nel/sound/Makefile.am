@@ -10,7 +10,6 @@ include_HEADERS      =	sound_animation.h	\
 			sound_anim_manager.h	\
 			sound_anim_marker.h	\
 			u_audio_mixer.h		\
-			u_env_sound.h		\
 			u_listener.h		\
 			u_source.h
 
