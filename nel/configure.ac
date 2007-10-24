@@ -13,13 +13,13 @@
 # *and* AC_SUBST(LIBTOOL_VERSION)
 
 AC_PREREQ(2.57)
-AC_INIT([nel],[0.4.0],[nel-all@nevrax.org])
+AC_INIT([nel],[0.5.0],[nel-all@nevrax.org])
 AM_INIT_AUTOMAKE([tar-ustar])
 
 AC_CONFIG_SRCDIR(include/nel/misc/types_nl.h)
 AM_CONFIG_HEADER(include/nelconfig.h)
 
-AC_SUBST(LIBTOOL_VERSION, [0:4:0])
+AC_SUBST(LIBTOOL_VERSION, [0:5:0])
 
 # Checks for programs.
 AC_CANONICAL_HOST
@@ -60,7 +60,6 @@ fi
 
 # The following hack should ensure that configure doesnt add optimizing
 # or debugging flags to CFLAGS or CXXFLAGS
-CFLAGS="$CFLAGS -ftemplate-depth-24"
 CXXFLAGS="$CXXFLAGS -ftemplate-depth-24"
 
 
@@ -252,7 +251,7 @@ fi
 AC_C_BIGENDIAN
 
 # Supress GCC "multi-character character constant" warnings.
-if test "X$CC" = "Xgcc";
+if test "$ac_cv_cxx_compiler_gnu" = "yes";
 then
     if test "$with_debug" = "yes"
     then
@@ -266,12 +265,9 @@ then
 fi
 
 # Add some common define
-if test "X$CC" = "Xgcc";
+if test "$ac_cv_cxx_compiler_gnu" = "yes";
 then
-    CFLAGS="$CFLAGS -D_REENTRANT -Wall -ansi -W -Wpointer-arith -Wsign-compare -Wno-deprecated-declarations -Wno-multichar -Wno-long-long -Wno-unused"
     CXXFLAGS="$CXXFLAGS -D_REENTRANT -Wall -ansi -W -Wpointer-arith -Wsign-compare -Wno-deprecated-declarations -Wno-multichar -Wno-long-long -Wno-unused"
-#    CFLAGS="$CFLAGS -D_REENTRANT -Wno-multichar -Wno-long-long"
-#    CXXFLAGS="$CXXFLAGS -D_REENTRANT -Wno-multichar -Wno-long-long"
 fi
 
 
@@ -354,7 +350,6 @@ AC_LANG([C])
 
 AM_PATH_XML2([2.0.0], [], [AC_MSG_ERROR([libxml2 must be installed])])
 
-CFLAGS="$CFLAGS $XML_CFLAGS $XML_CPPFLAGS"
 CXXFLAGS="$CXXFLAGS $XML_CFLAGS $XML_CPPFLAGS"
 
 LIBS="$LIBS $XML_LIBS"
@@ -389,7 +384,6 @@ then
   AC_LANG([C])
 
   AM_PATH_GTK_2_0([2.0.0],
-    CFLAGS="$CFLAGS $GTK_CFLAGS"
     CXXFLAGS="$CXXFLAGS $GTK_CFLAGS"
     LIBS="$LIBS $GTK_LIBS"
     AC_DEFINE(NL_USE_GTK, [], [Undef if you don't want to use anything GTK based like the GTK Displayer]
@@ -454,7 +448,6 @@ fi
 # Arrange for the include directory to be in the search path even when
 # build is done outside the source tree
 # Put the nelconfig.h define
-CFLAGS="$CFLAGS -I\${top_srcdir}/include -DHAVE_NELCONFIG_H"
 CXXFLAGS="$CXXFLAGS -I\${top_srcdir}/include -DHAVE_NELCONFIG_H"
 
 # ====================================================================
