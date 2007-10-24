@@ -4,8 +4,6 @@
 
 MAINTAINERCLEANFILES = Makefile.in
 
-EXTRA_DIST		= memory
-
 DIST_SUBDIRS              = sound_sources pacs georges 3d net misc
 
 SUBDIRS              = pacs georges 3d net misc
