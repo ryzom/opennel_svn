@@ -236,9 +236,7 @@ void CFileContainer::getFileListByName(const std::string &extension, const std::
 //{
 //	if (_Instance == NULL)
 //	{
-//#undef new
 //		_Instance = new CPath;
-//#define new NL_NEW
 //	}
 //	return _Instance;
 //}
@@ -301,7 +299,6 @@ void CPath::remapExtension (const string &ext1, const string &ext2, bool substit
 
 void CFileContainer::remapExtension (const string &ext1, const string &ext2, bool substitute)
 {
-	NL_ALLOC_CONTEXT (MiPath);
 	nlassert(!_MemoryCompressed);
 
 	string ext1lwr = toLower(ext1);
@@ -385,7 +382,6 @@ void CPath::remapFile (const std::string &file1, const std::string &file2)
 
 void CFileContainer::remapFile (const std::string &file1, const std::string &file2)
 {
-	NL_ALLOC_CONTEXT (MiPath);
 	CPath *inst = CPath::getInstance();
 	if (file1.empty()) return;
 	if (file2.empty()) return;
@@ -413,7 +409,6 @@ void CPath::loadRemappedFiles (const std::string &file)
 
 void CFileContainer::loadRemappedFiles (const std::string &file)
 {
-	NL_ALLOC_CONTEXT (MiPath);
 	string fullName = lookup(file, false, true, true);
 	CIFile f;
 	f.setCacheFileOnOpen (true);
@@ -986,7 +981,6 @@ void CPath::addSearchPath (const string &path, bool recurse, bool alternative, c
 
 void CFileContainer::addSearchPath (const string &path, bool recurse, bool alternative, class IProgressCallback *progressCallBack)
 {
-	NL_ALLOC_CONTEXT (MiPath);
 	//H_AUTO_INST(addSearchPath);
 
 	nlassert(!_MemoryCompressed);
@@ -1131,7 +1125,6 @@ void CPath::addSearchFile (const string &file, bool remap, const string &virtual
 
 void CFileContainer::addSearchFile (const string &file, bool remap, const string &virtual_ext, NLMISC::IProgressCallback *progressCallBack)
 {
-	NL_ALLOC_CONTEXT (MiPath);
 	nlassert(!_MemoryCompressed);
 
 	string newFile = standardizePath(file, false);
@@ -1219,7 +1212,6 @@ void CPath::addSearchListFile (const string &filename, bool recurse, bool altern
 
 void CFileContainer::addSearchListFile (const string &filename, bool recurse, bool alternative)
 {
-	NL_ALLOC_CONTEXT (MiPath);
 	// check empty file
 	if (filename.empty())
 	{
@@ -1452,7 +1444,6 @@ void CPath::addIgnoredDoubleFile(const std::string &ignoredFile)
 
 void CFileContainer::addIgnoredDoubleFile(const std::string &ignoredFile)
 {
-	NL_ALLOC_CONTEXT (MiPath);
 	IgnoredFiles.push_back(ignoredFile);
 }
 
@@ -1463,7 +1454,6 @@ void CFileContainer::addIgnoredDoubleFile(const std::string &ignoredFile)
 
 void CFileContainer::insertFileInMap (const string &filename, const string &filepath, bool remap, const string &extension)
 {
-	NL_ALLOC_CONTEXT (MiPath);
 	nlassert(!_MemoryCompressed);
 	// find if the file already exist
 	TFiles::iterator it = _Files.find (toLower(filename));
@@ -1581,7 +1571,6 @@ void CPath::removeBigFiles(const std::vector<std::string> &bnpFilenames)
 
 void CFileContainer::removeBigFiles(const std::vector<std::string> &bnpFilenames)
 {
-	NL_ALLOC_CONTEXT (MiPath);
 	nlassert(!isMemoryCompressed());
 	std::hash_set<TSStringId> bnpStrIds;
 	TFiles::iterator fileIt, fileCurrIt;
@@ -1639,7 +1628,6 @@ void CPath::memoryCompress()
 
 void CFileContainer::memoryCompress()
 { 
-	NL_ALLOC_CONTEXT (MiPath);
 
 	SSMext.memoryCompress();
 	SSMpath.memoryCompress();

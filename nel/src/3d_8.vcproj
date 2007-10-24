@@ -132,6 +132,7 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="std3d.h"
+				BrowseInformation="0"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>

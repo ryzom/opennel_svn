@@ -265,6 +265,7 @@
 				OutputFile=".\Debug/ig_elevation.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
+				IgnoreDefaultLibraryNames="libcmt.lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/ig_elevation.pdb"
 				SubSystem="1"
@@ -336,6 +337,7 @@
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
+				BrowseInformation="0"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>

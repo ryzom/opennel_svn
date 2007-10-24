@@ -273,6 +273,7 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="stdgeorges.h"
+				BrowseInformation="0"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>

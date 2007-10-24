@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="object_viewer"
 	ProjectGUID="{A10DFC7C-B9E1-47D3-B3D8-3EE15AEBDAEC}"
 	RootNamespace="object_viewer"
@@ -48,7 +48,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/Zm400 "
+				AdditionalOptions="/Zm400"
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="../../../include"
@@ -164,6 +164,7 @@
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
+				BrowseInformation="0"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>
@@ -250,7 +251,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/D /Zm500 "
+				AdditionalOptions="/Zm700"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../../include"
 				PreprocessorDefinitions="__STL_DEBUG;_DEBUG;WIN32;_WINDOWS;_USRDLL;NL_NO_DEFINE_NEW"

@@ -1126,7 +1126,6 @@ void changeLogDirectory(const std::string &dir)
 
 void createDebug (const char *logPath, bool logInFile, bool eraseLastLog)
 {
-	NL_ALLOC_CONTEXT (_Debug)
 	
 //	static bool alreadyCreateSharedAmongThreads = false;
 //	if ( !alreadyCreateSharedAmongThreads )

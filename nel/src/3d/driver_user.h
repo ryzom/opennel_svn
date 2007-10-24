@@ -44,7 +44,6 @@
 #include "async_texture_manager.h"
 #include "lod_character_manager.h"
 
-#define NL3D_MEM_DRIVER						NL_ALLOC_CONTEXT( 3dDrv )
 
 namespace NL3D 
 {
@@ -460,7 +459,6 @@ public:
 	/// 
 	virtual	UShapeBank*		getShapeBank()
 	{
-		NL3D_MEM_DRIVER
 		return &_ShapeBank;
 	}
 	// @}
@@ -549,12 +547,10 @@ public:
 	// @{
 	IDriver		*getDriver()
 	{
-		NL3D_MEM_DRIVER
 		return _Driver;
 	}
 	void		restoreMatrixContext()
 	{
-		NL3D_MEM_DRIVER
 		setupMatrixContext();
 	}
 	// same as restoreMatrixContext(), but don't reset Viewport/Scissor

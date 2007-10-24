@@ -50,6 +50,7 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="stdpacs.h"
+				BrowseInformation="0"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>

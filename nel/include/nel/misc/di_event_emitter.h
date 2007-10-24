@@ -84,7 +84,6 @@ struct EDirectInputCooperativeLevelFailed : public  EDirectInput
 // Class to represent Direct Inputs events
 struct CDIEvent : public IInputDeviceEvent
 {
-	// TODO : redefine operator new ?
 	virtual bool	operator < (const IInputDeviceEvent &ide) const
 	{
 		// just compare the dates

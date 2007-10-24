@@ -1074,8 +1074,6 @@ HRESULT STDMETHODCALLTYPE CFXPassRecorder::SetVertexShaderConstantI(UINT StartRe
 	return D3D_OK;
 }
 
-#define new NL_NEW
-
 //===================================================================================
 CFXPassRecord::~CFXPassRecord()
 {

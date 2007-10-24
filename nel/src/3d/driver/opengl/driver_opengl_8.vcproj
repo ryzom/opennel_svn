@@ -157,6 +157,7 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="stdopengl.h"
+				BrowseInformation="0"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>
@@ -342,6 +343,7 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="stdopengl.h"
+				BrowseInformation="0"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"

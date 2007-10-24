@@ -67,7 +67,6 @@ BOOL WINAPI DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 
 __declspec(dllexport) ISoundDriver *NLSOUND_createISoundDriverInstance(bool useEax, ISoundDriver::IStringMapperProvider *stringMapper, bool forceSoftwareBuffer)
 {
-	NL_ALLOC_CONTEXT(NLSOUND_ISoundDriver);
 
 	CSoundDriverFMod *driver = new CSoundDriverFMod();
 	driver->init(stringMapper, forceSoftwareBuffer);
@@ -94,7 +93,6 @@ extern "C"
 {
 ISoundDriver *NLSOUND_createISoundDriverInstance(bool useEax, ISoundDriver::IStringMapperProvider *stringMapper, bool forceSoftwareBuffer)
 {
-	NL_ALLOC_CONTEXT(NLSOUND_ISoundDriver);
 	CSoundDriverFMod *driver = new CSoundDriverFMod();
 	driver->init(stringMapper, forceSoftwareBuffer);
 
@@ -253,7 +251,6 @@ void CSoundDriverFMod::update()
 
 IListener *CSoundDriverFMod::createListener()
 {
-	NL_ALLOC_CONTEXT(NLSOUND_CSoundDriverFMod);
 
     if (CListenerFMod::instance() != NULL) 
     {
@@ -270,7 +267,6 @@ IListener *CSoundDriverFMod::createListener()
 
 IBuffer *CSoundDriverFMod::createBuffer()
 {
-	NL_ALLOC_CONTEXT(NLSOUND_CSoundDriverFMod);
 
     if ( !_FModOk ) 
         throw ESoundDriver("Corrupt driver");
@@ -300,7 +296,6 @@ bool CSoundDriverFMod::readRawBuffer( IBuffer *destbuffer, const std::string &na
 
 ISource *CSoundDriverFMod::createSource()
 {
-	NL_ALLOC_CONTEXT(NLSOUND_CSoundDriverFMod);
 
     if ( !_FModOk ) 
         throw ESoundDriver("Corrupt driver");

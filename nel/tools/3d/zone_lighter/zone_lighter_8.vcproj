@@ -171,6 +171,7 @@
 				OutputFile=".\Debug/zone_lighter.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
+				IgnoreDefaultLibraryNames="libcmt.lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/zone_lighter.pdb"
 				SubSystem="1"
@@ -335,6 +336,7 @@
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
+				BrowseInformation="0"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>

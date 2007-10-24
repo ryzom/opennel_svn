@@ -328,10 +328,4 @@ extern "C" long _ftol2( double dblSource );
  #define NL_TMPL_PARAM_ON_METHOD_2(p1, p2)	
 #endif
 
-
-/**
- * Force the use of NeL memory manager
- */
-#include "../memory/memory_manager.h"
-
 #endif // NL_TYPES_H

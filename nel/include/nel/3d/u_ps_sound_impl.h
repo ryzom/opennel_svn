@@ -37,7 +37,6 @@
 // WARNING : this file is not intended to be directly included by the client. 
 // It is just used to avoid a dependencie between NL3D and NLSOUND
 
-#define NL3D_MEM_PS_SOUND							NL_ALLOC_CONTEXT( 3dPSSnd )
 
 namespace NL3D 
 {
@@ -59,30 +58,24 @@ public:
 	CPSSoundInstanceImpl() 
 		: _Source(NULL), _Spawned(false), _SoundServImpl(NULL)
 	{
-		NL3D_MEM_PS_SOUND
 	}
-
-	// TODO needs "NL3D_MEM_PS_SOUND" ?
-	virtual ~CPSSoundInstanceImpl() {}
 
 	/// init this sound instance parameters
 	void init(NLSOUND::USource *source, CPSSoundServImpl *soundServImp, bool spawned)
 	{
-		NL3D_MEM_PS_SOUND
 		nlassert(source);
 		_Source = source;		
 		_Spawned    = spawned;
 		_SoundServImpl = soundServImp;
 	}
 
-	/// change this sound source paramerters
+	/// change this sound source parameters
 	virtual void setSoundParams(float gain,
 								const NLMISC::CVector &pos,
 								const NLMISC::CVector &velocity,
 								float pitch
 							  )
 	{
-		NL3D_MEM_PS_SOUND
 		if (!_Source) return;		
 		if (gain < 0) gain = 0;
 		if (gain > 1) gain = 1;		
@@ -96,7 +89,6 @@ public:
 	/// start to play the sound
 	virtual void play(void)
 	{
-		NL3D_MEM_PS_SOUND
 		if (!_Source) return;
 		_Source->play();
 	}
@@ -104,7 +96,6 @@ public:
 
 	virtual bool isPlaying(void) const
 	{
-		NL3D_MEM_PS_SOUND
 		if (!_Source) return false;
 		return _Source->isPlaying();
 	}
@@ -112,7 +103,6 @@ public:
 	/// stop the sound
 	virtual void stop(void)
 	{
-		NL3D_MEM_PS_SOUND
 		if (!_Source) return;
 		_Source->stop();
 	}
@@ -120,7 +110,6 @@ public:
 	// get pitch
 	virtual float getPitch() const
 	{
-		NL3D_MEM_PS_SOUND
 		if (!_Source) return 0.f;
 		return _Source->getPitch();
 	}
@@ -128,13 +117,11 @@ public:
 	// set sound looping
 	virtual void setLooping(bool looping)
 	{
-		NL3D_MEM_PS_SOUND
 		if (_Source) _Source->setLooping(looping);
 	}
 
 	virtual bool isLooping() const
 	{
-		NL3D_MEM_PS_SOUND
 			return _Source ? _Source->getLooping() : false;
 	}
 

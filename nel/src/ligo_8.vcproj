@@ -122,6 +122,7 @@
 				EnableFunctionLevelLinking="true"
 				RuntimeTypeInfo="true"
 				PrecompiledHeaderFile=".\../obj/Release/ligo/ligo.pch"
+				BrowseInformation="0"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>

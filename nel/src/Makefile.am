@@ -4,7 +4,7 @@
 
 MAINTAINERCLEANFILES = Makefile.in
 
-DIST_SUBDIRS	     = net 3d pacs sound misc georges ligo memory
+DIST_SUBDIRS	     = net 3d pacs sound misc georges ligo
 
 SUBDIRS              = @NEL_SUBDIRS@
 
@@ -12,7 +12,6 @@ EXTRA_DIST           =	3d.dsp		\
 			georges.dsp	\
 			ligo.dsp	\
 			logic.dsp	\
-			memory.dsp	\
 			misc.dsp	\
 			net.dsp		\
 			pacs.dsp	\
@@ -21,7 +20,6 @@ EXTRA_DIST           =	3d.dsp		\
 			georges.vcproj	\
 			ligo.vcproj	\
 			logic.vcproj	\
-			memory.vcproj	\
 			misc.vcproj	\
 			net.vcproj	\
 			pacs.vcproj	\

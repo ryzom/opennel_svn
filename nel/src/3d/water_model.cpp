@@ -1625,7 +1625,6 @@ uint CWaterModel::fillVBHard(void *datas, uint startTri)
 //***************************************************************************************************************
 void	CWaterModel::traverseRender()
 {				
-	NL_ALLOC_CONTEXT( RdrWate )
 	H_AUTO( NL3D_Water_Render );	
 
 	CRenderTrav					&renderTrav		= getOwnerScene()->getRenderTrav();

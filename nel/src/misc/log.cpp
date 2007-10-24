@@ -57,9 +57,7 @@ void CLog::setDefaultProcessName ()
 {
 	if (_ProcessName == NULL)
 	{
-#undef new
 		_ProcessName = new string;
-#define new NL_NEW
 	}
 
 #ifdef NL_OS_WINDOWS

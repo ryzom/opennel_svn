@@ -49,6 +49,7 @@
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="true"
 				PrecompiledHeaderFile=".\../../../obj/Debug/sound_lowlevel/sound_lowlevel.pch"
+				BrowseInformation="0"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -265,6 +266,7 @@
 				EnableFunctionLevelLinking="true"
 				RuntimeTypeInfo="true"
 				PrecompiledHeaderFile=".\../../../obj/Release/sound_lowlevel/sound_lowlevel.pch"
+				BrowseInformation="0"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>

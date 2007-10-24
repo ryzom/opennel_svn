@@ -33,8 +33,6 @@
 
 #include "nel/misc/hierarchical_timer.h"
 
-#include "nel/memory/memory_manager.h"
-
 #include "global_retriever.h"
 #include "retriever_bank.h"
 
@@ -784,7 +782,6 @@ sint32	NLPACS::CGlobalRetriever::getLocalRetrieverId(const NLPACS::UGlobalPositi
 
 bool			NLPACS::CGlobalRetriever::buildInstance(const string &id, const NLMISC::CVectorD &position, sint32 &instanceId)
 {
-	NL_ALLOC_CONTEXT( Pacs )
 
 	sint32	retrieverId = getIdentifier(id);
 
@@ -2419,7 +2416,6 @@ void	NLPACS::CGlobalRetriever::testRotCollisionWithCollisionChains(CCollisionSur
 
 NLPACS::UGlobalRetriever *NLPACS::UGlobalRetriever::createGlobalRetriever (const char *globalRetriever, const NLPACS::URetrieverBank *retrieverBank)
 {
-	NL_ALLOC_CONTEXT( Pacs )
 
 	// Cast
 //	nlassert (dynamic_cast<const NLPACS::CRetrieverBank*>(retrieverBank));

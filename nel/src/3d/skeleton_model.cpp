@@ -1079,7 +1079,6 @@ void		CSkeletonModel::setDisplayLodCharacterFlag(bool displayCLod)
 // ***************************************************************************
 void		CSkeletonModel::traverseRender()
 {
-	NL_ALLOC_CONTEXT( RdrSkel )
 	H_AUTO( NL3D_Skeleton_Render );
 
 	// render as CLod, or render Skins.
