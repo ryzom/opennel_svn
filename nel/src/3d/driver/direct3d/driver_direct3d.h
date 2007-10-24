@@ -747,7 +747,7 @@ public:
 	// ***************************************************************************
 
 	// Mode initialisation, requests
-	virtual bool			init (uint windowIcon = 0);
+	virtual bool			init (uint windowIcon = 0, emptyProc exitFunc = 0);
 	virtual bool			setDisplay(void* wnd, const GfxMode& mode, bool show, bool resizeable) throw(EBadDisplay);
 	virtual bool			release();
 	virtual bool			setMode(const GfxMode& mode);
@@ -2378,7 +2378,6 @@ public:
 	// for debug only
 	static bool		_CacheTest[CacheTest_Count];
 
-	
 	static std::vector<uint16>  _QuadIndices; // tmp : quads indices -> to allow support of quads on devices that don't have 32 bit indices
 
 	// reset an index buffer and force it to be reallocated	
@@ -2389,6 +2388,8 @@ public:
 	#ifdef 	NL_DEBUG
 		std::set<CVBDrvInfosD3D *> _LockedBuffers;
 	#endif	
+
+	emptyProc ExitFunc;
 
 	bool beginScene()
 	{

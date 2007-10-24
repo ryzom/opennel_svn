@@ -1044,10 +1044,6 @@ static void D3DWndProc(CDriverD3D *driver, HWND hWnd, UINT message, WPARAM wPara
 {
 	H_AUTO_D3D(D3DWndProc);
 
-	// ace: if we receive close, exit to not assert after
-	if(message == WM_CLOSE)
-		exit(0);
-
 	// Check this message in parents
 
 	if ((message == WM_SIZE) || (message == WM_EXITSIZEMOVE) || (message == WM_MOVE))
@@ -1190,12 +1186,22 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 		return 0;
 #endif // NL_DISABLE_MENU
 
+	// ace: if we receive close, exit now or it'll assert after
+	if(message == WM_CLOSE)
+	{
+		if(pDriver && pDriver->ExitFunc)
+			pDriver->ExitFunc();
+		else
+			exit(0);
+		return 0;
+	}
+
 	return DefWindowProcW(hWnd, message, wParam, lParam);
 }
 
 // ***************************************************************************
 
-bool CDriverD3D::init (uint windowIcon)
+bool CDriverD3D::init (uint windowIcon, emptyProc exitFunc)
 {
 	H_AUTO_D3D(CDriver3D_init );
 	// Register a window class
@@ -1216,6 +1222,8 @@ bool CDriverD3D::init (uint windowIcon)
 	wc.lpszMenuName		= NULL;
 	if ( !RegisterClassW(&wc) )
 		nlwarning ("CDriverD3D::init: Can't register windows class %s", wc.lpszClassName);
+
+	ExitFunc = exitFunc;
 
 	return true;
 }

@@ -133,7 +133,7 @@ public:
 
 	/// \name Object
 	// @{
-	CDriverUser (uint windowIcon = 0, bool direct3d = false);
+	CDriverUser (uint windowIcon = 0, bool direct3d = false, emptyProc exitFunc = 0);
 	virtual	~CDriverUser();
 	// @}
 

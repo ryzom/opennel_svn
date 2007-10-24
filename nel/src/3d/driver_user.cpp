@@ -97,10 +97,10 @@ void					UDriver::setMatrixMode2D43()
 
 
 // ***************************************************************************
-UDriver					*UDriver::createDriver(uint windowIcon, bool direct3d)
+UDriver					*UDriver::createDriver(uint windowIcon, bool direct3d, emptyProc exitFunc)
 {
 	NL3D_MEM_DRIVER
-	return new CDriverUser (windowIcon, direct3d);
+	return new CDriverUser (windowIcon, direct3d, exitFunc);
 }
 
 
@@ -126,7 +126,7 @@ bool	CDriverUser::_StaticInit= false;
 
 
 // ***************************************************************************
-CDriverUser::CDriverUser (uint windowIcon, bool direct3d)
+CDriverUser::CDriverUser (uint windowIcon, bool direct3d, emptyProc exitFunc)
 {
 	NL3D_MEM_DRIVER
 
@@ -158,7 +158,7 @@ CDriverUser::CDriverUser (uint windowIcon, bool direct3d)
 #endif
 
 	nlassert(_Driver);
-	_Driver->init (windowIcon);
+	_Driver->init (windowIcon, exitFunc);
 
 	_WindowInit= false;
 

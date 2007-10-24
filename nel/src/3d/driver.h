@@ -170,7 +170,7 @@ public:
 							IDriver(void);
 	virtual					~IDriver(void);
 
-	virtual bool			init (uint windowIcon = 0)=0;
+	virtual bool			init (uint windowIcon = 0, emptyProc exitFunc = 0)=0;
 	
 	// Test if the device is lost. Can only happen with D3D.
 	// The calling application may skip some part of its rendering when it is the case (this is not a requirement, but may save cpu for other applications)
@@ -218,7 +218,7 @@ public:
 	/// Before rendering via a driver in a thread, must activate() (per thread).
 	virtual bool			activate(void)=0;
 
-	/// Get the number of texture stage avaliable, for multitexturing (Normal material shaders). Valid only after setDisplay().
+	/// Get the number of texture stage available, for multi texturing (Normal material shaders). Valid only after setDisplay().
 	virtual	sint			getNbTextureStages() const =0;
 
 	/** is the texture is set up in the driver

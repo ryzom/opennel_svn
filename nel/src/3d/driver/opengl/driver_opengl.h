@@ -294,7 +294,7 @@ public:
 
 	virtual	bool			isLost() const { return false; } // there's no notion of 'lost device" in OpenGL
 
-	virtual bool			init (uint windowIcon = 0);
+	virtual bool			init (uint windowIcon = 0, emptyProc exitFunc = 0);
 
 	virtual void			disableHardwareVertexProgram();
 	virtual void			disableHardwareVertexArrayAGP();

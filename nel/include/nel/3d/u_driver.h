@@ -73,6 +73,8 @@ class ULight;
 class UAnimationSet;
 class UWaterEnvMap;
 
+typedef void (*emptyProc)(void);
+
 //****************************************************************************
 /// Monitor color properties
 struct CMonitorColorProperties
@@ -804,7 +806,7 @@ public:
 	/**
 	 *	This is the static function which build a UDriver, the root for all 3D functions.
 	 */
-	static	UDriver			*createDriver(uint windowIcon = 0, bool direct3d = false);
+	static	UDriver			*createDriver(uint windowIcon = 0, bool direct3d = false, emptyProc exitFunc = 0);
 
 	/**
 	 *	Purge static memory

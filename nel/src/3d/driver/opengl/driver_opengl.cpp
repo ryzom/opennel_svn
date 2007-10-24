@@ -391,7 +391,7 @@ CDriverGL::~CDriverGL()
 }
 
 // ***************************************************************************
-bool CDriverGL::init (uint windowIcon)
+bool CDriverGL::init (uint windowIcon, emptyProc exitFunc)
 {
 	H_AUTO_OGL(CDriverGL_init)
 #ifdef NL_OS_WINDOWS
