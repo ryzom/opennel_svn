@@ -146,20 +146,6 @@ fi
 
 # NeL libraries that are disabled by default
 
-# Memory library
-AC_ARG_ENABLE([memory],
-              AC_HELP_STRING([--enable-memory],
-                             [disable compilation and install of NeL Memory]),
-              [],
-              [enable_memory=no])
-
-if test "$enable_memory" = "yes"
-then
-   AC_MSG_RESULT([enable NeL Memory])
-else
-   NEL_SUBDIRS="$NEL_SUBDIRS memory"
-fi
-
 # Sound library
 AC_ARG_ENABLE([sound],
               AC_HELP_STRING([--enable-sound],
@@ -205,7 +191,6 @@ AC_SUBST([enable_pacs])
 AC_SUBST([enable_sound])
 AC_SUBST([enable_georges])
 AC_SUBST([enable_ligo])
-AC_SUBST([enable_memory])
 
 AC_SUBST([NEL_SUBDIRS])
 
@@ -468,14 +453,12 @@ AC_CONFIG_FILES([Makefile                                  \
            include/nel/3d/Makefile                         \
            include/nel/pacs/Makefile                       \
            include/nel/sound/Makefile                      \
-           include/nel/memory/Makefile                     \
            include/nel/georges/Makefile                    \
            src/Makefile                                    \
            src/misc/Makefile                               \
            src/misc/nel-misc.pc                            \
            src/misc/config_file/Makefile                   \
            src/net/Makefile                                \
-           src/memory/Makefile                             \
            src/3d/Makefile                                 \
            src/3d/nel-3d.pc                                \
            src/3d/driver/Makefile                          \

@@ -68,7 +68,7 @@
 #include "nel/net/module_manager.h"
 #include "nel/net/transport_class.h"
 
-#include "nel/memory/memory_manager.h"
+//#include "nel/memory/memory_manager.h"
 
 #include "stdin_monitor_thread.h"
 
@@ -1618,7 +1618,7 @@ sint IService::main (const char *serviceShortName, const char *serviceLongName, 
 	nlinfo ("SERVICE: Service ends");
 
 	string name = getServiceLongName () + ".memory_report";
-	NLMEMORY::StatisticsReport (name.c_str(), false);
+	//NLMEMORY::StatisticsReport (name.c_str(), false);
 
 	return ExitSignalAsked?100+ExitSignalAsked:getExitStatus ();
 }

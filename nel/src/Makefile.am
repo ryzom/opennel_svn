@@ -28,7 +28,6 @@ EXTRA_DIST           =	3d.dsp		\
 			georges_8.vcproj\
 			ligo_8.vcproj	\
 			logic_8.vcproj	\
-			memory_8.vcproj	\
 			misc_8.vcproj	\
 			net_8.vcproj	\
 			pacs_8.vcproj	\
