@@ -659,7 +659,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 		int nfattribs = 0;
 		int niattribs = 0;
 
-		// Attribute arrays must be �0� terminated � for simplicity, first
+		// Attribute arrays must be "0" terminated - for simplicity, first
 		// just zero-out the array then fill from left to right.
 		for ( int a = 0; a < 2*20; a++ )
 		{
@@ -668,7 +668,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 		}
 		
 		// Since we are trying to create a pbuffer, the pixel format we
-		// request (and subsequently use) must be �p-buffer capable�.
+		// request (and subsequently use) must be "buffer capable".
 		iattributes[2*niattribs ] = WGL_DRAW_TO_PBUFFER_ARB;
 		iattributes[2*niattribs+1] = true;
 		niattribs++;
@@ -777,7 +777,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 
 
 		/* The final step of pbuffer creation is to create an OpenGL rendering context and
-			associate it with the handle for the pbuffer�s device context created in step #4. This is done as follows */
+			associate it with the handle for the pbuffer's device context created in step #4. This is done as follows */
 		_hRC = wglCreateContext( _hDC );
 		if (_hRC == NULL)
 		{
@@ -809,7 +809,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 			nlwarning ("CDriverGL::setDisplay: DestroyWindow failed");
 
 		/* After a pbuffer has been successfully created you can use it for off-screen rendering. To do
-			so, you�ll first need to bind the pbuffer, or more precisely, make its GL rendering context
+			so, you'll first need to bind the pbuffer, or more precisely, make its GL rendering context
 			the current context that will interpret all OpenGL commands and state changes. */
 		if (!wglMakeCurrent(_hDC,_hRC))
 		{
