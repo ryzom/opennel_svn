@@ -117,7 +117,7 @@ CObjectDyn::CObjectDyn (double width, double depth, double height, double orient
 	_MovePrimitive->setAbsorbtion (0.9f);
 
 	// Setup user data
-	_MovePrimitive->UserData=(uint)this;
+	_MovePrimitive->UserData=(uint64)this;
 
 	// Setup trigger type
 	_MovePrimitive->setTriggerType (trigger);
@@ -195,7 +195,7 @@ CObjectDyn::CObjectDyn (double diameter, double height, const CVectorD& pos, con
 	_MovePrimitive->setAbsorbtion (0.9f);
 
 	// Setup user data
-	_MovePrimitive->UserData=(uint)this;
+	_MovePrimitive->UserData=(uint64)this;
 
 	// Setup trigger type
 	_MovePrimitive->setTriggerType (trigger);
