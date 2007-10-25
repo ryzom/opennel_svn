@@ -166,7 +166,7 @@ string getDate()
 
 void cbInit (CMessage &msgin, TSockId from, CCallbackNetBase &netbase)
 {
-	uint32 session = (uint32) from;
+	uint64 session = (uint64)(uintptr_t) from;
 
 	string connectionName;
 	msgin.serial (connectionName);
