@@ -87,7 +87,6 @@ void TestALError()
 	
 __declspec(dllexport) ISoundDriver *NLSOUND_createISoundDriverInstance(bool useEax)
 {
-	NL_ALLOC_CONTEXT(NLSOUND_ISoundDriver);
 	CSoundDriverAL *driver = new CSoundDriverAL();
 	driver->init();
 	return driver;
@@ -104,7 +103,6 @@ extern "C"
 {
 ISoundDriver* NLSOUND_createISoundDriverInstance (bool useEax)
 {
-	NL_ALLOC_CONTEXT(NLSOUND_ISoundDriver);
 	CSoundDriverAL *driver = new CSoundDriverAL();
 	driver->init();
 	return driver;
@@ -266,7 +264,6 @@ void CSoundDriverAL::generateItems( TGenFunctionAL algenfunc, TTestFunctionAL al
  */
 IBuffer *CSoundDriverAL::createBuffer()
 {
-	NL_ALLOC_CONTEXT(NLSOUND_CSoundDriverAL);
 	CBufferAL *buffer = new CBufferAL(createItem(alGenBuffers, alIsBuffer, _Buffers, _NbExpBuffers, BUFFER_ALLOC_RATE));
 	return buffer;
 }
@@ -277,7 +274,6 @@ IBuffer *CSoundDriverAL::createBuffer()
  */
 ISource *CSoundDriverAL::createSource()
 {
-	NL_ALLOC_CONTEXT(NLSOUND_CSoundDriverAL);
 	CSourceAL *sourceal = new CSourceAL(createItem(alGenSources, alIsSource, _Sources, _NbExpSources, SOURCE_ALLOC_RATE));
 	if ( _RolloffFactor != ROLLOFF_FACTOR_DEFAULT )
 	{
@@ -293,7 +289,6 @@ ISource *CSoundDriverAL::createSource()
 ALuint CSoundDriverAL::createItem(TGenFunctionAL algenfunc, TTestFunctionAL altestfunc,
 								  vector<ALuint>& names, uint& index, uint allocrate)
 {
-	NL_ALLOC_CONTEXT(NLSOUND_CSoundDriverAL);
 	nlassert( index <= names.size() );
 	if ( index == names.size() )
 	{
@@ -395,7 +390,6 @@ bool			CSoundDriverAL::deleteItem( ALuint name, TDeleteFunctionAL aldeletefunc, 
  */
 IListener		*CSoundDriverAL::createListener()
 {
-	NL_ALLOC_CONTEXT(NLSOUND_CSoundDriverAL);
 	nlassert( CListenerAL::instance() == NULL );
 	return new CListenerAL();
 }
