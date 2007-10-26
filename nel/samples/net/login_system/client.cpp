@@ -71,7 +71,7 @@ using namespace NLNET;
 // Functions
 //
 
-void main (int argc, char **argv)
+int main (int argc, char **argv)
 {
 	string result;
 	
@@ -207,4 +207,5 @@ void main (int argc, char **argv)
 #endif // USE_UDP
 
 	delete cnx;
+	return 0;
 }

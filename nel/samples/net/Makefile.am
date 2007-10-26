@@ -4,7 +4,7 @@
 
 MAINTAINERCLEANFILES = Makefile.in
 
-SUBDIRS              = chat udp
+SUBDIRS              = chat udp login_system
 
 
 # End of Makefile.am

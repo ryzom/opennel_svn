@@ -514,6 +514,7 @@ AC_CONFIG_FILES([Makefile                                  \
 	   samples/net/Makefile                            \
 	   samples/net/chat/Makefile                       \
 	   samples/net/udp/Makefile                        \
+	   samples/net/login_system/Makefile               \
            nel-config
 		
 ])
