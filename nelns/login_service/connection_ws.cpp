@@ -40,7 +40,9 @@
 
 #include "nel/net/service.h"
 #include "nel/net/login_cookie.h"
+
 #include "login_service.h"
+#include "mysql_helper.h"
 
 
 //
@@ -74,32 +76,6 @@ void refuseShard (TServiceId sid, const char *format, ...)
 	CUnifiedNetwork::getInstance ()->send (sid, msgout);
 }
 
-sint findShardWithSId (TServiceId sid)
-{
-	for (sint i = 0; i < (sint) Shards.size (); i++)
-	{
-		if (Shards[i].SId == sid)
-		{
-			return i;
-		}
-	}
-	// shard not found
-	return -1;
-}
-
-sint32 findShard (uint32 shardId)
-{
-	for (sint i = 0; i < (sint) Shards.size (); i++)
-	{
-		if (Shards[i].ShardId == shardId)
-		{
-			return i;
-		}
-	}
-	// shard not found
-	return -1;
-}
-
 static void cbWSConnection (const std::string &serviceName, TServiceId sid, void *arg)
 {
 	TSockId from;
@@ -112,23 +88,20 @@ static void cbWSConnection (const std::string &serviceName, TServiceId sid, void
 	if(IService::getInstance ()->ConfigFile.getVar("AcceptExternalShards").asInt () == 1)
 		return;
 
+	string reason;
+	CMysqlResult result;
+	MYSQL_ROW row;
+	sint32 nbrow;
+
 	string query = "select * from shard where WSAddr='"+ia.ipAddress()+"'";
-	sint ret = mysql_query (DatabaseConnection, query.c_str ());
-	if (ret != 0)
+	reason = sqlQuery(query, nbrow, row, result);
+	if (!reason.empty())
 	{
 		refuseShard (sid, "mysql_query (%s) failed: %s", query.c_str (),  mysql_error(DatabaseConnection));
 		return;
 	}
 
-	//MYSQL_RES *res = mysql_store_result(DatabaseConnection);
-	CMySQLResult	res(DatabaseConnection);
-	if (res.failed())
-	{
-		refuseShard (sid, "mysql_store_result () failed from query '%s': %s", query.c_str (),  mysql_error(DatabaseConnection));
-		return;
-	}
-
-	if (res.numRows() == 0)
+	if (nbrow == 0)
 	{
 		// if we are here, it s that the shard have not a valid wsaddr in the database
 		// we can't accept unknown shard
@@ -279,33 +252,33 @@ static void cbWSIdentification (CMessage &msgin, const std::string &serviceName,
 
 	sint32 shardId;
 	msgin.serial(shardId);
+	string application;
+	try {
+		msgin.serial(application);
+	} catch (Exception &) { }
 	nldebug("shard identification, It says to be ShardId %d, let's check that!", shardId);
 
+	string reason;
+
+	CMysqlResult result;
+	MYSQL_ROW row;
+	sint32 nbrow;
 	string query = "select * from shard where ShardId="+toString(shardId);
-	sint ret = mysql_query (DatabaseConnection, query.c_str ());
-	if (ret != 0)
+	reason = sqlQuery(query, nbrow, row, result);
+	if (!reason.empty())
 	{
 		refuseShard (sid, "mysql_query (%s) failed: %s", query.c_str (),  mysql_error(DatabaseConnection));
 		return;
 	}
 
-	//MYSQL_RES *res = mysql_store_result(DatabaseConnection);
-	CMySQLResult	res(DatabaseConnection);
-	if (res.failed())
-	{
-		refuseShard (sid, "mysql_store_result () failed from query '%s': %s", query.c_str (),  mysql_error(DatabaseConnection));
-		return;
-	}
-
-	sint nbrow = (sint)res.numRows();
 	if (nbrow == 0)
 	{
 		if(IService::getInstance ()->ConfigFile.getVar("AcceptExternalShards").asInt () == 1)
 		{
 			// we accept new shard, add it
-			query = "insert into shard (ShardId, WsAddr, Online, Name) values ("+toString(shardId)+", '"+ia.ipAddress ()+"', 1, '"+ia.ipAddress ()+"')";
-			sint ret = mysql_query (DatabaseConnection, query.c_str ());
-			if (ret != 0)
+			query = "insert into shard (ShardId, WsAddr, Online, Name, ClientApplication) values ("+toString(shardId)+", '"+ia.ipAddress ()+"', 1, '"+ia.ipAddress ()+"', '"+application+"')";
+			reason = sqlQuery(query, nbrow, row, result);
+			if (!reason.empty())
 			{
 				refuseShard (sid, "mysql_query (%s) failed: %s", query.c_str (),  mysql_error(DatabaseConnection));
 			}
@@ -324,13 +297,6 @@ static void cbWSIdentification (CMessage &msgin, const std::string &serviceName,
 	}
 	else if (nbrow == 1)
 	{
-		MYSQL_ROW row = res.fetchRow();
-		if (row == 0)
-		{
-			refuseShard (sid, "mysql_fetch_row (%s) failed: %s", query.c_str (),  mysql_error(DatabaseConnection));
-			return;
-		}
-
 		// check that the ip is ok
 		CInetAddress iadb;
 		iadb.setNameAndPort (row[1]);
@@ -395,25 +361,16 @@ static void cbWSClientConnected (CMessage &msgin, const std::string &serviceName
 	else
 		nlinfo ("Received a validation that a client is disconnected on the frontend");
 	
+	string reason;
+	CMysqlResult result;
+	MYSQL_ROW row;
+	sint32 nbrow;
+
 	string query = "select * from user where UId="+toString(Id);
-	sint ret = mysql_query (DatabaseConnection, query.c_str ());
-	if (ret != 0)
+	reason = sqlQuery(query, nbrow, row, result);
+	if(!reason.empty())
 	{
 		nlwarning ("mysql_query (%s) failed: %s", query.c_str (),  mysql_error(DatabaseConnection));
-		return;
-	}
-	//MYSQL_RES *res = mysql_store_result(DatabaseConnection);
-	CMySQLResult	res(DatabaseConnection);
-	if (res.failed())
-	{
-		nlwarning ("mysql_store_result () failed from query '%s': %s", query.c_str (),  mysql_error(DatabaseConnection));
-		return;
-	}
-	sint nbrow = (sint)res.numRows();
-	MYSQL_ROW row = res.fetchRow();
-	if (row == 0)
-	{
-		nlwarning ("mysql_fetch_row (%s) failed: %s", query.c_str (),  mysql_error(DatabaseConnection));
 		return;
 	}
 

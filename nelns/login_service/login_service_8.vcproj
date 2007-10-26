@@ -381,6 +381,14 @@
 	</References>
 	<Files>
 		<File
+			RelativePath=".\connection_client.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\connection_client.h"
+			>
+		</File>
+		<File
 			RelativePath="connection_web.cpp"
 			>
 			<FileConfiguration
@@ -520,6 +528,14 @@
 		</File>
 		<File
 			RelativePath="login_service.h"
+			>
+		</File>
+		<File
+			RelativePath=".\mysql_helper.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\mysql_helper.h"
 			>
 		</File>
 	</Files>

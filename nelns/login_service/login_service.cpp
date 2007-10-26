@@ -61,10 +61,15 @@
 #include "nel/net/login_cookie.h"
 
 #include "login_service.h"
-//#include "connection_client.h"
+#include "connection_client.h"
 #include "connection_ws.h"
 #include "connection_web.h"
+#include "mysql_helper.h"
 
+
+//
+// Namespaces
+//
 
 using namespace std;
 using namespace NLMISC;
@@ -83,22 +88,41 @@ NLMISC::CLog *Output = NULL;
 
 //uint32 CUser::NextUserId = 1;	// 0 is reserved
 
-// Variables
-
 //vector<CUser>	Users;
 //vector<CShard>	Shards;
 
-IService *ServiceInstance = NULL;
-
-string DatabaseName, DatabaseHost, DatabaseLogin, DatabasePassword;
-
-MYSQL *DatabaseConnection = NULL;
-
 vector<CShard> Shards;
+
 
 //
 // Functions
 //
+
+sint findShard (sint32 shardId)
+{
+	for (sint i = 0; i < (sint) Shards.size (); i++)
+	{
+		if (Shards[i].ShardId == shardId)
+		{
+			return i;
+		}
+	}
+	// shard not found
+	return -1;
+}
+
+sint findShardWithSId (TServiceId sid)
+{
+	for (sint i = 0; i < (sint) Shards.size (); i++)
+	{
+		if (Shards[i].SId == sid)
+		{
+			return i;
+		}
+	}
+	// shard not found
+	return -1;
+}
 
 
 // transform "192.168.1.1:80" into "192.168.1.1"
@@ -256,12 +280,9 @@ void displayUsers ()
 void beep (uint freq, uint nb, uint beepDuration, uint pauseDuration)
 {
 #ifdef NL_OS_WINDOWS
-	if (ServiceInstance == NULL)
-		return;
-
 	try
 	{
-		if (ServiceInstance->ConfigFile.getVar ("Beep").asInt() == 1)
+		if (IService::getInstance()->ConfigFile.getVar ("Beep").asInt() == 1)
 		{
 			for (uint i = 0; i < nb; i++)
 			{
@@ -276,163 +297,69 @@ void beep (uint freq, uint nb, uint beepDuration, uint pauseDuration)
 #endif // NL_OS_WINDOWS
 }
 
-void cbDatabaseVar (CConfigFile::CVar &var)
-{
-	DatabaseName = IService::getInstance ()->ConfigFile.getVar("DatabaseName").asString ();
-	DatabaseHost = IService::getInstance ()->ConfigFile.getVar("DatabaseHost").asString ();
-	DatabaseLogin = IService::getInstance ()->ConfigFile.getVar("DatabaseLogin").asString ();
-	DatabasePassword = IService::getInstance ()->ConfigFile.getVar("DatabasePassword").asString ();
-
-	MYSQL *db = mysql_init(NULL);
-	if(db == NULL)
-	{
-		nlwarning ("mysql_init() failed");
-		return;
-	}
-
-	DatabaseConnection = mysql_real_connect(db, DatabaseHost.c_str(), DatabaseLogin.c_str(), DatabasePassword.c_str(), DatabaseName.c_str(),0,NULL,0);
-	if (DatabaseConnection == NULL || DatabaseConnection != db)
-	{
-		nlerror ("mysql_real_connect() failed to '%s' with login '%s' and database name '%s'", DatabaseHost.c_str(), DatabaseLogin.c_str(), DatabaseName.c_str());
-		return;
-	}
-}
-
 class CLoginService : public IService
 {
-	bool Init;
-
 public:
+	
+	bool UseDirectClient;
 
-	CLoginService () : Init(false) {};
+	CLoginService () : UseDirectClient(false) { }
 
 	/// Init the service, load the universal time.
 	void init ()
 	{
-		ServiceInstance = this;
-
 		beep ();
 
 		Output = new CLog;
+
+		if(ConfigFile.exists("UseDirectClient"))
+			UseDirectClient = ConfigFile.getVar("UseDirectClient").asBool();
 
 		string fn = IService::getInstance()->SaveFilesDirectory;
 		fn += "login_service.stat";
 		nlinfo("Login stat in directory '%s'", fn.c_str());
 		Fd = new NLMISC::CFileDisplayer(fn);
 		Output->addDisplayer (Fd);
-		if (WindowDisplayer != NULL)
-			Output->addDisplayer (WindowDisplayer);
+		if (WindowDisplayer) Output->addDisplayer (WindowDisplayer);
+
+		// Initialize the database access
+		sqlInit();
 
 		connectionWSInit ();
 
-		connectionWebInit ();
+		if(UseDirectClient)
+			connectionClientInit ();
+		else
+			connectionWebInit ();
 
-		// Initialize the database access
-		
-		ConfigFile.setCallback ("ForceDatabaseReconnection", cbDatabaseVar);
-		cbDatabaseVar (ConfigFile.getVar ("ForceDatabaseReconnection"));
-
-		Init = true;
-
-		Output->displayNL ("Login Service initialised");
+		Output->displayNL ("Login Service initialized");
 	}
 
 	bool update ()
 	{
 		connectionWSUpdate ();
-		connectionWebUpdate ();
-
+		if(UseDirectClient)
+			connectionClientUpdate ();
+		else
+			connectionWebUpdate ();
 		return true;
 	}
 
 	/// release the service, save the universal time
 	void release ()
 	{
-		if (Init)
-		{
-			//writePlayerDatabase ();
-		}
-
 		connectionWSRelease ();
-		connectionWebRelease ();
+		if(UseDirectClient)
+			connectionClientRelease ();
+		else
+			connectionWebRelease ();
 		
 		Output->displayNL ("Login Service released");
 	}
 };
 
-// Service instanciation
+// Service instantiation
 NLNET_SERVICE_MAIN (CLoginService, "LS", "login_service", 49999, EmptyCallbackArray, NELNS_CONFIG, NELNS_LOGS);
-
-
-
-
-
-
-
-
-
-// Constructor
-CMySQLResult::CMySQLResult(MYSQL_RES* res)
-{
-	_Result = res;
-}
-
-/// Constructor
-CMySQLResult::CMySQLResult(MYSQL* database)
-{ 
-	_Result = mysql_store_result(database);
-}
-/// Destructor
-CMySQLResult::~CMySQLResult()
-{
-	if (_Result != NULL)
-		mysql_free_result(_Result);
-}
-
-/// Cast operator
-CMySQLResult::operator MYSQL_RES*()
-{
-	return _Result;
-}
-
-/// Affectation
-CMySQLResult&	CMySQLResult::operator = (MYSQL_RES* res)
-{
-	if (res == _Result)
-		return *this;
-	if (_Result != NULL)
-		mysql_free_result(_Result);
-	_Result = res;
-	return *this;
-}
-
-
-/// Test success
-bool			CMySQLResult::success() const
-{
-	return _Result != NULL;
-}
-/// Test failure
-bool			CMySQLResult::failed() const
-{
-	return !success();
-}
-
-
-
-/// Number of rows of result
-uint			CMySQLResult::numRows()
-{
-	return (uint)mysql_num_rows(_Result);
-}
-/// Fetch row
-MYSQL_ROW		CMySQLResult::fetchRow()
-{
-	return mysql_fetch_row(_Result);
-}
-
-
-
 
 //
 // Variables
