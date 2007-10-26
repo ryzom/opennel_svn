@@ -68,8 +68,6 @@
 #include "nel/net/module_manager.h"
 #include "nel/net/transport_class.h"
 
-//#include "nel/memory/memory_manager.h"
-
 #include "stdin_monitor_thread.h"
 
 
@@ -1607,18 +1605,12 @@ sint IService::main (const char *serviceShortName, const char *serviceLongName, 
 		delete timeoutThread;
 	}
 
-#ifdef NL_RELEASE
-#endif
-
 	CHTimer::display();
 	CHTimer::displayByExecutionPath ();
 	CHTimer::displayHierarchical(&CommandLog, true, 64);
 	CHTimer::displayHierarchicalByExecutionPathSorted (&CommandLog, CHTimer::TotalTime, true, 64);
 
 	nlinfo ("SERVICE: Service ends");
-
-	string name = getServiceLongName () + ".memory_report";
-	//NLMEMORY::StatisticsReport (name.c_str(), false);
 
 	return ExitSignalAsked?100+ExitSignalAsked:getExitStatus ();
 }
