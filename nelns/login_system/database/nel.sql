@@ -1,10 +1,17 @@
-# MySQL-Front Dump 2.4
+# HeidiSQL Dump 
 #
-# Host: net2   Database: nel
-#--------------------------------------------------------
-# Server version 4.0.12-log
+# --------------------------------------------------------
+# Host:                 127.0.0.1
+# Database:             nel
+# Server version:       5.0.33
+# Server OS:            Win32
+# Target-Compatibility: MySQL 5.0
+# Extended INSERTs:     Y
+# max_allowed_packet:   1048576
+# HeidiSQL version:     3.0 Revision: 572
+# --------------------------------------------------------
 
-USE nel;
+/*!40100 SET CHARACTER SET latin1*/;
 
 
 #
@@ -13,9 +20,10 @@ USE nel;
 
 CREATE TABLE `permission` (
   `UId` int(10) unsigned NOT NULL default '0',
-  `ClientApplication` char(64) NOT NULL default 'ryzom',
+  `ClientApplication` char(64) collate latin1_general_ci NOT NULL default 'ryzom',
   `ShardId` int(10) NOT NULL default '-1'
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
 
 
 #
@@ -24,15 +32,16 @@ CREATE TABLE `permission` (
 
 CREATE TABLE `shard` (
   `ShardId` int(10) NOT NULL auto_increment,
-  `WsAddr` varchar(64) default NULL,
+  `WsAddr` varchar(64) collate latin1_general_ci default NULL,
   `NbPlayers` int(10) unsigned default '0',
-  `Name` varchar(64) default 'unknown shard',
+  `Name` varchar(64) collate latin1_general_ci default 'unknown shard',
   `Online` tinyint(1) unsigned default '0',
-  `ClientApplication` varchar(64) default 'ryzom',
-  `Version` varchar(64) default NULL,
-  `DynPatchURL` varchar(255) default '',
+  `ClientApplication` varchar(64) collate latin1_general_ci default NULL,
+  `Version` varchar(64) collate latin1_general_ci default NULL,
+  `DynPatchURL` varchar(255) collate latin1_general_ci default '',
   PRIMARY KEY  (`ShardId`)
-) TYPE=MyISAM COMMENT='contains all shards informations for login system';
+) ENGINE=MyISAM AUTO_INCREMENT=301 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='contains all shards informations for login system';
+
 
 
 #
@@ -41,12 +50,13 @@ CREATE TABLE `shard` (
 
 CREATE TABLE `user` (
   `UId` int(10) NOT NULL auto_increment,
-  `Login` varchar(64) NOT NULL default '',
-  `Password` tinytext NOT NULL,
+  `Login` varchar(64) collate latin1_general_ci NOT NULL default '',
+  `Password` char(32) collate latin1_general_ci NOT NULL,
   `ShardId` int(10) NOT NULL default '-1',
-  `State` enum('Offline','Online') NOT NULL default 'Offline',
-  `Privilege` varchar(255) default NULL,
-  `ExtendedPrivilege` varchar(45) default '',
+  `State` enum('Offline','Authorized','Online') collate latin1_general_ci NOT NULL default 'Offline',
+  `Privilege` varchar(255) collate latin1_general_ci NOT NULL,
+  `ExtendedPrivilege` varchar(45) collate latin1_general_ci NOT NULL,
+  `Cookie` varchar(255) collate latin1_general_ci NOT NULL,
   PRIMARY KEY  (`UId`)
-) TYPE=MyISAM COMMENT='contains all users informations for login system';
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='contains all users informations for login system';
 
