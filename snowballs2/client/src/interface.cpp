@@ -213,7 +213,7 @@ void	updateInterface()
 
 void	releaseInterface()
 {
-	// Rmove the keyboard listener from the server
+	// Remove the keyboard listener from the server
 	Driver->EventServer.removeListener (EventCharId, &InterfaceListener);
 }
 

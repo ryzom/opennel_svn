@@ -217,7 +217,7 @@ void cbAddClient ( CMessage& msgin, TSockId from, CCallbackNetBase& clientcb )
 	msgout.serial( start );
 
 	/*
-	 * The incomming message from the client is sent to the Position service
+	 * The incoming message from the client is sent to the Position service
 	 * under the "POS" identification.
 	 */
 	CUnifiedNetwork::getInstance ()->send( "POS", msgout );
@@ -480,7 +480,7 @@ void onReconnectChat (const std::string &serviceName, TServiceId sid, void *arg)
 
 
 /****************************************************************************
- * Disonnection callback for the Chat service
+ * Disconnection callback for the Chat service
  ****************************************************************************/
 void onDisconnectChat (const std::string &serviceName, TServiceId sid, void *arg)
 {
@@ -505,7 +505,7 @@ void onReconnectPosition (const std::string &serviceName, TServiceId sid, void *
 
 
 /****************************************************************************
- * Disonnection callback for the Position service
+ * Disconnection callback for the Position service
  ****************************************************************************/
 void onDisconnectPosition (const std::string &serviceName, TServiceId sid, void *arg)
 {
@@ -529,7 +529,7 @@ void onConnectionClient (TSockId from, const CLoginCookie &cookie)
 
 	id = cookie.getUserId();
 
-	nlinfo( "The client with uniq Id %u is connected", id );
+	nlinfo( "The client with unique Id %u is connected", id );
 
 	// Add new client to the list of player managed by this FrontEnd
 	pair<_pmap::iterator, bool> player = localPlayers.insert( make_pair( id, CPlayer( id, from )));
@@ -552,7 +552,7 @@ void onConnectionClient (TSockId from, const CLoginCookie &cookie)
 
 
 /****************************************************************************
- * Disonnection callback for a client
+ * Disconnection callback for a client
  ****************************************************************************/
 void onDisconnectClient ( TSockId from, void *arg )
 {
@@ -566,7 +566,7 @@ void onDisconnectClient ( TSockId from, void *arg )
 	CPlayer *p = (CPlayer *)(uint)i;
 	id = p->id;
 
-	nlinfo( "A client with uniq Id %u has disconnected", id );
+	nlinfo( "A client with unique Id %u has disconnected", id );
 
 	// tell the login system that this client is disconnected
 	CLoginServer::clientDisconnected ( id );
