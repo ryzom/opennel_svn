@@ -59,7 +59,7 @@ using namespace NLNET;
 //
 
 static uint RecordNbPlayers = 0;
-static uint NbPlayers = 0;
+uint NbPlayers = 0;
 
 
 //
@@ -368,11 +368,7 @@ static void cbWSClientConnected (CMessage &msgin, const std::string &serviceName
 
 	string query = "select * from user where UId="+toString(Id);
 	reason = sqlQuery(query, nbrow, row, result);
-	if(!reason.empty())
-	{
-		nlwarning ("mysql_query (%s) failed: %s", query.c_str (),  mysql_error(DatabaseConnection));
-		return;
-	}
+	if(!reason.empty()) return;
 
 	if(nbrow == 0)
 	{
@@ -387,10 +383,10 @@ static void cbWSClientConnected (CMessage &msgin, const std::string &serviceName
 	}
 
 	// row[4] = State
-	if (con == 1 && string(row[4]) != string("Offline"))
+	if (con == 1 && string(row[4]) != string("Waiting"))
 	{
-		nlwarning ("Id %d is not offline", Id);
-		Output->displayNL ("###: %3d User isn't offline, his state is '%s'", Id, row[4]);
+		nlwarning("Id %d is not waiting", Id);
+		Output->displayNL("###: %3d User isn't waiting, his state is '%s'", Id, row[4]);
 		return;
 	}
 	else if (con == 0 && string(row[4]) != string ("Online"))
@@ -408,12 +404,8 @@ static void cbWSClientConnected (CMessage &msgin, const std::string &serviceName
 
 
 		string query = "update user set State='Online', ShardId="+toString(Shards[ShardPos].ShardId)+" where UId="+toString(Id);
-		sint ret = mysql_query (DatabaseConnection, query.c_str ());
-		if (ret != 0)
-		{
-			nlwarning ("mysql_query (%s) failed: %s", query.c_str (),  mysql_error(DatabaseConnection));
-			return;
-		}
+		string rea = sqlQuery(query);
+		if(!rea.empty()) return;
 
 		if (ShardPos != -1)
 		{
@@ -421,12 +413,8 @@ static void cbWSClientConnected (CMessage &msgin, const std::string &serviceName
 			Shards[ShardPos].NbPlayers++;
 
 			string query = "update shard set NbPlayers=NbPlayers+1 where ShardId="+toString(Shards[ShardPos].ShardId);
-			sint ret = mysql_query (DatabaseConnection, query.c_str ());
-			if (ret != 0)
-			{
-				nlwarning ("mysql_query (%s) failed: %s", query.c_str (),  mysql_error(DatabaseConnection));
-				return;
-			}
+			string rea = sqlQuery(query);
+			if(!rea.empty()) return;
 		}
 		else
 			nlwarning ("user connected shard isn't in the shard list");
@@ -448,12 +436,8 @@ static void cbWSClientConnected (CMessage &msgin, const std::string &serviceName
 	//		disconnectClient (Users[pos], true, false);
 
 		string query = "update user set State='Offline', ShardId=-1 where UId="+toString(Id);
-		sint ret = mysql_query (DatabaseConnection, query.c_str ());
-		if (ret != 0)
-		{
-			nlwarning ("mysql_query (%s) failed: %s", query.c_str (),  mysql_error(DatabaseConnection));
-			return;
-		}
+		string rea = sqlQuery(query);
+		if(!rea.empty()) return;
 
 		if (ShardPos != -1)
 		{
@@ -461,12 +445,8 @@ static void cbWSClientConnected (CMessage &msgin, const std::string &serviceName
 			Shards[ShardPos].NbPlayers--;
 
 			string query = "update shard set NbPlayers=NbPlayers-1 where ShardId="+toString(Shards[ShardPos].ShardId);
-			sint ret = mysql_query (DatabaseConnection, query.c_str ());
-			if (ret != 0)
-			{
-				nlwarning ("mysql_query (%s) failed: %s", query.c_str (),  mysql_error(DatabaseConnection));
-				return;
-			}
+			string rea = sqlQuery(query);
+			if(!rea.empty()) return;
 		}
 		else
 			nlwarning ("user disconnected shard isn't in the shard list");

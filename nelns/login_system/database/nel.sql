@@ -20,7 +20,7 @@
 
 CREATE TABLE `permission` (
   `UId` int(10) unsigned NOT NULL default '0',
-  `ClientApplication` char(64) collate latin1_general_ci NOT NULL default 'ryzom',
+  `ClientApplication` char(64) collate latin1_general_ci NOT NULL default 'sample',
   `ShardId` int(10) NOT NULL default '-1'
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
@@ -53,10 +53,11 @@ CREATE TABLE `user` (
   `Login` varchar(64) collate latin1_general_ci NOT NULL default '',
   `Password` char(32) collate latin1_general_ci NOT NULL,
   `ShardId` int(10) NOT NULL default '-1',
-  `State` enum('Offline','Authorized','Online') collate latin1_general_ci NOT NULL default 'Offline',
-  `Privilege` varchar(255) collate latin1_general_ci NOT NULL,
-  `ExtendedPrivilege` varchar(45) collate latin1_general_ci NOT NULL,
-  `Cookie` varchar(255) collate latin1_general_ci NOT NULL,
+  `State` enum('Offline','Authorized','Online','Waiting') collate latin1_general_ci NOT NULL default 'Offline',
+  `Privilege` varchar(255) collate latin1_general_ci NOT NULL default '',
+  `ExtendedPrivilege` varchar(45) collate latin1_general_ci NOT NULL default '',
+  `Cookie` varchar(255) collate latin1_general_ci NOT NULL default '',
   PRIMARY KEY  (`UId`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='contains all users informations for login system';
+
 

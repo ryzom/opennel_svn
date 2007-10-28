@@ -144,10 +144,10 @@ retry:
 			break;
 		}
 
-		if(row[4] == string("Online"))
+		if(row[4] != string("Offline"))
 		{
 			// 2 players are trying to play with the same id, disconnect all
-			reason = sqlQuery("update user set state='Offline', ShardId=-1 where UId="+uid);
+			reason = sqlQuery(string("update user set state='Offline', ShardId=-1 where UId=")+uid);
 			if(!reason.empty()) break;
 
 			// send a message to the already connected player to disconnect
