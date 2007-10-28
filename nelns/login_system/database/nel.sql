@@ -32,13 +32,13 @@ CREATE TABLE `permission` (
 
 CREATE TABLE `shard` (
   `ShardId` int(10) NOT NULL auto_increment,
-  `WsAddr` varchar(64) collate latin1_general_ci default NULL,
-  `NbPlayers` int(10) unsigned default '0',
-  `Name` varchar(64) collate latin1_general_ci default 'unknown shard',
-  `Online` tinyint(1) unsigned default '0',
-  `ClientApplication` varchar(64) collate latin1_general_ci default NULL,
-  `Version` varchar(64) collate latin1_general_ci default NULL,
-  `DynPatchURL` varchar(255) collate latin1_general_ci default '',
+  `WsAddr` varchar(64) collate latin1_general_ci NOT NULL,
+  `NbPlayers` int(10) unsigned NOT NULL default '0',
+  `Name` varchar(64) collate latin1_general_ci NOT NULL default 'unknown shard',
+  `Online` tinyint(1) unsigned NOT NULL default '0',
+  `ClientApplication` varchar(64) collate latin1_general_ci NOT NULL,
+  `Version` varchar(64) collate latin1_general_ci NOT NULL,
+  `DynPatchURL` varchar(255) collate latin1_general_ci NOT NULL,
   PRIMARY KEY  (`ShardId`)
 ) ENGINE=MyISAM AUTO_INCREMENT=301 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='contains all shards informations for login system';
 
@@ -53,11 +53,10 @@ CREATE TABLE `user` (
   `Login` varchar(64) collate latin1_general_ci NOT NULL default '',
   `Password` char(32) collate latin1_general_ci NOT NULL,
   `ShardId` int(10) NOT NULL default '-1',
-  `State` enum('Offline','Authorized','Online','Waiting') collate latin1_general_ci NOT NULL default 'Offline',
+  `State` enum('Offline','Authorized','Waiting','Online') collate latin1_general_ci NOT NULL default 'Offline',
   `Privilege` varchar(255) collate latin1_general_ci NOT NULL default '',
   `ExtendedPrivilege` varchar(45) collate latin1_general_ci NOT NULL default '',
   `Cookie` varchar(255) collate latin1_general_ci NOT NULL default '',
   PRIMARY KEY  (`UId`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='contains all users informations for login system';
-
 
