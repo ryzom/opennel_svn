@@ -14,12 +14,12 @@ dnl ====================================================================
 # *and* AC_SUBST(LIBTOOL_VERSION)
 
 AC_PREREQ(2.57)
-AC_INIT([snowballs],[0.2.0],[nel-all@nevrax.org])
+AC_INIT([snowballs],[0.3.0],[nel-all@nevrax.org])
 AM_INIT_AUTOMAKE([tar-ustar])
 
 AM_CONFIG_HEADER(config.h)
 
-AC_SUBST(LIBTOOL_VERSION, [0:2:0])
+AC_SUBST(LIBTOOL_VERSION, [0:3:0])
 
 dnl ====================================================================
 dnl Checks for programs.
