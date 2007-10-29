@@ -40,7 +40,6 @@ AM_MAINTAINER_MODE
 
 dnl The following hack should ensure that configure doesn't add optimizing
 dnl or debugging flags to CFLAGS or CXXFLAGS
-CFLAGS="$CFLAGS -ftemplate-depth-24"
 CXXFLAGS="$CXXFLAGS -ftemplate-depth-24"
 
 AC_CHECK_LIB([pthread], [pthread_create])
@@ -107,12 +106,9 @@ then
 fi
 
 # Add some common define
-if test "X$CC" = "Xgcc";
+if test "$ac_cv_cxx_compiler_gnu" = "yes";
 then
-    CFLAGS="$CFLAGS -D_REENTRANT -Wall -ansi -W -Wpointer-arith -Wsign-compare -Wno-deprecated-declarations -Wno-multichar -Wno-long-long -Wno-unused"
     CXXFLAGS="$CXXFLAGS -D_REENTRANT -Wall -ansi -W -Wpointer-arith -Wsign-compare -Wno-deprecated-declarations -Wno-multichar -Wno-long-long -Wno-unused"
-#    CFLAGS="$CFLAGS -D_REENTRANT -Wno-multichar -Wno-long-long"
-#    CXXFLAGS="$CXXFLAGS -D_REENTRANT -Wno-multichar -Wno-long-long"
 fi
 
 
