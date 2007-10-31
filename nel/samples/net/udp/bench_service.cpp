@@ -65,8 +65,8 @@ using namespace NLNET;
 
 struct CClient
 {
-	CClient (TSockId from, uint32 session, const string &cn) : From(from), Session(session), NextPingNumber(0), ConnectionName(cn), FirstWrite(true),
-		NbPing(0), NbPong(0), MeanPongTime(0), NbDuplicated(0), LastPongReceived(0), FullMeanPongTime(0), FullNbPong(0), BlockNumber(0)
+	CClient (TSockId from, uint32 session, const string &cn) : From(from), Session(session), NextPingNumber(0), LastPongReceived(0), ConnectionName(cn),
+		BlockNumber(0), FullMeanPongTime(0), FullNbPong(0), NbPing(0), NbPong(0), MeanPongTime(0), NbDuplicated(0), FirstWrite(true)
 	{ PongReceived.resize (1001); }
 
 	CInetAddress	Address;	// udp address

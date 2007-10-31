@@ -59,7 +59,7 @@ typedef void (*TMsgCallback) (CMessage &msgin, TSockId from, CCallbackNetBase &n
 typedef struct
 {
 	/// Key C string. It is a message type name, or "C" for connection or "D" for disconnection
-	char			*Key;
+	const char		*Key;
 	/// The callback function
 	TMsgCallback	Callback;
 

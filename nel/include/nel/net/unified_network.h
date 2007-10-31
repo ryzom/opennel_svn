@@ -201,7 +201,7 @@ typedef void (*TUnifiedMsgCallback) (CMessage &msgin, const std::string &service
 struct TUnifiedCallbackItem
 {
 	/// Key C string. It is a message type name, or "C" for connection or "D" for disconnection
-	char				*Key;
+	const char			*Key;
 	/// The callback function
 	TUnifiedMsgCallback	Callback;
 

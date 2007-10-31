@@ -397,7 +397,7 @@ bool isPowerOf2(sint32 v)
 
 string bytesToHumanReadable (const std::string &bytes)
 {
-	static char *divTable[]= { "B", "KB", "MB", "GB" };
+	static const char *divTable[]= { "B", "KB", "MB", "GB" };
 	uint div = 0;
 	uint64 res = atoiInt64(bytes.c_str());
 	uint64 newres = res;
@@ -414,7 +414,7 @@ string bytesToHumanReadable (const std::string &bytes)
 
 string bytesToHumanReadable (uint32 bytes)
 {
-	static char *divTable[]= { "B", "KB", "MB", "GB" };
+	static const char *divTable[]= { "B", "KB", "MB", "GB" };
 	uint div = 0;
 	uint32 res = bytes;
 	uint32 newres = res;
@@ -485,7 +485,7 @@ NLMISC_CATEGORISED_COMMAND(nel,hrtob, "Convert a human readable number into a by
 
 string secondsToHumanReadable (uint32 time)
 {
-	static char *divTable[] = { "s", "mn", "h", "d" };
+	static const char *divTable[] = { "s", "mn", "h", "d" };
 	static uint  divCoef[]  = { 60, 60, 24 };
 	uint div = 0;
 	uint32 res = time;

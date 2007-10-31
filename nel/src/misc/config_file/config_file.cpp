@@ -60,9 +60,9 @@ namespace NLMISC
 {
 
 #ifndef NL_DONT_USE_EXTERNAL_CODE
-char *CConfigFile::CVar::TypeName[] = { "Integer", "String", "Float", "Boolean" };
+const char *CConfigFile::CVar::TypeName[] = { "Integer", "String", "Float", "Boolean" };
 #else
-char *CConfigFile::CVar::TypeName[] = { "Integer", "String", "Float" };
+const char *CConfigFile::CVar::TypeName[] = { "Integer", "String", "Float" };
 #endif // NL_DONT_USE_EXTERNAL_CODE
 
 int CConfigFile::CVar::asInt (int index) const

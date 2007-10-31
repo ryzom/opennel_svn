@@ -271,9 +271,9 @@ private:
 	/// The mapping for occlusion material name to material number
 	TStringIntMap	_IdToMaterial;
 	/// The environment name table for init.
-	static char								*_EnvironmentNames[];
+	static const char							*_EnvironmentNames[];
 	/// The material name table for init.
-	static char								*_MaterialNames[];
+	static const char							*_MaterialNames[];
 
 };
 
