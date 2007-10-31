@@ -185,6 +185,36 @@ then
 	CXXFLAGS="$CXXFLAGS -fprofile-arcs -ftest-coverage"
 fi
 
+# Enable/disable samples compilation.
+AC_ARG_ENABLE([samples],
+	AC_HELP_STRING([--disable-samples],
+			[disable sample code]),
+		[],
+		[enable_samples="yes"])
+
+if test "$enable_samples" = "no"
+then
+	AC_MSG_RESULT([disable sample code.])
+	SAMPLE_SUBDIR=""
+else
+	SAMPLE_SUBDIR="samples"
+fi
+
+# Enable/disable samples compilation.
+AC_ARG_ENABLE([tools],
+	AC_HELP_STRING([--disable-tools],
+			[disable tools code]),
+		[],
+		[enable_tools="yes"])
+
+if test "$enable_tools" = "no"
+then
+	AC_MSG_RESULT([disable tools code.])
+	TOOLS_SUBDIR=""
+else
+	TOOLS_SUBDIR="tools"
+fi
+
 AC_SUBST([enable_net])
 AC_SUBST([enable_3d])
 AC_SUBST([enable_pacs])
@@ -193,7 +223,8 @@ AC_SUBST([enable_georges])
 AC_SUBST([enable_ligo])
 
 AC_SUBST([NEL_SUBDIRS])
-
+AC_SUBST([SAMPLE_SUBDIR])
+AC_SUBST([TOOLS_SUBDIR])
 
 # ====================================================================
 # Checks for programs.

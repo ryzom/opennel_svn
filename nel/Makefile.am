@@ -21,7 +21,7 @@ MAINTAINERCLEANFILES	=	Makefile.in		\
 DISTCLEANFILES		=	include/stamp-h		\
 				include/stamp-h.in 
 
-SUBDIRS			= 	include src tools samples
+SUBDIRS			= 	include src @TOOLS_SUBDIR@ @SAMPLE_SUBDIR@
 
 bin_SCRIPTS		=	nel-config
 
