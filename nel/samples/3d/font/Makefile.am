@@ -9,7 +9,7 @@ bin_PROGRAMS              = font
 font_SOURCES = main.cpp
 
 fontdir = $(datadir)/nel/samples/font
-font_DATA = arlrdbd.ttf
+font_DATA = beteckna.ttf
 
 AM_CXXFLAGS               = -DFONT_DIR="\"$(fontdir)\"" -I$(top_srcdir)/src 
 
