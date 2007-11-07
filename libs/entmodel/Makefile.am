@@ -4,7 +4,7 @@
 
 MAINTAINERCLEANFILES = Makefile.in
 
-SUBDIRS              = src # include
+SUBDIRS              = src include
 
 # End of Makefile.am
 

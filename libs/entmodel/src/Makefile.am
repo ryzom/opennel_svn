@@ -6,15 +6,14 @@ MAINTAINERCLEANFILES  = Makefile.in
 
 lib_LTLIBRARIES       = libnelentmod.la
 
-libnelmisc_la_SOURCES = event_mgr.cpp 
 
+libnelentmod_la_LIBADD  = -lc -lpthread -lrt -ldl
 
-libnelmisc_la_LIBADD  = -lc -lpthread -lrt -ldl
+libnelentmod_la_LDFLAGS = -version-info @LIBTOOL_VERSION@
 
-libnelmisc_la_LDFLAGS = -version-info @LIBTOOL_VERSION@
-
-pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = nel-entmod.pc
+#pkgconfigdir = $(libdir)/pkgconfig
+#pkgconfig_DATA = nel-entmod.pc
 
 # End of Makefile.am
 
+libnelentmod_la_SOURCES = gameeventserver.cpp

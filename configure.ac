@@ -17,6 +17,8 @@ AC_PREREQ(2.57)
 AC_INIT([sfb-personal],[0.1.0],[matt.raykowski@gmail.com])
 AM_INIT_AUTOMAKE([tar-ustar])
 
+AM_CONFIG_HEADER(config.h)
+
 AC_SUBST(LIBTOOL_VERSION, [0:1:0])
 
 dnl ====================================================================
@@ -39,6 +41,9 @@ AM_MAINTAINER_MODE
 dnl The following hack should ensure that configure doesn't add optimizing
 dnl or debugging flags to CFLAGS or CXXFLAGS
 CXXFLAGS="$CXXFLAGS -ftemplate-depth-24"
+
+dnl Set up CXXFLAGS so that we can reach includes.
+CXXFLAGS="$CXXFLAGS -I\${top_srcdir}/libs/entmodel/include"
 
 AC_CHECK_LIB([pthread], [pthread_create])
 AC_CHECK_LIB([dl], [dlopen])
@@ -153,7 +158,7 @@ dnl ====================================================================
 dnl NeL
 
 dnl         misc   net    3d              pacs            sound ai    georges
-AM_PATH_NEL("yes", "yes", "yes",          "yes",          "yes","no", "yes")
+AM_PATH_NEL("yes", "yes", "yes",          "yes",          "no", "no", "no")
 
 dnl ====================================================================
 dnl FreeType 2
@@ -166,8 +171,8 @@ dnl ====================================================================
 
 AC_CONFIG_FILES([Makefile					\
 		 libs/Makefile					\
-		 libs/entmodel					\
-		 libs/entmodel/src				\
+		 libs/entmodel/Makefile				\
+		 libs/entmodel/src/Makefile			\
 ])
 AC_OUTPUT
 
