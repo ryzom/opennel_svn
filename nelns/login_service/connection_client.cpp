@@ -147,8 +147,8 @@ retry:
 		if(row[4] != string("Offline"))
 		{
 			// 2 players are trying to play with the same id, disconnect all
-			reason = sqlQuery(string("update user set state='Offline', ShardId=-1 where UId=")+uid);
-			if(!reason.empty()) break;
+			//reason = sqlQuery(string("update user set state='Offline', ShardId=-1 where UId=")+uid);
+			//if(!reason.empty()) break;
 
 			// send a message to the already connected player to disconnect
 			CMessage msgout("DC");
@@ -339,7 +339,7 @@ static void cbClientDisconnection (TSockId from, void *arg)
 			if(lc.getUserAddr() == (uint32)from)
 			{
 				// got it, if he is not in waiting state, it s not normal, remove all
-				if(row[1] != string("Waiting"))
+				if(row[1] == string("Authorized"))
 					sqlQuery("update user set state='Offline', ShardId=-1, Cookie='' where UId="+string(row[0]));
 				return;
 			}
