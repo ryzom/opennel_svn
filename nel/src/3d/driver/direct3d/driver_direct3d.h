@@ -385,8 +385,8 @@ public:
 	virtual ~CStateRecord() {}
 	// use STL allocator for fast alloc. this works because objects are small ( < 128 bytes)
 	#undef new
-		void *operator new(size_t size) { return Allocator.allocate(size); }\
-		void operator delete(void *block) { Allocator.deallocate((uint8 *) block); }
+		void *operator new(size_t size) { return CStateRecord::Allocator.allocate(size); }\
+		void operator delete(void *block) { CStateRecord::Allocator.deallocate((uint8 *) block, 1); }
 	#define new NL_NEW
 
 	static std::allocator<uint8> Allocator;

@@ -96,6 +96,10 @@ struct CContextMatcher
 		{
 			return patternMatcher.getHashValue();
 		}
+		bool operator () (const CContextMatcher &patternMatcher1, const CContextMatcher &patternMatcher2) const
+		{
+			return patternMatcher1.getHashValue() < patternMatcher2.getHashValue();
+		}
 	};
 
 };

@@ -56,6 +56,10 @@ public:
 	{
 		return	(size_t)stringId;
 	}
+	inline bool operator() (const NLMISC::TStringId &strId1, const NLMISC::TStringId &strId2) const
+	{
+		return (size_t)strId1 < (size_t)strId2;
+	}
 protected:
 private:
 };

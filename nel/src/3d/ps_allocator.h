@@ -47,7 +47,7 @@ namespace NL3D
 		// #if !defined (NL_USE_DEFAULT_MEMORY_MANAGER) && !defined (NL_NO_DEFINE_NEW)
 		// #	define new NL_NEW
 		// #endif
-#		define PS_FAST_ALLOC
+//#		define PS_FAST_ALLOC
 #	endif
 #endif // NL_OS_WINDOWS
 
