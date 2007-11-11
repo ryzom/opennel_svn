@@ -30,7 +30,7 @@
 #include <cmath>
 	
 #ifdef NL_OS_WINDOWS
-#include <eax.h>
+#	include <eax.h>
 #endif
 
 #include "nel/misc/hierarchical_timer.h"
@@ -39,7 +39,7 @@
 #include "sound_driver_fmod.h"
 #include "listener_fmod.h"
 
-#include "fmod.h"
+#include <fmod.h>
 
 
 using namespace std;
