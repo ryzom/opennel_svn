@@ -145,11 +145,11 @@ public:
 	
 	
 	virtual bool playMusic(uint, NLMISC::CIFile&, uint, bool);
-	virtual bool playMusicAsync(uint, const stlp_std::string&, uint, uint, uint, bool);
+	virtual bool playMusicAsync(uint, const std::string&, uint, uint, uint, bool);
 	virtual void stopMusic(uint, uint);
 	virtual void pauseMusic(uint);
 	virtual void resumeMusic(uint);
-	virtual bool getSongTitle(const stlp_std::string&, stlp_std::string&, uint, uint);
+	virtual bool getSongTitle(const std::string&, std::string&, uint, uint);
 	virtual bool isMusicEnded(uint);
 	virtual float getMusicLength(uint);
 	virtual void setMusicVolume(uint, float);

@@ -61,7 +61,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="libxml2.lib ws2_32.lib"
-				OutputFile="$(OutDir)\$(ProjectName).exe"
+				OutputFile=".\Debug/georges_sample.exe"
 				LinkIncremental="2"
 				IgnoreDefaultLibraryNames="libcmt.lib"
 				GenerateDebugInformation="true"
@@ -136,7 +136,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="libxml2.lib ws2_32.lib"
-				OutputFile="$(OutDir)\$(ProjectName).exe"
+				OutputFile=".\Release\georges_sample.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 			/>

@@ -69,8 +69,7 @@ void Init()
 		// Packed sheet option, this mean we want packed sheet generated in 'data' folder
 		AudioMixer->setPackedSheetOption("data", true);
 		// init with 32 tracks, EAX enabled, no ADPCM, and activate automatic sample bank loading
-		AudioMixer->init(32, true, false, NULL, true, UAudioMixer::DriverFMod);
-//		AudioMixer->init(32, true, false, NULL, true);
+		AudioMixer->init(32, true, false, NULL, true, UAudioMixer::DriverAuto);
 
 		/*
 		 * 2. Initialize listener's position and orientation (in NeL coordinate system).
@@ -149,6 +148,8 @@ void OnMove( const CVector& listenerpos )
  */
 int main()
 {
+	CApplicationContext myApplicationContext;
+
 	// Initialization
 	Init();
 

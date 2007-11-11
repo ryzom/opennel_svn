@@ -87,9 +87,10 @@ public:
 	/// Driver Creation Choice
 	enum	TDriver
 	{
-		DriverAuto= 0,
+		DriverAuto = 0,
 		DriverFMod,
-
+		DriverOpenAl,
+		DriverDSound,
 		NumDrivers
 	};
 
@@ -124,7 +125,7 @@ public:
 	 *	\param driverType set DriverFMod if you want to use FMod driver (nel_drv_fmod_win_??.dll)
 	 *	\param forceSoftwareBuffer (used only by FMod for now) force Buffer to be loaded in software (may be faster)
 	*/
-	static	ISoundDriver	*createDriver(bool useEax, IStringMapperProvider *stringMapper, TDriver driverType= DriverAuto, bool forceSoftwareBuffer= false);
+	static	ISoundDriver	*createDriver(bool useEax, IStringMapperProvider *stringMapper, TDriver driverType = DriverAuto, bool forceSoftwareBuffer = false);
 
 	/// Create a sound buffer
 	virtual	IBuffer			*createBuffer() = 0;
