@@ -467,18 +467,18 @@ bool CDriverGL::activeFrameBufferObject(ITexture * tex)
 {
 	if(supportFrameBufferObject() && supportPackedDepthStencil())
 	{
-		if(tex)
-		{
+//		if(tex)
+//		{
 			CTextureDrvInfosGL*	gltext = (CTextureDrvInfosGL*)(ITextureDrvInfos*)(tex->TextureDrvShare->DrvTexture);
 			return gltext->activeFrameBufferObject(tex);
-		}
+/*		}
 #ifdef NL_OS_WINDOWS
 		else
 		{
 			nglBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 			return true;
 		}
-#endif
+#endif */
 	}
 
 	return false;
@@ -1196,7 +1196,8 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 	// Driver caps.
 	//=============
 	// Retrieve the extensions for the current context.
-	NL3D::registerGlExtensions (_Extensions);	
+	NL3D::registerGlExtensions (_Extensions);
+	nlinfo(_Extensions.toString().c_str());	
 	//
 #ifdef NL_OS_WINDOWS
 	NL3D::registerWGlExtensions (_Extensions, _hDC);
