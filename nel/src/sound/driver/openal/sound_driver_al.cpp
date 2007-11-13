@@ -482,42 +482,42 @@ bool CSoundDriverAL::readRawBuffer( IBuffer *destbuffer, const std::string &name
 	return true;
 }
 
-bool CSoundDriverAL::playMusic(uint, NLMISC::CIFile&, uint, bool) {
+bool CSoundDriverAL::playMusic(uint channel, NLMISC::CIFile &file, uint xFadeTime, bool loop) {
 	return false;
 }
 
-bool CSoundDriverAL::playMusicAsync(uint, const std::string&, uint, uint, uint, bool) {
+bool CSoundDriverAL::playMusicAsync(uint channel, const std::string &path, uint xFadeTime, uint fileOffset, uint fileSize, bool loop) {
 	return false;
 }
 
-void CSoundDriverAL::stopMusic(uint, uint) {
+void CSoundDriverAL::stopMusic(uint channel, uint xFadeTime) {
 }
 
 
-void CSoundDriverAL::pauseMusic(uint) {
+void CSoundDriverAL::pauseMusic(uint channel) {
 }
 
 
-void CSoundDriverAL::resumeMusic(uint) {
+void CSoundDriverAL::resumeMusic(uint channel) {
 }
 
 
-bool CSoundDriverAL::getSongTitle(const std::string&, std::string&, uint, uint) {
+bool CSoundDriverAL::getSongTitle(const std::string &filename, std::string &result, uint fileOffset, uint fileSize) {
 	return false;
 }
 
 
-bool CSoundDriverAL::isMusicEnded(uint) {
+bool CSoundDriverAL::isMusicEnded(uint channel) {
 	return true;
 }
 
 
-float CSoundDriverAL::getMusicLength(uint) {
+float CSoundDriverAL::getMusicLength(uint channel) {
 	return 0.0f;
 }
 
 
-void CSoundDriverAL::setMusicVolume(uint, float) {
+void CSoundDriverAL::setMusicVolume(uint channel, float gain) {
 }
 
 } // NLSOUND
