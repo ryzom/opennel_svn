@@ -67,7 +67,7 @@ int main (int argc, char **argv)
 
 	// The first param is the font name (could be ttf, pfb, fon, etc...). The
 	// second one is optional, it's the font kerning file
-	tc.setFontGenerator (NLMISC::CPath::lookup("arlrdbd.ttf"));
+	tc.setFontGenerator (NLMISC::CPath::lookup("beteckna.ttf"));
 
 	// create the first computed string.
 	// A computed string is a string with a format and it generates the string
