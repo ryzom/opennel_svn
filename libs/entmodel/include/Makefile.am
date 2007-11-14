@@ -6,6 +6,6 @@ MAINTAINERCLEANFILES = Makefile.in
 
 includedir           = ${prefix}/include/nel/entmod
 
-include_HEADERS		= gameeventserver.h igameeventlistener.h
+include_HEADERS		= gameeventserver.h igameeventlistener.h igameevent.h
 
 # End of Makefile.am

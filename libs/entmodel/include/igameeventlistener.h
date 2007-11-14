@@ -58,6 +58,7 @@ class IGameEvent;
 * \brief Describe your class briefly
 */
 class IGameEventListener {
+public:
 	virtual bool observePreGameEvent(NLEM::CGameEventServer::EventPtr event) = 0;
 	virtual bool observeGameEvent(NLEM::CGameEventServer::EventPtr event) = 0;
 	virtual bool observePostGameEvent(NLEM::CGameEventServer::EventPtr event) = 0;

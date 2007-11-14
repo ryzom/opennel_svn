@@ -41,6 +41,8 @@
 // Local Includes
 //
 #include "gameeventserver.h"
+#include "igameevent.h"
+#include "igameeventlistener.h"
 
 //
 // Namespaces
@@ -124,42 +126,42 @@ void CGameEventServer::addListener(IGameEventListener* listener, std::vector<uin
 	}
 }
 
-void CGameEventServer::addListener(IGameEventListener* listener, uint16 eventID, uint32 sobID, EListenerType type) {
-	if(eventID < ISobEvent::ISobEventID)
-		return; // not a valid SOB event.
-
-	uint16 sobEventID = ISobEvent::getSobRelativeEventID(eventID);
-
-	CGameEventServer::sobEventListenerMap::iterator mapIter = m_SobEventListeners.find(sobID);
-	CGameEventServer::eventListenerArray* listenerArray;
-	if(mapIter == m_SobEventListeners.end()) {
-		CGameEventServer::eventListenerArray newEventListenerArray = {NULL, 0};
-		listenerArray = &(m_SobEventListeners[sobID] = newEventListenerArray);
-	} else {
-		listenerArray = &(mapIter->second);
-	}
-
-	if(listenerArray->size <= sobEventID) {
-		// Make the array bigger
-		uint16 newSize = sobEventID + 1;
-		CGameEventServer::listenerVector** eventListeners = new CGameEventServer::listenerVector*[newSize];
-		// fill the new entries
-		for(int i = listenerArray->size; i < newSize; ++i) {
-			eventListeners[i] = new CGameEventServer::listenerVector[CGameEventServer::ALL_TYPES];
-		}
-		// copy the old entries
-		if(listenerArray->size > 0) {
-			memcpy(eventListeners, listenerArray->listeners, listenerArray->size*sizeof(CGameEventServer::listenerVector*));
-			delete[] listenerArray->listeners;
-		}
-		listenerArray->listeners = eventListeners;
-		listenerArray->size = newSize;
-	}
-
-	addListener(listener, *(listenerArray->listeners[sobEventID]), type);
-
-
-}
+// void CGameEventServer::addListener(IGameEventListener* listener, uint16 eventID, uint32 sobID, EListenerType type) {
+// 	if(eventID < ISobEvent::ISobEventID)
+// 		return; // not a valid SOB event.
+// 
+// 	uint16 sobEventID = ISobEvent::getSobRelativeEventID(eventID);
+// 
+// 	CGameEventServer::sobEventListenerMap::iterator mapIter = m_SobEventListeners.find(sobID);
+// 	CGameEventServer::eventListenerArray* listenerArray;
+// 	if(mapIter == m_SobEventListeners.end()) {
+// 		CGameEventServer::eventListenerArray newEventListenerArray = {NULL, 0};
+// 		listenerArray = &(m_SobEventListeners[sobID] = newEventListenerArray);
+// 	} else {
+// 		listenerArray = &(mapIter->second);
+// 	}
+// 
+// 	if(listenerArray->size <= sobEventID) {
+// 		// Make the array bigger
+// 		uint16 newSize = sobEventID + 1;
+// 		CGameEventServer::listenerVector** eventListeners = new CGameEventServer::listenerVector*[newSize];
+// 		// fill the new entries
+// 		for(int i = listenerArray->size; i < newSize; ++i) {
+// 			eventListeners[i] = new CGameEventServer::listenerVector[CGameEventServer::ALL_TYPES];
+// 		}
+// 		// copy the old entries
+// 		if(listenerArray->size > 0) {
+// 			memcpy(eventListeners, listenerArray->listeners, listenerArray->size*sizeof(CGameEventServer::listenerVector*));
+// 			delete[] listenerArray->listeners;
+// 		}
+// 		listenerArray->listeners = eventListeners;
+// 		listenerArray->size = newSize;
+// 	}
+// 
+// 	addListener(listener, *(listenerArray->listeners[sobEventID]), type);
+// 
+// 
+// }
 
 void CGameEventServer::addListener(IGameEventListener* listener, listenerVector& vector, EListenerType type) {
 	if(type == CGameEventServer::ALL_TYPES) {
@@ -206,14 +208,14 @@ void CGameEventServer::removeListener(IGameEventListener* listener, std::vector<
 			removeListener(listener, *(mapIter->second), type);
 		}
 
-		// remove from sob event listeners
-		uint16 sobEventID = ISobEvent::getSobRelativeEventID(*eventIter);
-		CGameEventServer::sobEventListenerMap::iterator sobEventMapIter = m_SobEventListeners.begin();
-		for(;sobEventMapIter != m_SobEventListeners.end(); ++sobEventMapIter) {
-			if(sobEventMapIter->second.size <= sobEventID)
-				continue;
-			removeListener(listener, *(sobEventMapIter->second.listeners[sobEventID]), type);
-		}
+// 		// remove from sob event listeners
+// 		uint16 sobEventID = ISobEvent::getSobRelativeEventID(*eventIter);
+// 		CGameEventServer::sobEventListenerMap::iterator sobEventMapIter = m_SobEventListeners.begin();
+// 		for(;sobEventMapIter != m_SobEventListeners.end(); ++sobEventMapIter) {
+// 			if(sobEventMapIter->second.size <= sobEventID)
+// 				continue;
+// 			removeListener(listener, *(sobEventMapIter->second.listeners[sobEventID]), type);
+// 		}
 	}
 }
 
@@ -253,15 +255,15 @@ void CGameEventServer::removeListener(IGameEventListener* listener, std::vector<
 	}
 }
 
-void CGameEventServer::removeListener(IGameEventListener* listener, uint16 eventID, uint32 sobID, EListenerType type) {
-	CGameEventServer::sobEventListenerMap::iterator mapIter = m_SobEventListeners.find(sobID);
-	if(mapIter == m_SobEventListeners.end())
-		return;
-	uint16 sobEventID = ISobEvent::getSobRelativeEventID(eventID);
-	if(mapIter->second.size <= sobEventID)
-		return;
-	removeListener(listener, *(mapIter->second.listeners[sobEventID]), type);
-}
+// void CGameEventServer::removeListener(IGameEventListener* listener, uint16 eventID, uint32 sobID, EListenerType type) {
+// 	CGameEventServer::sobEventListenerMap::iterator mapIter = m_SobEventListeners.find(sobID);
+// 	if(mapIter == m_SobEventListeners.end())
+// 		return;
+// 	uint16 sobEventID = ISobEvent::getSobRelativeEventID(eventID);
+// 	if(mapIter->second.size <= sobEventID)
+// 		return;
+// 	removeListener(listener, *(mapIter->second.listeners[sobEventID]), type);
+// }
 
 void CGameEventServer::removeListeners(uint32 sobID) {
 	// remove from sob listeners
@@ -291,20 +293,20 @@ void CGameEventServer::removeListeners(uint16 eventID, EListenerType type) {
 	}
 
 	// remove from sob event listeners
-	uint16 sobEventID = ISobEvent::getSobRelativeEventID(eventID);
-	CGameEventServer::sobEventListenerMap::iterator sobEventMapIter = m_SobEventListeners.begin();
-	for(; sobEventMapIter != m_SobEventListeners.end(); ++sobEventMapIter) {
-		if(sobEventMapIter->second.size <= sobEventID)
-			continue;
-		
-		if(type == CGameEventServer::ALL_TYPES) {
-			for(int i = 0; i < CGameEventServer::ALL_TYPES; ++i) {
-				(*(sobEventMapIter->second.listeners[sobEventID]))[i].clear();
-			}
-		} else {
-			(*(sobEventMapIter->second.listeners[sobEventID]))[type].clear();
-		}
-	}
+// 	uint16 sobEventID = ISobEvent::getSobRelativeEventID(eventID);
+// 	CGameEventServer::sobEventListenerMap::iterator sobEventMapIter = m_SobEventListeners.begin();
+// 	for(; sobEventMapIter != m_SobEventListeners.end(); ++sobEventMapIter) {
+// 		if(sobEventMapIter->second.size <= sobEventID)
+// 			continue;
+// 		
+// 		if(type == CGameEventServer::ALL_TYPES) {
+// 			for(int i = 0; i < CGameEventServer::ALL_TYPES; ++i) {
+// 				(*(sobEventMapIter->second.listeners[sobEventID]))[i].clear();
+// 			}
+// 		} else {
+// 			(*(sobEventMapIter->second.listeners[sobEventID]))[type].clear();
+// 		}
+// 	}
 }
 
 void CGameEventServer::removeListener(IGameEventListener* listener, listenerVector& vector, EListenerType type) {
@@ -377,11 +379,11 @@ bool CGameEventServer::processEvent(CGameEventServer::EventPtr& event, EListener
 	bool ret = true;
 	ret = ret && notifyGlobalListeners(event, type);
 	ret = ret && notifyEventListeners(event, type);
-	if(event->getId() > ISobEvent::ISobEventID) {
-		NLMISC::CSmartPtr<ISobEvent> sobEvent = dynamic_cast<ISobEvent*>(event.getPtr());
-		ret = ret && notifySobListeners(sobEvent, event, type);
-		ret = ret && notifySobEventListeners(sobEvent, event, type);
-	}
+// 	if(event->getId() > ISobEvent::ISobEventID) {
+// 		NLMISC::CSmartPtr<ISobEvent> sobEvent = dynamic_cast<ISobEvent*>(event.getPtr());
+// 		ret = ret && notifySobListeners(sobEvent, event, type);
+// 		ret = ret && notifySobEventListeners(sobEvent, event, type);
+// 	}
 	return ret;
 }
 
@@ -406,38 +408,38 @@ bool CGameEventServer::notifyEventListeners(CGameEventServer::EventPtr& event, E
 	return ret;
 }
 
-bool CGameEventServer::notifySobListeners(NLMISC::CSmartPtr<ISobEvent>& event, CGameEventServer::EventPtr& gameEvent, EListenerType type) {
-	bool ret = true;
-	if(event->getId() < ISobEvent::ISobEventID)
-		return ret; // not a valid SOB event.
+// bool CGameEventServer::notifySobListeners(NLMISC::CSmartPtr<ISobEvent>& event, CGameEventServer::EventPtr& gameEvent, EListenerType type) {
+// 	bool ret = true;
+// 	if(event->getId() < ISobEvent::ISobEventID)
+// 		return ret; // not a valid SOB event.
+// 
+// 	CGameEventServer::sobListenerMap::iterator mapIter = m_SobListeners.find(event->TargetID);
+// 	if(mapIter == m_SobListeners.end())
+// 		return ret;
+// 	CGameEventServer::listenerSet::iterator iter = (*(mapIter->second))[type].begin();
+// 	for(;iter != (*(mapIter->second))[type].end(); ++iter) {
+// 		ret = ret && notifyListener(gameEvent, (*iter), type);
+// 	}
+// 	return ret;
+// }
 
-	CGameEventServer::sobListenerMap::iterator mapIter = m_SobListeners.find(event->TargetID);
-	if(mapIter == m_SobListeners.end())
-		return ret;
-	CGameEventServer::listenerSet::iterator iter = (*(mapIter->second))[type].begin();
-	for(;iter != (*(mapIter->second))[type].end(); ++iter) {
-		ret = ret && notifyListener(gameEvent, (*iter), type);
-	}
-	return ret;
-}
-
-bool CGameEventServer::notifySobEventListeners(NLMISC::CSmartPtr<ISobEvent>& event, CGameEventServer::EventPtr& gameEvent, EListenerType type) {
-	bool ret = true;
-	if(event->getId() < ISobEvent::ISobEventID)
-		return ret; // not a valid SOB event.
-
-	uint16 sobEventID = ISobEvent::getSobRelativeEventID(event->getId());
-	CGameEventServer::sobEventListenerMap::iterator mapIter = m_SobEventListeners.find(event->TargetID);
-	if(mapIter == m_SobEventListeners.end())
-		return ret; // SOB not found
-	if(mapIter->second.size <= sobEventID)
-		return ret; // event not found
-	CGameEventServer::listenerSet::iterator iter = (*(mapIter->second.listeners[sobEventID]))[type].begin();
-	for(;iter != (*(mapIter->second.listeners[sobEventID]))[type].end(); ++iter) {
-		ret = ret && notifyListener(gameEvent, (*iter), type);
-	}
-	return ret;
-}
+// bool CGameEventServer::notifySobEventListeners(NLMISC::CSmartPtr<ISobEvent>& event, CGameEventServer::EventPtr& gameEvent, EListenerType type) {
+// 	bool ret = true;
+// 	if(event->getId() < ISobEvent::ISobEventID)
+// 		return ret; // not a valid SOB event.
+// 
+// 	uint16 sobEventID = ISobEvent::getSobRelativeEventID(event->getId());
+// 	CGameEventServer::sobEventListenerMap::iterator mapIter = m_SobEventListeners.find(event->TargetID);
+// 	if(mapIter == m_SobEventListeners.end())
+// 		return ret; // SOB not found
+// 	if(mapIter->second.size <= sobEventID)
+// 		return ret; // event not found
+// 	CGameEventServer::listenerSet::iterator iter = (*(mapIter->second.listeners[sobEventID]))[type].begin();
+// 	for(;iter != (*(mapIter->second.listeners[sobEventID]))[type].end(); ++iter) {
+// 		ret = ret && notifyListener(gameEvent, (*iter), type);
+// 	}
+// 	return ret;
+// }
 
 bool CGameEventServer::notifyListener(CGameEventServer::EventPtr& event, IGameEventListener* listener, EListenerType type) {
 	if(listener == NULL)
@@ -458,10 +460,11 @@ bool CGameEventServer::notifyListener(CGameEventServer::EventPtr& event, IGameEv
 	return true;
 }
 
+/// TODO: Fix the time thing.
 double CGameEventServer::getTestTime() {
 	if(m_DeltaMultiplier == 0)
-		return getSimulation()->adjustedTime();
-	return getSimulation()->adjustedTime() + (getSimulation()->smoothDeltaTime()*m_DeltaMultiplier);
+		return 0;//getSimulation()->adjustedTime();
+	return 0;//getSimulation()->adjustedTime() + (getSimulation()->smoothDeltaTime()*m_DeltaMultiplier);
 }
 
 
