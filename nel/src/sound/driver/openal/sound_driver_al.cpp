@@ -503,7 +503,8 @@ void CSoundDriverAL::resumeMusic(uint channel) {
 
 
 bool CSoundDriverAL::getSongTitle(const std::string &filename, std::string &result, uint fileOffset, uint fileSize) {
-	return false;
+	result = CFile::getFilenameWithoutExtension (filename);
+	return true;
 }
 
 

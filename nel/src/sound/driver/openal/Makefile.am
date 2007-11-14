@@ -18,11 +18,11 @@ libnel_drv_openal_la_SOURCES = buffer_al.cpp               \
                                source_al.h			\
                                stdopenal.h
 
-AM_CXXFLAGS                  = -I$(top_srcdir)/src @OPENAL_CFLAGS@
+AM_CXXFLAGS                  = -I$(top_srcdir)/src @OPENAL_CFLAGS@ @OGG_CFLAGS@ @VORBIS_CFLAGS@
 
 noinst_HEADERS		     = stdopenal.h
 
-libnel_drv_openal_la_LIBADD  = @OPENAL_LIBS@
+libnel_drv_openal_la_LIBADD  = @OPENAL_LIBS@ @OGG_LIBS@ @VORBIS_LIBS@
 
 libnel_drv_openal_la_LDFLAGS = -version-info @LIBTOOL_VERSION@
 

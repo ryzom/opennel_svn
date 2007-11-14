@@ -450,6 +450,9 @@ then
   if test "$have_openal" = "yes"
   then
     SOUND_SUBDIRS="$SOUND_SUBDIRS openal"
+
+    XIPH_PATH_OGG([], AC_MSG_ERROR([Driver OpenAL Requires libogg!]))
+    XIPH_PATH_VORBIS([], AC_MSG_ERROR([Driver OpenAL Requires libvorbis!]))
   fi
   AC_SUBST([SOUND_SUBDIRS])
 fi

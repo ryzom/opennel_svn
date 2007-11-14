@@ -143,16 +143,18 @@ public:
 
 	// Does not create a sound loader
 	
-	
-	virtual bool playMusic(uint, NLMISC::CIFile&, uint, bool);
-	virtual bool playMusicAsync(uint, const std::string&, uint, uint, uint, bool);
-	virtual void stopMusic(uint, uint);
-	virtual void pauseMusic(uint);
-	virtual void resumeMusic(uint);
-	virtual bool getSongTitle(const std::string&, std::string&, uint, uint);
-	virtual bool isMusicEnded(uint);
-	virtual float getMusicLength(uint);
-	virtual void setMusicVolume(uint, float);
+	/// \name Music
+	// @{
+	virtual bool playMusic(uint channel, NLMISC::CIFile &file, uint xFadeTime, bool loop);
+	virtual bool playMusicAsync(uint channel, const std::string &path, uint xFadeTime, uint fileOffset, uint fileSize, bool loop);
+	virtual void stopMusic(uint channel, uint xFadeTime);
+	virtual void pauseMusic(uint channel);
+	virtual void resumeMusic(uint channel);
+	virtual bool getSongTitle(const std::string &filename, std::string &result, uint fileOffset, uint fileSize);
+	virtual bool isMusicEnded(uint channel);
+	virtual float getMusicLength(uint channel);
+	virtual void setMusicVolume(uint channel, float gain);
+	// @}
 	
 public:
 	
@@ -209,6 +211,20 @@ private:
 	// Rolloff factor (not in the listener in OpenAL, but relative to the sources)
 	float					_RolloffFactor;
 
+	
+	/// \name Music
+	// @{
+
+	/// Number of music channels/sources available.
+	enum {NumMusicChannel = 2};
+
+	/// Music channels/sources
+	CSourceAL	*_MusicChannel[NumMusicChannel];
+
+	/// Update the music channels.
+	void updateMusic();
+
+	// @}
 };
 
 
