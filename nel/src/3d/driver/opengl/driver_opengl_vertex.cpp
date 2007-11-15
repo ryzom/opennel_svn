@@ -160,7 +160,7 @@ bool CDriverGL::setupVertexBuffer(CVertexBuffer& VB)
 			if ((preferred == CVertexBuffer::RAMVolatile) || (preferred == CVertexBuffer::AGPVolatile))
 				preferred = CVertexBuffer::RAMPreferred;
 			const uint size = VB.capacity()*VB.getVertexSize();
-			uint preferredMemory = _Extensions.DisableHardwareVertexArrayAGP?CVertexBuffer::RAMPreferred:preferred;
+			uint preferredMemory = _Extensions.DisableHardwareVertexArrayAGP ? CVertexBuffer::RAMPreferred : preferred;
 			while (preferredMemory != CVertexBuffer::RAMPreferred)
 			{
 				// Vertex buffer hard
@@ -388,7 +388,7 @@ bool CDriverGL::renderSimpleTriangles(uint32 firstTri, uint32 ntris)
 		nlassert(_LastIB._Format == CIndexBuffer::Indices32);
 		glDrawElements(GL_TRIANGLES,3*ntris,GL_UNSIGNED_INT, ((uint32 *) _LastIB._Values)+firstTri);
 	}
-
+	
 	// Profiling.
 	_PrimitiveProfileIn.NTriangles+= ntris;
 	_PrimitiveProfileOut.NTriangles+= ntris;
@@ -975,7 +975,7 @@ void		CDriverGL::setupGlArraysStd(CVertexBufferInfo &vb)
 	// Setup Uvs
 	//-----------
 	// Get the routing
-	for(sint i=0; i<inlGetNumTextStages(); i++)
+	for(uint i=0; i<inlGetNumTextStages(); i++)
 	{
 		// normal behavior: each texture has its own UV.
 		setupUVPtr(i, vb, vb.UVRouting[i]);
@@ -1017,7 +1017,7 @@ void		CDriverGL::toggleGlArraysForNVVertexProgram()
 		_DriverGLStates.enableVertexArray(false);
 		_DriverGLStates.enableNormalArray(false);
 		_DriverGLStates.enableColorArray(false);
-		for(sint i=0; i<inlGetNumTextStages(); i++)
+		for(uint i=0; i<inlGetNumTextStages(); i++)
 		{
 			_DriverGLStates.clientActiveTextureARB(i);
 			_DriverGLStates.enableTexCoordArray(false);
@@ -1044,7 +1044,7 @@ void		CDriverGL::toggleGlArraysForARBVertexProgram()
 			// fix for ATI : when switching from Vertex Program to fixed Pipe, must clean texture, otherwise texture may be disabled in next render 
 			// (seems to be a driver bug)
 			ITexture *oldTex[IDRV_MAT_MAXTEXTURES];			
-			for(sint stage=0 ; stage < inlGetNumTextStages() ; stage++)
+			for(uint stage=0 ; stage < inlGetNumTextStages() ; stage++)
 			{			
 				oldTex[stage] = _CurrentTexture[stage];
 				// activate the texture, or disable texturing if NULL.
@@ -1056,7 +1056,7 @@ void		CDriverGL::toggleGlArraysForARBVertexProgram()
 			glVertex4f(0.f, 0.f, 0.f, 1.f);
 			glVertex4f(0.f, 0.f, 0.f, 1.f);
 			glEnd();		
-			for(sint stage=0 ; stage<inlGetNumTextStages() ; stage++)
+			for(uint stage=0 ; stage<inlGetNumTextStages() ; stage++)
 			{			
 				// activate the texture, or disable texturing if NULL.
 				activateTexture(stage, oldTex[stage]);			
@@ -1082,7 +1082,7 @@ void		CDriverGL::toggleGlArraysForARBVertexProgram()
 		_DriverGLStates.enableNormalArray(false);
 		_DriverGLStates.enableColorArray(false);
 		_DriverGLStates.enableSecondaryColorArray(false);
-		for(sint i=0; i<inlGetNumTextStages(); i++)		
+		for(uint i=0; i<inlGetNumTextStages(); i++)		
 		{
 			_DriverGLStates.clientActiveTextureARB(i);
 			_DriverGLStates.enableTexCoordArray(false);
@@ -1130,7 +1130,7 @@ void		CDriverGL::toggleGlArraysForEXTVertexShader()
 		_DriverGLStates.enableNormalArray(false);
 		_DriverGLStates.enableColorArray(false);
 		_DriverGLStates.enableSecondaryColorArray(false);
-		for(sint i=0; i<inlGetNumTextStages(); i++)
+		for(uint i=0; i<inlGetNumTextStages(); i++)
 		{
 			_DriverGLStates.clientActiveTextureARB(i);
 			_DriverGLStates.enableTexCoordArray(false);
@@ -1146,11 +1146,15 @@ void		CDriverGL::toggleGlArraysForEXTVertexShader()
 void		CDriverGL::setupGlArraysForNVVertexProgram(CVertexBufferInfo &vb)
 {
 	H_AUTO_OGL(CDriverGL_setupGlArraysForNVVertexProgram)
-	uint32	flags= vb.VertexFormat;
+	uint16	flags= vb.VertexFormat;
+	
+	if (vb.VBMode == CVertexBufferInfo::HwARB)
+		_DriverGLStates.bindARBVertexBuffer(vb.VertexObjectId);
 	
 	// For each value
 	for (uint value=0; value<CVertexBuffer::NumValue; value++)
 	{
+		//nldebug("  value = %d", value);
 		// Flag
 		uint16 flag=1<<value;
 
@@ -1222,6 +1226,10 @@ void		CDriverGL::setupGlArraysForNVVertexProgram(CVertexBufferInfo &vb)
 				_DriverGLStates.enableSecondaryColorArray(false);
 		}
 	}
+	
+	if (vb.VBMode == CVertexBufferInfo::HwARB)
+		_DriverGLStates.bindARBVertexBuffer(0);
+	
 }
 
 // tells for each vertex argument if it must be normalized when it is an integral type
@@ -1516,7 +1524,7 @@ void		CDriverGL::setupGlArraysForEXTVertexShader(CVertexBufferInfo &vb)
 void		CDriverGL::setupGlArrays(CVertexBufferInfo &vb)
 {	
 	H_AUTO_OGL(CDriverGL_setupGlArrays)
-	uint32	flags= vb.VertexFormat;
+	uint16	flags= vb.VertexFormat;
 	
 	// Standard case (NVVertexProgram or no vertex program case)
 	if (_Extensions.NVVertexProgram)
@@ -1788,46 +1796,3 @@ void CIndexBufferInfo::setupIndexBuffer(CIndexBuffer &ib)
 // ***************************************************************************
 
 } // NL3D
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
