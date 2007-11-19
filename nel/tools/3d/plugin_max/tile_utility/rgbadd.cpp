@@ -93,7 +93,7 @@ class RGBAdd: public Texmap {
 		void SetReference(int i, RefTargetHandle rtarg);
 		int RemapRefOnLoad(int iref); 
 
-		RefTargetHandle Clone(RemapDir &remap = NoRemap());
+		RefTargetHandle Clone(RemapDir &remap = DefaultRemapDir());
 		RefResult NotifyRefChanged( Interval changeInt, RefTargetHandle hTarget, 
 		   PartID& partID, RefMessage message );
 
