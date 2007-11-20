@@ -98,7 +98,6 @@ libnelmisc_la_SOURCES = \
 	string_common.cpp \
 	string_id_array.cpp \
 	string_mapper.cpp \
-	string_stream.cpp \
 	system_info.cpp \
 	task_manager.cpp \
 	tds.cpp \
