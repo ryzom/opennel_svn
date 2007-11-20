@@ -94,10 +94,13 @@ struct CClient
 	void updateFullStat ();
 };
 
-struct TInetAddressHash : public std::hash<NLNET::CInetAddress>
+struct TInetAddressHash
 {
+	static const size_t bucket_size = 4;
+	static const size_t min_buckets = 8;
+
 	/// Hash function
-	size_t operator() ( const NLNET::CInetAddress& x ) const
+	inline size_t operator() ( const NLNET::CInetAddress& x ) const
 	{
 		return x.port();
 		//return x.internalIPAddress();
@@ -108,7 +111,7 @@ struct TInetAddressHash : public std::hash<NLNET::CInetAddress>
 // Types
 //
 
-typedef std::hash_map<NLNET::CInetAddress,CClient*,TInetAddressHash> TClientMap;
+typedef CHashMap<NLNET::CInetAddress,CClient*,TInetAddressHash> TClientMap;
 #define GETCLIENTA(it) (*it).second
 
 //
