@@ -166,15 +166,6 @@ dnl Checks for libraries.
 dnl ====================================================================
 
 dnl ====================================================================
-dnl STLPort
-
-AM_PATH_STLPORT('/usr/local /usr')
-LIBS="$LIBS $STLPORT_LIBS"
-CPPFLAGS="$CPPFLAGS $STLPORT_INCLUDES"
-LDFLAGS="$LDFLAGS $STLPORT_LDFLAGS"
-
-
-dnl ====================================================================
 dnl OpenAL
 
 AM_PATH_OPENAL($enable_client)
