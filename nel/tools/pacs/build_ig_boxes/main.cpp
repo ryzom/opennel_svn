@@ -63,7 +63,7 @@ public:
 	CIGBox(const string &name, const CAABBox &bbox) : Name(name), BBox(bbox) {}
 	string			Name;
 	CAABBox			BBox;
-	void			serial(IStream &f) { f.serial(Name, BBox); }
+	void			serial(NLMISC::IStream &f) { f.serial(Name, BBox); }
 };
 
 vector<CIGBox>										Boxes;

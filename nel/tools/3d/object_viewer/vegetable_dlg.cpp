@@ -542,7 +542,7 @@ void CVegetableDlg::OnButtonVegetableInsert()
 	if(id!=LB_ERR)
 	{
 		// Add a new vegetable to the list.
-		_Vegetables.insert(_Vegetables.begin()+id);
+		_Vegetables.insert(_Vegetables.begin()+id, CVegetableDesc());
 		_Vegetables[id].initDefaultVegetable();
 
 		// update view

@@ -210,10 +210,18 @@ template<class A>
 class CHashPtr
 {
 public:
+	static const size_t bucket_size = 4;
+	static const size_t min_buckets = 8;
+
 	typedef	A	*ptrA;
 	size_t	operator() (const ptrA &a) const
 	{
 		return ((uintptr_t)a)/sizeof(A);
+	}
+
+	bool operator() (const ptrA &a, const ptrA &b) const
+	{
+		return (uintptr_t)a < (uintptr_t)b;
 	}
 };
 

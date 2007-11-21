@@ -198,13 +198,13 @@ int main(int argc, char* argv[])
 						sint32 curPos=output.getPos ();
 
 						// File at the begining
-						output.seek (0, IStream::begin);
+						output.seek (0, NLMISC::IStream::begin);
 
 						// Write the triangle count
 						output.serial (triangles);
 
 						// Go to the end of the file
-						output.seek (curPos, IStream::begin);
+						output.seek (curPos, NLMISC::IStream::begin);
 
 						// Close the file
 						output.close ();
