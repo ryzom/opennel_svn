@@ -467,18 +467,18 @@ bool CDriverGL::activeFrameBufferObject(ITexture * tex)
 {
 	if(supportFrameBufferObject() && supportPackedDepthStencil())
 	{
-//		if(tex)
-//		{
+		if(tex)
+		{
 			CTextureDrvInfosGL*	gltext = (CTextureDrvInfosGL*)(ITextureDrvInfos*)(tex->TextureDrvShare->DrvTexture);
 			return gltext->activeFrameBufferObject(tex);
-/*		}
-#ifdef NL_OS_WINDOWS
+		}
+//#ifdef NL_OS_WINDOWS
 		else
 		{
 			nglBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 			return true;
 		}
-#endif */
+//#endif
 	}
 
 	return false;
@@ -1002,7 +1002,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 	  GLX_RED_SIZE, 4,
 	  GLX_GREEN_SIZE, 4,
 	  GLX_BLUE_SIZE, 4,
-	  //GLX_ALPHA_SIZE, 8,
+	  GLX_ALPHA_SIZE, 1,
 	  None
 	};
 	/*
@@ -4288,6 +4288,3 @@ void displayGLError(GLenum error)
 		break;
 	}
 }
-
-
-
