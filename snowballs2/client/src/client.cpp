@@ -524,7 +524,7 @@ int main(int argc, char **argv)
 			Driver->getBuffer (btm);
 			string filename = CFile::findNewFile ("screenshot.tga");
 			COFile fs (filename);
-			btm.writeTGA (fs,24,true);
+			btm.writeTGA (fs,24,false);
 			nlinfo("Screenshot '%s' saved", filename.c_str());
 		}
 		// Check if the config file was modified by another program
