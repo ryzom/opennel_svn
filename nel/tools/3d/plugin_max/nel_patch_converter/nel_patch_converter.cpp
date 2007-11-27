@@ -36,7 +36,7 @@ static RPO*			pRPO;
 static ObjectState*	pOS;
 
 
-static PO2RPOClassDesc PO2RPODesc;
+PO2RPOClassDesc PO2RPODesc;
 ClassDesc2* GetPO2RPODesc() {return &PO2RPODesc;}
 
 enum { po2rpo_params };
@@ -63,6 +63,7 @@ IObjParam *PO2RPO::ip			= NULL;
 
 PO2RPO::PO2RPO()
 {
+	pblock=NULL;
 	PO2RPODesc.MakeAutoParamBlocks(this);
 }
 
