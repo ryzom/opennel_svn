@@ -73,6 +73,7 @@ static int CommandsNbLines;
 static float CommandsLineHeight;
 static int CommandsFontSize;
 static CRGBA CommandsBackColor, CommandsFrontColor;
+static UMaterial CommandsMaterial = NULL;
 
 //
 // Functions
@@ -278,13 +279,29 @@ void	initCommands()
 	cbUpdateCommands (ConfigFile.getVar ("CommandsBackColor"));
 	cbUpdateCommands (ConfigFile.getVar ("CommandsFrontColor"));
 	cbUpdateCommands (ConfigFile.getVar ("CommandsFontSize"));
+
+	CommandsMaterial = Driver->createMaterial();
+        CommandsMaterial.initUnlit();
+        CommandsMaterial.setBlendFunc(UMaterial::srcalpha, UMaterial::invsrcalpha);
+        CommandsMaterial.setBlend(true);
 }
 
 void	updateCommands()
 {
 	// Display the background
 	Driver->setMatrixMode2D11 ();
-	Driver->drawQuad (CommandsBoxX-CommandsBoxBorder, CommandsBoxY-CommandsBoxBorder, CommandsBoxX+CommandsBoxWidth+CommandsBoxBorder, CommandsBoxY + (CommandsNbLines+1) * CommandsLineHeight + CommandsBoxBorder, CommandsBackColor);
+	CommandsMaterial.setColor(CommandsBackColor);
+	CQuad quad;
+	quad.V0.set(CommandsBoxX-CommandsBoxBorder,
+		    CommandsBoxY-CommandsBoxBorder, 0);
+	quad.V1.set(CommandsBoxX+CommandsBoxWidth+CommandsBoxBorder,
+		    CommandsBoxY-CommandsBoxBorder, 0);
+	quad.V2.set(CommandsBoxX+CommandsBoxWidth+CommandsBoxBorder,
+		    CommandsBoxY + (CommandsNbLines+1) * CommandsLineHeight + CommandsBoxBorder, 0);
+	quad.V3.set(CommandsBoxX-CommandsBoxBorder,
+		    CommandsBoxY + (CommandsNbLines+1) * CommandsLineHeight + CommandsBoxBorder, 0);
+	Driver->drawQuad(quad, CommandsMaterial);
+	//Driver->drawQuad (CommandsBoxX-CommandsBoxBorder, CommandsBoxY-CommandsBoxBorder, CommandsBoxX+CommandsBoxWidth+CommandsBoxBorder, CommandsBoxY + (CommandsNbLines+1) * CommandsLineHeight + CommandsBoxBorder, CommandsBackColor);
 
 	// Set the text context
 	TextContext->setHotSpot (UTextContext::BottomLeft);
