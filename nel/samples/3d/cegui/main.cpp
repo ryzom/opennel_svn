@@ -24,7 +24,9 @@
  * MA 02111-1307, USA.
  */
 
+#ifdef NL_OS_WINDOWS
 #define USE_JPEG
+#endif
 
 #include "globals.h"
 #include "resource.h"
