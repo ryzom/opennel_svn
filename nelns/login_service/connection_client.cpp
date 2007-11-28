@@ -160,7 +160,7 @@ retry:
 		}
 
 		CLoginCookie c;
-		c.set((uint32)from, rand(), uid);
+		c.set((uint32)(uintptr_t)from, rand(), uid);
 
 		reason = sqlQuery("update user set state='Authorized', Cookie='"+c.setToString()+"' where UId="+uid);
 		if(!reason.empty()) break;
@@ -227,7 +227,7 @@ static void cbClientChooseShard(CMessage &msgin, TSockId from, CCallbackNetBase 
 		{
 			CLoginCookie lc;
 			lc.setFromString(row[1]);
-			if(lc.getUserAddr() == (uint32)from)
+			if(lc.getUserAddr() == (uint32)(uintptr_t)from)
 			{
 				ok = true;
 				break;
@@ -336,7 +336,7 @@ static void cbClientDisconnection (TSockId from, void *arg)
 		if(!str.empty())
 		{
 			lc.setFromString(str);
-			if(lc.getUserAddr() == (uint32)from)
+			if(lc.getUserAddr() == (uint32)(uintptr_t)from)
 			{
 				// got it, if he is not in waiting state, it s not normal, remove all
 				if(row[1] == string("Authorized"))
