@@ -109,7 +109,7 @@ namespace CEGUI
 		m_Material.setDoubleSided();
 	}
 
-	void NeLTexture::loadFromMemory(const void *buffPtr, uint buffWidth, uint buffHeight/*, PixelFormat pixelFormat*/)
+	void NeLTexture::loadFromMemory(const void *buffPtr, uint buffWidth, uint buffHeight, PixelFormat pixelFormat)
 	{
 		// this object can only contain one texture at a time, free the old one if it exists.
 		freeNeLTexture();
@@ -129,9 +129,9 @@ namespace CEGUI
 		 * btm.writeTGA(fs);
 		 */
 
-		int size =4;
+		int size=4;
                
-		/*switch(pixelFormat)
+		switch(pixelFormat)
 		{
 			case PF_RGB:
 				size = 3;
@@ -139,7 +139,7 @@ namespace CEGUI
 			case PF_RGBA:
 				size = 4;
 				break;
-		}*/
+		}
 
 		// copy the memory stream for use in the NeL texture.
 		uint8 *pTmpBuf=new uint8[buffWidth*buffHeight*size];

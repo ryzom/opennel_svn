@@ -96,7 +96,7 @@ namespace CEGUI
 		 * \param pixelFormat The type of pixel packing used.
 		 * \todo Clean up CTextureMem creation and registration.
 		 */
-		virtual void loadFromMemory(const void *buffPtr, uint buffWidth, uint buffHeight/*, PixelFormat pixelFormat = CEGUI::Texture::PF_RGBA*/);
+		virtual void loadFromMemory(const void *buffPtr, uint buffWidth, uint buffHeight, PixelFormat pixelFormat = CEGUI::Texture::PF_RGBA);
 		NL3D::UMaterial getNeLTexture(void);
 		void setNeLTextureSize(uint size);
 
