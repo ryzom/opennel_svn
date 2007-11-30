@@ -223,156 +223,156 @@ void createDemoWindows(void)
 
 	FrameWindow* fwnd1 = (FrameWindow*)winMgr.createWindow("TaharezLook/FrameWindow", "Demo7/Window1");
 	root->addChildWindow(fwnd1);
-	fwnd1->setMinimumSize(Size(0.2f, 0.2f));
-	fwnd1->setMaximumSize(Size(0.8f, 0.8f));
-	fwnd1->setPosition(Point(0.2f, 0.2f));
-	fwnd1->setSize(Size(0.5f, 0.5f));
+	fwnd1->setMinSize(UVector2(cegui_reldim(0.2f),cegui_reldim(0.2f)));
+	fwnd1->setMaxSize(UVector2(cegui_reldim(0.8f),cegui_reldim(0.8f)));
+	fwnd1->setPosition(UVector2(cegui_reldim(0.2f),cegui_reldim(0.2f)));
+	fwnd1->setSize(UVector2(cegui_reldim(0.5f),cegui_reldim(0.5f)));
 	fwnd1->setText("Demo 7 - Window 1");
 	fwnd1->setCloseButtonEnabled(false);
 
 	FrameWindow* fwnd2 = (FrameWindow*)winMgr.createWindow("TaharezLook/FrameWindow", "Demo7/Window2");
 	root->addChildWindow(fwnd2);
-	fwnd2->setMinimumSize(Size(0.2f, 0.2f));
-	fwnd2->setMaximumSize(Size(0.8f, 0.8f));
-	fwnd2->setPosition(Point(0.4f, 0.1f));
-	fwnd2->setSize(Size(0.5f, 0.5f));
+	fwnd2->setMinSize(UVector2(cegui_reldim(0.2f),cegui_reldim(0.2f)));
+	fwnd2->setMaxSize(UVector2(cegui_reldim(0.8f),cegui_reldim(0.8f)));
+	fwnd2->setPosition(UVector2(cegui_reldim(0.4f),cegui_reldim(0.1f)));
+	fwnd2->setSize(UVector2(cegui_reldim(0.5f),cegui_reldim(0.5f)));
 	fwnd2->setText("Demo 7 - Window 2");
 	fwnd2->setCloseButtonEnabled(false);
 
 	FrameWindow* fwnd3 = (FrameWindow*)winMgr.createWindow("TaharezLook/FrameWindow", "Demo7/Window3");
 	root->addChildWindow(fwnd3);
-	fwnd3->setMinimumSize(Size(0.2f, 0.2f));
-	fwnd3->setMaximumSize(Size(0.8f, 0.8f));
-	fwnd3->setPosition(Point(0.25f, 0.4f));
-	fwnd3->setSize(Size(0.5f, 0.5f));
+	fwnd3->setMinSize(UVector2(cegui_reldim(0.2f),cegui_reldim(0.2f)));
+	fwnd3->setMaxSize(UVector2(cegui_reldim(0.8f),cegui_reldim(0.8f)));
+	fwnd3->setPosition(UVector2(cegui_reldim(0.25f),cegui_reldim(0.4f)));
+	fwnd3->setSize(UVector2(cegui_reldim(0.5f),cegui_reldim(0.5f)));
 	fwnd3->setText("Demo 7 - Window 3");
 	fwnd3->setCloseButtonEnabled(false);
 
 	PushButton* btn = (PushButton*)winMgr.createWindow("TaharezLook/Button", "Demo7/Window1/Quit");
 	fwnd1->addChildWindow(btn);
-	btn->setMaximumSize(Size(1.0f, 1.0f));
-	btn->setPosition(Point(0.02f, 0.1f));
-	btn->setSize(Size(0.25f, 0.1f));
+	btn->setMaxSize(UVector2(cegui_reldim(1.0f),cegui_reldim(1.0f)));
+	btn->setPosition(UVector2(cegui_reldim(0.02f),cegui_reldim(0.1f)));
+	btn->setSize(UVector2(cegui_reldim(0.25f),cegui_reldim(0.1f)));
 	btn->setText("Exit Demo");
-	btn->setNormalTextColour(colour(1, 0, 0));
+//	btn->setNormalTextColour(colour(1, 0, 0));
 
 	RadioButton* rbtn = (RadioButton*)winMgr.createWindow("TaharezLook/RadioButton", "Demo7/Window1/Radio1");
 	fwnd1->addChildWindow(rbtn);
-	rbtn->setMaximumSize(Size(1.0f, 1.0f));
-	rbtn->setPosition(Point(0.02f, 0.23f));
-	rbtn->setSize(Size(0.25f, 0.075f));
+	rbtn->setMaxSize(UVector2(cegui_reldim(1.0f),cegui_reldim(1.0f)));
+	rbtn->setPosition(UVector2(cegui_reldim(0.02f),cegui_reldim(0.23f)));
+	rbtn->setSize(UVector2(cegui_reldim(0.25f),cegui_reldim(0.075f)));
 	rbtn->setText("Option 1");
 	rbtn->setID(0);
 
 	rbtn = (RadioButton*)winMgr.createWindow("TaharezLook/RadioButton", "Demo7/Window1/Radio2");
 	fwnd1->addChildWindow(rbtn);
-	rbtn->setMaximumSize(Size(1.0f, 1.0f));
-	rbtn->setPosition(Point(0.02f, 0.306f));
-	rbtn->setSize(Size(0.25f, 0.075f));
+	rbtn->setMaxSize(UVector2(cegui_reldim(1.0f),cegui_reldim(1.0f)));
+	rbtn->setPosition(UVector2(cegui_reldim(0.02f),cegui_reldim(0.306f)));
+	rbtn->setSize(UVector2(cegui_reldim(0.25f),cegui_reldim(0.075f)));
 	rbtn->setText("Option 2");
 	rbtn->setID(1);
 
 	rbtn = (RadioButton*)winMgr.createWindow("TaharezLook/RadioButton", "Demo7/Window1/Radio3");
 	fwnd1->addChildWindow(rbtn);
-	rbtn->setMaximumSize(Size(1.0f, 1.0f));
-	rbtn->setPosition(Point(0.02f, 0.382f));
-	rbtn->setSize(Size(0.25f, 0.075f));
+	rbtn->setMaxSize(UVector2(cegui_reldim(1.0f),cegui_reldim(1.0f)));
+	rbtn->setPosition(UVector2(cegui_reldim(0.02f),cegui_reldim(0.382f)));
+	rbtn->setSize(UVector2(cegui_reldim(0.25f),cegui_reldim(0.075f)));
 	rbtn->setText("Option 3");
 	rbtn->setID(2);
 
 	Checkbox* cbox = (Checkbox*)winMgr.createWindow("TaharezLook/Checkbox", "Demo7/Window1/Checkbox");
 	fwnd1->addChildWindow(cbox);
-	cbox->setMaximumSize(Size(1.0f, 1.0f));
-	cbox->setPosition(Point(0.02f, 0.48f));
-	cbox->setSize(Size(0.45f, 0.075f));
+	cbox->setMaxSize(UVector2(cegui_reldim(1.0f),cegui_reldim(1.0f)));
+	cbox->setPosition(UVector2(cegui_reldim(0.02f),cegui_reldim(0.48f)));
+	cbox->setSize(UVector2(cegui_reldim(0.45f),cegui_reldim(0.075f)));
 	cbox->setText("Enable some option");
 	cbox->setSelected(true);
 
-	StaticText* stxt = (StaticText*)winMgr.createWindow("TaharezLook/StaticText", "Demo7/Window1/Text1");
+	Window* stxt = winMgr.createWindow("TaharezLook/StaticText", "Demo7/Window1/Text1");
 	fwnd1->addChildWindow(stxt);
-	stxt->setMaximumSize(Size(1.0f, 1.0f));
-	stxt->setPosition(Point(0.5f, 0.1f));
-	stxt->setSize(Size(0.45f, 0.5f));
+	stxt->setMaxSize(UVector2(cegui_reldim(1.0f),cegui_reldim(1.0f)));
+	stxt->setPosition(UVector2(cegui_reldim(0.5f),cegui_reldim(0.1f)));
+	stxt->setSize(UVector2(cegui_reldim(0.45f),cegui_reldim(0.5f)));
 	stxt->setText("This is a static text widget.  More examples of this, and the static image, can be seen in the frame-rate / debug overlay.");
-	stxt->setFrameEnabled(false);
-	stxt->setBackgroundEnabled(false);
-	stxt->setHorizontalFormatting(StaticText::WordWrapCentred);
+	stxt->setProperty("FrameEnabled", "false");
+	stxt->setProperty("BackgroundEnabled", "false");
+//	stxt->setHorizontalFormatting(StaticText::WordWrapCentred);
 
 	Editbox* ebox = (Editbox*)winMgr.createWindow("TaharezLook/Editbox", "Demo7/Window1/Editbox");
 	fwnd1->addChildWindow(ebox);
-	ebox->setMaximumSize(Size(1.0f, 1.0f));
-	ebox->setPosition(Point(0.2f, 0.6f));
-	ebox->setSize(Size(0.6f, 0.1f));
+	ebox->setMaxSize(UVector2(cegui_reldim(1.0f),cegui_reldim(1.0f)));
+	ebox->setPosition(UVector2(cegui_reldim(0.2f),cegui_reldim(0.6f)));
+	ebox->setSize(UVector2(cegui_reldim(0.6f),cegui_reldim(0.1f)));
 	ebox->setText("Single-line editbox");
 
 	Scrollbar* sbar = (Scrollbar*)winMgr.createWindow("TaharezLook/LargeVerticalScrollbar", "Demo7/Window1/Scrollbar1");
 	fwnd1->addChildWindow(sbar);
-	sbar->setMinimumSize(Size(0.01f, 0.1f));
-	sbar->setMaximumSize(Size(0.03f, 1.0f));
-	sbar->setPosition(Point(0.06f, 0.6f));
-	sbar->setSize(Size(0.06f, 0.38f));
+	sbar->setMinSize(UVector2(cegui_reldim(0.01f),cegui_reldim(0.1f)));
+	sbar->setMaxSize(UVector2(cegui_reldim(0.03f),cegui_reldim(1.0f)));
+	sbar->setPosition(UVector2(cegui_reldim(0.06f),cegui_reldim(0.6f)));
+	sbar->setSize(UVector2(cegui_reldim(0.06f),cegui_reldim(0.38f)));
 
 	Slider* sldr = (Slider*)winMgr.createWindow("TaharezLook/Slider", "Demo7/Window1/Slider1");
 	fwnd1->addChildWindow(sldr);
-	sldr->setMinimumSize(Size(0.01f, 0.1f));
-	sldr->setMaximumSize(Size(0.03f, 1.0f));
-	sldr->setPosition(Point(0.9f, 0.625f));
-	sldr->setSize(Size(0.03f, 0.28f));
+	sldr->setMinSize(UVector2(cegui_reldim(0.01f),cegui_reldim(0.1f)));
+	sldr->setMaxSize(UVector2(cegui_reldim(0.03f),cegui_reldim(1.0f)));
+	sldr->setPosition(UVector2(cegui_reldim(0.9f),cegui_reldim(0.625f)));
+	sldr->setSize(UVector2(cegui_reldim(0.03f),cegui_reldim(0.28f)));
 	sldr->setCurrentValue(1.0f);
 
 	ProgressBar* pbar = (ProgressBar*)winMgr.createWindow("TaharezLook/ProgressBar", "Demo7/Window2/Progbar1");
 	fwnd2->addChildWindow(pbar);
-	pbar->setMaximumSize(Size(1.0f, 1.0f));
-	pbar->setPosition(Point(0.04f, 0.1f));
-	pbar->setSize(Size(0.94f, 0.05f));
+	pbar->setMaxSize(UVector2(cegui_reldim(1.0f),cegui_reldim(1.0f)));
+	pbar->setPosition(UVector2(cegui_reldim(0.04f),cegui_reldim(0.1f)));
+	pbar->setSize(UVector2(cegui_reldim(0.94f),cegui_reldim(0.05f)));
 	pbar->setProgress(0.33f);
 
 	pbar = (ProgressBar*)winMgr.createWindow("TaharezLook/AlternateProgressBar", "Demo7/Window2/Progbar2");
 	fwnd2->addChildWindow(pbar);
-	pbar->setMaximumSize(Size(1.0f, 1.0f));
-	pbar->setPosition(Point(0.04f, 0.16f));
-	pbar->setSize(Size(0.94f, 0.05f));
+	pbar->setMaxSize(UVector2(cegui_reldim(1.0f),cegui_reldim(1.0f)));
+	pbar->setPosition(UVector2(cegui_reldim(0.04f),cegui_reldim(0.16f)));
+	pbar->setSize(UVector2(cegui_reldim(0.94f),cegui_reldim(0.05f)));
 	pbar->setProgress(0.7f);
 
 	Listbox* lbox = (Listbox*)winMgr.createWindow("TaharezLook/Listbox", "Demo7/Window2/Listbox");
 	fwnd2->addChildWindow(lbox);
-	lbox->setMaximumSize(Size(1.0f, 1.0f));
-	lbox->setPosition(Point(0.04f, 0.25f));
-	lbox->setSize(Size(0.42f, 0.3f));
+	lbox->setMaxSize(UVector2(cegui_reldim(1.0f),cegui_reldim(1.0f)));
+	lbox->setPosition(UVector2(cegui_reldim(0.04f),cegui_reldim(0.25f)));
+	lbox->setSize(UVector2(cegui_reldim(0.42f),cegui_reldim(0.3f)));
 
 	Combobox* cbobox = (Combobox*)winMgr.createWindow("TaharezLook/Combobox", "Demo7/Window2/Combobox");
 	fwnd2->addChildWindow(cbobox);
-	cbobox->setMaximumSize(Size(1.0f, 1.0f));
-	cbobox->setPosition(Point(0.5f, 0.25f));
-	cbobox->setSize(Size(0.42f, 0.45f));
+	cbobox->setMaxSize(UVector2(cegui_reldim(1.0f),cegui_reldim(1.0f)));
+	cbobox->setPosition(UVector2(cegui_reldim(0.5f),cegui_reldim(0.25f)));
+	cbobox->setSize(UVector2(cegui_reldim(0.42f),cegui_reldim(0.45f)));
 
 	MultiColumnList* mclbox = (MultiColumnList*)winMgr.createWindow("TaharezLook/MultiColumnList", "Demo7/Window2/MultiColumnList");
 	fwnd2->addChildWindow(mclbox);
-	mclbox->setMaximumSize(Size(1.0f, 1.0f));
-	mclbox->setPosition(Point(0.05f, 0.6f));
-	mclbox->setSize(Size(0.9f, 0.38f));
+	mclbox->setMaxSize(UVector2(cegui_reldim(1.0f),cegui_reldim(1.0f)));
+	mclbox->setPosition(UVector2(cegui_reldim(0.05f),cegui_reldim(0.6f)));
+	mclbox->setSize(UVector2(cegui_reldim(0.9f),cegui_reldim(0.38f)));
 	mclbox->setSelectionMode(MultiColumnList::RowSingle);
 
-	StaticImage* simg = (StaticImage*)winMgr.createWindow("TaharezLook/StaticImage", "Demo7/Window2/Image1");
+	Window* simg = winMgr.createWindow("TaharezLook/StaticImage", "Demo7/Window2/Image1");
 	fwnd2->addChildWindow(simg);
-	simg->setMaximumSize(Size(1.0f, 1.0f));
-	simg->setPosition(Point(0.5f, 0.32f));
-	simg->setSize(Size(0.5f, 0.30f));
-	simg->setFrameEnabled(false);
-	simg->setBackgroundEnabled(false);
-	simg->setImage("WerewolfGuiImagery", "CeguiLogo");
+	simg->setMaxSize(UVector2(cegui_reldim(1.0f),cegui_reldim(1.0f)));
+	simg->setPosition(UVector2(cegui_reldim(0.5f),cegui_reldim(0.32f)));
+	simg->setSize(UVector2(cegui_reldim(0.5f),cegui_reldim(0.30f)));
+	simg->setProperty("FrameEnabled", "false");
+	simg->setProperty("BackgroundEnabled","false");
+	simg->setProperty("Image", "set:WerewolfGuiImagery image:CeguiLogo");
 
 	MultiLineEditbox* mleb = (MultiLineEditbox*)winMgr.createWindow("TaharezLook/MultiLineEditbox", "Demo7/Window3/MLEditbox");
 	fwnd3->addChildWindow(mleb);
-	mleb->setMaximumSize(Size(1.0f, 1.0f));
-	mleb->setPosition(Point(0.02f, 0.1f));
-	mleb->setSize(Size(0.96f, 0.85f));
+	mleb->setMaxSize(UVector2(cegui_reldim(1.0f),cegui_reldim(1.0f)));
+	mleb->setPosition(UVector2(cegui_reldim(0.02f),cegui_reldim(0.1f)));
+	mleb->setSize(UVector2(cegui_reldim(0.96f),cegui_reldim(0.85f)));
 	mleb->setText("Multi-line edit box.  Edit me!");
 
 	// List box setup
-	mclbox->addColumn("Server Name", 0, 0.33f);
-	mclbox->addColumn("Address", 1, 0.5f);
-	mclbox->addColumn("Ping", 2, 0.2f);
+	mclbox->addColumn("Server Name", 0, cegui_absdim(0.33f));
+	mclbox->addColumn("Address", 1, cegui_absdim(0.5f));
+	mclbox->addColumn("Ping", 2, cegui_absdim(0.2f));
 
 	lbox->addItem(new MyListItem("Listbox Item 1"));
 	lbox->addItem(new MyListItem("Listbox Item 2"));
@@ -481,15 +481,15 @@ bool handleRadio(const CEGUI::EventArgs& e)
 
 	if (id == 0)
 	{
-		((StaticImage*)WindowManager::getSingleton().getWindow("Demo7/Window2/Image1"))->setImage("WerewolfGuiImagery", "CeguiLogo");
+		WindowManager::getSingleton().getWindow("Demo7/Window2/Image1")->setProperty("Image", "set:WerewolfGuiImagery image:CeguiLogo");
 	}
 	else if (id == 1)
 	{
-		((StaticImage*)WindowManager::getSingleton().getWindow("Demo7/Window2/Image1"))->setImage("WerewolfGuiImagery", "NeLLogo");
+		WindowManager::getSingleton().getWindow("Demo7/Window2/Image1")->setProperty("Image", "set:WerewolfGuiImagery image:NeLLogo");
 	}
 	else
 	{
-		((StaticImage*)WindowManager::getSingleton().getWindow("Demo7/Window2/Image1"))->setImage("WerewolfGuiImagery", "WerewolfLogo");
+		WindowManager::getSingleton().getWindow("Demo7/Window2/Image1")->setProperty("Image", "set:WerewolfGuiImagery image:WerewolfLogo");
 	}
 
 
