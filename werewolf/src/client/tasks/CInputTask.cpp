@@ -38,7 +38,7 @@
 //
 #include "tasks/CInputTask.h"
 #include "tasks/C3DTask.h"
-#include <wwcommon/CTaskManager.h>
+#include <ww/wwcommon/CTaskManager.h>
 
 //
 // Class

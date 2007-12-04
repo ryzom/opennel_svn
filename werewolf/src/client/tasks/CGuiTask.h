@@ -30,7 +30,7 @@
 //
 // System Includes
 //
-#include "renderers/NeLRenderer/nelrenderer.h"
+#include "nel/cegui/nelrenderer.h"
 #include "CEGUI.h"
 
 //
@@ -40,8 +40,8 @@
 //
 // Werewolf Includes
 //
-#include "wwcommon/ITask.h"
-#include "wwcommon/ISingleton.h"
+#include "ww/wwcommon/ITask.h"
+#include "ww/wwcommon/ISingleton.h"
 
 //
 // Typedefs

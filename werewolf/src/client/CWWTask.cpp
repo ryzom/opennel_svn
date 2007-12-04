@@ -62,7 +62,7 @@
 //#include "tasks/CEntityTask.h"
 #include "tasks/CInputTask.h"
 
-#include "wwcommon/CTaskManager.h"
+#include "ww/wwcommon/CTaskManager.h"
 //#include "CCamera.h"
 #include "controllers/CInputController.h"
 #include "CWWTask.h"

@@ -78,3 +78,4 @@ protected:
 }; // END NAMESPACE WWCLIENT
 
 #endif // __CSEQUENTIALSELECTOR_H__
+

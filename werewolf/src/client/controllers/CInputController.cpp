@@ -32,7 +32,7 @@
 //
 // Werewolf Includes
 //
-#include "wwcommon/CTaskManager.h"
+#include "ww/wwcommon/CTaskManager.h"
 #include "tasks/CInputTask.h"
 #include "CInputController.h"
 #include "CWWTask.h"

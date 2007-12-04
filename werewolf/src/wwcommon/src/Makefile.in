@@ -79,7 +79,7 @@ libwwcommon_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(libwwcommon_la_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
-depcomp = $(SHELL) $(top_srcdir)/depcomp
+depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -157,6 +157,7 @@ PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
 RANLIB = @RANLIB@
+SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 SNOWBALLS_CONFIG = @SNOWBALLS_CONFIG@
@@ -276,7 +277,7 @@ ISimulationState.cpp \
 ISobEvent.cpp \
 ISobStateChangeEvent.cpp 
 
-AM_CXXFLAGS = -I/usr/include/python2.4
+AM_CXXFLAGS = -I/usr/include/python2.5
 libwwcommon_la_LIBADD = -lc -lpthread
 libwwcommon_la_LDFLAGS = -version-info @LIBTOOL_VERSION@
 all: all-am

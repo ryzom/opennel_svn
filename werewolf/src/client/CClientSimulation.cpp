@@ -41,14 +41,14 @@
 //
 // Werewolf Includes
 //
-#include "wwcommon/ISimulationObj.h"
-#include "wwcommon/CPerformer.h"
+#include "ww/wwcommon/ISimulationObj.h"
+#include "ww/wwcommon/CPerformer.h"
 #include "CActorProxy.h"
 
-#include <wwcommon/CSobManager.h>
-#include <wwcommon/CSobFactory.h>
-#include <wwcommon/IBaseSimulation.h>
-#include <wwcommon/CGameEventServer.h>
+#include <ww/wwcommon/CSobManager.h>
+#include <ww/wwcommon/CSobFactory.h>
+#include <ww/wwcommon/IBaseSimulation.h>
+#include <ww/wwcommon/CGameEventServer.h>
 #include "CClientSimulation.h"
 #include "controllers/CInteractiveSobController.h"
 
@@ -58,8 +58,8 @@
 #include "tasks/CResourceTask.h"
 #include "views/CPerformer3DView.h"
 
-#include <wwcommon/CSobHandlerFactory.h>
-#include <wwcommon/CMotionController.h>
+#include <ww/wwcommon/CSobHandlerFactory.h>
+#include <ww/wwcommon/CMotionController.h>
 #include "tasks/CPacsTask.h"
 
 //
@@ -153,7 +153,7 @@ void CClientSimulation::spawnSelf(WWCOMMON::CSobSpawnEvent *event) {
 
 	sob->setPosition(event->Position);
 	sob->setGlobalPosition(event->Position);
-	WWCOMMON::IView* view = new CPerformer3DView(sob, CResourceTask::instance().getEMD(event->EMD));
+	WWCOMMON::IView* view = new CPerformer3DView((WWCOMMON::CPerformer*)sob, CResourceTask::instance().getEMD(event->EMD));
 	view->show();
 	sob->addView(view);
 

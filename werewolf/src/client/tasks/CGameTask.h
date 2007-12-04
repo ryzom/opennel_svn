@@ -41,8 +41,8 @@
 //
 #include "controllers/CPlayerController.h"
 
-#include "wwcommon/ITask.h"
-#include "wwcommon/ISingleton.h"
+#include "ww/wwcommon/ITask.h"
+#include "ww/wwcommon/ISingleton.h"
 
 //
 // Namespaces
@@ -77,9 +77,9 @@ public:
 private:
 	CPlayerController	m_Controller;
 
-	CEGUI::StaticText *m_FpsCounter;
-	CEGUI::StaticText *m_Location;
-	CEGUI::StaticText *m_Zone;
+	CEGUI::Window *m_FpsCounter;
+	CEGUI::Window *m_Location;
+	CEGUI::Window *m_Zone;
 };
 
 }; // END NAMESPACE WWCLIENT

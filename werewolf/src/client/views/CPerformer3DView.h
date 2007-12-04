@@ -42,10 +42,10 @@
 //
 // Werewolf Includes
 //	
-#include <wwcommon/IView.h>
-#include <wwcommon/CPerformer.h>
+#include <ww/wwcommon/IView.h>
+#include <ww/wwcommon/CPerformer.h>
 #include "entities/CEntityMedia.h"
-#include <wwcommon/IGameEventListener.h>
+#include <ww/wwcommon/IGameEventListener.h>
 
 //
 // Namespaces
@@ -59,7 +59,7 @@ private:
 	WWCOMMON::CPerformer* m_performer;
 	CEntityMedia m_emd;
 public:
-	CPerformer3DView(WWCOMMON::CPerformer* performer, CEntityMedia& emd);
+	CPerformer3DView(WWCOMMON::CPerformer* performer, const CEntityMedia& emd);
 	virtual ~CPerformer3DView();
 
 	void update();

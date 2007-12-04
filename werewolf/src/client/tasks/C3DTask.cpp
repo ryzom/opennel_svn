@@ -44,11 +44,12 @@
 #include <3d/shape.h>
 #include <3d/material.h>
 #include <3d/register_3d.h>
+#include <3d/driver_user.h>
 
 //
 // Werewolf Includes
 //
-#include "wwcommon/CTaskManager.h"
+#include "ww/wwcommon/CTaskManager.h"
 #include "CConfigTask.h"
 #include "CTimeTask.h"
 #include "C3DTask.h"
@@ -140,8 +141,8 @@ void C3DTask::init() {
 
 	// Set the default shape cache size.
 	// TODO henri:everyone figure out where to get the value to initialize the shape cache.
-	NL3D::CSceneUser* sceneUser = dynamic_cast<NL3D::CSceneUser*>(m_Scene);
-	sceneUser->getScene().getShapeBank()->setShapeCacheSize("default", 500);
+	//NL3D::CSceneUser* sceneUser = dynamic_cast<NL3D::CSceneUser*>(m_Scene);
+	//sceneUser->getScene().getShapeBank()->setShapeCacheSize("default", 500);
 
 	//LevelParticle = NULL;
 

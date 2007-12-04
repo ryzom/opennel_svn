@@ -64,3 +64,4 @@ protected:
 }; // END NAMESPACE WWCLIENT
 
 #endif // __ISELECTOR_H__
+

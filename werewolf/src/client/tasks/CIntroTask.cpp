@@ -41,7 +41,7 @@
 #include "tasks/CPreGameTask.h"
 #include "tasks/CInputTask.h"
 #include "tasks/CNetworkTask.h"
-#include "wwcommon/CTaskManager.h"
+#include "ww/wwcommon/CTaskManager.h"
 
 //
 // Namespaces
@@ -116,11 +116,11 @@ void CIntroTask::initWindows() {
 	edb->setMaskCodePoint( (CEGUI::utf32)'*' );
 
 	// set up the columns on the shard list.
-	CEGUI::MultiColumnList *mcl=(CEGUI::MultiColumnList *)CEGUI::WindowManager::getSingleton().getWindow("NetworkTask/ShardList/ShardMCL");
+	CEGUI::MultiColumnList *mcl=static_cast<CEGUI::MultiColumnList *>(CEGUI::WindowManager::getSingleton().getWindow("NetworkTask/ShardList/ShardMCL"));
 	mcl->setSelectionMode(CEGUI::MultiColumnList::RowSingle);
-	mcl->addColumn("Shard ID",0,0.33f);
-	mcl->addColumn("Shard Name",1,0.5f);
-	mcl->addColumn("Players",2,0.2f);
+	mcl->addColumn("Shard ID",0,cegui_absdim(0.33f));
+	mcl->addColumn("Shard Name",1,cegui_absdim(0.5f));
+	mcl->addColumn("Players",2,cegui_absdim(0.2f));
 
 	// set up event subscriptions
 	CEGUI::WindowManager::getSingleton().getWindow("IntroTask/MainMenu/Quit")->

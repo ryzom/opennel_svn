@@ -41,9 +41,9 @@
 #include "tasks/CCameraTask.h"
 #include "tasks/CConfigTask.h"
 
-#include <wwcommon/CGameEventServer.h>
-#include <wwcommon/CSobStateRequestEvent.h>
-#include <wwcommon/ISimulationObj.h>
+#include <ww/wwcommon/CGameEventServer.h>
+#include <ww/wwcommon/CSobStateRequestEvent.h>
+#include <ww/wwcommon/ISimulationObj.h>
 
 //
 // Class

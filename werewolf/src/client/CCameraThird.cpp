@@ -38,7 +38,7 @@
 //
 #include "CCameraThird.h"
 //#include "CInterpolator.h"
-#include "wwcommon/CGeneralInterpolator.h"
+#include "ww/wwcommon/CGeneralInterpolator.h"
 
 #include "interfaces/IBaseCamera.h"
 #include "CActorProxy.h"

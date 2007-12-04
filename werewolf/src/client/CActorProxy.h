@@ -41,11 +41,11 @@
 //
 // Werewolf Includes
 //	
-#include "wwcommon/CPerformer.h"
-#include "wwcommon/ISimulationObj.h"
-#include "wwcommon/IController.h"
-#include "wwcommon/CSobFactory.h"
-#include "wwcommon/CFactoryRegistrar.h"
+#include "ww/wwcommon/CPerformer.h"
+#include "ww/wwcommon/ISimulationObj.h"
+#include "ww/wwcommon/IController.h"
+#include "ww/wwcommon/CSobFactory.h"
+#include "ww/wwcommon/CFactoryRegistrar.h"
 #include "CLocalObjectView.h"
 
 //

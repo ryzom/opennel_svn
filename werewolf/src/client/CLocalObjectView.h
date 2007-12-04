@@ -38,8 +38,8 @@
 //
 // Werewolf Includes
 //
-#include "wwcommon/ISimulationObj.h"
-#include "wwcommon/IGameEventListener.h"
+#include "ww/wwcommon/ISimulationObj.h"
+#include "ww/wwcommon/IGameEventListener.h"
 
 //
 // Callbacks

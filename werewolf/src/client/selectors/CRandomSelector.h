@@ -78,3 +78,4 @@ protected:
 }; // END NAMESPACE WWCLIENT
 
 #endif // __CRANDOMSELECTOR_H__
+

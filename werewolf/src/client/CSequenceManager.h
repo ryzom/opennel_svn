@@ -97,3 +97,4 @@ private:
 }; // END NAMESPACE WWCLIENT
 
 #endif // __CSEQUENCEMANAGER_H__
+

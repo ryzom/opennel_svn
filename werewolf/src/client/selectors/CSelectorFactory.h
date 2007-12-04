@@ -29,7 +29,6 @@
 //
 // Standard Includes
 //
-#include <hash_map>
 
 //
 // System Includes
@@ -42,8 +41,8 @@
 //
 // Werewolf Includes
 //
-#include <wwcommon/ISingleton.h>
-#include <wwcommon/general.h>
+#include <ww/wwcommon/ISingleton.h>
+#include <ww/wwcommon/general.h>
 
 #include "selectors/ISelector.h"
 #include "selectors/CRandomSelector.h"
@@ -61,11 +60,11 @@ public:
 	typedef ISelector<T>* (*CreateSelector)(void);
 	
 	bool registerSelector(CreateSelector create, std::string name) {
-		return m_SelectorMap.insert( selectorMap::value_type(name, create)).second;
+		return m_SelectorMap.insert( typename selectorMap::value_type(name, create)).second;
 	};
 
 	ISelector<T>* createSelector(std::string name) {
-		selectorMap::const_iterator iter = m_SelectorMap.find(name);
+		typename selectorMap::const_iterator iter = m_SelectorMap.find(name);
 		if( iter == m_SelectorMap.end()) {
 			nlwarning("Selector creation failed: %s not found!", name.c_str());
 			if(m_DefaultSelector)
@@ -93,3 +92,4 @@ private:
 }; // END NAMESPACE WWCLIENT
 
 #endif // __CSELECTORFACTORY_H__
+

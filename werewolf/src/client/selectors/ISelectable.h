@@ -55,3 +55,4 @@ class ISelectable {
 }; // END NAMESPACE WWCLIENT
 
 #endif // __ISELECTABLE_H__
+

@@ -109,3 +109,4 @@ public:
 }; // END NAMESPACE WWCLIENT
 
 #endif // __CANIMATIONCLIP_H__
+

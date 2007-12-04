@@ -22,7 +22,7 @@
 //
 #include "stdpch.h"
 #include <list>
-#include "renderers/NeLRenderer/nelrenderer.h"
+#include "nel/cegui/nelrenderer.h"
 #include "CEGUI.h"
 
 //

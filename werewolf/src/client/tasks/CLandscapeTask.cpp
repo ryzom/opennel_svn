@@ -56,7 +56,7 @@ namespace WWCLIENT {
 
 void CLandscapeTask::updateProgressBar(float prog1, float prog2, std::string message) {
 	C3DTask::instance().clear();
-	CEGUI::StaticText *wnd=(CEGUI::StaticText *)CEGUI::WindowManager::getSingleton().getWindow("LandscapeProgress/Message");
+	CEGUI::Window *wnd=CEGUI::WindowManager::getSingleton().getWindow("LandscapeProgress/Message");
 	wnd->setText(message);
 	CEGUI::ProgressBar *pbar=(CEGUI::ProgressBar *)CEGUI::WindowManager::getSingleton().getWindow("LandscacpeProgress/ProgBar");
 	pbar->setProgress(prog1);

@@ -29,7 +29,6 @@
 //
 // System Includes
 //
-#include <hash_map>
 #include <string>
 
 //
@@ -46,9 +45,9 @@
 //
 #include "CAnimationClip.h"
 
-#include <wwcommon/general.h>
-#include <wwcommon/ITask.h>
-#include <wwcommon/ISingleton.h>
+#include <ww/wwcommon/general.h>
+#include <ww/wwcommon/ITask.h>
+#include <ww/wwcommon/ISingleton.h>
 
 //
 // Namespaces
@@ -86,7 +85,7 @@ public:
 	CAnimationClip* getClip(std::string name);
 
 protected:
-	typedef std::hash_map<std::string, CAnimationClip, std::hash<std::string>, stdstreqpred> clipMap;
+	typedef CHashMap<std::string, CAnimationClip, CHash<std::string>, stdstreqpred> clipMap;
 	clipMap m_AnimationClips;
 	NL3D::UAnimationSet *m_AnimationSet;
 	NL3D::UPlayListManager *m_PlayListManager; 

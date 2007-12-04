@@ -50,8 +50,8 @@
 #include "CTimeTask.h"
 #include "CClientSimulation.h"
 #include "CActorProxy.h"
-#include <wwcommon/CMotionController.h>
-#include <wwcommon/CPolynomialMotionController.h>
+#include <ww/wwcommon/CMotionController.h>
+#include <ww/wwcommon/CPolynomialMotionController.h>
 
 //
 // Namespaces

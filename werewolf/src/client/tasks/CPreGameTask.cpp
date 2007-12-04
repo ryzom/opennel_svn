@@ -41,10 +41,10 @@
 #include "tasks/CBackgroundTask.h"
 #include "tasks/CNetworkTask.h"
 #include "tasks/CGameTask.h"
-#include <wwcommon/CTaskManager.h>
-#include <wwcommon/CGameSpawnRequestEvent.h>
-#include <wwcommon/IGameEvent.h>
-#include <wwcommon/CGameEventServer.h>
+#include <ww/wwcommon/CTaskManager.h>
+#include <ww/wwcommon/CGameSpawnRequestEvent.h>
+#include <ww/wwcommon/IGameEvent.h>
+#include <ww/wwcommon/CGameEventServer.h>
 
 //
 // Namespaces

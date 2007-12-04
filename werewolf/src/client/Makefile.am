@@ -5,12 +5,10 @@ MAINTAINERCLEANFILES  = Makefile.in
 
 bin_PROGRAMS		= client
 
-client_LDADD	=	../wwcommon/src/libwwcommon.la @CEGUI_LIBS@
+client_LDADD	=	../wwcommon/src/libwwcommon.la @CEGUI_LIBS@ -lpython2.5 -lboost_python
 
 client_SOURCES	=	main.cpp		\
 CClientEventManager.cpp \
-Models/CBBClusterModel.cpp \
-Models/CLeafClusterModel.cpp \
 main.cpp \
 CCameraThird.cpp \
 tasks/CBackgroundTask.cpp \
@@ -45,6 +43,6 @@ entities/CSkeleton.cpp \
 entities/CEntityMedia.cpp \
 CLocalObjectView.cpp 
 
-AM_CXXFLAGS              = -I/usr/include/python2.4 @CEGUI_CFLAGS@
+AM_CXXFLAGS              = -I/usr/include/python2.5 @CEGUI_CFLAGS@
 
 # End of Makefile.am

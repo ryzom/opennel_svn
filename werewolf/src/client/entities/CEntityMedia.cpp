@@ -176,7 +176,7 @@ void CEntityMedia::hideMesh(std::string group) {
 	iter->second.hideMesh();
 }
 
-void CEntityMedia::transform(NLMISC::CMatrix& matrix) {
+void CEntityMedia::transform(const NLMISC::CMatrix& matrix) {
 	if(!m_Transform.empty()) {
 		m_Transform.setMatrix(matrix);
 	}

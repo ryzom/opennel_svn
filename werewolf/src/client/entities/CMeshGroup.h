@@ -48,7 +48,7 @@
 //
 #include "entities/CSkeleton.h"
 #include "entities/IControllableMedia.h"
-#include <wwcommon/general.h>
+#include <ww/wwcommon/general.h>
 
 //
 // Namespaces

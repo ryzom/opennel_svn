@@ -44,7 +44,7 @@
 #include "tasks/CGameTask.h"
 #include "tasks/CConfigTask.h"
 
-#include "wwcommon/IGameEvent.h"
+#include "ww/wwcommon/IGameEvent.h"
 #include "CClientSimulation.h"
 
 //

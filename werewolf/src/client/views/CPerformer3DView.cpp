@@ -40,10 +40,10 @@
 // Werewolf Includes
 //	
 #include "views/CPerformer3DView.h"
-#include <wwcommon/CMovementState.h>
-#include <wwcommon/CStateManager.h>
-#include <wwcommon/CGameEventServer.h>
-#include <wwcommon/CSobMoveEvent.h>
+#include <ww/wwcommon/CMovementState.h>
+#include <ww/wwcommon/CStateManager.h>
+#include <ww/wwcommon/CGameEventServer.h>
+#include <ww/wwcommon/CSobMoveEvent.h>
 #include "CClientSimulation.h"
 #include "entities/CAnimationController.h"
 
@@ -55,7 +55,7 @@ namespace WWCLIENT {
 
 const char* CPerformer3DView::m_Name = "3D_EMD";
 
-CPerformer3DView::CPerformer3DView(WWCOMMON::CPerformer* performer, CEntityMedia& emd) : 
+CPerformer3DView::CPerformer3DView(WWCOMMON::CPerformer* performer, const CEntityMedia& emd) : 
 	m_performer(performer), m_emd(emd) {
 	m_emd.initInstance(performer);
 	showMesh("body", "normal");
@@ -85,6 +85,8 @@ void CPerformer3DView::render() {
 }
 
 void CPerformer3DView::update() {
+	//const NLMISC::CMatrix &tmp = m_performer->getInterpolator()->getSmoothKey().getMatrix();
+
 	m_emd.transform(m_performer->getInterpolator()->getSmoothKey().getMatrix());
 	NLMISC::CVector pos = m_performer->getInterpolator()->getSmoothKey().getMatrix().getPos();
 	m_emd.update();

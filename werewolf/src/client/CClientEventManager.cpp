@@ -41,10 +41,10 @@
 // Werewolf Includes
 //	
 #include "CClientEventManager.h"
-#include <wwcommon/CGameEventServer.h>
-#include <wwcommon/CGameSpawnRequestEvent.h>
-#include <wwcommon/CGameUnspawnRequestEvent.h>
-#include <wwcommon/CSobStateRequestEvent.h>
+#include <ww/wwcommon/CGameEventServer.h>
+#include <ww/wwcommon/CGameSpawnRequestEvent.h>
+#include <ww/wwcommon/CGameUnspawnRequestEvent.h>
+#include <ww/wwcommon/CSobStateRequestEvent.h>
 #include "tasks/CNetworkTask.h"
 #include "tasks/CPreGameTask.h"
 #include "CClientSimulation.h"

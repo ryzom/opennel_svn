@@ -42,7 +42,7 @@
 //
 // Werewolf Includes
 //	
-#include <wwcommon/IDirtyPropagator.h>
+#include <ww/wwcommon/IDirtyPropagator.h>
 
 //
 // Namespaces

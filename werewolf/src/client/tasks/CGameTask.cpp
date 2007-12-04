@@ -52,9 +52,9 @@
 #include "tasks/CTimeTask.h"
 #include "tasks/CNetworkTask.h"
 
-#include "wwcommon/CTaskManager.h"
+#include "ww/wwcommon/CTaskManager.h"
 
-#include "wwcommon/ITask.h"
+#include "ww/wwcommon/ITask.h"
 
 #include "CClientSimulation.h"
 
@@ -106,9 +106,9 @@ void CGameTask::init() {
 	CEGUI::WindowManager& winMgr = CEGUI::WindowManager::getSingleton();
 	CEGUI::FrameWindow *wnd=(CEGUI::FrameWindow *)winMgr.getWindow("GameTask/DebugWindow");
 	wnd->show();
-	m_FpsCounter=(CEGUI::StaticText *)winMgr.getWindow("GameTask/DebugWindow/FPS");
-	m_Location=(CEGUI::StaticText *)winMgr.getWindow("GameTask/DebugWindow/Position");
-	m_Zone=(CEGUI::StaticText *)winMgr.getWindow("GameTask/DebugWindow/Zone");
+	m_FpsCounter=winMgr.getWindow("GameTask/DebugWindow/FPS");
+	m_Location=winMgr.getWindow("GameTask/DebugWindow/Position");
+	m_Zone=winMgr.getWindow("GameTask/DebugWindow/Zone");
 }
 
 void CGameTask::update() {

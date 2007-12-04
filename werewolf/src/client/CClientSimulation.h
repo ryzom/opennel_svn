@@ -42,12 +42,12 @@
 //
 // Werewolf Includes
 //
-#include "wwcommon/ISimulationObj.h"
-#include "wwcommon/CPerformer.h"
-#include "wwcommon/CSobManager.h"
-#include "wwcommon/IBaseSimulation.h"
-#include <wwcommon/CSobSpawnEvent.h>
-#include <wwcommon/CSobAddEvent.h>
+#include "ww/wwcommon/ISimulationObj.h"
+#include "ww/wwcommon/CPerformer.h"
+#include "ww/wwcommon/CSobManager.h"
+#include "ww/wwcommon/IBaseSimulation.h"
+#include <ww/wwcommon/CSobSpawnEvent.h>
+#include <ww/wwcommon/CSobAddEvent.h>
 #include "CActorProxy.h"
 
 //

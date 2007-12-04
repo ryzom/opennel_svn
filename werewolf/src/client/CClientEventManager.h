@@ -42,12 +42,12 @@
 //
 // Werewolf Includes
 //
-#include <wwcommon/ISingleton.h>
-#include <wwcommon/IGameEventListener.h>
-#include <wwcommon/IGameEvent.h>
-#include <wwcommon/CSobSpawnEvent.h>
-#include <wwcommon/CSobAddEvent.h>
-#include <wwcommon/CSobRemoveEvent.h>
+#include <ww/wwcommon/ISingleton.h>
+#include <ww/wwcommon/IGameEventListener.h>
+#include <ww/wwcommon/IGameEvent.h>
+#include <ww/wwcommon/CSobSpawnEvent.h>
+#include <ww/wwcommon/CSobAddEvent.h>
+#include <ww/wwcommon/CSobRemoveEvent.h>
 
 //
 // Namespaces

@@ -38,8 +38,8 @@
 // Werewolf Includes
 //
 #include "CActorProxy.h"
-#include <wwcommon/CStateManager.h>
-#include <wwcommon/ISobController.h>
+#include <ww/wwcommon/CStateManager.h>
+#include <ww/wwcommon/ISobController.h>
 
 //
 // Class

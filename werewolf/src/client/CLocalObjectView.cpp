@@ -38,12 +38,12 @@
 // Werewolf Includes
 //
 #include "CLocalObjectView.h"
-#include "wwcommon/IBaseSimulation.h"
-#include "wwcommon/CSobManager.h"
-#include "wwcommon/ISimulationObj.h"
-#include <wwcommon/IGameEvent.h>
-#include <wwcommon/CGameEventServer.h>
-#include <wwcommon/CSobStateRequestEvent.h>
+#include "ww/wwcommon/IBaseSimulation.h"
+#include "ww/wwcommon/CSobManager.h"
+#include "ww/wwcommon/ISimulationObj.h"
+#include <ww/wwcommon/IGameEvent.h>
+#include <ww/wwcommon/CGameEventServer.h>
+#include <ww/wwcommon/CSobStateRequestEvent.h>
 #include "tasks/CNetworkTask.h"
 
 //

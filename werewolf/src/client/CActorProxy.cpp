@@ -40,11 +40,11 @@
 // Werewolf Includes
 //	
 #include "CActorProxy.h"
-#include "wwcommon/CPerformer.h"
-#include "wwcommon/ISimulationObj.h"
-#include "wwcommon/CSobFactory.h"
-#include "wwcommon/CStateManager.h"
-#include "wwcommon/CMovementState.h"
+#include "ww/wwcommon/CPerformer.h"
+#include "ww/wwcommon/ISimulationObj.h"
+#include "ww/wwcommon/CSobFactory.h"
+#include "ww/wwcommon/CStateManager.h"
+#include "ww/wwcommon/CMovementState.h"
 
 //
 // Namespaces

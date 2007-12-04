@@ -55,7 +55,7 @@ ISimulationState.cpp \
 ISobEvent.cpp \
 ISobStateChangeEvent.cpp 
 
-AM_CXXFLAGS         	 = -I/usr/include/python2.4
+AM_CXXFLAGS         	 = -I/usr/include/python2.5
 
 libwwcommon_la_LIBADD  = -lc -lpthread
 

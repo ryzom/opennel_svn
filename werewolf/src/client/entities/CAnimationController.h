@@ -44,9 +44,9 @@
 // Werewolf Includes
 //	
 #include "entities/IMediaController.h"
-#include <wwcommon/IDirtyPropagator.h>
+#include <ww/wwcommon/IDirtyPropagator.h>
 #include "entities/CEntityMedia.h"
-#include <wwcommon/CStateManager.h>
+#include <ww/wwcommon/CStateManager.h>
 
 //
 // Namespaces

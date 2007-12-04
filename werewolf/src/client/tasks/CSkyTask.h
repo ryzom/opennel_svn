@@ -38,8 +38,8 @@
 //
 // Werewolf Includes
 //
-#include "wwcommon/ITask.h"
-#include "wwcommon/ISingleton.h"
+#include "ww/wwcommon/ITask.h"
+#include "ww/wwcommon/ISingleton.h"
 
 //
 // Class

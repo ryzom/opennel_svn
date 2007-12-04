@@ -31,7 +31,6 @@
 // Standard Includes
 //
 #include <vector>
-#include <hash_map>
 
 //
 // System Includes
@@ -52,10 +51,10 @@
 #include "entities/CAnimLayer.h"
 #include "entities/CMeshGroup.h"
 #include "entities/CSkeleton.h"
-#include <wwcommon/general.h>
+#include <ww/wwcommon/general.h>
 #include "CSequenceManager.h"
 #include "entities/IControllableMedia.h"
-#include <wwcommon/ISimulationObj.h>
+#include <ww/wwcommon/ISimulationObj.h>
 
 //
 // Namespaces
@@ -80,9 +79,9 @@ public:
 	CEntityMedia();
 	~CEntityMedia();
 
-	typedef std::hash_map<std::string, CSkeleton, std::hash<std::string> > skeletonMap;
-	typedef std::hash_map<std::string, CAnimLayer, std::hash<std::string> > animLayerMap;
-	typedef std::hash_map<std::string, CMeshGroup, std::hash<std::string> > meshGroupMap;
+	typedef CHashMap<std::string, CSkeleton, CHash<std::string> > skeletonMap;
+	typedef CHashMap<std::string, CAnimLayer, CHash<std::string> > animLayerMap;
+	typedef CHashMap<std::string, CMeshGroup, CHash<std::string> > meshGroupMap;
 
 	void readGeorges(const NLMISC::CSmartPtr<NLGEORGES::UForm> &form, const std::string &sheetId);
 	void initInstance(WWCOMMON::ISimulationObj* sob);
@@ -118,7 +117,7 @@ public:
 
 	void showMesh(std::string group, std::string mesh);
 	void hideMesh(std::string group);
-	void transform(NLMISC::CMatrix& matrix);
+	void transform(const NLMISC::CMatrix& matrix);
 	NL3D::UTransform* getTransform();
 
 	void playAnimation(std::string layer, std::string group);
