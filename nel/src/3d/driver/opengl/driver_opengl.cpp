@@ -993,7 +993,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 	    nldebug("XOpenDisplay on '%s' OK", getenv("DISPLAY"));
 	  }
 
-	int sAttribList[] =
+	int sAttribList16bpp[] =
 	{
 	  GLX_RGBA,
 	  GLX_DOUBLEBUFFER,
@@ -1002,25 +1002,26 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 	  GLX_RED_SIZE, 4,
 	  GLX_GREEN_SIZE, 4,
 	  GLX_BLUE_SIZE, 4,
-	  GLX_ALPHA_SIZE, 1,
 	  None
 	};
-	/*
-	int sAttribList[] =
+	
+	int sAttribList32bpp[] =
 	{
 	  GLX_RGBA,
 	  GLX_DOUBLEBUFFER,
 	  //GLX_BUFFER_SIZE, 32,
-	  GLX_DEPTH_SIZE, 32,
+	  GLX_DEPTH_SIZE, 24,
 	  GLX_RED_SIZE, 8,
 	  GLX_GREEN_SIZE, 8,
 	  GLX_BLUE_SIZE, 8,
 	  GLX_ALPHA_SIZE, 8,
 	  None
-	  };
-	*/
-	XVisualInfo *visual_info = glXChooseVisual (dpy, DefaultScreen(dpy), sAttribList);
-
+	};
+	
+	// first try 32bpp and if that fails 16bpp
+	XVisualInfo *visual_info = glXChooseVisual (dpy, DefaultScreen(dpy), sAttribList32bpp);
+	if (visual_info == NULL)
+		visual_info = glXChooseVisual(dpy, DefaultScreen(dpy), sAttribList16bpp);
 	if(visual_info == NULL)
 	  {
 	    nlerror("glXChooseVisual() failed");
