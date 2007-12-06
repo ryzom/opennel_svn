@@ -82,11 +82,11 @@ int WINAPI WinMain( HINSTANCE hInstance,
 									 LPSTR lpCmdLine, 
 									 int nCmdShow ) {
 	ghInstance = hInstance;
-	NLMISC::CApplicationContext myApplicationContext;
 #else
 int main(int argc, char **argv)
 {
 #endif
+	NLMISC::CApplicationContext myApplicationContext;
 	try {
 		gScreenWidth=800;
 		gScreenHeight=600;
