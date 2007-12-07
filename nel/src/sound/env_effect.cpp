@@ -23,6 +23,8 @@
  * MA 02111-1307, USA.
  */
 
+#if 0
+
 #include "stdsound.h"
 
 #include "env_effect.h"
@@ -144,3 +146,5 @@ void			CEnvEffect::save( const std::vector<CEnvEffect>& container, NLMISC::IStre
 
 
 } // NLSOUND
+
+#endif // 0

@@ -23,6 +23,7 @@
  * MA 02111-1307, USA.
  */
 
+#if 0
 #include "stdsound.h"
 
 #include "env_sound_user.h"
@@ -593,3 +594,5 @@ void CEnvSoundUser::addChild( CEnvSoundUser *child )
 
 
 } // NLSOUND
+
+#endif // 0

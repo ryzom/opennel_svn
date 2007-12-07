@@ -23,6 +23,7 @@
  * MA 02111-1307, USA.
  */
 
+#if 0
 #error "Deprecated"
 
 #include "stdsound.h"
@@ -417,3 +418,5 @@ void		CAmbiantSource::setProperties( std::vector<TSoundId>& ambiantsounds,
 
 
 } // NLSOUND
+
+#endif // 0
