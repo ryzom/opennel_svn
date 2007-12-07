@@ -11,6 +11,7 @@ ENDIF(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
 PROJECT(OpenNeL CXX C)
+SET(NL_VERSION "0.6.0")
 
 #-----------------------------------------------------------------------------
 # Redirect output files
@@ -31,18 +32,19 @@ OPTION(WITH_COVERAGE		"With Code Coverage Support"			ON)
 ###
 # Core libraries
 ###
-OPTION(WITH_NET			"Build NLNET"					OFF)
+OPTION(WITH_NET			"Build NLNET"					ON )
 OPTION(WITH_3D			"Build NL3D"					ON )
 OPTION(WITH_PACS		"Build NLPACS"					OFF)
 OPTION(WITH_GEORGES		"Build NLGEORGES"				ON )
-OPTION(WITH_LIGO		"Build NLLIGO"					OFF)
-OPTION(WITH_SOUND		"Build NLSOUND"					OFF)
+OPTION(WITH_LIGO		"Build NLLIGO"					ON )
+OPTION(WITH_SOUND		"Build NLSOUND"					ON )
 
 ###
 # Drivers Support
 ###
 OPTION(WITH_DRIVER_OPENAL	"Build OpenAL Driver"				OFF)
 OPTION(WITH_DRIVER_OPENGL	"Build OpenGL Driver"				ON )
+OPTION(WITH_DRIVER_DIRECT3D	"Build OpenGL Driver"				OFF)
 
 ###
 # Optional support
@@ -147,7 +149,7 @@ IF(UNIX)
   INCLUDE_DIRECTORIES(/usr/include /usr/local/include)
 ENDIF(UNIX)
 
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include)
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/src)
 
 ## None
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${NL_RELEASEDEBUG_CFLAGS} ${PLATFORM_CFLAGS} ")

@@ -1,6 +1,6 @@
 FILE(GLOB SRC *.cpp)
 
-DECORATE_NEL_LIB("nelgeorges")
+DECORATE_NEL_LIB("nelnet")
 
 ADD_LIBRARY(${LIBNAME} SHARED ${SRC})
 

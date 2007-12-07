@@ -1,6 +1,6 @@
-FILE(GLOB SRC *.cpp)
+FILE(GLOB SRC *.cpp driver/*.cpp)
 
-DECORATE_NEL_LIB("nelgeorges")
+DECORATE_NEL_LIB("nelsound")
 
 ADD_LIBRARY(${LIBNAME} SHARED ${SRC})
 
