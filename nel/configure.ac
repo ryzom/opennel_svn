@@ -422,15 +422,16 @@ fi
 # ====================================================================
 # CEGUI
 
-PKG_CHECK_MODULES(CEGUI, CEGUI >= 0.4,
-	[],
-	[
-		AC_MSG_ERROR([Couldn't find CEGUI or tests failed:
+if test "$enable_cegui" = "yes"
+	PKG_CHECK_MODULES(CEGUI, CEGUI >= 0.4,
+		[],
+		[
+			AC_MSG_ERROR([Couldn't find CEGUI or tests failed:
 $CEGUI_PKG_ERRORS
 Please go to http://crayzedsgui.sourceforge.net to get the latest, or check
 config.log to see why the tests failed, and fix it.])
-	])
-
+		])
+fi
 
 # ====================================================================
 # FreeType 2
