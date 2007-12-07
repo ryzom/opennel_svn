@@ -423,6 +423,7 @@ fi
 # CEGUI
 
 if test "$enable_cegui" = "yes"
+then
 	PKG_CHECK_MODULES(CEGUI, CEGUI >= 0.4,
 		[],
 		[
