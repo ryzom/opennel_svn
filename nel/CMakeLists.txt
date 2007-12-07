@@ -32,9 +32,9 @@ OPTION(WITH_COVERAGE		"With Code Coverage Support"			ON)
 # Core libraries
 ###
 OPTION(WITH_NET			"Build NLNET"					OFF)
-OPTION(WITH_3D			"Build NL3D"					OFF)
+OPTION(WITH_3D			"Build NL3D"					ON )
 OPTION(WITH_PACS		"Build NLPACS"					OFF)
-OPTION(WITH_GEORGES		"Build NLGEORGES"				OFF)
+OPTION(WITH_GEORGES		"Build NLGEORGES"				ON )
 OPTION(WITH_LIGO		"Build NLLIGO"					OFF)
 OPTION(WITH_SOUND		"Build NLSOUND"					OFF)
 
@@ -42,7 +42,7 @@ OPTION(WITH_SOUND		"Build NLSOUND"					OFF)
 # Drivers Support
 ###
 OPTION(WITH_DRIVER_OPENAL	"Build OpenAL Driver"				OFF)
-OPTION(WITH_DRIVER_OPENGL	"Build OpenGL Driver"				OFF)
+OPTION(WITH_DRIVER_OPENGL	"Build OpenGL Driver"				ON )
 
 ###
 # Optional support
@@ -102,7 +102,9 @@ IF(UNIX)
 
     SET(JPEG_LIB jpeg)
 
-    INCLUDE(${CMAKE_ROOT}/Modules/FindOpenGL.cmake)
+    IF(WITH_DRIVER_OPENGL)
+      INCLUDE(${CMAKE_ROOT}/Modules/FindOpenGL.cmake)
+    ENDIF(WITH_DRIVER_OPENGL)
   ENDIF(WITH_3D)
 
   IF(WITH_GTK)
