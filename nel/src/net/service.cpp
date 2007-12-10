@@ -632,7 +632,7 @@ sint IService::main (const char *serviceShortName, const char *serviceLongName, 
 		ListeningPort = servicePort;
 
 		setReportEmailFunction ((void*)sendEmail);
-		setDefaultEmailParams ("gw.nevrax.com", "", "cado@nevrax.com");
+		// setDefaultEmailParams ("gw.nevrax.com", "", "cado@nevrax.com");
 
 
 		//
@@ -669,7 +669,15 @@ sint IService::main (const char *serviceShortName, const char *serviceLongName, 
 		
 		// setup variable with config file variable
 		IVariable::init (ConfigFile);
-
+		
+		if (ConfigFile.exists("DefaultEmailSMTP") && ConfigFile.exists("DefaultEmailTo"))
+			NLNET::setDefaultEmailParams(
+				ConfigFile.getVar("DefaultEmailSMTP").asString(),
+				ConfigFile.exists("DefaultEmailFrom")
+				? ConfigFile.getVar("DefaultEmailFrom").asString()
+				: "service@opennel.org",
+				ConfigFile.getVar("DefaultEmailTo").asString());
+		
 		//
 		// Set the shard Id
 		//
@@ -1088,6 +1096,8 @@ sint IService::main (const char *serviceShortName, const char *serviceLongName, 
 				CInetAddress loc(LSAddr);
 				try
 				{
+					// todo: check if app not closed by user, or you get stuck here
+
 					if ( CUnifiedNetwork::getInstance()->init (&loc, _RecordingState, _ShortName, ListeningPort, _SId) )
 					{
 						ok = true;
