@@ -371,7 +371,12 @@ static void cbWSShardChooseShard (CMessage &msgin, const std::string &serviceNam
 		msgin.serial (reason);
 		msgin.serial (cookie);
 
-		if(!reason.empty()) break;
+		if(!reason.empty())
+		{
+			nldebug("SCS from WS failed: %s", reason.c_str());
+			sqlQuery("update user set state='Offline', ShardId=-1, Cookie='' where Cookie='" + cookie.setToString() + "'");
+			break;
+		}
 
 		CMysqlResult result;
 		MYSQL_ROW row;
@@ -381,6 +386,16 @@ static void cbWSShardChooseShard (CMessage &msgin, const std::string &serviceNam
 		if(nbrow != 1)
 		{
 			reason = "More than one row was found";
+			nldebug("SCS from WS failed with duplicate cookies, sending disconnect messages.");
+			// disconnect them all
+			while(row != 0)
+			{
+				CMessage msgout("DC");
+				uint32 uid = atoui(row[0]);
+				msgout.serial(uid);
+				CUnifiedNetwork::getInstance()->send("WS", msgout);
+				row = mysql_fetch_row(result);
+			}
 			break;
 		}
 
