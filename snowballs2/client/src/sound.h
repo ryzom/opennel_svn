@@ -56,15 +56,13 @@
 
 extern NLSOUND::UAudioMixer *AudioMixer;
 extern NLSOUND::TSoundId SoundId;
-#ifdef NL_OS_WINDOWS
-extern SBCLIENT::CPlaylistManager *PlaylistManager;
-#endif
 
 //
 // External functions
 //
 
-void playMusic(const std::string &file, int fade, bool async, bool loop);
+void playMusic(sint32 playlist, sint32 track);
+void setMusicVolume(sint32 playlist, float volume);
 
 void initSound();
 void updateSound();

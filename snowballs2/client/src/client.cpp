@@ -275,7 +275,7 @@ void initCore()
 		// Initialize sound for loading screens etc
 #ifdef NL_OS_WINDOWS
 		initSound();
-		PlaylistManager->playMusic(SBCLIENT_MUSIC_WAIT);
+		playMusic(SBCLIENT_MUSIC_WAIT);
 #endif
 		// Required for 3d rendering (3d nel logo etc)
 		initLight();
@@ -296,7 +296,7 @@ void initIngame()
 	{
 		LoadedIngame = true;
 #ifdef NL_OS_WINDOWS
-		PlaylistManager->playMusic(SBCLIENT_MUSIC_WAIT);
+		playMusic(SBCLIENT_MUSIC_WAIT);
 #endif
 
 		// Create a scene
@@ -362,7 +362,7 @@ void initOnline()
 {
 	if (LoadedOnline) return;
 #ifdef NL_OS_WINDOWS
-	PlaylistManager->playMusic(SBCLIENT_MUSIC_WAIT);
+	playMusic(SBCLIENT_MUSIC_WAIT);
 #endif
 	
 	displayLoadingState("Connecting");
@@ -377,7 +377,7 @@ void initOnline()
 	displayLoadingState("Ready!");
 
 #ifdef NL_OS_WINDOWS
-	PlaylistManager->playMusic(SBCLIENT_MUSIC_BACKGROUND);
+	playMusic(SBCLIENT_MUSIC_BACKGROUND);
 #endif
 	LoadedOnline = true;
 }
@@ -388,7 +388,7 @@ void initOffline()
 	{
 		LoadedOffline = true;
 #ifdef NL_OS_WINDOWS
-		PlaylistManager->playMusic(SBCLIENT_MUSIC_WAIT);
+		playMusic(SBCLIENT_MUSIC_WAIT);
 #endif
 
 		uint32 id = rand();
@@ -410,7 +410,7 @@ void initOffline()
 		displayLoadingState("Ready!");
 	
 #ifdef NL_OS_WINDOWS
-		PlaylistManager->playMusic(SBCLIENT_MUSIC_BACKGROUND);
+		playMusic(SBCLIENT_MUSIC_BACKGROUND);
 #endif
 	}
 }
@@ -506,7 +506,7 @@ void releaseOffline()
 void loopLogin()
 {
 #ifdef NL_OS_WINDOWS
-	PlaylistManager->playMusic(SBCLIENT_MUSIC_LOGIN);
+	playMusic(SBCLIENT_MUSIC_LOGIN);
 #endif
 	// todo: login screen, move this stuff to a button or something
 	displayLoadingState("Login");
