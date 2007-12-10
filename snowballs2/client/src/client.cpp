@@ -679,8 +679,9 @@ void loopIngame()
 		}
 		else if (Driver->AsyncListener.isKeyPushed(KeyF10))
 		{
-			// F10 -> test unloading and reloading all resources
-			NextGameState = GameStateUnload;
+			// F10 -> switch beteen online and offline
+			if (isOnline()) NextGameState = GameStateOffline;
+			else NextGameState = GameStateLogin;
 		}
 		else if (Driver->AsyncListener.isKeyPushed(KeyF11))
 		{
@@ -887,5 +888,26 @@ NLMISC_COMMAND(sb_quit,"quit the client","")
 
 	NextGameState = GameStateExit;
 
+	return true;
+}
+
+NLMISC_COMMAND(sb_offline, "go offline", "")
+{
+	if (args.size() != 0) return false;
+	NextGameState = GameStateOffline;
+	return true;
+}
+
+NLMISC_COMMAND(sb_unload, "unload game", "")
+{
+	if (args.size() != 0) return false;
+	NextGameState = GameStateUnload;
+	return true;
+}
+
+NLMISC_COMMAND(sb_login, "go to the login screen", "")
+{
+	if (args.size() != 0) return false;
+	NextGameState = GameStateLogin;
 	return true;
 }
