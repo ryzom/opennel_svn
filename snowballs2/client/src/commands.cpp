@@ -288,20 +288,26 @@ void	initCommands()
 
 void	updateCommands()
 {
+	// Snap to pixels (kind of ugly code, but looks better ingame)
+	uint32 _width, _height;
+	Driver->getWindowSize(_width, _height);
+	float width = (float)_width, height = (float)_height;
+	float CommandsLineHeight = CommandsFontSize / height;
+	float CommandsBoxX = ((float)(sint32)(::CommandsBoxX * width)) / width;
+	float CommandsBoxWidth = ((float)(sint32)(::CommandsBoxWidth * width)) / width;
+	float CommandsBoxY = ((float)(sint32)(::CommandsBoxY * height)) / height;
+	float CommandsBoxHeight = ((float)(sint32)((CommandsNbLines + 1) * CommandsLineHeight * width)) / width;
+	float CommandsBoxBorderX = ((float)(sint32)(::CommandsBoxBorder * width)) / width;
+	float CommandsBoxBorderY = ((float)(sint32)(::CommandsBoxBorder * height)) / height;
+
 	// Display the background
 	Driver->setMatrixMode2D11 ();
 	CommandsMaterial.setColor(CommandsBackColor);
-	CQuad quad;
-	quad.V0.set(CommandsBoxX-CommandsBoxBorder,
-		    CommandsBoxY-CommandsBoxBorder, 0);
-	quad.V1.set(CommandsBoxX+CommandsBoxWidth+CommandsBoxBorder,
-		    CommandsBoxY-CommandsBoxBorder, 0);
-	quad.V2.set(CommandsBoxX+CommandsBoxWidth+CommandsBoxBorder,
-		    CommandsBoxY + (CommandsNbLines+1) * CommandsLineHeight + CommandsBoxBorder, 0);
-	quad.V3.set(CommandsBoxX-CommandsBoxBorder,
-		    CommandsBoxY + (CommandsNbLines+1) * CommandsLineHeight + CommandsBoxBorder, 0);
-	Driver->drawQuad(quad, CommandsMaterial);
-	//Driver->drawQuad (CommandsBoxX-CommandsBoxBorder, CommandsBoxY-CommandsBoxBorder, CommandsBoxX+CommandsBoxWidth+CommandsBoxBorder, CommandsBoxY + (CommandsNbLines+1) * CommandsLineHeight + CommandsBoxBorder, CommandsBackColor);
+	float x0 = CommandsBoxX - CommandsBoxBorderX;
+	float y0 = CommandsBoxY - CommandsBoxBorderY;
+	float x1 = CommandsBoxX + CommandsBoxWidth + CommandsBoxBorderX;
+	float y1 = CommandsBoxY + CommandsBoxHeight + CommandsBoxBorderY;
+	Driver->drawQuad(CQuad(CVector(x0, y0, 0), CVector(x1, y0, 0), CVector(x1, y1, 0), CVector(x0, y1, 0)), CommandsMaterial);
 
 	// Set the text context
 	TextContext->setHotSpot (UTextContext::BottomLeft);
@@ -309,18 +315,20 @@ void	updateCommands()
 	TextContext->setFontSize (CommandsFontSize);
 
 	// Display the user input line
-	string line = string("> ")+CommandsListener.line() + string ("_");
-	TextContext->printfAt (CommandsBoxX, CommandsBoxY + CommandsBoxBorder, line.c_str());
-	CommandsListener.setMaxWidthReached (TextContext->getLastXBound() > (CommandsBoxWidth-CommandsBoxBorder)*1.33f); // max is 1.33=4/3
+	ucstring line = ucstring("> ") + ucstring(CommandsListener.line()) + ucstring("_");
+	uint32 csi = TextContext->textPush(line);	
+	float sw = TextContext->getStringInfo(csi).StringWidth / width; // make sure newly typed text is visible
+	TextContext->printAt(sw > CommandsBoxWidth ? CommandsBoxX - sw + CommandsBoxWidth : CommandsBoxX, CommandsBoxY, csi);
+	TextContext->erase(csi);
 
 	// Display stored lines
-	float yPos = CommandsBoxY + CommandsBoxBorder;
+	float yPos = CommandsBoxY;
 	list<string>::reverse_iterator rit = StoredLines.rbegin();
-	for (sint i = 0; i < CommandsNbLines; i++)
+	for (sint32 i = 0; i < CommandsNbLines; ++i)
 	{
 		yPos += CommandsLineHeight;
 		if (rit == StoredLines.rend()) break;
-		TextContext->printfAt (CommandsBoxX, yPos, (*rit).c_str());
+		TextContext->printfAt(CommandsBoxX, yPos, (*rit).c_str());
 		rit++;
 	}
 }

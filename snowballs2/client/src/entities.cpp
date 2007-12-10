@@ -356,6 +356,19 @@ void	removeAllEntitiesExceptUs ()
 	}
 }
 
+void deleteAllEntities()
+{
+	EIT eit, nexteit;
+	for (eit = Entities.begin(); eit != Entities.end(); )
+	{
+		nexteit = eit; nexteit++;
+		CEntity	&entity = (*eit).second;
+		deleteEntity (entity);
+		eit = nexteit;
+	}
+	Self = NULL;
+}
+
 
 
 

@@ -31,12 +31,13 @@
 #include <vector>
 
 #include <nel/misc/vector.h>
+#include <nel/misc/command.h>
 
 #include <nel/sound/u_audio_mixer.h>
 #include <nel/sound/u_listener.h>
 #include <nel/sound/u_source.h>
 
-#include "client.h"
+#include "sound.h"
 #include "entities.h"
 
 //
@@ -52,35 +53,86 @@ using namespace NLSOUND;
 //
 
 UAudioMixer *AudioMixer = NULL;
-
 TSoundId SoundId;
-
 const vector<TSoundId> *SoundIdArray;
+#ifdef NL_OS_WINDOWS
+SBCLIENT::CPlaylistManager *PlaylistManager = NULL;
+#endif
 
 //
 // Functions
 //
 
-void	initSound()
+void cbConfigFileSoundMaxTracks(NLMISC::CConfigFile::CVar &var)
 {
-/*	AudioMixer = UAudioMixer::createAudioMixer ();
-	AudioMixer->init ();
+#ifdef NL_OS_WINDOWS
+	AudioMixer->changeMaxTrack(var.asInt());
+#endif
+}
 
-	AudioMixer->loadSoundBuffers ("sounds.nss", &SoundIdArray);
+void cbConfigFileFail(NLMISC::CConfigFile::CVar &var)
+{
+	nlwarning("You can't modify the config variable '%s' at runtime for now, please restart the game", var.asString().c_str());
+}
+
+void initSound()
+{
+#ifdef NL_OS_WINDOWS
+	AudioMixer = UAudioMixer::createAudioMixer ();
+	std::string driverName;
+	NLSOUND::UAudioMixer::TDriver driverType;
+	if (!ConfigFile.exists("SoundDriver")) 
+#ifdef NL_OS_WINDOWS
+		driverType = NLSOUND::UAudioMixer::DriverFMod;
+#elif defined (NL_OS_UNIX)
+		driverType = NLSOUND::UAudioMixer::DriverOpenAl;
+#else
+		driverType = NLSOUND::UAudioMixer::DriverAuto;
+#endif
+	else 
+	{
+		driverName = ConfigFile.getVar("SoundDriver").asString();
+		if (driverName == "Auto") driverType = NLSOUND::UAudioMixer::DriverAuto;
+		else if (driverName == "FMod") driverType = NLSOUND::UAudioMixer::DriverFMod;
+		else if (driverName == "DSound") driverType = NLSOUND::UAudioMixer::DriverDSound;
+		else if (driverName == "OpenAl") driverType = NLSOUND::UAudioMixer::DriverOpenAl;
+		else nlerror("SoundDriver value '%s' is invalid.", driverName.c_str());
+	}
+
+	AudioMixer->init(
+		ConfigFile.exists("SoundMaxTracks")
+		? ConfigFile.getVar("SoundMaxTracks").asInt() : 32,
+		ConfigFile.exists("SoundUseEax")
+		? ConfigFile.getVar("SoundUseEax").asBool() : true,
+		ConfigFile.exists("SoundUseADPCM")
+		? ConfigFile.getVar("SoundUseADPCM").asBool() : true,
+		NULL, false, driverType,
+		ConfigFile.exists("SoundForceSoftware")
+		? ConfigFile.getVar("SoundForceSoftware").asBool() : true);
+
+	ConfigFile.setCallback("SoundMaxTracks", cbConfigFileSoundMaxTracks);
+	ConfigFile.setCallback("SoundUseEax", cbConfigFileFail);
+	ConfigFile.setCallback("SoundUseADPCM", cbConfigFileFail);
+	ConfigFile.setCallback("SoundForceSoftware", cbConfigFileFail);
+	ConfigFile.setCallback("SoundDriver", cbConfigFileFail);
+
+	PlaylistManager = new SBCLIENT::CPlaylistManager(AudioMixer, &ConfigFile, "SoundPlaylist");
+
+	/* AudioMixer->loadSoundBuffers ("sounds.nss", &SoundIdArray);
 	nlassert( SoundIdArray->size() == 2 );
 	SoundId = (*SoundIdArray)[0];
-//	StSoundId = (*SoundIdArray)[1];
-*/}
+	// StSoundId = (*SoundIdArray)[1]; */
+#endif
+}
 
-
-void	playSound (CEntity &entity, TSoundId id)
+void playSound (CEntity &entity, TSoundId id)
 {
 /*	entity.Source = AudioMixer->createSource (id);
 	entity.Source->setLooping (true);
 	entity.Source->play ();
 */}
 
-void	deleteSound (CEntity &entity)
+void deleteSound (CEntity &entity)
 {
 /*	if (entity.Source != NULL)
 	{
@@ -92,10 +144,60 @@ void	deleteSound (CEntity &entity)
 	}
 */}
 
-void	updateSound()
+void updateSound()
 {
+#ifdef NL_OS_WINDOWS
+	PlaylistManager->update(DiffTime);
+	AudioMixer->update();
+#endif
 }
 
-void	releaseSound()
+void releaseSound()
 {
+#ifdef NL_OS_WINDOWS
+	delete PlaylistManager;
+	PlaylistManager = NULL;
+	delete AudioMixer;
+	AudioMixer = NULL;
+#endif
 }
+
+#ifdef NL_OS_WINDOWS
+
+NLMISC_COMMAND(music_bg,"background music","")
+{
+	// check args, if there s not the right number of parameter, return bad
+	if (args.size() != 0) return false;
+	//playMusic("xtarsia_evil-snowballs_game.ogg", 2000, true, true);
+	PlaylistManager->playMusic(SBCLIENT_MUSIC_BACKGROUND);
+	return true;
+}
+
+NLMISC_COMMAND(music_bg_beat,"background music with beat","")
+{
+	// check args, if there s not the right number of parameter, return bad
+	if (args.size() != 0) return false;
+	//playMusic("xtarsia_evil-snowballs_beat.ogg", 2000, true, true);
+	PlaylistManager->playMusic(SBCLIENT_MUSIC_BACKGROUND_BEAT);
+	return true;
+}
+
+NLMISC_COMMAND(music_wait,"loading music","")
+{
+	// check args, if there s not the right number of parameter, return bad
+	if (args.size() != 0) return false;
+	//playMusic("xtarsia_evil-snowballs_beat.ogg", 2000, true, true);
+	PlaylistManager->playMusic(SBCLIENT_MUSIC_WAIT);
+	return true;
+}
+
+NLMISC_COMMAND(music_login,"login screen music","")
+{
+	// check args, if there s not the right number of parameter, return bad
+	if (args.size() != 0) return false;
+	//playMusic("xtarsia_evil-snowballs_beat.ogg", 2000, true, true);
+	PlaylistManager->playMusic(SBCLIENT_MUSIC_LOGIN);
+	return true;
+}
+
+#endif

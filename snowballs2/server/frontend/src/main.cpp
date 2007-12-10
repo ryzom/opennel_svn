@@ -198,31 +198,36 @@ void cbPosService (CMessage &msgin, const std::string &serviceName, TServiceId s
  ****************************************************************************/
 void cbAddClient ( CMessage& msgin, TSockId from, CCallbackNetBase& clientcb )
 {
-	uint32  id;
-	string  name;
-	uint8   race;
-	CVector start;
+	uint32 id;
+	string name;
+	uint8 race;
+	CVector start(1840.0f + ((float)(rand() % 100) / 10.0f), -970.0f + ((float)(rand() % 100) / 10.0f), 0.0f); // kaetemi_todo: from config
 
 	// Input from the client is stored.
-	msgin.serial( id );
-	msgin.serial( name );
-	msgin.serial( race );
-	msgin.serial( start );
+	msgin.serial(id);
+	msgin.serial(name);
+	msgin.serial(race);
 
 	// Prepare the message to send to the Position service
-	CMessage msgout( "ADD_ENTITY" );
-	msgout.serial( id );
-	msgout.serial( name );
-	msgout.serial( race );
-	msgout.serial( start );
+	CMessage msgout("ADD_ENTITY");
+	msgout.serial(id);
+	msgout.serial(name);
+	msgout.serial(race);
+	msgout.serial(start);
 
 	/*
 	 * The incoming message from the client is sent to the Position service
 	 * under the "POS" identification.
 	 */
-	CUnifiedNetwork::getInstance ()->send( "POS", msgout );
+	CUnifiedNetwork::getInstance()->send("POS", msgout);
 
-	nldebug( "SB: Received ADD_ENTITY from the client");
+	nldebug("SB: Received ADD_ENTITY from the client");
+
+	// kaetemi_todo: from config
+	msgout = CMessage("CHAT");
+	std::string chat_msg(std::string(">>>> Welcome to Snowballs, ") + name + std::string("!"));
+	msgout.serial(chat_msg);
+	Clients->send(msgout, from);
 }
 
 
@@ -638,13 +643,19 @@ public:
 		CUnifiedNetwork::getInstance ()->setServiceDownCallback ("POS", onDisconnectPosition, 0);
 	}
 
-	bool update ()
+	bool update()
 	{
 		// Manage messages from clients
 		Clients->update ();
 
 		// we want to continue
 		return true;
+	}
+
+	void release()
+	{
+		delete Clients;
+		Clients = NULL;
 	}
 };
 

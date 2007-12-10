@@ -69,10 +69,6 @@ static UScene				*SkyScene = NULL;
 static UCamera				SkyCamera = NULL;
 static UInstance			Sky = NULL;
 
-// The logo 3D objects
-static UScene				*LogoScene = NULL;
-static UInstance			Logo = NULL;
-
 static UCloudScape			*Clouds = NULL;
 
 //
@@ -112,22 +108,17 @@ void	initCamera()
 	Sky = SkyScene->createInstance("sky.shape");
 	Sky.setTransformMode (UTransformable::DirectMatrix);
 	Sky.setMatrix(CMatrix::Identity);
-
-	//
-	// Setup the logo scene
-	//
-
-	LogoScene = Driver->createScene(false);
-
-	CViewport v;
-	v.init (0.0f, 0.80f, 0.2f, 0.2f);
-	LogoScene->setViewport (v);
-
-	Logo = LogoScene->createInstance("nel_logo.shape");
-	Logo.setPos (0.0f, 3.0f, 0.0f);
 }
 
-void	updateCamera()
+void releaseCamera()
+{
+	SkyScene->deleteInstance(Sky);
+	Driver->deleteScene(SkyScene);
+	Scene->deleteInstance(Snow);
+	VisualCollisionManager->deleteEntity(CamCollisionEntity);
+}
+
+void updateCamera()
 {
 	// Set the new position of the snow emitter
 	CMatrix	mat = CMatrix::Identity;
@@ -135,7 +126,7 @@ void	updateCamera()
 	Snow.setMatrix(mat);
 }
 
-void initSky ()
+void initSky()
 {
 	SCloudScapeSetup css;
 	Clouds = Scene->createCloudScape ();
@@ -144,12 +135,17 @@ void initSky ()
 	Clouds->setNbCloudToUpdateIn80ms (1);
 }
 
-void animateSky (TTime dt)
+void releaseSky()
+{
+	Scene->deleteCloudScape(Clouds);
+}
+
+void animateSky(TTime dt)
 {
 	Clouds->anim ((double)dt);
 }
 
-void updateSky ()
+void updateSky()
 {
 	CMatrix skyCameraMatrix;
 	skyCameraMatrix.identity();
@@ -164,21 +160,4 @@ void updateSky ()
 	Driver->clearZBuffer();
 
 	Clouds->render ();
-}
-
-void releaseCamera()
-{
-	Driver->deleteScene (SkyScene);
-}
-
-void	update3dLogo ()
-{
-	Driver->clearZBuffer();
-
-	static float angle=0.0;
-	angle+=0.05f;
-	Logo.setTransformMode (UTransformable::RotEuler);
-	Logo.setRotEuler (0.0f,0.0f,angle);
-	LogoScene->animate (float(NewTime)/1000);
-	LogoScene->render ();
 }

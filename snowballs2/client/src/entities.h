@@ -198,6 +198,7 @@ void	removeEntity (uint32 eid);
 
 // when we turn online, we need to clear all offline entities
 void	removeAllEntitiesExceptUs ();
+void deleteAllEntities();
 
 void	initEntities();
 void	updateEntities ();

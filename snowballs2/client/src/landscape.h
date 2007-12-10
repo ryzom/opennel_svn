@@ -61,12 +61,15 @@ extern NLMISC::CVector						 SunDirection;
 // External functions
 //
 
-void			initLandscape();
-void			updateLandscape();
-void			releaseLandscape();
+void initLight();
+void releaseLight();
 
-void			initAiming();
-void			releaseAiming();
+void initLandscape();
+void updateLandscape();
+void releaseLandscape();
+
+void initAiming();
+void releaseAiming();
 
 // Compute the collision with the landscape from the start position, using the given step,
 // at maximum numSteps steps from the start. It uses full (!) physics computation, and should be

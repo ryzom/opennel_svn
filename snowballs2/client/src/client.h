@@ -57,7 +57,9 @@ extern NL3D::UScene				*Scene;
 extern NL3D::UTextContext		*TextContext;
 extern C3dMouseListener			*MouseListener;
 
-extern NLMISC::TTime			 LastTime, NewTime;
+extern NLMISC::TTime			 LastTime, NewTime, DiffTime;
+
+extern ucstring				     Login;
 
 #endif // CLIENT_H
 

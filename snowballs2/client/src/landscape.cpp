@@ -120,6 +120,28 @@ void cbUpdateLandscape (CConfigFile::CVar &var)
 	else nlwarning ("Unknown variable update %s", var.Name.c_str());
 }
 
+void initLight()
+{
+	Sun = ULight::createLight();
+	nlassert(Sun != NULL);
+	Sun->setMode(ULight::DirectionalLight);
+	Driver->enableLight(0);
+
+	ConfigFile.setCallback("SunAmbientColor", cbUpdateLandscape);
+	ConfigFile.setCallback("SunDiffuseColor", cbUpdateLandscape);
+	ConfigFile.setCallback("SunSpecularColor", cbUpdateLandscape);
+	ConfigFile.setCallback("SunDirection", cbUpdateLandscape);
+
+	cbUpdateLandscape(ConfigFile.getVar("SunAmbientColor"));
+	cbUpdateLandscape(ConfigFile.getVar("SunDiffuseColor"));
+	cbUpdateLandscape(ConfigFile.getVar("SunSpecularColor"));
+	cbUpdateLandscape(ConfigFile.getVar("SunDirection"));
+}
+
+void releaseLight()
+{
+	delete Sun; Sun = NULL;
+}
 
 void	initLandscape()
 {
@@ -165,11 +187,6 @@ void	initLandscape()
 		}
 	}
 
-	Sun = ULight::createLight ();
-	nlassert (Sun != NULL);
-	Sun->setMode (ULight::DirectionalLight);
-	Driver->enableLight (0);
-
 	ConfigFile.setCallback ("LandscapeTileNear", cbUpdateLandscape);
 	ConfigFile.setCallback ("LandscapeThresold", cbUpdateLandscape);
 	ConfigFile.setCallback ("FogStart", cbUpdateLandscape);
@@ -177,32 +194,23 @@ void	initLandscape()
 	ConfigFile.setCallback ("FogColor", cbUpdateLandscape);
 	ConfigFile.setCallback ("FogEnable", cbUpdateLandscape);
 
-	ConfigFile.setCallback ("SunAmbientColor", cbUpdateLandscape);
-	ConfigFile.setCallback ("SunDiffuseColor", cbUpdateLandscape);
-	ConfigFile.setCallback ("SunSpecularColor", cbUpdateLandscape);
-	ConfigFile.setCallback ("SunDirection", cbUpdateLandscape);
-
 	cbUpdateLandscape (ConfigFile.getVar ("LandscapeTileNear"));
 	cbUpdateLandscape (ConfigFile.getVar ("LandscapeThresold"));
 	cbUpdateLandscape (ConfigFile.getVar ("FogStart"));
 	cbUpdateLandscape (ConfigFile.getVar ("FogEnd"));
 	cbUpdateLandscape (ConfigFile.getVar ("FogColor"));
 	cbUpdateLandscape (ConfigFile.getVar ("FogEnable"));
+}
 
-	cbUpdateLandscape (ConfigFile.getVar ("SunAmbientColor"));
-	cbUpdateLandscape (ConfigFile.getVar ("SunDiffuseColor"));
-	cbUpdateLandscape (ConfigFile.getVar ("SunSpecularColor"));
-	cbUpdateLandscape (ConfigFile.getVar ("SunDirection"));
+void	releaseLandscape()
+{
+	Scene->deleteLandscape(Landscape);
 }
 
 void	updateLandscape()
 {
 	// load the zones around the viewpoint
 	Landscape->refreshZonesAround (MouseListener->getViewMatrix().getPos(), 1000.0f);
-}
-
-void	releaseLandscape()
-{
 }
 
 void	initAiming()

@@ -86,13 +86,13 @@ static void cbAddEntity (CMessage &msgin, TSockId from, CCallbackNetBase &netbas
 
 	nlinfo ("New player named '%s' comes in at position (%8.2f, %8.2f, %8.2f)", name.c_str(), startPosition.x, startPosition.y, startPosition.z);
 
-	if (id != Self->Id)
+	if (Self == NULL && name == Login.toUtf8())
 	{
-		addEntity(id, name, CEntity::Other, startPosition, startPosition);
+		addEntity(id, name, CEntity::Self, startPosition, startPosition);
 	}
 	else
 	{
-//		nlinfo ("Receive my add entity");
+		addEntity(id, name, CEntity::Other, startPosition, startPosition);
 	}
 }
 
@@ -201,31 +201,32 @@ static void cbIdentification (CMessage &msgin, TSockId from, CCallbackNetBase &n
 	
 //	nlinfo ("my online id is %u", id);
 
-	if (Self == NULL)
-		nlerror ("Self is NULL");
+//	if (Self == NULL)
+//		nlerror ("Self is NULL");
+//
+//	if (Self->Id != id)
+//	{
+////		nlinfo ("remaping my entity from %u to %u", Self->Id, id);
+//		
+//		// copy my old entity
+//		CEntity me = *Self;
+//		
+//		// set my new online id
+//		me.Id = id;
+//
+//		// add my new entity in the array
+//		EIT eit = (Entities.insert (make_pair (id, me))).first;
+//
+//		// remove my old entity
+//		Entities.erase (Self->Id);
+//
+//		// remap Self
+//		Self = &((*eit).second);
+//	}
 
-	if (Self->Id != id)
-	{
-//		nlinfo ("remaping my entity from %u to %u", Self->Id, id);
-		
-		// copy my old entity
-		CEntity me = *Self;
-		
-		// set my new online id
-		me.Id = id;
-
-		// add my new entity in the array
-		EIT eit = (Entities.insert (make_pair (id, me))).first;
-
-		// remove my old entity
-		Entities.erase (Self->Id);
-
-		// remap Self
-		Self = &((*eit).second);
-	}
-
-	// send to the network my entity					
-	sendAddEntity (Self->Id, Self->Name, 1, Self->Position);
+	// send to the network my entity
+	std::string login_name(Login.toUtf8());
+	sendAddEntity(id, login_name, 1);
 }
 
 // Array that contains all callback that could comes from the server
@@ -246,13 +247,13 @@ bool	isOnline ()
 	return Connection != NULL && Connection->connected ();
 }
 
-void	sendAddEntity (uint32 id, string &name, uint8 race, CVector &startPosition)
+void	sendAddEntity (uint32 id, string &name, uint8 race)
 {
 	if (!isOnline ()) return;
 
-	CMessage msgout ("ADD_ENTITY");
-	msgout.serial (id, name, race, startPosition);
-	Connection->send (msgout);
+	CMessage msgout("ADD_ENTITY");
+	msgout.serial(id, name, race);
+	Connection->send(msgout);
 }
 
 void	sendChatLine (string Line)
