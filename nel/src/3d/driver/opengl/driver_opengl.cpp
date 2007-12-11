@@ -1609,7 +1609,80 @@ bool CDriverGL::getModes(std::vector<GfxMode> &modes)
 		modeIndex++;
 	}
 #else
-	nlwarning("LINUXTODO: enumerate all available modes. now returns empty array");
+  int nmodes;
+  XF86VidModeModeInfo **ms;
+  XF86VidModeGetAllModeLines(dpy, 0, &nmodes, &ms);
+  nlinfo("Available modes %d", nmodes);
+  for (int j = 0; j < nmodes; j++) {
+    // Add this mode
+    GfxMode mode;
+    mode.Width = (uint16)ms[j]->hdisplay;
+    mode.Height = (uint16)ms[j]->vdisplay;
+    mode.Frequency = 1000 * ms[j]->dotclock / (ms[j]->htotal * ms[j]->vtotal);
+    nlinfo("  Mode %d: width %d height %d freq %d", j, ms[j]->hdisplay,ms[j]->vdisplay, 1000 * ms[j]->dotclock / (ms[j]->htotal * ms[j]->vtotal));
+    modes.push_back (mode);
+  }
+
+  /*
+        XVisualInfo *vi;
+        int items;
+        vi = XGetVisualInfo(dpy, 0, 0, &items);
+        if (vi) {
+	  nlinfo("nb visuals %d", items);
+            for (int i = 0; i < 64; i++) {
+                int depth;
+                int r, g, b, a;
+                int ar, ag, ab, aa;
+                int bs, ss;
+                int db, ugl, gll, rgba, stereo;
+                if (glXGetConfig(dpy, vi+i, GLX_DEPTH_SIZE, &depth) != Success)
+                    break;
+                if (glXGetConfig(dpy, vi+i, GLX_RED_SIZE, &r) != Success)
+                    break;
+                if (glXGetConfig(dpy, vi+i, GLX_GREEN_SIZE, &g) != Success)
+                    break;
+                if (glXGetConfig(dpy, vi+i, GLX_BLUE_SIZE, &b) != Success)
+                    break;
+                if (glXGetConfig(dpy, vi+i, GLX_ALPHA_SIZE, &a) != Success)
+                    break;
+                if (glXGetConfig(dpy, vi+i, GLX_ACCUM_RED_SIZE, &ar) != Success)
+                    break;
+                if (glXGetConfig(dpy, vi+i, GLX_ACCUM_GREEN_SIZE, &ag) != Success)
+                    break;
+                if (glXGetConfig(dpy, vi+i, GLX_ACCUM_BLUE_SIZE, &ab) != Success)
+                    break;
+                if (glXGetConfig(dpy, vi+i, GLX_ACCUM_ALPHA_SIZE, &aa) != Success)
+                    break;
+                if (glXGetConfig(dpy, vi+i, GLX_BUFFER_SIZE, &bs) != Success)
+                    break;
+                if (glXGetConfig(dpy, vi+i, GLX_STENCIL_SIZE, &ss) != Success)
+                    break;
+                if (glXGetConfig(dpy, vi+i, GLX_DOUBLEBUFFER, &db) != Success)
+                    break;
+                if (glXGetConfig(dpy, vi+i, GLX_USE_GL, &ugl) != Success)
+                    break;
+                if (glXGetConfig(dpy, vi+i, GLX_RGBA, &rgba) != Success)
+                    break;
+                if (glXGetConfig(dpy, vi+i, GLX_STEREO, &stereo) != Success)
+                    break;
+                if (glXGetConfig(dpy, vi+i, GLX_LEVEL, &gll) != Success)
+                    break;
+                nlinfo("i %d depth %d r %d g %d b %d a %d bs %d ss %d db %d ugl %d rgba %d stereo %d gll %d ar %d ag %d ab %d aa %d", i,
+		       depth,
+		       r , g, b, a,
+		       bs,
+		      ss,
+		      db,
+		      ugl,
+		      rgba,
+		       stereo,
+		       gll,
+		       ar, ag,ab, aa);
+            }
+	    } else {
+	      nlinfo("failed");
+	   	    }
+  */
 #endif
 	return true;
 }
