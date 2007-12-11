@@ -1,0 +1,16 @@
+FILE(GLOB SRC *.cpp)
+
+DECORATE_NEL_LIB("nelnet")
+SET(NLNET_LIB ${LIBNAME})
+
+ADD_EXECUTABLE(nl_sample_chatclient client.cpp kbhit.cpp kbhit.h)
+
+ADD_EXECUTABLE(nl_sample_chatserver server.cpp)
+
+INCLUDE_DIRECTORIES(${LIBXML2_INCLUDE_DIR})
+TARGET_LINK_LIBRARIES(nl_sample_chatclient ${PLATFORM_LINKFLAGS} ${NLNET_LIB})
+TARGET_LINK_LIBRARIES(nl_sample_chatserver ${PLATFORM_LINKFLAGS} ${NLNET_LIB})
+ADD_DEFINITIONS(${LIBXML2_DEFINITIONS})
+
+INSTALL(TARGETS nl_sample_chatclient nl_sample_chatserver RUNTIME DESTINATION bin)
+INSTALL(FILES chat_service.cfg client.cfg DESTINATION share/nel/nl_sample_chat)
