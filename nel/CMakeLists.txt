@@ -42,7 +42,7 @@ OPTION(WITH_SOUND		"Build NLSOUND"					ON )
 ###
 # Drivers Support
 ###
-OPTION(WITH_DRIVER_OPENAL	"Build OpenAL Driver"				OFF)
+OPTION(WITH_DRIVER_OPENAL	"Build OpenAL Driver"				ON )
 OPTION(WITH_DRIVER_OPENGL	"Build OpenGL Driver"				ON )
 OPTION(WITH_DRIVER_DIRECT3D	"Build OpenGL Driver"				OFF)
 
