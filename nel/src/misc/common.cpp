@@ -115,7 +115,7 @@ uint getThreadId()
 #ifdef NL_OS_WINDOWS
 	return GetCurrentThreadId();
 #elif defined NL_OS_UNIX
-	return pthread_self();
+	  return uint(pthread_self());
 	// doesnt work on linux kernel 2.6	return getpid();
 #endif
 
