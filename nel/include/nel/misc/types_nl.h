@@ -104,6 +104,9 @@
 	// define NOMINMAX to be sure that windows includes will not define min max macros, but instead, use the stl template
 #	define NOMINMAX
 #else
+#ifdef __APPLE__
+#define NL_OS_MAC
+#endif
 #	define NL_OS_UNIX
 #	define NL_COMP_GCC
 #	ifdef WORDS_BIGENDIAN
