@@ -140,6 +140,11 @@ void initLight()
 
 void releaseLight()
 {
+	ConfigFile.setCallback("SunAmbientColor", NULL);
+	ConfigFile.setCallback("SunDiffuseColor", NULL);
+	ConfigFile.setCallback("SunSpecularColor", NULL);
+	ConfigFile.setCallback("SunDirection", NULL);
+
 	delete Sun; Sun = NULL;
 }
 
@@ -204,6 +209,13 @@ void	initLandscape()
 
 void	releaseLandscape()
 {
+	ConfigFile.setCallback("LandscapeTileNear", NULL);
+	ConfigFile.setCallback("LandscapeThresold", NULL);
+	ConfigFile.setCallback("FogStart", NULL);
+	ConfigFile.setCallback("FogEnd", NULL);
+	ConfigFile.setCallback("FogColor", NULL);
+	ConfigFile.setCallback("FogEnable", NULL);
+
 	Scene->deleteLandscape(Landscape);
 }
 

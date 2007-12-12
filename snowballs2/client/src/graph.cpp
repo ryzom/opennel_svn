@@ -157,6 +157,7 @@ void updateGraph ()
 
 void releaseGraph ()
 {
+	ConfigFile.setCallback("ShowGraph", NULL);
 }
 
 NLMISC_COMMAND(graph,"swith on/off graphs","")

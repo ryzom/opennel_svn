@@ -474,6 +474,7 @@ void releaseIngame()
 		releaseInterface();
 		releaseNetwork();
 		releaseAnimation();
+		releaseMouseListenerConfig();
 		releaseCamera();
 		releaseAiming();
 		releasePACS();

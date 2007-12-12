@@ -226,6 +226,9 @@ void	updateInterface()
 
 void	releaseInterface()
 {
+	// Delete the material
+	Driver->deleteMaterial(InterfaceMaterial);
+
 	// Remove the keyboard listener from the server
 	Driver->EventServer.removeListener (EventCharId, &InterfaceListener);
 }

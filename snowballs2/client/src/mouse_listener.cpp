@@ -446,3 +446,12 @@ void	initMouseListenerConfig()
 	cbUpdateMouseListenerConfig(ConfigFile.getVar ("ViewHeight"));
 	cbUpdateMouseListenerConfig(ConfigFile.getVar ("ViewTargetHeight"));
 }
+
+void releaseMouseListenerConfig()
+{
+	ConfigFile.setCallback("MouseInvert", NULL);
+	ConfigFile.setCallback("MouseZoomStep", NULL);
+	ConfigFile.setCallback("ViewLagBehind", NULL);
+	ConfigFile.setCallback("ViewHeight", NULL);
+	ConfigFile.setCallback("ViewTargetHeight", NULL);
+}

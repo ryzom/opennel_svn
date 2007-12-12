@@ -303,7 +303,8 @@ private:
 // External functions
 //
 
-void	initMouseListenerConfig();
+void initMouseListenerConfig();
+void releaseMouseListenerConfig();
 
 #endif // MOUSE_LISTENER_H
 
