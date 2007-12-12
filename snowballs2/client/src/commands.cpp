@@ -281,9 +281,9 @@ void	initCommands()
 	cbUpdateCommands (ConfigFile.getVar ("CommandsFontSize"));
 
 	CommandsMaterial = Driver->createMaterial();
-        CommandsMaterial.initUnlit();
-        CommandsMaterial.setBlendFunc(UMaterial::srcalpha, UMaterial::invsrcalpha);
-        CommandsMaterial.setBlend(true);
+    CommandsMaterial.initUnlit();
+    CommandsMaterial.setBlendFunc(UMaterial::srcalpha, UMaterial::invsrcalpha);
+    CommandsMaterial.setBlend(true);
 }
 
 void	updateCommands()
@@ -338,10 +338,34 @@ void	clearCommands ()
 	StoredLines.clear ();
 }
 
-void	releaseCommands()
+void releaseCommands()
 {
-	// Rmove the keyboard listener from the server
-	Driver->EventServer.removeListener (EventCharId, &CommandsListener);
+	// Remove the displayers
+	CommandsLog.removeDisplayer(&CommandsDisplayer);
+#ifndef NL_RELEASE
+	InfoLog->removeDisplayer(&CommandsDisplayer);
+	InfoLog->removeDisplayer(&CommandsDisplayer);
+	WarningLog->removeDisplayer(&CommandsDisplayer);
+	AssertLog->removeDisplayer(&CommandsDisplayer);
+	ErrorLog->removeDisplayer(&CommandsDisplayer);
+#endif
+
+	// Remove callbacks for the config file
+	ConfigFile.setCallback("CommandsBoxX", NULL);
+	ConfigFile.setCallback("CommandsBoxY", NULL);
+	ConfigFile.setCallback("CommandsBoxWidth", NULL);
+	ConfigFile.setCallback("CommandsBoxBorder", NULL);
+	ConfigFile.setCallback("CommandsNbLines", NULL);
+	ConfigFile.setCallback("CommandsLineHeight", NULL);
+	ConfigFile.setCallback("CommandsBackColor", NULL);
+	ConfigFile.setCallback("CommandsFrontColor", NULL);
+	ConfigFile.setCallback("CommandsFontSize", NULL);
+
+	// Remove the keyboard listener from the server
+	Driver->EventServer.removeListener(EventCharId, &CommandsListener);
+
+	// Remove the material
+	Driver->deleteMaterial(CommandsMaterial);
 }
 
 NLMISC_COMMAND(clear,"clear the chat history","")

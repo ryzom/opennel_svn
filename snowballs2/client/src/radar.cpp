@@ -686,6 +686,26 @@ void updateRadar ()
 
 void releaseRadar ()
 {
+	ConfigFile.setCallback ("RadarPosX", NULL);
+	ConfigFile.setCallback ("RadarPosY", NULL);
+	ConfigFile.setCallback ("RadarWidth", NULL);
+	ConfigFile.setCallback ("RadarHeight", NULL);
+	ConfigFile.setCallback ("RadarBackColor", NULL);
+	ConfigFile.setCallback ("RadarFrontColor", NULL);
+	ConfigFile.setCallback ("RadarSelfColor", NULL);
+	ConfigFile.setCallback ("RadarOtherColor", NULL);
+	ConfigFile.setCallback ("RadarPlaceColor", NULL);
+	ConfigFile.setCallback ("RadarEntitySize", NULL);
+	ConfigFile.setCallback ("RadarState", NULL);
+	ConfigFile.setCallback ("RadarDistance", NULL);
+	ConfigFile.setCallback ("RadarMinDistance", NULL);
+	ConfigFile.setCallback ("RadarMaxDistance", NULL);
+	ConfigFile.setCallback ("RadarParticularPlaces", NULL);
+	ConfigFile.setCallback ("RadarFontSize", NULL);
+	ConfigFile.setCallback ("RadarLittlePosX", NULL);
+	ConfigFile.setCallback ("RadarLittlePosY", NULL);
+	ConfigFile.setCallback ("RadarLittleRadius", NULL);
+	Driver->deleteMaterial(RadarMaterial); RadarMaterial = NULL;
 }
 
 NLMISC_COMMAND(go,"change position of the player with a player name or location","<player_name>|<location_name>")

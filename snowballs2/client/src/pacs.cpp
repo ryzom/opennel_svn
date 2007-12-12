@@ -134,7 +134,7 @@ void	initPACS()
 
 void	releasePACS()
 {
-	// create a move primitive for each instance in the instance group
+	// all move primitives
 	uint	i;
 	for (i=0; i<InstancesMovePrimitives.size(); ++i)
 		MoveContainer->removePrimitive(InstancesMovePrimitives[i]);

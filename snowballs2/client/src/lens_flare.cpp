@@ -201,18 +201,24 @@ void CLensFlare::show()
 	}
 }
 
-static CLensFlare	*LensFlare = NULL;
+static CLensFlare *LensFlare = NULL;
+static UTextureFile *flareTexture1 = NULL;
+static UTextureFile *flareTexture3 = NULL;
+static UTextureFile *flareTexture4 = NULL;
+static UTextureFile *flareTexture5 = NULL;
+static UTextureFile *flareTexture6 = NULL;
+static UTextureFile *flareTexture7 = NULL;
 
 void initLensFlare ()
 {
 	LensFlare = new CLensFlare ();
 
-	UTexture *flareTexture1 = Driver->createTextureFile ("flare01.tga");
-	UTexture *flareTexture3 = Driver->createTextureFile ("flare03.tga");
-	UTexture *flareTexture4 = Driver->createTextureFile ("flare04.tga");
-	UTexture *flareTexture5 = Driver->createTextureFile ("flare05.tga");
-	UTexture *flareTexture6 = Driver->createTextureFile ("flare06.tga");
-	UTexture *flareTexture7 = Driver->createTextureFile ("flare07.tga");
+	flareTexture1 = Driver->createTextureFile("flare01.tga");
+	flareTexture3 = Driver->createTextureFile("flare03.tga");
+	flareTexture4 = Driver->createTextureFile("flare04.tga");
+	flareTexture5 = Driver->createTextureFile("flare05.tga");
+	flareTexture6 = Driver->createTextureFile("flare06.tga");
+	flareTexture7 = Driver->createTextureFile("flare07.tga");
 
 	float w = 30/800.0f;
 	float h = 30/600.0f;
@@ -296,6 +302,11 @@ void updateLensFlare ()
 
 void releaseLensFlare ()
 {
-	delete LensFlare;
-	LensFlare = NULL;
+	delete LensFlare; LensFlare = NULL;
+	Driver->deleteTextureFile(flareTexture1); flareTexture1 = NULL;
+	Driver->deleteTextureFile(flareTexture3); flareTexture3 = NULL;
+	Driver->deleteTextureFile(flareTexture4); flareTexture4 = NULL;
+	Driver->deleteTextureFile(flareTexture5); flareTexture5 = NULL;
+	Driver->deleteTextureFile(flareTexture6); flareTexture6 = NULL;
+	Driver->deleteTextureFile(flareTexture7); flareTexture7 = NULL;
 }

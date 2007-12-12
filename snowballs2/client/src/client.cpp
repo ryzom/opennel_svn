@@ -263,21 +263,22 @@ void initCore()
 			ConfigFile.getVar("ScreenFull").asInt()==0));
 		// Set the cache size for the font manager(in bytes)
 		Driver->setFontManagerMaxMemory(2097152);
-		displayLoadingState("Loading..."); 
 		// Create a Text context for later text rendering
+		displayLoadingState("Initialize Text"); 
 		TextContext = Driver->createTextContext(CPath::lookup(ConfigFile.getVar("FontName").asString()));
 		TextContext->setShaded(true);
 		TextContext->setKeep800x600Ratio(false);
-		displayLoadingState("Loading...");
 		// You can't call displayLoadingState() before init the loading state system
+		displayLoadingState("Initialize Loading");
 		initLoadingState();
-		displayLoadingState("Loading...");
 		// Initialize sound for loading screens etc
 #ifdef NL_OS_WINDOWS
+		displayLoadingState("Initialize Sound");
 		initSound();
 		playMusic(SBCLIENT_MUSIC_WAIT);
 #endif
 		// Required for 3d rendering (3d nel logo etc)
+		displayLoadingState("Initialize Light");
 		initLight();
 	}
 }
