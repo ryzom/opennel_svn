@@ -200,8 +200,9 @@ void	removeEntity (uint32 eid);
 void	removeAllEntitiesExceptUs ();
 void deleteAllEntities();
 
-void	initEntities();
-void	updateEntities ();
+void initEntities();
+void updateEntities();
+void releaseEntities();
 
 // Reset the pacs position of an entity (in case pacs went wrong)
 void	resetEntityPosition(uint32 eid);

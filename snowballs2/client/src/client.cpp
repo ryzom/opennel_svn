@@ -469,6 +469,8 @@ void releaseIngame()
 		releaseSky();
 		releaseLensFlare();
 		releaseRadar();
+		releaseCommands();
+		releaseEntities();
 		releaseGraph();
 		releaseCompass();
 		releaseInterface();

@@ -836,6 +836,12 @@ void initEntities()
 
 void releaseEntities()
 {
+	// Remove config file callbacks
+	ConfigFile.setCallback("EntityNameColor", NULL);
+	ConfigFile.setCallback("EntityNameSize", NULL);
+
+	// Delete all entities (should already have been called normally)
+	deleteAllEntities();
 }
 
 
