@@ -113,8 +113,8 @@ TTime CTime::getLocalTime ()
 	if ( ! initdone )
 	{
 
-#ifdef _POSIX_TIMERS
-#ifdef _POSIX_MONOTONIC_CLOCK
+#if defined(_POSIX_TIMERS) && (_POSIX_TIMERS > 0)
+#if defined(_POSIX_MONOTONIC_CLOCK) && (_POSIX_MONOTONIC_CLOCK > 0)
 
 		/* Initialize the local time engine.
 		* On Unix, this method will find out if the Monotonic Clock is supported
@@ -138,8 +138,8 @@ TTime CTime::getLocalTime ()
 		initdone = true;
 	}
 
-#ifdef _POSIX_TIMERS
-#ifdef _POSIX_MONOTONIC_CLOCK
+#if defined(_POSIX_TIMERS) && (_POSIX_TIMERS > 0)
+#if defined(_POSIX_MONOTONIC_CLOCK) && (_POSIX_MONOTONIC_CLOCK > 0)
 
 	if ( isMonotonicClockSupported )
 	{
