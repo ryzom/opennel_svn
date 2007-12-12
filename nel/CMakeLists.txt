@@ -110,7 +110,7 @@ IF(UNIX)
   ENDIF(WITH_3D)
 
   IF(WITH_GTK)
-    INCLUDE($(CMAKE_ROOT)/Modules/FindGTK.cmake)
+    INCLUDE(${CMAKE_ROOT}/Modules/FindGTK.cmake)
   ENDIF(WITH_GTK)
 
   INCLUDE(${CMAKE_ROOT}/Modules/FindLibXml2.cmake)
