@@ -53,7 +53,7 @@
 #	include <cstdlib>
 #	define IsDebuggerPresent() false
 #	include <execinfo.h>
-#	include <malloc.h>
+//#	include <malloc.h>
 #	include <errno.h>
 #endif
 
