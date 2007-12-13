@@ -540,7 +540,7 @@ static bool setupARBMultiTexture(const char	*glext)
 static bool setupEXTTextureEnvCombine(const char	*glext)
 {
 	H_AUTO_OGL(setupEXTTextureEnvCombine)
-	if(strstr(glext, "GL_EXT_texture_env_combine")==NULL)
+	    if(strstr(glext, "GL_EXT_texture_env_combine")==NULL && strstr(glext, "GL_ARB_texture_env_combine")==NULL)
 		return false;
 
 	return true;
