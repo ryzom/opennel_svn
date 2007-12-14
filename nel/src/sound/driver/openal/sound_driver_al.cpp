@@ -174,11 +174,11 @@ bool CSoundDriverAL::init()
 
 #if EAX_AVAILABLE == 1
     // Set EAX environment if EAX is available
-	if ( alIsExtensionPresent((ALubyte *)"EAX") == AL_TRUE ) // or EAX2.0
+	if ( alIsExtensionPresent((ALchar *)"EAX") == AL_TRUE ) // or EAX2.0
 	{
 		nlinfo( "Initializing EAX" );
-	    EAXSetProp = (EAXSet)alGetProcAddress((ALubyte*)"EAXSet");
-		EAXGetProp = (EAXGet)alGetProcAddress((ALubyte*)"EAXGet");
+	    EAXSetProp = (EAXSet)alGetProcAddress((ALchar*)"EAXSet");
+		EAXGetProp = (EAXGet)alGetProcAddress((ALchar*)"EAXGet");
 		if ( EAXSetProp != NULL )
 		{
 			unsigned long ulEAXVal;
