@@ -820,6 +820,14 @@
 			>
 		</File>
 		<File
+			RelativePath="src\sub_configuration.cpp"
+			>
+		</File>
+		<File
+			RelativePath="src\sub_configuration.h"
+			>
+		</File>
+		<File
 			RelativePath="src\radar.cpp"
 			>
 			<FileConfiguration

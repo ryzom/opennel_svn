@@ -12,6 +12,7 @@
 #ifdef NL_OS_WINDOWS
 #include <nel/misc/config_file.h>
 #include <nel/sound/u_audio_mixer.h>
+#include "sub_configuration.h"
 
 namespace SBCLIENT {
 
@@ -24,21 +25,21 @@ namespace SBCLIENT {
  * \author Jan Boon
  * \date 2007
  */
-class CMusicPlaylistManager
+class CMusicPlaylistManager : CSubConfiguration
 {
 	// todo: see if possible to implement class on top of CMusicSoundManager.
 
 	struct CPlaylist
 	{
 		CPlaylist() : Volume(1.0f), Current(0), Fade(0), Async(true), Loop(false), Music() { }
-		CPlaylist(float volume, uint32 fade, bool async, bool loop) : Current(-1), Music(),
+		CPlaylist(float volume, uint32 fade, bool async, uint8 loop) : Current(-1), Music(),
 			Volume(volume), Fade(fade), Async(async), Loop(loop) { }
 		~CPlaylist() { delete[] Music; }
 		float Volume;
 		sint32 Current;
 		sint32 Fade;
 		bool Async;
-		bool Loop;
+		uint8 Loop;
 		std::string *Music; // deleted by this
 	};
 
@@ -49,12 +50,12 @@ private:
 	float _CurrentVolume; // actual current volume
 	float _TargetVolume; // the volume to reach
 	sint32 _TimeVolume; // time left to reach the volume
-	std::string _ConfigPrefix;
-	NLMISC::CConfigFile *_ConfigFile; // not deleted by this
 	NLSOUND::UAudioMixer *_AudioMixer; // not deleted by this
+	void init(NLSOUND::UAudioMixer *audioMixer);
 
 public:
 	CMusicPlaylistManager(NLSOUND::UAudioMixer *audioMixer, NLMISC::CConfigFile *configFile, const std::string &configPrefix);
+	CMusicPlaylistManager(NLSOUND::UAudioMixer *audioMixer, const std::string &configFile, const std::string &configPrefix);
 	// todo: constructor without config file
 	~CMusicPlaylistManager();
 	static CMusicPlaylistManager *getInstance();

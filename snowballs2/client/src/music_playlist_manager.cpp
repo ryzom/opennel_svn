@@ -6,48 +6,62 @@
 #ifdef NL_OS_WINDOWS
 #include "music_playlist_manager.h"
 
+using namespace std;
+using namespace NLMISC;
+using namespace NLSOUND;
+
 namespace SBCLIENT {
 
 CMusicPlaylistManager *CMusicPlaylistManager::_Instance = NULL;
 
-CMusicPlaylistManager::CMusicPlaylistManager(NLSOUND::UAudioMixer *audioMixer, NLMISC::CConfigFile *configFile, const std::string &configPrefix)
-	: _Current(-1), _CurrentVolume(0.0f), _TargetVolume(1.0f), _TimeVolume(0)
+void CMusicPlaylistManager::init(UAudioMixer *audioMixer)
 {
 	nlassert(_Instance == NULL);
+
 	_Instance = this;
 
-	_ConfigFile = configFile;
-	_ConfigPrefix = configPrefix;
 	_AudioMixer = audioMixer;
-	uint32 playlists = configFile->exists(configPrefix + "s")
-		? configFile->getVar(configPrefix + "s").asInt() : 0;
+	uint32 playlists = cfgExists("Count")
+		? cfgGetVar("Count").asInt() : 0;
 	_Playlists = new CPlaylist[playlists];
 
 	for (uint32 i = 0; i < playlists; ++i)
 	{
-		std::string iS = NLMISC::toString(i);
-		std::string iSp = configPrefix + iS;
+		std::string iS = NLMISC::toString("%u_", i);
 
 		_Playlists[i] = CPlaylist(
-			configFile->exists(iSp + "Volume")
-			? configFile->getVar(iSp + "Volume").asFloat() : 1.0f,
-			configFile->exists(iSp + "Fade")
-			? configFile->getVar(iSp + "Fade").asInt() : 0,
-			configFile->exists(iSp + "Async")
-			? configFile->getVar(iSp + "Async").asBool() : true,
-			configFile->exists(iSp + "Loop")
-			? configFile->getVar(iSp + "Loop").asBool() : false);
+			cfgExists(iS + "Volume")
+			? cfgGetVar(iS + "Volume").asFloat() : 1.0f,
+			cfgExists(iS + "Fade")
+			? cfgGetVar(iS + "Fade").asInt() : 0,
+			cfgExists(iS + "Async")
+			? cfgGetVar(iS + "Async").asBool() : true,
+			cfgExists(iS + "Loop")
+			? (uint8)cfgGetVar(iS + "Loop").asInt() : 0);
 
-		if (configFile->exists(iSp + "Music"))
+		if (cfgExists(iS + "Music"))
 		{
 			NLMISC::CConfigFile::CVar &plMusic
-				= configFile->getVar(iSp + "Music");
+				= cfgGetVar(iS + "Music");
 			uint32 plSize = plMusic.size();
 			_Playlists[i].Music = new std::string[plSize];
 			for (uint32 j = 0; j < plSize; ++j)
 				_Playlists[i].Music[j] = plMusic.asString(j);
 		}
 	}
+}
+CMusicPlaylistManager::CMusicPlaylistManager(UAudioMixer *audioMixer, const string &configFile, const string &configPrefix)
+	: _Current(-1), _CurrentVolume(0.0f), _TargetVolume(0.0f), _TimeVolume(0)
+{
+	setConfigFile(configFile, configPrefix);
+	init(audioMixer);
+}
+
+CMusicPlaylistManager::CMusicPlaylistManager(UAudioMixer *audioMixer, CConfigFile *configFile, const string &configPrefix)
+	: _Current(-1), _CurrentVolume(0.0f), _TargetVolume(0.0f), _TimeVolume(0)
+{
+	setConfigFile(configFile, configPrefix);
+	init(audioMixer);
 }
 
 CMusicPlaylistManager::~CMusicPlaylistManager()
@@ -74,7 +88,6 @@ void CMusicPlaylistManager::update(NLMISC::TTime dTime)
 		else { _TimeVolume -= (sint32)dTime; }
 		change *= _TargetVolume - _CurrentVolume;
 		_CurrentVolume += change;
-		// nlinfo("Changing music volume with %f to %f", change, _CurrentVolume);
 		_AudioMixer->setMusicVolume(_CurrentVolume);
 	}
 }
@@ -93,13 +106,12 @@ void CMusicPlaylistManager::playMusic(sint32 playlist, sint32 track)
 	if (_Playlists[playlist].Volume > 0.0f)
 	{
 		std::string trackS = _Playlists[playlist].Music[track];
-		// nlinfo("Setting music to %s", trackS.c_str());
 		_AudioMixer->playMusic(
 			_Playlists[playlist].Music[track], 
 			_Current == -1 ? _Playlists[playlist].Fade
 			: std::min(_Playlists[playlist].Fade, _Playlists[_Current].Fade), 
 			_Playlists[playlist].Async, 
-			_Playlists[playlist].Loop);
+			_Playlists[playlist].Loop == 1);
 		_TargetVolume = _Playlists[playlist].Volume;
 		_TimeVolume = _TargetVolume == _CurrentVolume ? 0 : _Current == -1 
 			? _Playlists[playlist].Fade
@@ -112,9 +124,6 @@ void CMusicPlaylistManager::playMusic(sint32 playlist, sint32 track)
 	}
 	else
 	{
-		// nlinfo("Stopping music with %i fade", 
-		//	_Current == -1 ? _Playlists[playlist].Fade
-		//	: std::min(_Playlists[playlist].Fade, _Playlists[_Current].Fade));
 		_AudioMixer->stopMusic(
 			_Current == -1 ? _Playlists[playlist].Fade
 			: std::min(_Playlists[playlist].Fade, _Playlists[_Current].Fade));
@@ -128,8 +137,8 @@ void CMusicPlaylistManager::setVolume(sint32 playlist, float volume)
 {
 	_Playlists[playlist].Volume = volume;
 	if (playlist == _Current) _TargetVolume = volume;
-	std::string cfgVarVolume = _ConfigPrefix + NLMISC::toString(playlist) + "Volume";
-	_ConfigFile->getVar(cfgVarVolume).setAsFloat(volume);
+	std::string cfgVarVolume = NLMISC::toString("%i_Volume", playlist);
+	cfgGetVar(cfgVarVolume).setAsFloat(volume);
 }
 
 }
