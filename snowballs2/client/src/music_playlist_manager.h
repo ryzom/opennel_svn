@@ -32,7 +32,8 @@ class CMusicPlaylistManager : CSubConfiguration
 	struct CPlaylist
 	{
 		CPlaylist() : Volume(1.0f), Current(0), Fade(0), Async(true), Loop(false), Music() { }
-		CPlaylist(float volume, uint32 fade, bool async, uint8 loop) : Current(-1), Music(),
+		CPlaylist(float volume, uint32 fade, bool async, uint8 loop) 
+			: Current(-1), Music(0), MusicCount(0),
 			Volume(volume), Fade(fade), Async(async), Loop(loop) { }
 		~CPlaylist() { delete[] Music; }
 		float Volume;
@@ -40,12 +41,14 @@ class CMusicPlaylistManager : CSubConfiguration
 		sint32 Fade;
 		bool Async;
 		uint8 Loop;
+		uint32 MusicCount;
 		std::string *Music; // deleted by this
 	};
 
 private:
 	static CMusicPlaylistManager *_Instance;
 	sint32 _Current;
+	uint32 PlaylistCount;
 	CPlaylist *_Playlists; // deleted by this
 	float _CurrentVolume; // actual current volume
 	float _TargetVolume; // the volume to reach

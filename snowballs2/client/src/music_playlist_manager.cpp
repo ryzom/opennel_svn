@@ -21,11 +21,11 @@ void CMusicPlaylistManager::init(UAudioMixer *audioMixer)
 	_Instance = this;
 
 	_AudioMixer = audioMixer;
-	uint32 playlists = cfgExists("Count")
+	PlaylistCount = cfgExists("Count")
 		? cfgGetVar("Count").asInt() : 0;
-	_Playlists = new CPlaylist[playlists];
+	_Playlists = new CPlaylist[PlaylistCount];
 
-	for (uint32 i = 0; i < playlists; ++i)
+	for (uint32 i = 0; i < PlaylistCount; ++i)
 	{
 		std::string iS = NLMISC::toString("%u_", i);
 
@@ -43,9 +43,9 @@ void CMusicPlaylistManager::init(UAudioMixer *audioMixer)
 		{
 			NLMISC::CConfigFile::CVar &plMusic
 				= cfgGetVar(iS + "Music");
-			uint32 plSize = plMusic.size();
-			_Playlists[i].Music = new std::string[plSize];
-			for (uint32 j = 0; j < plSize; ++j)
+			_Playlists[i].MusicCount = plMusic.size();
+			_Playlists[i].Music = new std::string[_Playlists[i].MusicCount];
+			for (uint32 j = 0; j < _Playlists[i].MusicCount; ++j)
 				_Playlists[i].Music[j] = plMusic.asString(j);
 		}
 	}
@@ -102,6 +102,17 @@ void CMusicPlaylistManager::playMusic(sint32 playlist, sint32 track)
 
 	if (playlist == _Current && track == _Playlists[_Current].Current) return;
 	if (track == -1) track = _Playlists[playlist].Current + 1;
+
+	if (playlist < 0 || playlist >= (sint32)PlaylistCount)
+	{
+		nlwarning("Music playlist '%i' doesn't exist", playlist);
+		return;
+	}
+	if (track < 0 || track >= (sint32)_Playlists[playlist].MusicCount)
+	{
+		nlwarning("Track '%i' doesn't exist in music playlist '%i'", track, playlist);
+		return;
+	}
 
 	if (_Playlists[playlist].Volume > 0.0f)
 	{

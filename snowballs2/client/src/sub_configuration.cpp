@@ -43,8 +43,7 @@ void CSubConfiguration::setConfigFile()
 {
 	if (_ConfigFileCreated)
 	{
-		if (ConfigFile->exists("Save") 
-			&& ConfigFile->getVar("Save").asBool())
+		if (ConfigFile->exists("SaveConfig") && ConfigFile->getVar("SaveConfig").asBool())
 			ConfigFile->save();
 		_ConfigFileCreated = false;
 		delete ConfigFile;
