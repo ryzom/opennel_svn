@@ -39,7 +39,6 @@
 
 #include "client.h"
 #include "entities.h"
-#include "playlist_manager.h"
 
 // 
 // Defines

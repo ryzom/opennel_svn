@@ -39,6 +39,7 @@
 
 #include "sound.h"
 #include "entities.h"
+#include "music_playlist_manager.h"
 
 //
 // Namespaces
@@ -56,7 +57,7 @@ UAudioMixer *AudioMixer = NULL;
 TSoundId SoundId;
 const vector<TSoundId> *SoundIdArray;
 #ifdef NL_OS_WINDOWS
-static SBCLIENT::CPlaylistManager *PlaylistManager = NULL;
+static SBCLIENT::CMusicPlaylistManager *PlaylistManager = NULL;
 #endif
 static bool SoundEnabled;
 
@@ -133,7 +134,7 @@ void initSound2()
 	ConfigFile.setCallback("SoundForceSoftware", cbConfigFileFail);
 	ConfigFile.setCallback("SoundDriver", cbConfigFileFail);
 
-	PlaylistManager = new SBCLIENT::CPlaylistManager(AudioMixer, &ConfigFile, "SoundPlaylist");
+	PlaylistManager = new SBCLIENT::CMusicPlaylistManager(AudioMixer, &ConfigFile, "SoundPlaylist");
 
 	/* AudioMixer->loadSoundBuffers ("sounds.nss", &SoundIdArray);
 	nlassert( SoundIdArray->size() == 2 );

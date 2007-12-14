@@ -1,13 +1,16 @@
+/** \file music_playlist_manager.h * 
+ * CMusicPlaylistManager
+ */
 
 #include <nel/misc/types_nl.h>
 #ifdef NL_OS_WINDOWS
-#include "playlist_manager.h"
+#include "music_playlist_manager.h"
 
 namespace SBCLIENT {
 
-CPlaylistManager *CPlaylistManager::_Instance = NULL;
+CMusicPlaylistManager *CMusicPlaylistManager::_Instance = NULL;
 
-CPlaylistManager::CPlaylistManager(NLSOUND::UAudioMixer *audioMixer, NLMISC::CConfigFile *configFile, const std::string &configPrefix)
+CMusicPlaylistManager::CMusicPlaylistManager(NLSOUND::UAudioMixer *audioMixer, NLMISC::CConfigFile *configFile, const std::string &configPrefix)
 	: _Current(-1), _CurrentVolume(0.0f), _TargetVolume(1.0f), _TimeVolume(0)
 {
 	nlassert(_Instance == NULL);
@@ -47,20 +50,20 @@ CPlaylistManager::CPlaylistManager(NLSOUND::UAudioMixer *audioMixer, NLMISC::CCo
 	}
 }
 
-CPlaylistManager::~CPlaylistManager()
+CMusicPlaylistManager::~CMusicPlaylistManager()
 {
 	_AudioMixer->stopMusic();
 	delete[] _Playlists;
 	_Instance = NULL;
 }
 
-CPlaylistManager *CPlaylistManager::getInstance()
+CMusicPlaylistManager *CMusicPlaylistManager::getInstance()
 {
 	nlassert(_Instance != NULL);
 	return _Instance;
 }
 
-void CPlaylistManager::update(NLMISC::TTime dTime)
+void CMusicPlaylistManager::update(NLMISC::TTime dTime)
 {
 	// kaetemi_todo: add automatic playlist loop for loop mode 2
 
@@ -76,7 +79,7 @@ void CPlaylistManager::update(NLMISC::TTime dTime)
 	}
 }
 
-void CPlaylistManager::playMusic(sint32 playlist, sint32 track)
+void CMusicPlaylistManager::playMusic(sint32 playlist, sint32 track)
 {
 	if (playlist == -1)
 	{
@@ -121,7 +124,7 @@ void CPlaylistManager::playMusic(sint32 playlist, sint32 track)
 	_Current = playlist;
 }
 
-void CPlaylistManager::setVolume(sint32 playlist, float volume)
+void CMusicPlaylistManager::setVolume(sint32 playlist, float volume)
 {
 	_Playlists[playlist].Volume = volume;
 	if (playlist == _Current) _TargetVolume = volume;

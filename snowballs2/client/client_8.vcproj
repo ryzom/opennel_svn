@@ -812,11 +812,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\playlist_manager.cpp"
+			RelativePath="src\music_playlist_manager.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\src\playlist_manager.h"
+			RelativePath="src\music_playlist_manager.h"
 			>
 		</File>
 		<File
