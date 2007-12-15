@@ -276,7 +276,7 @@ void	updateAnimation()
 	}
 
 	// compute new animation position depending of the current time
-	PlayListManager->animate (float(CTime::getLocalTime ())/1000.0f);
+	PlayListManager->animate (double(CTime::getLocalTime ())/1000.0f);
 }
 
 void	releaseAnimation()
