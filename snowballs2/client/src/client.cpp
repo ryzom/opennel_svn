@@ -96,8 +96,9 @@ using namespace NLNET;
 // 
 // Constants
 // 
-static const uint8 GameStateLoad = 0, GameStateUnload = 1, GameStateExit = 2, 
-GameStateLogin = 3, GameStateOnline = 4, GameStateOffline = 5;
+
+static const uint8 GameStateLoad = 0, GameStateUnload = 1, GameStateReset = 2, GameStateExit = 3, 
+GameStateLogin = 4, GameStateOnline = 5, GameStateOffline = 6;
 
 //
 // Globals
@@ -155,6 +156,7 @@ void releaseLogin();
 void releaseIngame();
 void releaseOnline();
 void releaseOffline();
+void cbGraphicsDriver(CConfigFile::CVar &var);
 
 //
 // Functions
@@ -188,7 +190,12 @@ SwitchNextGameState:
 			displayLoadingState("Unloading");
 			releaseLogin(); // release all
 			releaseIngame();
-			// releaseCore(); // optional
+			break;
+		case GameStateReset:
+			displayLoadingState("Reset");
+			releaseLogin(); // release all
+			releaseIngame();
+			releaseCore();
 			break;
 		case GameStateExit:
 			displayLoadingState("See you later!");
@@ -221,6 +228,9 @@ SwitchNextGameState:
 		NextGameState = GameStateLogin;
 		break;
 	case GameStateUnload: // test state, switch back to load for default
+		NextGameState = GameStateLoad;
+		break;
+	case GameStateReset: // used to reset everything
 		NextGameState = GameStateLoad;
 		break;
 	case GameStateExit: // exit the loop
@@ -280,6 +290,8 @@ void initCore()
 		// Required for 3d rendering (3d nel logo etc)
 		displayLoadingState("Initialize Light");
 		initLight();
+
+		ConfigFile.setCallback("OpenGL", cbGraphicsDriver);
 	}
 }
 
@@ -421,6 +433,9 @@ void releaseCore()
 	if (LoadedCore)
 	{
 		LoadedCore = false;
+		// Release configuration callbacks
+		ConfigFile.setCallback("OpenGL", NULL);
+
 		// Release the sun
 		releaseLight();
 		// Release the loading state textures
@@ -728,6 +743,15 @@ void renderInformation()
 	SpfGraph.addOneValue((float)DiffTime);
 }
 
+// 
+// Configuration callbacks
+// 
+
+void cbGraphicsDriver(CConfigFile::CVar &var)
+{
+	NextGameState = GameStateReset;
+}
+
 //
 // Main
 //
@@ -906,6 +930,13 @@ NLMISC_COMMAND(sb_unload, "unload game", "")
 {
 	if (args.size() != 0) return false;
 	NextGameState = GameStateUnload;
+	return true;
+}
+
+NLMISC_COMMAND(sb_reset, "reset game", "")
+{
+	if (args.size() != 0) return false;
+	NextGameState = GameStateReset;
 	return true;
 }
 
