@@ -25,16 +25,16 @@ namespace SBCLIENT {
  * \author Jan Boon
  * \date 2007
  */
-class CMusicPlaylistManager : CSubConfiguration
+class CMusicPlaylistManager
 {
 	// todo: see if possible to implement class on top of CMusicSoundManager.
 
 	struct CPlaylist
 	{
 		CPlaylist() : Volume(1.0f), Current(0), Fade(0), Async(true), Loop(false), Music() { }
-		CPlaylist(float volume, uint32 fade, bool async, uint8 loop) 
+		CPlaylist(float volume, uint32 fade, bool async, uint8 loop, sint32 index) 
 			: Current(-1), Music(0), MusicCount(0),
-			Volume(volume), Fade(fade), Async(async), Loop(loop) { }
+			Volume(volume), Fade(fade), Async(async), Loop(loop), Index(index) { }
 		~CPlaylist() { delete[] Music; }
 		float Volume;
 		sint32 Current;
@@ -42,11 +42,13 @@ class CMusicPlaylistManager : CSubConfiguration
 		bool Async;
 		uint8 Loop;
 		uint32 MusicCount;
-		std::string *Music; // deleted by this
+		std::string *Music; // deleted by this		
+		sint32 Index; // needed for callbacks
 	};
 
 private:
 	static CMusicPlaylistManager *_Instance;
+	CSubConfiguration _Config;
 	sint32 _Current;
 	uint32 PlaylistCount;
 	CPlaylist *_Playlists; // deleted by this
@@ -55,6 +57,12 @@ private:
 	sint32 _TimeVolume; // time left to reach the volume
 	NLSOUND::UAudioMixer *_AudioMixer; // not deleted by this
 	void init(NLSOUND::UAudioMixer *audioMixer);
+	sint32 getFadeTo(sint32 playlist);
+	
+	static void cbPlaylistVolume(NLMISC::CConfigFile::CVar &var, void *context, void *state);
+	static void cbPlaylistFade(NLMISC::CConfigFile::CVar &var, void *context, void *state);
+	static void cbPlaylistAsync(NLMISC::CConfigFile::CVar &var, void *context, void *state);
+	static void cbPlaylistLoop(NLMISC::CConfigFile::CVar &var, void *context, void *state);
 
 public:
 	CMusicPlaylistManager(NLSOUND::UAudioMixer *audioMixer, NLMISC::CConfigFile *configFile, const std::string &configPrefix);
@@ -64,7 +72,12 @@ public:
 	static CMusicPlaylistManager *getInstance();
 	void update(NLMISC::TTime dTime);
 	void playMusic(sint32 playlist, sint32 track); // playlist -1 to stop, track -1 means next
+	
 	void setVolume(sint32 playlist, float volume);
+	void fadeVolume(sint32 playlist, float volume);
+	void setFade(sint32 playlist, sint32 fade);
+	void setAsync(sint32 playlist, bool async);
+	void setLoop(sint32 playlist, uint8 loop);
 };
 
 }

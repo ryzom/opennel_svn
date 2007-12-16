@@ -21,8 +21,8 @@ void CMusicPlaylistManager::init(UAudioMixer *audioMixer)
 	_Instance = this;
 
 	_AudioMixer = audioMixer;
-	PlaylistCount = cfgExists("Count")
-		? cfgGetVar("Count").asInt() : 0;
+	PlaylistCount = _Config.exists("Count")
+		? _Config.getVar("Count").asInt() : 0;
 	_Playlists = new CPlaylist[PlaylistCount];
 
 	for (uint32 i = 0; i < PlaylistCount; ++i)
@@ -30,19 +30,25 @@ void CMusicPlaylistManager::init(UAudioMixer *audioMixer)
 		std::string iS = NLMISC::toString("%u_", i);
 
 		_Playlists[i] = CPlaylist(
-			cfgExists(iS + "Volume")
-			? cfgGetVar(iS + "Volume").asFloat() : 1.0f,
-			cfgExists(iS + "Fade")
-			? cfgGetVar(iS + "Fade").asInt() : 0,
-			cfgExists(iS + "Async")
-			? cfgGetVar(iS + "Async").asBool() : true,
-			cfgExists(iS + "Loop")
-			? (uint8)cfgGetVar(iS + "Loop").asInt() : 0);
+			_Config.exists(iS + "Volume")
+			? _Config.getVar(iS + "Volume").asFloat() : 1.0f,
+			_Config.exists(iS + "Fade")
+			? _Config.getVar(iS + "Fade").asInt() : 0,
+			_Config.exists(iS + "Async")
+			? _Config.getVar(iS + "Async").asBool() : true,
+			_Config.exists(iS + "Loop")
+			? (uint8)_Config.getVar(iS + "Loop").asInt() : 0,
+			i);
 
-		if (cfgExists(iS + "Music"))
+		_Config.setCallback(iS + "Volume", cbPlaylistVolume, this, &(_Playlists[i]));
+		_Config.setCallback(iS + "Fade", cbPlaylistFade, this, &(_Playlists[i]));
+		_Config.setCallback(iS + "Async", cbPlaylistAsync, this, &(_Playlists[i]));
+		_Config.setCallback(iS + "Loop", cbPlaylistLoop, this, &(_Playlists[i]));
+
+		if (_Config.exists(iS + "Music"))
 		{
 			NLMISC::CConfigFile::CVar &plMusic
-				= cfgGetVar(iS + "Music");
+				= _Config.getVar(iS + "Music");
 			_Playlists[i].MusicCount = plMusic.size();
 			_Playlists[i].Music = new std::string[_Playlists[i].MusicCount];
 			for (uint32 j = 0; j < _Playlists[i].MusicCount; ++j)
@@ -53,20 +59,30 @@ void CMusicPlaylistManager::init(UAudioMixer *audioMixer)
 CMusicPlaylistManager::CMusicPlaylistManager(UAudioMixer *audioMixer, const string &configFile, const string &configPrefix)
 	: _Current(-1), _CurrentVolume(0.0f), _TargetVolume(0.0f), _TimeVolume(0)
 {
-	setConfigFile(configFile, configPrefix);
+	_Config.setConfigFile(configFile, configPrefix);
 	init(audioMixer);
 }
 
 CMusicPlaylistManager::CMusicPlaylistManager(UAudioMixer *audioMixer, CConfigFile *configFile, const string &configPrefix)
 	: _Current(-1), _CurrentVolume(0.0f), _TargetVolume(0.0f), _TimeVolume(0)
 {
-	setConfigFile(configFile, configPrefix);
+	_Config.setConfigFile(configFile, configPrefix);
 	init(audioMixer);
 }
 
 CMusicPlaylistManager::~CMusicPlaylistManager()
 {
 	_AudioMixer->stopMusic();
+
+	for (uint32 i = 0; i < PlaylistCount; ++i)
+	{
+		std::string iS = NLMISC::toString("%u_", i);
+		_Config.setCallback(iS + "Volume", NULL, NULL, NULL);
+		_Config.setCallback(iS + "Fade", NULL, NULL, NULL);
+		_Config.setCallback(iS + "Async", NULL, NULL, NULL);
+		_Config.setCallback(iS + "Loop", NULL, NULL, NULL);
+	}
+
 	delete[] _Playlists;
 	_Instance = NULL;
 }
@@ -83,12 +99,20 @@ void CMusicPlaylistManager::update(NLMISC::TTime dTime)
 
 	if (_CurrentVolume != _TargetVolume)
 	{
-		float change = (float)dTime / (float)_TimeVolume;
-		if (change > 1.0f) { change = 1.0f; _TimeVolume = 0; }
-		else { _TimeVolume -= (sint32)dTime; }
-		change *= _TargetVolume - _CurrentVolume;
-		_CurrentVolume += change;
-		_AudioMixer->setMusicVolume(_CurrentVolume);
+		if (_TimeVolume == 0)
+		{
+			_CurrentVolume = _TargetVolume;
+			_AudioMixer->setMusicVolume(_TargetVolume);
+		}
+		else
+		{
+			float change = (float)((double)dTime / (double)_TimeVolume);
+			if (change > 1.0) { change = 1.0; _TimeVolume = 0; }
+			else { _TimeVolume -= (sint32)dTime; }
+			change *= _TargetVolume - _CurrentVolume;
+			_CurrentVolume += change;
+			_AudioMixer->setMusicVolume(_CurrentVolume);
+		}
 	}
 }
 
@@ -119,14 +143,11 @@ void CMusicPlaylistManager::playMusic(sint32 playlist, sint32 track)
 		std::string trackS = _Playlists[playlist].Music[track];
 		_AudioMixer->playMusic(
 			_Playlists[playlist].Music[track], 
-			_Current == -1 ? _Playlists[playlist].Fade
-			: std::min(_Playlists[playlist].Fade, _Playlists[_Current].Fade), 
+			getFadeTo(playlist), 
 			_Playlists[playlist].Async, 
 			_Playlists[playlist].Loop == 1);
 		_TargetVolume = _Playlists[playlist].Volume;
-		_TimeVolume = _TargetVolume == _CurrentVolume ? 0 : _Current == -1 
-			? _Playlists[playlist].Fade
-			: std::min(_Playlists[playlist].Fade, _Playlists[_Current].Fade);
+		_TimeVolume = _TargetVolume == _CurrentVolume ? 0 : getFadeTo(playlist);
 		if (_TimeVolume == 0)
 		{
 			_CurrentVolume = _TargetVolume;
@@ -135,13 +156,20 @@ void CMusicPlaylistManager::playMusic(sint32 playlist, sint32 track)
 	}
 	else
 	{
-		_AudioMixer->stopMusic(
-			_Current == -1 ? _Playlists[playlist].Fade
-			: std::min(_Playlists[playlist].Fade, _Playlists[_Current].Fade));
+		_AudioMixer->stopMusic(getFadeTo(playlist));
 	}
 
 	_Playlists[playlist].Current = track;
 	_Current = playlist;
+}
+
+sint32 CMusicPlaylistManager::getFadeTo(sint32 playlist)
+{
+	return _Current == -1 
+		? playlist == -1
+			? 0 : _Playlists[playlist].Fade
+		: playlist == -1
+			? 0 : std::min(_Playlists[playlist].Fade, _Playlists[_Current].Fade);
 }
 
 void CMusicPlaylistManager::setVolume(sint32 playlist, float volume)
@@ -149,7 +177,58 @@ void CMusicPlaylistManager::setVolume(sint32 playlist, float volume)
 	_Playlists[playlist].Volume = volume;
 	if (playlist == _Current) _TargetVolume = volume;
 	std::string cfgVarVolume = NLMISC::toString("%i_Volume", playlist);
-	cfgGetVar(cfgVarVolume).setAsFloat(volume);
+	_Config.getVar(cfgVarVolume).forceAsDouble((double)volume);
+}
+
+void CMusicPlaylistManager::fadeVolume(sint32 playlist, float volume)
+{
+	if (playlist == _Current) _TimeVolume = _Playlists[playlist].Fade;
+	setVolume(playlist, volume);
+}
+
+void CMusicPlaylistManager::setFade(sint32 playlist, sint32 fade)
+{
+	_Playlists[playlist].Fade = fade;
+	std::string varName = NLMISC::toString("%i_Fade", playlist);
+	_Config.getVar(varName).forceAsInt(fade);
+}
+
+void CMusicPlaylistManager::setAsync(sint32 playlist, bool async)
+{
+	_Playlists[playlist].Async = async;
+	std::string varName = NLMISC::toString("%i_Async", playlist);
+	_Config.getVar(varName).asBool(async);
+}
+
+void CMusicPlaylistManager::setLoop(sint32 playlist, uint8 loop)
+{
+	_Playlists[playlist].Loop = loop;
+	std::string varName = NLMISC::toString("%i_Loop", playlist);
+	_Config.getVar(varName).forceAsInt(loop);
+}
+
+void CMusicPlaylistManager::cbPlaylistVolume(NLMISC::CConfigFile::CVar &var, void *context, void *state)
+{
+	((CMusicPlaylistManager *)context)
+		->fadeVolume(((CPlaylist *)state)->Index, var.asFloat());
+}	
+
+void CMusicPlaylistManager::cbPlaylistFade(NLMISC::CConfigFile::CVar &var, void *context, void *state)
+{
+	((CMusicPlaylistManager *)context)
+		->setFade(((CPlaylist *)state)->Index, var.asInt());
+}
+
+void CMusicPlaylistManager::cbPlaylistAsync(NLMISC::CConfigFile::CVar &var, void *context, void *state)
+{
+	((CMusicPlaylistManager *)context)
+		->setAsync(((CPlaylist *)state)->Index, var.asBool());
+}
+
+void CMusicPlaylistManager::cbPlaylistLoop(NLMISC::CConfigFile::CVar &var, void *context, void *state)
+{
+	((CMusicPlaylistManager *)context)
+		->setLoop(((CPlaylist *)state)->Index, var.asInt());
 }
 
 }

@@ -18,19 +18,32 @@ namespace SBCLIENT {
 class CSubConfiguration
 {
 private: 
+	// maybe add void *Context, *State members to CVar
+	struct CConfigCallback
+	{
+		CConfigCallback() { }
+		CConfigCallback(void (*cb)(NLMISC::CConfigFile::CVar &, void *, void *), void *context, void *state)
+			: Callback(cb), Context(context), State(state) { }
+		void (*Callback)(NLMISC::CConfigFile::CVar &, void *, void *);
+		void *Context;
+		void *State;
+	};
+	static std::map<std::string, CConfigCallback> _CVarStates;
+	static void callback(NLMISC::CConfigFile::CVar &var);
 	std::string _ConfigPrefix;
 	std::string _ConfigPrefixD;
+	NLMISC::CConfigFile *ConfigFile;
 	bool _ConfigFileCreated;
 	void tryConfigFile();
-protected:
+public:
 	CSubConfiguration();
 	~CSubConfiguration();
-	NLMISC::CConfigFile *ConfigFile;
 	void setConfigFile(const std::string &configFile, const std::string &configPrefix); // ConfigFiled created and deleted
 	void setConfigFile(NLMISC::CConfigFile *configFile, const std::string &configPrefix); // configFile is NOT deleted
 	void setConfigFile();
-	NLMISC::CConfigFile::CVar &cfgGetVar(const std::string &varName);
-	bool cfgExists(const std::string &varName);
+	NLMISC::CConfigFile::CVar &getVar(const std::string &varName);
+	bool exists(const std::string &varName);
+	void setCallback(const std::string &varName, void (*cb)(NLMISC::CConfigFile::CVar &, void *, void *), void *context, void *state);
 };
 
 }
