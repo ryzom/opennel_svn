@@ -465,7 +465,7 @@ bool CDriverGL::isTextureRectangle(ITexture * tex) const
 
 bool CDriverGL::activeFrameBufferObject(ITexture * tex) 
 {
-	if(supportFrameBufferObject() && supportPackedDepthStencil())
+	if(supportFrameBufferObject()/* && supportPackedDepthStencil()*/)
 	{
 		if(tex)
 		{
@@ -2572,9 +2572,11 @@ void CDriverGL::copyFrameBufferToTexture(ITexture *tex,
 	bool compressed = false;
 	getGlTextureFormat(*tex, compressed);
 	nlassert(!compressed);	
-	// first, mark the texture as valid, and make sure there is a corresponding texture in the device memory	
+	// first, mark the texture as valid, and make sure there is a corresponding texture in the device memory
 	setupTexture(*tex);	
 	CTextureDrvInfosGL*	gltext = (CTextureDrvInfosGL*)(ITextureDrvInfos*)(tex->TextureDrvShare->DrvTexture);
+	//if (_RenderTargetFBO)
+	//	gltext->activeFrameBufferObject(NULL);
 	_DriverGLStates.activeTextureARB(0);
 	// setup texture mode, after activeTextureARB()
 	CDriverGLStates::TTextureMode textureMode= CDriverGLStates::Texture2D;
@@ -2596,8 +2598,8 @@ void CDriverGL::copyFrameBufferToTexture(ITexture *tex,
 	_DriverGLStates.setTextureMode(CDriverGLStates::TextureDisabled);
 	_CurrentTexture[0] = NULL;
 	_CurrentTextureInfoGL[0] = NULL;
-	
-		
+	//if (_RenderTargetFBO)
+	//	gltext->activeFrameBufferObject(tex);
 }
 
 

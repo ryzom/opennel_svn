@@ -58,6 +58,7 @@ namespace NL3D
 CTextureDrvInfosGL::CTextureDrvInfosGL(IDriver *drv, ItTexDrvInfoPtrMap it, CDriverGL *drvGl, bool isRectangleTexture) : ITextureDrvInfos(drv, it)
 {
 	H_AUTO_OGL(CTextureDrvInfosGL_CTextureDrvInfosGL)
+	//nldebug("CTextureDrvInfosGL::ctor()");
 	// The id is auto created here.
 	glGenTextures(1,&ID);
 	
@@ -72,6 +73,7 @@ CTextureDrvInfosGL::CTextureDrvInfosGL(IDriver *drv, ItTexDrvInfoPtrMap it, CDri
 	
 	InitFBO = false;
 	AttachDepthStencil = true;
+	UsePackedDepthStencil = drvGl->supportPackedDepthStencil();
 }
 // ***************************************************************************
 CTextureDrvInfosGL::~CTextureDrvInfosGL()
@@ -90,7 +92,11 @@ CTextureDrvInfosGL::~CTextureDrvInfosGL()
 	{
 		nglDeleteFramebuffersEXT(1, &FBOId);
 		if(AttachDepthStencil)
-			nglDeleteRenderbuffersEXT(1, &DepthStencilFBOId);	
+		{
+			nglDeleteRenderbuffersEXT(1, &DepthFBOId);
+			if(!UsePackedDepthStencil)
+				nglDeleteRenderbuffersEXT(1, &StencilFBOId);
+		}
 	}
 }
 
@@ -107,8 +113,14 @@ bool CTextureDrvInfosGL::initFrameBufferObject(ITexture * tex)
 		nglGenFramebuffersEXT(1, &FBOId);
 		if(AttachDepthStencil)
 		{
-			nglGenRenderbuffersEXT(1, &DepthStencilFBOId);
+			nglGenRenderbuffersEXT(1, &DepthFBOId);
+			if(UsePackedDepthStencil)
+				StencilFBOId = DepthFBOId;
+			else
+				nglGenRenderbuffersEXT(1, &StencilFBOId);
 		}
+
+		//nldebug("using depth %d and stencil %d", DepthFBOId, StencilFBOId);
 
 		// initialize FBO
 		nglBindFramebufferEXT(GL_FRAMEBUFFER_EXT, FBOId); 
@@ -116,14 +128,34 @@ bool CTextureDrvInfosGL::initFrameBufferObject(ITexture * tex)
 								  TextureMode, ID, 0);
 
 		// attach depth/stencil render to FBO
+		// note: for some still unkown reason it's impossible to add
+		// a stencil buffer as shown in the respective docs (see
+		// opengl.org extension registry). Until a safe approach to add
+		// them is found, there will be no attached stencil for the time
+		// being, aside of using packed depth+stencil buffers.
 		if(AttachDepthStencil)
 		{
-			nglBindRenderbufferEXT(GL_RENDERBUFFER_EXT, DepthStencilFBOId);
-			nglRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH24_STENCIL8_EXT, tex->getWidth(), tex->getHeight());
+			if(UsePackedDepthStencil)
+			{
+				//nldebug("using packed depth stencil");
+				nglBindRenderbufferEXT(GL_RENDERBUFFER_EXT, StencilFBOId);
+				nglRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH24_STENCIL8_EXT, tex->getWidth(), tex->getHeight());
+			}
+			else
+			{
+				nglBindRenderbufferEXT(GL_RENDERBUFFER_EXT, DepthFBOId);
+				nglRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT24, tex->getWidth(), tex->getHeight());
+				/*
+				nglBindRenderbufferEXT(GL_RENDERBUFFER_EXT, StencilFBOId);
+				nglRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_STENCIL_INDEX8_EXT, tex->getWidth(), tex->getHeight());
+				*/
+			}
 			nglFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
-										 GL_RENDERBUFFER_EXT, DepthStencilFBOId);
-			nglFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT,
-										 GL_RENDERBUFFER_EXT, DepthStencilFBOId);
+										 GL_RENDERBUFFER_EXT, DepthFBOId);
+			//nldebug("glFramebufferRenderbufferExt(depth:24) = %X", nglCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT));
+			//nglFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT,
+			//							 GL_RENDERBUFFER_EXT, StencilFBOId);
+			//nldebug("glFramebufferRenderbufferExt(stencil:8) = %X", nglCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT));
 		}
 
 		// check status
@@ -165,6 +197,19 @@ bool CTextureDrvInfosGL::initFrameBufferObject(ITexture * tex)
 				nlwarning("Framebuffer incomplete\n");
 				//nlassert(0);
 		}
+
+		// clean up resources if allocation failed		
+		if (!InitFBO)
+		{
+			nglDeleteFramebuffersEXT(1, &FBOId);
+			if (AttachDepthStencil)
+			{
+				nglDeleteRenderbuffersEXT(1, &DepthFBOId);
+				if(!UsePackedDepthStencil)
+					nglDeleteRenderbuffersEXT(1, &StencilFBOId);
+			}
+		}
+		
 	}
 
 	return InitFBO;
@@ -546,6 +591,7 @@ void CDriverGL::setupTextureBasicParameters(ITexture &tex)
 bool CDriverGL::setupTextureEx (ITexture& tex, bool bUpload, bool &bAllUploaded, bool bMustRecreateSharedTexture)
 {
 	H_AUTO_OGL(setupTextureEx)
+	//nldebug("CDriverGL::setupTextureEx(%016p, %d, %d, %d)", &tex, bUpload, bAllUploaded, bMustRecreateSharedTexture);
 	bAllUploaded = false;
 	
 	if(tex.isTextureCube() && (!_Extensions.ARBTextureCubeMap))
@@ -556,6 +602,7 @@ bool CDriverGL::setupTextureEx (ITexture& tex, bool bUpload, bool &bAllUploaded,
 	bool mustCreate = false;
 	if ( !tex.TextureDrvShare )
 	{
+		//nldebug("  creating CTextureDrvShare()");
 		// insert into driver list. (so it is deleted when driver is deleted).
 		ItTexDrvSharePtrList	it= _TexDrvShares.insert(_TexDrvShares.end(), NULL);
 		// create and set iterator, for future deletion.
@@ -1825,63 +1872,64 @@ bool CDriverGL::setRenderTarget (ITexture *tex, uint32 x, uint32 y, uint32 width
 	if (tex)
 		nlassertex (tex->getRenderTarget(), ("The texture must be a render target. Call ITexture::setRenderTarget(true)."));
 
-	if(tex==NULL && _RenderTargetFBO)
-	{
-		activeFrameBufferObject(NULL);
-		setupViewport(_OldViewport);
-		_OldViewport = _CurrViewport;
+	_RenderTargetFBO = supportFrameBufferObject();
+	_RenderTargetPackedDepthStencil = supportPackedDepthStencil();
 
-		_RenderTargetFBO = false;
-		return false;
+	// make backup of offscreen buffer to old texture if not using FBOs
+	if (!_RenderTargetFBO && _TextureTarget && (_TextureTarget != tex || _TextureTargetCubeFace != cubeFace) && _TextureTargetUpload)
+	{
+		// Flush it
+		copyFrameBufferToTexture (_TextureTarget, _TextureTargetLevel, _TextureTargetX, _TextureTargetY, 0,
+			0, _TextureTargetWidth, _TextureTargetHeight, _TextureTargetCubeFace);
 	}
-	else if(tex && tex->isBloomTexture() && supportBloomEffect() /*&& activeFrameBufferObject(tex)*/)
+
+	// Backup the texture
+	_TextureTarget = tex;
+
+	// Set a new texture as render target
+	if (tex)
 	{
-		uint32 w, h;
-		getWindowSize(w, h);
-		
-		getViewport(_OldViewport);
-		CViewport newVP;
-		newVP.init(0, 0, ((float)width/(float)w), ((float)height/(float)h));
-		setupViewport(newVP);
+		// Backup the parameters
+		_TextureTargetLevel = mipmapLevel;
+		_TextureTargetX = x;
+		_TextureTargetY = y;
+		_TextureTargetWidth = width;
+		_TextureTargetHeight = height;
+		_TextureTargetUpload = true;
+		_TextureTargetCubeFace = cubeFace;
 
-		_RenderTargetFBO = true;
-
-		return activeFrameBufferObject(tex);
+		if (_RenderTargetFBO)
+		{
+			uint32 w, h;
+			getWindowSize(w, h);
+	
+			getViewport(_OldViewport);
+			CViewport newVP;
+			newVP.init(0, 0, ((float)width/(float)w), ((float)height/(float)h));
+			setupViewport(newVP);
+			setupScissor(_CurrScissor);
+			if (!tex->TextureDrvShare)
+				setupTexture(*tex);
+			return activeFrameBufferObject(tex);
+		}
+		else
+		{
+			// Update the viewport
+			setupViewport (_CurrViewport);		
+			// Update the scissor
+			setupScissor (_CurrScissor);
+			//_RenderTargetFBO = false;
+			_OldViewport = _CurrViewport;
+		}
 	}
 	else
 	{
-		// Have a previous texture ?
-		if (_TextureTarget && (_TextureTarget != tex || _TextureTargetCubeFace != cubeFace) && _TextureTargetUpload)
-		{
-			// Flush it
-			copyFrameBufferToTexture (_TextureTarget, _TextureTargetLevel, _TextureTargetX, _TextureTargetY, 0,
-				0, _TextureTargetWidth, _TextureTargetHeight, _TextureTargetCubeFace);
-		}
-
-		// Backup the texture
-		_TextureTarget = tex;
-
-		// Set a new texture as render target ?
-		if (tex)
-		{
-			// Backup the parameters
-			_TextureTargetLevel = mipmapLevel;
-			_TextureTargetX = x;
-			_TextureTargetY = y;
-			_TextureTargetWidth = width;
-			_TextureTargetHeight = height;
-			_TextureTargetUpload = true;
-			_TextureTargetCubeFace = cubeFace;
-		}
-
-		// Update the viewport
-		setupViewport (_CurrViewport);		
-
-		// Update the scissor
-		setupScissor (_CurrScissor);
-
-		_RenderTargetFBO = false;
+		if (_RenderTargetFBO)
+			activeFrameBufferObject(NULL);
+		setupViewport(_OldViewport);
+		setupScissor(_CurrScissor);
 		_OldViewport = _CurrViewport;
+		_RenderTargetFBO = false;
 	}
 
 	return true;
