@@ -157,10 +157,12 @@ public:
 	GLuint					FBOId;
 
 	// depth stencil FBO id
-	GLuint					DepthStencilFBOId;
+	GLuint					DepthFBOId;
+	GLuint					StencilFBOId;
 
 	bool					InitFBO;
 	bool					AttachDepthStencil;
+	bool					UsePackedDepthStencil;
 
 	// The current wrap modes assigned to the texture.
 	ITexture::TWrapMode		WrapS;
@@ -755,6 +757,7 @@ private:
 	CViewport				_OldViewport;
 
 	bool					_RenderTargetFBO;
+	bool					_RenderTargetPackedDepthStencil;
 
 
 	// Num lights return by GL_MAX_LIGHTS
