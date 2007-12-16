@@ -107,10 +107,15 @@ IF(UNIX)
     IF(WITH_DRIVER_OPENGL)
       INCLUDE(${CMAKE_ROOT}/Modules/FindOpenGL.cmake)
     ENDIF(WITH_DRIVER_OPENGL)
+    
+#    IF(WITH_CEGUI)
+#      INCLUDE(${CMAKE_SOURCE_DIR}/cmake/FindCEGUI.cmake)
+#    ENDIF(WITH_CEGUI)
+    
   ENDIF(WITH_3D)
 
   IF(WITH_GTK)
-    INCLUDE(${CMAKE_ROOT}/Modules/FindGTK.cmake)
+    INCLUDE(${CMAKE_SOURCE_DIR}/cmake/FindGTK2.cmake)
   ENDIF(WITH_GTK)
 
   INCLUDE(${CMAKE_ROOT}/Modules/FindLibXml2.cmake)
