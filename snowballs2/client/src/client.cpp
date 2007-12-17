@@ -114,6 +114,8 @@ UTextContext *TextContext = NULL; // core
 UScene *Scene = NULL; // ingame
 // This class is used to handle mouse/keyboard input for camera movement
 C3dMouseListener *MouseListener = NULL; // ingame
+// Log file
+CFileDisplayer FileDisplayer; // main
 // The previous and current frame dates
 TTime  LastTime, NewTime, DiffTime; // ingame
 // true if the commands(chat) interface must be display. This variable is set automatically with the config file
@@ -762,6 +764,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdline, 
 int main(int argc, char **argv)
 #endif
 {
+	// use log.log if NEL_LOG_IN_FILE defined as 1
+	createDebug(NULL, true, false);
+
+	// create snowballs_client.log
+	// filedisplayer only deletes the 001 etc
+	if (CFile::isExists("snowballs_client.log"))
+		CFile::deleteFile("snowballs_client.log");
+	// initialize the log file
+	FileDisplayer.setParam("snowballs_client.log", true);
+	DebugLog->addDisplayer(&FileDisplayer);
+	InfoLog->addDisplayer(&FileDisplayer);
+	WarningLog->addDisplayer(&FileDisplayer);
+	AssertLog->addDisplayer(&FileDisplayer);
+	ErrorLog->addDisplayer(&FileDisplayer);
+
 	nlinfo("Starting Snowballs!");
 	switchGameState();
 	nlinfo("See you later!");
