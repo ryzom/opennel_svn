@@ -1,5 +1,5 @@
 // This is the name of this language.
 LanguageName    [Deutsch]
-hi				[Hallo]
+Hi				[Hallo]
 PresentI18N		[%s prämtiert das NeL Internationalisierungs-System]
 ExitStr			[DrüEingabetaste> zum Beenden]

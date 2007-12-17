@@ -34,7 +34,7 @@ using namespace NLMISC;
 
 int main (int argc, char **argv)
 {
-	NLMISC::createDebug();
+	createDebug();
 	InfoLog->displayRawNL("Please, choose 'en', 'fr' or 'de' and press <return>");
 
 	std::string langName;
@@ -43,7 +43,7 @@ int main (int argc, char **argv)
 	// load the language
 	CI18N::load(langName);
 
-	InfoLog->displayRawNL(CI18N::get("hi").toString().c_str());
+	InfoLog->displayRawNL(CI18N::get("Hi").toString().c_str());
 	InfoLog->displayRawNL(CI18N::get("PresentI18N").toString().c_str(), "Nevrax");
 	InfoLog->displayRawNL(CI18N::get("ExitStr").toString().c_str());
 	getchar();
