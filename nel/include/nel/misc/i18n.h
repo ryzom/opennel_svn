@@ -263,8 +263,6 @@ private:
 								TLineFormat lineFmt,
 							    bool warnIfIncludesNotFound,
 								TReadContext &readContext);
-
-
 };
 
 } // NLMISC

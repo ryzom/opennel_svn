@@ -34,20 +34,14 @@ using namespace std;
 
 namespace NLMISC {
 
-/*const std::string		CI18N::_LanguageFiles[] = 
-{
-	std::string("english"),
-	std::string("french")
-};
-*/
 const std::string		CI18N::_LanguageCodes[] =
 {
-	std::string("en"),		// english
-	std::string("de"),		// german
-	std::string("fr"),		// french
-	std::string("wk"),		// work translation
-//	std::string("zh-TW"),	// traditional Chinese
-//	std::string("zh-CN")	// simplified Chinese
+	string("en"),		// English
+	string("de"),		// German
+	string("fr"),		// French
+	string("wk"),		// Work translation
+//	string("zh-TW"),	// Traditional Chinese
+//	string("zh-CN"),	// Simplified Chinese
 };
 
 const uint				CI18N::_NbLanguages = sizeof(CI18N::_LanguageCodes) / sizeof(std::string);
@@ -67,9 +61,6 @@ void CI18N::setLoadProxy(ILoadProxy *loadProxy)
 
 void CI18N::load (const std::string &languageCode)
 {
-//	nlassert (lid < _NbLanguages);
-//	nlassert (_LanguagesNamesLoaded);
-
 	uint i;
 	for (i=0; i<_NbLanguages; ++i)
 	{
@@ -79,7 +70,7 @@ void CI18N::load (const std::string &languageCode)
 
 	if (i == _NbLanguages)
 	{
-		nlwarning("I18N: Unknown language code : %s, defaulting to %s", _LanguageCodes[0].c_str());
+		nlwarning("I18N: Unknown language code '%s', defaulting to '%s'", languageCode.c_str(), _LanguageCodes[0].c_str());
 		i = 0;
 	}
 
@@ -219,53 +210,51 @@ ucstring CI18N::getCurrentLanguageName ()
 
 void CI18N::remove_C_Comment(ucstring &commentedString)
 {
+	ucstring temp;
+	temp.reserve(commentedString.size());
+	ucstring::const_iterator first(commentedString.begin()), last(commentedString.end());
+	for (;first != last; ++first)
 	{
-		ucstring temp;
-		temp.reserve(commentedString.size());
-		ucstring::const_iterator first(commentedString.begin()), last(commentedString.end());
-		for (;first != last; ++first)
+		temp.push_back(*first);
+		if (*first == '[')
 		{
-			temp.push_back(*first);
-			if (*first == '[')
+			// no comment inside string literal
+			while (++first != last)
 			{
-				// no comment inside string literal
-				while (++first != last)
-				{
-					temp.push_back(*first);
-					if (*first == ']')
-						break;
-				}
-			}
-			else if (*first == '/')
-			{
-				// start of comment ?
-				++first;
-				if (first != last && *first == '/')
-				{
-					temp.resize(temp.size()-1);
-					// one line comment, skip until end of line
-					while (first != last && *first != '\n')
-						++first;
-				}
-				else if (first != last && *first == '*')
-				{
-					temp.resize(temp.size()-1);
-					// start of multiline comment, skip until we found '*/'
-					while (first != last && !(*first == '*' && (first+1) != last && *(first+1) == '/'))
-						++first;
-					// skip the closing '/'
-					if (first != last)
-						++first;
-				}
-				else
-				{
-					temp.push_back(*first);
-				}
+				temp.push_back(*first);
+				if (*first == ']')
+					break;
 			}
 		}
-
-		commentedString.swap(temp);
+		else if (*first == '/')
+		{
+			// start of comment ?
+			++first;
+			if (first != last && *first == '/')
+			{
+				temp.resize(temp.size()-1);
+				// one line comment, skip until end of line
+				while (first != last && *first != '\n')
+					++first;
+			}
+			else if (first != last && *first == '*')
+			{
+				temp.resize(temp.size()-1);
+				// start of multiline comment, skip until we found '*/'
+				while (first != last && !(*first == '*' && (first+1) != last && *(first+1) == '/'))
+					++first;
+				// skip the closing '/'
+				if (first != last)
+					++first;
+			}
+			else
+			{
+				temp.push_back(*first);
+			}
+		}
 	}
+
+	commentedString.swap(temp);
 }
 
 
@@ -1080,42 +1069,6 @@ ucstring CI18N::makeMarkedString(ucchar openMark, ucchar closeMark, const ucstri
 string CI18N::encodeUTF8(const ucstring &str)
 {
 	return str.toUtf8();
-	/*	
-	string	res;
-	ucstring::const_iterator first(str.begin()), last(str.end());
-	for (; first != last; ++first)
-	{
-	  //ucchar	c = *first;
-		uint nbLoop = 0;
-		if (*first < 0x80)
-			res += char(*first);
-		else if (*first < 0x800)
-		{
-			ucchar c = *first;
-			c = c >> 6;
-			c = c & 0x1F;
-			res += c | 0xC0;
-			nbLoop = 1;
-		}
-		else if (*first < 0x10000)
-		{
-			ucchar c = *first;
-			c = c >> 12;
-			c = c & 0x0F;
-			res += c | 0xE0;
-			nbLoop = 2;
-		}
-
-		for (uint i=0; i<nbLoop; ++i)
-		{
-			ucchar	c = *first;
-			c = c >> ((nbLoop - i - 1) * 6);
-			c = c & 0x3F;
-			res += char(c) | 0x80; 
-		}
-	}
-	return res;
-	*/
 }
 
 /* UTF-8 conversion table
@@ -1127,7 +1080,6 @@ U-00010000 - U-001FFFFF:  11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
 U-00200000 - U-03FFFFFF:  111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx  
 U-04000000 - U-7FFFFFFF:  1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx  
 */
-
 
 uint64	CI18N::makeHash(const ucstring &str)
 {
