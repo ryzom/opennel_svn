@@ -1577,7 +1577,7 @@ bool CAudioMixerUser::tryToLoadSoundBank(const std::string &sampleName)
 		// extract samplebank name
 		path = NLMISC::CFile::getPath(path);
 		vector<string> rep;
-		explode(path, "/", rep, true);
+		explode(path, string("/"), rep, true);
 
 		loadSampleBank(false, rep.back());
 
