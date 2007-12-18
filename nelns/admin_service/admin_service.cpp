@@ -331,7 +331,7 @@ void updateSendAdminAlert ()
 	if(!Email.empty() && FirstEmailTime != 0 && AdminAlertAccumlationTime >=0 && CTime::getSecondsSince1970() > FirstEmailTime + AdminAlertAccumlationTime)
 	{
 		vector<string> lines;
-		explode (Email, "\n", lines, true);
+		explode (Email, string("\n"), lines, true);
 		if (!lines.empty())
 		{
 
