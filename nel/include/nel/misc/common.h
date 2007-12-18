@@ -376,7 +376,7 @@ inline std::string toString (const sint8 &t)
  */
 template <class T> void explode (const T &src, const T &sep, std::vector<T> &res, bool skipEmpty = false)
 {
-	string::size_type oldpos = 0, pos;
+	std::string::size_type oldpos = 0, pos;
 
 	res.clear ();
 
@@ -384,7 +384,7 @@ template <class T> void explode (const T &src, const T &sep, std::vector<T> &res
 	{
 		pos = src.find (sep, oldpos);
 		T s;
-		if(pos == string::npos)
+		if(pos == std::string::npos)
 			s = src.substr (oldpos);
 		else
 			s = src.substr (oldpos, (pos-oldpos));
@@ -394,7 +394,7 @@ template <class T> void explode (const T &src, const T &sep, std::vector<T> &res
 
 		oldpos = pos+sep.size();
 	}
-	while(pos != string::npos);
+	while(pos != std::string::npos);
 }
 
 
