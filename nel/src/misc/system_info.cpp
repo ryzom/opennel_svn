@@ -795,7 +795,7 @@ uint32 getSystemMemory (const string &colname)
         buffer[len] = '\0';
 
         vector<string> splitted;
-        explode(buffer, string("\n"), splitted, true);
+        explode(string(buffer), string("\n"), splitted, true);
 
         for(uint32 i = 0; i < splitted.size(); i++)
         {
@@ -841,7 +841,7 @@ string CSystemInfo::availableHDSpace (const string &filename)
         buffer[len] = '\0';
 
         vector<string> splitted;
-        explode(buffer, string("\n"), splitted, true);
+        explode(string(buffer), string("\n"), splitted, true);
 
         if(splitted.size() < 2)
             return "NoInfo";
