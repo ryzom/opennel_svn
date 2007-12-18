@@ -127,8 +127,11 @@ public:
 	  */
 	static void loadFromFilename (const std::string &filename, bool reload);
 
-	/// Returns the name of the language in English (French, English...)
+	/// Returns the name of the language in English (French, English, ...)
 	static ucstring getCurrentLanguageName ();
+
+	/// Returns the code of the language (fr, en, ...)
+	static std::string getCurrentLanguageCode ();
 
 	/// Find a string in the selected language and return his association.
 	static const ucstring &get (const std::string &label);

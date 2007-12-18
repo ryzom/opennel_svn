@@ -121,7 +121,7 @@ bool CI18N::loadFileIntoMap(const std::string &fileName, StrMapContainer &destMa
 		ret = destMap.insert(std::make_pair(label, ucs));
 		if (!ret.second)
 		{
-			nlwarning("I18N: Error in %s, the label %s exist twice !", fileName.c_str(), label.c_str());
+			nlwarning("I18N: Error in %s, the label %s exists twice !", fileName.c_str(), label.c_str());
 		}
 		skipWhiteSpace(first, last);
 	}
@@ -174,10 +174,9 @@ const ucstring &CI18N::get (const std::string &label)
 	static CHashSet<string>	missingStrings;
 	if (missingStrings.find(label) == missingStrings.end())
 	{
-		sint32 nblang = sizeof(_LanguageCodes)/sizeof(_LanguageCodes[0]);
-		if(_SelectedLanguage < 0 || _SelectedLanguage >= nblang)
+		if(_SelectedLanguage < 0 || _SelectedLanguage >= _NbLanguages)
 		{
-			nlwarning("I18N: _SelectedLanguage %d is not a valid language ID, out of array of size %d, can't display the message '%s'", _SelectedLanguage, nblang, label.c_str());
+			nlwarning("I18N: _SelectedLanguage %d is not a valid language ID, out of array of size %d, can't display the message '%s'", _SelectedLanguage, _NbLanguages, label.c_str());
 		}
 		else
 		{
@@ -207,6 +206,10 @@ ucstring CI18N::getCurrentLanguageName ()
 	return get("LanguageName");
 }
 
+string CI18N::getCurrentLanguageCode ()
+{
+	return (_SelectedLanguage>=0&&_SelectedLanguage<_NbLanguages)?_LanguageCodes[_SelectedLanguage]:"en";
+}
 
 void CI18N::remove_C_Comment(ucstring &commentedString)
 {
