@@ -1431,7 +1431,7 @@ NLMISC_CATEGORISED_COMMAND(nel, displayInstanceCounter, "display the instance co
 	string list = CInstanceCounterManager::getInstance().displayCounters();
 
 	vector<string> lines;
-	explode(list, "\n", lines, false);
+	explode(list, string("\n"), lines);
 
 
 	for (uint i=0; i<lines.size(); ++i)

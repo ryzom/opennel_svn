@@ -731,38 +731,6 @@ bool launchProgram (const std::string &programName, const std::string &arguments
 
 }
 
-void explode (const std::string &src, const std::string &sep, std::vector<std::string> &res, bool skipEmpty)
-{
-	string::size_type oldpos = 0, pos;
-
-	res.clear ();
-
-	do
-	{
-		pos = src.find (sep, oldpos);
-		string s;
-		if(pos == string::npos)
-			s = src.substr (oldpos);
-		else
-			s = src.substr (oldpos, (pos-oldpos));
-
-		if (!skipEmpty || !s.empty())
-			res.push_back (s);
-
-			oldpos = pos+sep.size();
-	}
-	while(pos != string::npos);
-
-	// debug
-/*	nlinfo ("Exploded '%s', with '%s', %d res", src.c_str(), sep.c_str(), res.size());
-	for (uint i = 0; i < res.size(); i++)
-	{
-		nlinfo (" > '%s'", res[i].c_str());
-	}
-*/
-}
-
-
 /*
  * Display the bits (with 0 and 1) composing a byte (from right to left)
  */
