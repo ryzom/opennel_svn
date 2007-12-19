@@ -34,22 +34,11 @@ using namespace std;
 
 namespace NLMISC {
 
-const std::string		CI18N::_LanguageCodes[] =
-{
-	string("en"),		// English
-	string("de"),		// German
-	string("fr"),		// French
-	string("wk"),		// Work translation
-//	string("zh-TW"),	// Traditional Chinese
-//	string("zh-CN"),	// Simplified Chinese
-};
-
-const uint				CI18N::_NbLanguages = sizeof(CI18N::_LanguageCodes) / sizeof(std::string);
 CI18N::StrMapContainer	CI18N::_StrMap;
 bool					CI18N::_StrMapLoaded = false;
 const ucstring			CI18N::_NotTranslatedValue("<Not Translated>");
 bool					CI18N::_LanguagesNamesLoaded = false;
-sint32					CI18N::_SelectedLanguage = -1;
+string					CI18N::_SelectedLanguageCode;
 CI18N::ILoadProxy		*CI18N::_LoadProxy = 0;
 
 
@@ -59,32 +48,15 @@ void CI18N::setLoadProxy(ILoadProxy *loadProxy)
 }
 
 
-void CI18N::load (const std::string &languageCode)
+void CI18N::load (const string &languageCode)
 {
-	uint i;
-	for (i=0; i<_NbLanguages; ++i)
-	{
-		if (_LanguageCodes[i] == languageCode)
-			break;
-	}
-
-	if (i == _NbLanguages)
-	{
-		nlwarning("I18N: Unknown language code '%s', defaulting to '%s'", languageCode.c_str(), _LanguageCodes[0].c_str());
-		i = 0;
-	}
-
-	std::string fileName  = _LanguageCodes[i] + ".uxt";
-
-	_SelectedLanguage = i;
-
 	if (_StrMapLoaded)	_StrMap.clear ();
 	else				_StrMapLoaded = true;
-
-	loadFileIntoMap(fileName, _StrMap);	
+	_SelectedLanguageCode = languageCode;
+	loadFileIntoMap(languageCode + ".uxt", _StrMap);	
 }
 
-bool CI18N::loadFileIntoMap(const std::string &fileName, StrMapContainer &destMap)
+bool CI18N::loadFileIntoMap(const string &fileName, StrMapContainer &destMap)
 {
 	ucstring text;
 	// read in the text
@@ -96,12 +68,12 @@ bool CI18N::loadFileIntoMap(const std::string &fileName, StrMapContainer &destMa
 	remove_C_Comment(text);
 
 	ucstring::const_iterator first(text.begin()), last(text.end());
-	std::string lastReadLabel("nothing");
+	string lastReadLabel("nothing");
 	
 	while (first != last)
 	{
 		skipWhiteSpace(first, last);
-		std::string label;
+		string label;
 		ucstring ucs;
 		if (!parseLabel(first, last, label))
 		{
@@ -117,8 +89,8 @@ bool CI18N::loadFileIntoMap(const std::string &fileName, StrMapContainer &destMa
 		}
 
 		// ok, a line read.
-		std::pair<std::map<std::string, ucstring>::iterator, bool> ret;
-		ret = destMap.insert(std::make_pair(label, ucs));
+		pair<map<string, ucstring>::iterator, bool> ret;
+		ret = destMap.insert(make_pair(label, ucs));
 		if (!ret.second)
 		{
 			nlwarning("I18N: Error in %s, the label %s exists twice !", fileName.c_str(), label.c_str());
@@ -136,7 +108,7 @@ bool CI18N::loadFileIntoMap(const std::string &fileName, StrMapContainer &destMa
 }
 
 
-void CI18N::loadFromFilename(const std::string &filename, bool reload)
+void CI18N::loadFromFilename(const string &filename, bool reload)
 {
 	StrMapContainer destMap;
 	if (!loadFileIntoMap(filename, destMap)) 
@@ -158,7 +130,7 @@ void CI18N::loadFromFilename(const std::string &filename, bool reload)
 }
 
 
-const ucstring &CI18N::get (const std::string &label)
+const ucstring &CI18N::get (const string &label)
 {
 	if (label.empty())
 	{
@@ -174,25 +146,18 @@ const ucstring &CI18N::get (const std::string &label)
 	static CHashSet<string>	missingStrings;
 	if (missingStrings.find(label) == missingStrings.end())
 	{
-		if(_SelectedLanguage < 0 || _SelectedLanguage >= _NbLanguages)
-		{
-			nlwarning("I18N: _SelectedLanguage %d is not a valid language ID, out of array of size %d, can't display the message '%s'", _SelectedLanguage, _NbLanguages, label.c_str());
-		}
-		else
-		{
-			nlwarning("I18N: The string %s did not exist in language %s (display once)", label.c_str(), _LanguageCodes[_SelectedLanguage].c_str());
-		}
+		nlwarning("I18N: The string %s did not exist in language %s (display once)", label.c_str(), _SelectedLanguageCode.c_str());
 		missingStrings.insert(label);
 	}
 
 	static ucstring	badString;
 
-	badString = ucstring(std::string("<NotExist:")+label+">");
+	badString = ucstring(string("<NotExist:")+label+">");
 
 	return badString;
 }
 
-bool CI18N::hasTranslation(const std::string &label)
+bool CI18N::hasTranslation(const string &label)
 {
 	if (label.empty()) return true;	
 	
@@ -208,7 +173,7 @@ ucstring CI18N::getCurrentLanguageName ()
 
 string CI18N::getCurrentLanguageCode ()
 {
-	return (_SelectedLanguage>=0&&_SelectedLanguage<_NbLanguages)?_LanguageCodes[_SelectedLanguage]:"en";
+	return _SelectedLanguageCode;
 }
 
 void CI18N::remove_C_Comment(ucstring &commentedString)
@@ -305,7 +270,7 @@ void	CI18N::skipWhiteSpace(ucstring::const_iterator &it, ucstring::const_iterato
 	}
 }
 
-bool CI18N::parseLabel(ucstring::const_iterator &it, ucstring::const_iterator &last, std::string &label)
+bool CI18N::parseLabel(ucstring::const_iterator &it, ucstring::const_iterator &last, string &label)
 {
 	ucstring::const_iterator rewind = it;
 	label.erase();
@@ -430,7 +395,7 @@ bool CI18N::parseMarkedString(ucchar openMark, ucchar closeMark, ucstring::const
 }
 
 
-void CI18N::readTextFile(const std::string &filename, 
+void CI18N::readTextFile(const string &filename, 
 						 ucstring &result, 
 						 bool forceUtf8, 
 						 bool fileLookup, 
@@ -485,7 +450,7 @@ void CI18N::skipLine(ucstring::const_iterator &it, ucstring::const_iterator end,
 }
 
 
-void CI18N::_readTextFile(const std::string &filename, 
+void CI18N::_readTextFile(const string &filename, 
 						 ucstring &result, 
 						 bool forceUtf8, 
 						 bool fileLookup, 
@@ -494,7 +459,7 @@ void CI18N::_readTextFile(const std::string &filename,
 						 bool warnIfIncludesNotFound,
 						 TReadContext &readContext)
 {
-	std::string fullName;
+	string fullName;
 	if (fileLookup)
 		fullName = CPath::lookup(filename, false,warnIfIncludesNotFound);
 	else
@@ -515,7 +480,7 @@ void CI18N::_readTextFile(const std::string &filename,
 
 
 	// Fast read all the text in binary mode.
-	std::string text;
+	string text;
 	text.resize(file.getFileSize());
 	if (file.getFileSize() > 0)
 		file.serialBuffer((uint8*)(&text[0]), text.size());
@@ -935,7 +900,7 @@ void CI18N::readTextBuffer(uint8 *buffer, uint size, ucstring &result, bool forc
 			buffer+= 3;
 			size-=3;
 		}
-		std::string text((char*)buffer, size);
+		string text((char*)buffer, size);
 		result.fromUtf8(text);
 	}
 	else if (size>=3 &&
@@ -947,7 +912,7 @@ void CI18N::readTextBuffer(uint8 *buffer, uint size, ucstring &result, bool forc
 		// remove utf8 header
 		buffer+= 3;
 		size-=3;
-		std::string text((char*)buffer, size);
+		string text((char*)buffer, size);
 		result.fromUtf8(text);
 	}
 	else if (size>=2 &&
@@ -986,20 +951,20 @@ void CI18N::readTextBuffer(uint8 *buffer, uint size, ucstring &result, bool forc
 		for (j=0; j<result.size(); j++)
 		{
 			uint8 *pc = (uint8*) &result[j];
-			std::swap(pc[0], pc[1]);
+			swap(pc[0], pc[1]);
 		}
 	}
 	else
 	{
 		// hum.. ascii read ?
 		// so, just do a direct conversion				
-		std::string text((char*)buffer, size);				
+		string text((char*)buffer, size);				
 		result = text;		
 	}
 }
 
 
-void CI18N::writeTextFile(const std::string filename, const ucstring &content, bool utf8)
+void CI18N::writeTextFile(const string filename, const ucstring &content, bool utf8)
 {
 	COFile file(filename);
 
@@ -1020,7 +985,7 @@ void CI18N::writeTextFile(const std::string filename, const ucstring &content, b
 	{
 		static char utf8Header[] = {char(0xef), char(0xbb), char(0xbf), 0};
 
-		std::string str = encodeUTF8(content);
+		string str = encodeUTF8(content);
 		// add the UTF-8 'not official' header
 		str = utf8Header + str;
 
@@ -1135,7 +1100,7 @@ void	CI18N::hashToUCString(uint64 hash, ucstring &dst)
 }
 
 // convert a readable string into a hash value.
-uint64 CI18N::stringToHash(const std::string &str)
+uint64 CI18N::stringToHash(const string &str)
 {
 	nlassert(str.size() == 16);
 	uint32	low, hight;
