@@ -203,20 +203,19 @@ IDriver* createIDriverInstance ()
 
 extern "C"
 {
+	IDriver* NL3D_createIDriverInstance ()
+	{
+		return new CDriverGL;
+	}
 
-IDriver* NL3D_createIDriverInstance ()
-{
-	return new CDriverGL;
-}
-
-uint32 NL3D_interfaceVersion ()
-{
-	return IDriver::InterfaceVersion;
+	uint32 NL3D_interfaceVersion ()
+	{
+		return IDriver::InterfaceVersion;
+	}
 }
 
 #endif
 
-}
 /*
 static Bool WndProc(Display *d, XEvent *e, char *arg)
 {
