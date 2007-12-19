@@ -192,9 +192,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 
 #elif defined (NL_OS_UNIX)
 
-extern "C"
-{
-
 #ifdef NL_STATIC
 
 IDriver* createIDriverInstance ()
@@ -203,6 +200,9 @@ IDriver* createIDriverInstance ()
 }
 
 #else
+
+extern "C"
+{
 
 IDriver* NL3D_createIDriverInstance ()
 {
