@@ -91,8 +91,8 @@ namespace NLMISC
 // Globals
 //
 
-bool DissableNLDebug= false;
-NLMISC::CVariablePtr<bool> _DissableNLDebug("nel","DissableNLDebug","Dissables generation and output of nldebug logs (no code associated with the log generation is executed)",&DissableNLDebug,true);
+bool DisableNLDebug= false;
+NLMISC::CVariablePtr<bool> _DisableNLDebug("nel","DisableNLDebug","Disables generation and output of nldebug logs (no code associated with the log generation is executed)",&DisableNLDebug,true);
 
 
 //bool DebugNeedAssert = false;
@@ -217,38 +217,35 @@ static void initDebug2 (bool logInFile)
 
 	// put the standard displayer everywhere
 
-	if (DebugLog==NULL)
-		return;
-
-  //#ifdef NL_DEBUG
-	DebugLog->addDisplayer (sd);
-	//#endif // NL_DEBUG
-	InfoLog->addDisplayer (sd);
-	WarningLog->addDisplayer (sd);
-	AssertLog->addDisplayer (sd);
-	ErrorLog->addDisplayer (sd);
+//#ifdef NL_DEBUG
+	INelContext::getInstance().getDebugLog()->addDisplayer (sd);
+//#endif // NL_DEBUG
+	INelContext::getInstance().getInfoLog()->addDisplayer (sd);
+	INelContext::getInstance().getWarningLog()->addDisplayer (sd);
+	INelContext::getInstance().getAssertLog()->addDisplayer (sd);
+	INelContext::getInstance().getErrorLog()->addDisplayer (sd);
 
 	// put the memory displayer everywhere
 
 	// use the memory displayer and bypass all filter (even for the debug mode)
-	DebugLog->addDisplayer (DefaultMemDisplayer, true);
-	InfoLog->addDisplayer (DefaultMemDisplayer, true);
-	WarningLog->addDisplayer (DefaultMemDisplayer, true);
-	AssertLog->addDisplayer (DefaultMemDisplayer, true);
-	ErrorLog->addDisplayer (DefaultMemDisplayer, true);
+	INelContext::getInstance().getDebugLog()->addDisplayer (DefaultMemDisplayer, true);
+	INelContext::getInstance().getInfoLog()->addDisplayer (DefaultMemDisplayer, true);
+	INelContext::getInstance().getWarningLog()->addDisplayer (DefaultMemDisplayer, true);
+	INelContext::getInstance().getAssertLog()->addDisplayer (DefaultMemDisplayer, true);
+	INelContext::getInstance().getErrorLog()->addDisplayer (DefaultMemDisplayer, true);
 
 	// put the file displayer only if wanted
 
 #if LOG_IN_FILE
 	if (logInFile)
 	{
-	  //#ifdef NL_DEBUG
-		DebugLog->addDisplayer (fd);
-		//#endif // NL_DEBUG
-		InfoLog->addDisplayer (fd);
-		WarningLog->addDisplayer (fd);
-		AssertLog->addDisplayer (fd);
-		ErrorLog->addDisplayer (fd);
+//#ifdef NL_DEBUG
+		INelContext::getInstance().getDebugLog()->addDisplayer (fd);
+//#endif // NL_DEBUG
+		INelContext::getInstance().getInfoLog()->addDisplayer (fd);
+		INelContext::getInstance().getWarningLog()->addDisplayer (fd);
+		INelContext::getInstance().getAssertLog()->addDisplayer (fd);
+		INelContext::getInstance().getErrorLog()->addDisplayer (fd);
 	}
 #endif // LOG_IN_FILE
 
@@ -256,8 +253,8 @@ static void initDebug2 (bool logInFile)
 
 	if (DefaultMsgBoxDisplayer)
 	{
-		AssertLog->addDisplayer (DefaultMsgBoxDisplayer);
-		ErrorLog->addDisplayer (DefaultMsgBoxDisplayer);
+		INelContext::getInstance().getAssertLog()->addDisplayer (DefaultMsgBoxDisplayer);
+		INelContext::getInstance().getErrorLog()->addDisplayer (DefaultMsgBoxDisplayer);
 	}
 
 #endif // DEFAULT_DISPLAYER

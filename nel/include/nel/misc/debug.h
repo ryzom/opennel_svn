@@ -68,27 +68,21 @@ public:
 	CLog &operator ()();
 };
 
+
 //
 // Externals
 //
 
 // NOTE: The following are all NULL until createDebug() has been called at least once
-//extern CLog *ErrorLog;
+// NOTE2: You must not use this class before the main() (not inside a static class ctor)
 extern CImposterLog		ErrorLog;
-//extern CLog *WarningLog;
 extern CImposterLog		WarningLog;
-//extern CLog *InfoLog;
 extern CImposterLog		InfoLog;
-//extern CLog *DebugLog;
 extern CImposterLog		DebugLog;
-//extern CLog *AssertLog;
 extern CImposterLog		AssertLog;
 
 extern CMemDisplayer *DefaultMemDisplayer;
 extern CMsgBoxDisplayer *DefaultMsgBoxDisplayer;
-
-
-
 
 
 //
@@ -182,8 +176,8 @@ void	setCrashAlreadyReported(bool state);
 #		define nldebug 0&&
 #	endif
 #else // NL_RELEASE
-	extern bool DissableNLDebug;
-#	define nldebug if (NLMISC::DissableNLDebug) {} else (NLMISC::createDebug(), NLMISC::DebugLog->setPosition( __LINE__, __FILE__, __FUNCTION__ ), NLMISC::DebugLog)->displayNL
+	extern bool DisableNLDebug;
+#	define nldebug if (NLMISC::DisableNLDebug) {} else (NLMISC::createDebug(), NLMISC::INelContext::getInstance().getDebugLog()->setPosition( __LINE__, __FILE__, __FUNCTION__ ), NLMISC::INelContext::getInstance().getDebugLog())->displayNL
 #endif // NL_RELEASE
 
 /**
@@ -197,7 +191,7 @@ void	setCrashAlreadyReported(bool state);
 #		define nlinfo 0&&
 #	endif
 #else // NL_RELEASE
-#	define nlinfo (NLMISC::createDebug(), NLMISC::InfoLog->setPosition( __LINE__, __FILE__, __FUNCTION__ ), NLMISC::InfoLog)->displayNL
+#	define nlinfo (NLMISC::createDebug(), NLMISC::INelContext::getInstance().getInfoLog()->setPosition( __LINE__, __FILE__, __FUNCTION__ ), NLMISC::INelContext::getInstance().getInfoLog())->displayNL
 #endif // NL_RELEASE
 
 /**
@@ -225,7 +219,7 @@ void	setCrashAlreadyReported(bool state);
 #		define nlwarning 0&&
 #	endif
 #else // NL_RELEASE
-#	define nlwarning (NLMISC::createDebug(), NLMISC::WarningLog->setPosition( __LINE__, __FILE__, __FUNCTION__ ), NLMISC::WarningLog)->displayNL
+#	define nlwarning (NLMISC::createDebug(), NLMISC::INelContext::getInstance().getWarningLog()->setPosition( __LINE__, __FILE__, __FUNCTION__ ), NLMISC::INelContext::getInstance().getWarningLog())->displayNL
 #endif // NL_RELEASE
 
 /**
@@ -244,7 +238,7 @@ void	setCrashAlreadyReported(bool state);
 	}
  *\endcode
  */
-#define nlerror (NLMISC::createDebug (), NLMISC::ErrorLog->setPosition( __LINE__, __FILE__, __FUNCTION__ ), NLMISC::nlFatalError)
+#define nlerror (NLMISC::createDebug (), NLMISC::INelContext::getInstance().getErrorLog()->setPosition( __LINE__, __FILE__, __FUNCTION__ ), NLMISC::nlFatalError)
 
 
 /**
@@ -252,7 +246,7 @@ void	setCrashAlreadyReported(bool state);
  * Same as nlerror but it doesn't generate any exceptions. It's used only in very specific case, for example, when you
  * call a nlerror in a catch block (look the service.cpp)
  */
-#define nlerrornoex (NLMISC::createDebug (), NLMISC::ErrorLog->setPosition( __LINE__, __FILE__, __FUNCTION__ ), NLMISC::nlError)
+#define nlerrornoex (NLMISC::createDebug (), NLMISC::INelContext::getInstance().getErrorLog()->setPosition( __LINE__, __FILE__, __FUNCTION__ ), NLMISC::nlError)
 
 
 /**
@@ -393,8 +387,8 @@ if(false)
 { \
 	if (!(exp)) { \
 		NLMISC::createDebug (); \
-		NLMISC::AssertLog->setPosition (__LINE__, __FILE__, __FUNCTION__); \
-		NLMISC::AssertLog->displayNL ("\"%s\" ", #exp); \
+		NLMISC::INelContext::getInstance().getAssertLog()->setPosition (__LINE__, __FILE__, __FUNCTION__); \
+		NLMISC::INelContext::getInstance().getAssertLog()->displayNL ("\"%s\" ", #exp); \
 		NLMISC_BREAKPOINT; \
 	} \
 }
@@ -405,9 +399,9 @@ if(false)
 { \
 	if (!(exp)) { \
 		NLMISC::createDebug (); \
-		NLMISC::AssertLog->setPosition (__LINE__, __FILE__, __FUNCTION__); \
-		NLMISC::AssertLog->displayNL ("\"%s\" ", #exp); \
-		NLMISC::AssertLog->displayRawNL str; \
+		NLMISC::INelContext::getInstance().getAssertLog()->setPosition (__LINE__, __FILE__, __FUNCTION__); \
+		NLMISC::INelContext::getInstance().getAssertLog()->displayNL ("\"%s\" ", #exp); \
+		NLMISC::INelContext::getInstance().getAssertLog()->displayRawNL str; \
 		NLMISC_BREAKPOINT; \
 	} \
 }
@@ -445,7 +439,7 @@ if(false)
 	bool _expResult_ = (exp) ? true : false; \
 	if (!ignoreNextTime && !_expResult_) { \
 		NLMISC::_assertex_stop_0(ignoreNextTime, __LINE__, __FILE__, __FUNCTION__, #exp); \
-		NLMISC::AssertLog->displayRawNL str; \
+		NLMISC::INelContext::getInstance().getAssertLog()->displayRawNL str; \
 		if(NLMISC::_assertex_stop_1(ignoreNextTime)) \
 			NLMISC_BREAKPOINT; \
 	} \
@@ -480,7 +474,7 @@ if(false)
 	bool _expResult_ = (exp) ? true : false; \
 	if (!_expResult_ && !ignoreNextTime) { \
 		NLMISC::_assertex_stop_0(ignoreNextTime, __LINE__, __FILE__, __FUNCTION__, #exp); \
-		NLMISC::AssertLog->displayRawNL str; \
+		NLMISC::INelContext::getInstance().getAssertLog()->displayRawNL str; \
 		if(NLMISC::_assertex_stop_1(ignoreNextTime)) \
 			NLMISC_BREAKPOINT; \
 	} \
@@ -517,7 +511,7 @@ if(false)
 	static bool ignoreNextTime = false; \
 	if (!ignoreNextTime) { \
 		NLMISC::_assertex_stop_0(ignoreNextTime, __LINE__, __FILE__, __FUNCTION__, NULL); \
-		NLMISC::AssertLog->displayRawNL str; \
+		NLMISC::INelContext::getInstance().getAssertLog()->displayRawNL str; \
 		if(NLMISC::_assertex_stop_1(ignoreNextTime)) \
 			NLMISC_BREAKPOINT; \
 	} \

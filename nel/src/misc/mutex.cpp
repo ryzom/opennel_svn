@@ -335,12 +335,8 @@ CUnfairMutex::CUnfairMutex()
     pthread_mutexattr_t attr;
 	pthread_mutexattr_init( &attr );
 	// Fast mutex. Note: on Windows all mutexes are recursive
-#ifdef NL_OS_MAC
-            pthread_mutexattr_setkind_np( &attr, PTHREAD_MUTEX_RECURSIVE );
-#else
-            pthread_mutexattr_setkind_np( &attr, PTHREAD_MUTEX_RECURSIVE_NP );
-#endif
-            pthread_mutex_init( &mutex, &attr );
+	pthread_mutexattr_settype( &attr, PTHREAD_MUTEX_RECURSIVE );
+	pthread_mutex_init( &mutex, &attr );
 	pthread_mutexattr_destroy( &attr );
 }
 
@@ -353,12 +349,8 @@ CUnfairMutex::CUnfairMutex(const std::string &name)
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_init( &attr );
 	// Fast mutex. Note: on Windows all mutexes are recursive
-#ifdef NL_OS_MAC
-            pthread_mutexattr_setkind_np( &attr, PTHREAD_MUTEX_RECURSIVE );
-#else
-            pthread_mutexattr_setkind_np( &attr, PTHREAD_MUTEX_RECURSIVE_NP );
-#endif
-           pthread_mutex_init( &mutex, &attr );
+	pthread_mutexattr_settype( &attr, PTHREAD_MUTEX_RECURSIVE );
+	pthread_mutex_init( &mutex, &attr );
 	pthread_mutexattr_destroy( &attr );
 }
 
