@@ -1197,7 +1197,11 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 	//=============
 	// Retrieve the extensions for the current context.
 	NL3D::registerGlExtensions (_Extensions);
-	nlinfo(_Extensions.toString().c_str());	
+	vector<string> lines;
+	explode(_Extensions.toString(), string("\n"), lines);
+	for(uint i = 0; i < lines.size(); i++)
+		nlinfo(lines[i].c_str());	
+
 	//
 #ifdef NL_OS_WINDOWS
 	NL3D::registerWGlExtensions (_Extensions, _hDC);

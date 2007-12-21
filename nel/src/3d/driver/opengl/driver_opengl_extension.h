@@ -180,7 +180,7 @@ public:
 	std::string toString() {
 		std::string result = "OpenGL ver ";
 		result += Version1_2 ? "1.2 or above" : "1.1 or below";
-		result += "; extensions:\n  texturing: ";
+		result += "; Available extensions:\n  texturing: ";
 		result += ARBMultiTexture ? "ARBMultiTexture " : "";
 		result += EXTTextureEnvCombine ? "EXTTextureEnvCombine " : "";
 		result += ARBTextureCompression ? "ARBTextureCompression " : "";
