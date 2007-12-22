@@ -184,7 +184,7 @@ string checkLogin(const string &login, const string &password, const string &cli
 		uint nbs = atoi(res.substr(2).c_str());
 		vector<string> lines;
 		
-		explode(res, "\n", lines, true);
+		explode(res, string("\n"), lines, true);
 
 		if(VerboseLog)
 		{
@@ -205,7 +205,7 @@ string checkLogin(const string &login, const string &password, const string &cli
 		for(uint i = 1; i < lines.size(); i++)
 		{
 			vector<string> res;
-			explode(lines[i], "|", res);
+			explode(lines[i], string("|"), res);
 
 			if(VerboseLog)
 			{
@@ -271,7 +271,7 @@ string selectShard(uint32 shardId, string &cookie, string &addr)
 		// server returns ok, we have the access
 		
 		vector<string> line;
-		explode(res, " ", line, true);
+		explode(res, string(" "), line, true);
 
 		if(line.size() != 2)
 		{

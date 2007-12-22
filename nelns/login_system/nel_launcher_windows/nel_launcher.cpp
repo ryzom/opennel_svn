@@ -18,6 +18,8 @@
 
 
 #include "stdafx.h"
+#include <nel/misc/types_nl.h>
+#include <nel/misc/debug.h>
 #include "nel_launcher.h"
 #include "nel_launcherDlg.h"
 
@@ -45,6 +47,7 @@ CNel_launcherApp::CNel_launcherApp()
 {
 	// TODO: add construction code here,
 	// Place all significant initialization in InitInstance
+	NLMISC::createDebug("nel_launcher.log", false, true);
 }
 
 /////////////////////////////////////////////////////////////////////////////
