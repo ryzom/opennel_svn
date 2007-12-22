@@ -23,6 +23,7 @@
  * MA 02111-1307, USA.
  */
 
+#include "stddsound.h"
 
 // The one and only INITGUID
 #define INITGUID
@@ -32,7 +33,6 @@
 #endif
 #define DIRECTSOUND_VERSION 0x0800
 
-#include "stddsound.h"
 #include "../sound_driver.h"
 
 #include <cmath>
