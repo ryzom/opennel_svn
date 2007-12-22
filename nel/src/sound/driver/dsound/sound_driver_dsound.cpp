@@ -51,21 +51,24 @@ namespace NLSOUND {
 
 CSoundDriverDSound* CSoundDriverDSound::_Instance = NULL;
 uint32 CSoundDriverDSound::_TimerPeriod = 100;
-HINSTANCE CSoundDriverDllHandle = 0;
 HWND CSoundDriverWnd = 0;
 
 /// import io proc def from buffer_dsound.
 LRESULT NelIOProc(LPSTR lpmmioinfo, UINT uMsg, LONG lParam1, LONG lParam2);
 
+#ifdef NL_STATIC
+
+HINSTANCE CSoundDriverDllHandle = 0;
 
 // ******************************************************************
 // The main entry of the DLL. It's used to get a hold of the hModule handle.
-
 BOOL WINAPI DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
   CSoundDriverDllHandle = (HINSTANCE) hModule;
   return TRUE;
 }
+
+#endif /* NL_STATIC */
 
 
 // ******************************************************************
@@ -78,7 +81,12 @@ long FAR PASCAL CSoundDriverCreateWindowProc(HWND hWnd, unsigned message, WPARAM
 
 // ******************************************************************
 
-__declspec(dllexport) ISoundDriver *NLSOUND_createISoundDriverInstance(bool useEax, ISoundDriver::IStringMapperProvider *stringMapper, bool forceSoftwareBuffer)
+#ifdef NL_STATIC
+ISoundDriver* createISoundDriverInstance
+#else
+__declspec(dllexport) ISoundDriver *NLSOUND_createISoundDriverInstance
+#endif
+	(bool useEax, ISoundDriver::IStringMapperProvider *stringMapper, bool forceSoftwareBuffer)
 {
 	static bool Registered = false;
 
@@ -130,18 +138,39 @@ __declspec(dllexport) ISoundDriver *NLSOUND_createISoundDriverInstance(bool useE
 
 // ******************************************************************
 
+#ifdef NL_STATIC
+uint32 interfaceVersion()
+#else
 __declspec(dllexport) uint32 NLSOUND_interfaceVersion()
+#endif
 {
 	return ISoundDriver::InterfaceVersion;
 }
 
 // ******************************************************************
 
-__declspec(dllexport) void NLSOUND_outputProfile(string &out)
+#ifdef NL_STATIC
+void outputProfile
+#else
+__declspec(dllexport) void NLSOUND_outputProfile
+#endif
+	(string &out)
 {
 	CSoundDriverDSound::instance()->writeProfile(out);
 }
 
+// ******************************************************************
+
+#ifdef NL_STATIC
+ISoundDriver::TDriver getDriverType()
+#else
+__declspec(dllexport) ISoundDriver::TDriver NLSOUND_getDriverType()
+#endif
+{
+	return ISoundDriver::DriverDSound;
+}
+
+// ******************************************************************
 
 
 

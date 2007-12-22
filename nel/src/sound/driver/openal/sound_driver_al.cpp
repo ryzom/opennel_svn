@@ -84,18 +84,56 @@ void TestALError()
  * Sound driver instance creation
  */
 #ifdef NL_OS_WINDOWS
+
+// ******************************************************************
 	
-__declspec(dllexport) ISoundDriver *NLSOUND_createISoundDriverInstance(bool useEax)
+#ifdef NL_STATIC
+ISoundDriver* createISoundDriverInstance
+#else
+__declspec(dllexport) ISoundDriver *NLSOUND_createISoundDriverInstance
+#endif
+	(bool useEax, ISoundDriver::IStringMapperProvider *stringMapper, bool forceSoftwareBuffer)
 {
 	CSoundDriverAL *driver = new CSoundDriverAL();
 	driver->init();
 	return driver;
 }
 
-__declspec(dllexport) uint32 NLSOUND_interfaceVersion ()
+// ******************************************************************
+
+#ifdef NL_STATIC
+uint32 interfaceVersion()
+#else
+__declspec(dllexport) uint32 NLSOUND_interfaceVersion()
+#endif
 {
 	return ISoundDriver::InterfaceVersion;
 }
+
+// ******************************************************************
+
+#ifdef NL_STATIC
+void outputProfile
+#else
+__declspec(dllexport) void NLSOUND_outputProfile
+#endif
+	(string &out)
+{
+	CSoundDriverAL::instance()->writeProfile(out);
+}
+
+// ******************************************************************
+
+#ifdef NL_STATIC
+ISoundDriver::TDriver getDriverType()
+#else
+__declspec(dllexport) ISoundDriver::TDriver NLSOUND_getDriverType()
+#endif
+{
+	return ISoundDriver::DriverOpenAl;
+}
+
+// ******************************************************************
 
 #elif defined (NL_OS_UNIX)
 
