@@ -56,7 +56,7 @@ HWND CSoundDriverWnd = 0;
 /// import io proc def from buffer_dsound.
 LRESULT NelIOProc(LPSTR lpmmioinfo, UINT uMsg, LONG lParam1, LONG lParam2);
 
-#ifdef NL_STATIC
+#ifndef NL_STATIC
 
 HINSTANCE CSoundDriverDllHandle = 0;
 
