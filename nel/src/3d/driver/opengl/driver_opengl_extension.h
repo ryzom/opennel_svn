@@ -179,10 +179,12 @@ public:
 
 	std::string toString() {
 		std::string result = "OpenGL ver ";
-		result += Version1_2 ? "1.2 or above" : "1.1 or below";
+		result += Version1_2 ? "1.2 or above(*)" : "1.1 or below";
+		result += IsATI9500OrAbove ? "; ATI9500 or better" : "";
+		result += IsGeforceFXOrAbove ? "; GeForce FX or better" : "";
 		result += "; Available extensions:\n  texturing: ";
 		result += ARBMultiTexture ? "ARBMultiTexture " : "";
-		result += EXTTextureEnvCombine ? "EXTTextureEnvCombine " : "";
+		result += EXTTextureEnvCombine ? "EXTTextureEnvCombine(*) " : "";
 		result += ARBTextureCompression ? "ARBTextureCompression " : "";
 		result += EXTTextureCompressionS3TC ? "EXTTextureCompressionS3TC " : "";
 		result += NVTextureEnvCombine4 ? "NVTextureEnvCombine4 " : "";
@@ -190,15 +192,16 @@ public:
 		result += ATIXTextureEnvRoute ? "ATITextureEnvRoute " : "";
 		result += ARBTextureCubeMap ? "ARBTextureCubeMap " : "";
 		result += ATIEnvMapBumpMap ? "ATIEnvMapBumpMap " : "";
-		result += "texture stages = ";
+		result += NVTextureRectangle ? "NVTextureRectangle " : "";
+		result += "texture stages(*) = ";
 		result += NLMISC::toString(NbTextureStages);
 		
 		result += "\n  programs:  ";
 		result += NVTextureShader ? "NVTextureShader " : "";
 		result += ATIFragmentShader ? "ATIFragmentShader " : "";
 		result += ARBFragmentProgram ? "ARBFragmentProgram " : "";
-		result += NVVertexProgram ? "NVVertexProgram " : "";
 		result += ARBVertexProgram ? "ARBVertexProgram " : "";
+		result += NVVertexProgram ? "NVVertexProgram " : "";
 		result += EXTVertexShader ? "EXTVertexShader " : "";
 		result += NVVertexProgramEmulated ? "NVVertexProgramEmulated " : "";
 
@@ -207,20 +210,28 @@ public:
 		result += EXTSeparateSpecularColor ? "EXTSeparateSpecularColor " : "";
 		result += EXTSecondaryColor ? "EXTSecondaryColor " : "";
 		result += EXTBlendColor ? "EXTBlendColor " : "";
+		result += NVOcclusionQuery ? "NVOcclusionQuery " : "";
+		result += NVStateVARWithoutFlush ? "NVStateVARWithoutFlush " : "";
 
+#ifdef NL_OS_WINDOWS
 		result += "\n  WindowsGL: ";
 		result += WGLARBPBuffer ? "WGLARBPBuffer " : "";
 		result += WGLARBPixelFormat ? "WGLARBPixelFormat " : "";
 		result += WGLEXTSwapControl ? "WGLEXTSwapControl " : "";
+#endif
 
 		result += "\n  Array/VBO: ";
 		result += NVVertexArrayRange ? ("NVVertexArrayRange (MaxVertex = " +
 					NLMISC::toString(NVVertexArrayRangeMaxVertex) + ") ") : "";
-		result += ATIVertexArrayObject ? "ATIVertexArrayObject " : "";
+		result += NVVertexArrayRange2 ? "NVVertexArrayRange2 " : "";
 		result += ATIVertexArrayObject ? "ATIVertexArrayObject " : "";
 		result += ATIVertexAttribArrayObject ? "ATIVertexAttribArrayObject " : "";
 		result += ARBVertexBufferObject ? "ARBVertexBufferObject " : "";
-		result += ATIMapObjectBuffer ? "ATIMapObjectBuffer" : "";
+		result += ATIMapObjectBuffer ? "ATIMapObjectBuffer " : "";
+		
+		result += "\n  FBO:       ";
+		result += FrameBufferObject ? "FramebufferObject " : "";
+		result += PackedDepthStencil ? "PackedDepthStencil " : "";
 	
 		return result;
 	}
