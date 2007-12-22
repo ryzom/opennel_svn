@@ -88,6 +88,10 @@ __declspec(dllexport) ISoundDriver *NLSOUND_createISoundDriverInstance
 #endif
 	(bool useEax, ISoundDriver::IStringMapperProvider *stringMapper, bool forceSoftwareBuffer)
 {
+#ifdef NL_STATIC
+	HINSTANCE CSoundDriverDllHandle = (HINSTANCE)GetModuleHandle(NULL);
+#endif
+
 	static bool Registered = false;
 
 	if (!Registered)
