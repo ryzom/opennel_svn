@@ -43,9 +43,6 @@ CNel_launcherApp::CNel_launcherApp()
 	m_bAuthGame	= FALSE;
 	m_dVersion	= 0;
 	m_bLog		= TRUE;
-
-	LoadVersion();
-	m_config.Load();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -71,6 +68,9 @@ BOOL CNel_launcherApp::InitInstance()
 	NLMISC::WarningLog->addDisplayer(&FileDisplayer);
 	NLMISC::AssertLog->addDisplayer(&FileDisplayer);
 	NLMISC::ErrorLog->addDisplayer(&FileDisplayer);
+
+	LoadVersion();
+	m_config.Load();
 
 	AfxEnableControlContainer();
 
@@ -323,32 +323,32 @@ void CNel_launcherApp::LoadVersion()
 	}
 	else
 	{
-		Log("Launcher' version " + csVersion);
+		nlinfo("Launcher' version %s", csVersion);
 		m_dVersion	= atof(csVersion);
 	}
 }
 
-void CNel_launcherApp::EnableLog(BOOL bEnable)
-{
-	m_bLog	= bEnable;
-}
-
-void CNel_launcherApp::Log(CString cs)
-{
-	nlinfo(cs);
-
-	/*if(!m_bLog)
-		return;
-
-	CFile	f;
-
-	if(f.Open(LOGFILE, CFile::modeCreate | CFile::modeWrite | CFile::modeNoTruncate))
-	{
-		f.SeekToEnd();
-		cs	+= "\r\n";
-		f.Write(cs, cs.GetLength());
-		f.Close();
-	}
-	else
-		AfxMessageBox("Cannot access/create to log file");*/
-}
+//void CNel_launcherApp::EnableLog(BOOL bEnable)
+//{
+//	m_bLog	= bEnable;
+//}
+//
+//void CNel_launcherApp::Log(CString cs)
+//{
+//	nlinfo(cs);
+//
+//	/*if(!m_bLog)
+//		return;
+//
+//	CFile	f;
+//
+//	if(f.Open(LOGFILE, CFile::modeCreate | CFile::modeWrite | CFile::modeNoTruncate))
+//	{
+//		f.SeekToEnd();
+//		cs	+= "\r\n";
+//		f.Write(cs, cs.GetLength());
+//		f.Close();
+//	}
+//	else
+//		AfxMessageBox("Cannot access/create to log file");*/
+//}
