@@ -63,28 +63,30 @@ BOOL CConfiguration::Load()
 		{
 			APP.Log("Launcher version <= config version, loading config from configuration file...");
 
+			HINSTANCE hInst = (HINSTANCE)GetModuleHandle(NULL);
+
 			if(!GetValue(csBuffer, KEY_HOST, m_csHost))
-				m_csHost.LoadString(IDS_HOST);
+				m_csHost.LoadString(hInst, IDS_HOST);
 			if(!GetValue(csBuffer, KEY_URL_MAIN, m_csUrlMain))
-				m_csUrlMain.LoadString(IDS_URLMAIN);
+				m_csUrlMain.LoadString(hInst, IDS_URLMAIN);
 
 			if(!GetValue(csBuffer, KEY_URL_RN, m_csUrlRN))
-				m_csUrlRN.LoadString(IDS_URLRN);
+				m_csUrlRN.LoadString(hInst, IDS_URLRN);
 
 			if(!GetValue(csBuffer, KEY_URL_NEWS, m_csUrlNews))
-				m_csUrlNews.LoadString(IDS_URLNEWS);
+				m_csUrlNews.LoadString(hInst, IDS_URLNEWS);
 
 			if(!GetValue(csBuffer, KEY_APPLICATION, m_csApp, 0))
-				m_csApp.LoadString(IDS_APPLICATION_APP);
+				m_csApp.LoadString(hInst, IDS_APPLICATION_APP);
 
 			if(!GetValue(csBuffer, KEY_APPLICATION, m_csExe, 1))
-				m_csExe.LoadString(IDS_APPLICATION_EXE);
+				m_csExe.LoadString(hInst, IDS_APPLICATION_EXE);
 
 			if(!GetValue(csBuffer, KEY_APPLICATION, m_csBasePath, 2))
-				m_csBasePath.LoadString(IDS_APPLICATION_BASEPATH);
+				m_csBasePath.LoadString(hInst, IDS_APPLICATION_BASEPATH);
 
 			if(!GetValue(csBuffer, KEY_APPLICATION, m_csAppBasePath, 3))
-				m_csAppBasePath.LoadString(IDS_APPLICATION_APPBASEPATH);
+				m_csAppBasePath.LoadString(hInst, IDS_APPLICATION_APPBASEPATH);
 		}
 	}
 	else
@@ -108,14 +110,16 @@ BOOL CConfiguration::Load()
 
 void CConfiguration::LoadFromResource()
 {
-	m_csHost.LoadString(IDS_HOST);
-	m_csUrlMain.LoadString(IDS_URLMAIN);
-	m_csUrlRN.LoadString(IDS_URLRN);
-	m_csUrlNews.LoadString(IDS_URLNEWS);
-	m_csApp.LoadString(IDS_APPLICATION_APP);
-	m_csExe.LoadString(IDS_APPLICATION_EXE);
-	m_csBasePath.LoadString(IDS_APPLICATION_BASEPATH);
-	m_csAppBasePath.LoadString(IDS_APPLICATION_APPBASEPATH);
+	HINSTANCE hInst = (HINSTANCE)GetModuleHandle(NULL);
+
+	m_csHost.LoadString(hInst, IDS_HOST);
+	m_csUrlMain.LoadString(hInst, IDS_URLMAIN);
+	m_csUrlRN.LoadString(hInst, IDS_URLRN);
+	m_csUrlNews.LoadString(hInst, IDS_URLNEWS);
+	m_csApp.LoadString(hInst, IDS_APPLICATION_APP);
+	m_csExe.LoadString(hInst, IDS_APPLICATION_EXE);
+	m_csBasePath.LoadString(hInst, IDS_APPLICATION_BASEPATH);
+	m_csAppBasePath.LoadString(hInst, IDS_APPLICATION_APPBASEPATH);
 	m_csAppBasePath.TrimRight();
 }
 
