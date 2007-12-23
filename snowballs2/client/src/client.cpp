@@ -186,7 +186,19 @@ SwitchNextGameState:
 		switch(NextGameState)
 		{
 		case GameStateLoad:
-			initCore(); // core is required
+			try
+			{
+				initCore(); // core is required
+			}
+			catch (NLMISC::Exception e)
+			{
+#ifdef NL_OS_WINDOWS
+				MessageBox(NULL, e.what(), "NeL Exception", MB_OK | MB_ICONSTOP);
+#else
+				printf(e.what());
+#endif
+				return; // exit if driver loading failed
+			}
 			break;
 		case GameStateUnload:
 			displayLoadingState("Unloading");
