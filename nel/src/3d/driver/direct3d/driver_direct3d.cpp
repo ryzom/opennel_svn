@@ -104,7 +104,7 @@ IDriver* createIDriverInstance ()
 	return new CDriverD3D;
 }
 
-#endif
+#else
 
 __declspec(dllexport) IDriver* NL3D_createIDriverInstance ()
 {
@@ -116,7 +116,7 @@ __declspec(dllexport) uint32 NL3D_interfaceVersion ()
 	return IDriver::InterfaceVersion;
 }
 
-
+#endif
 
 /*static*/ bool CDriverD3D::_CacheTest[CacheTest_Count] = 
 {
