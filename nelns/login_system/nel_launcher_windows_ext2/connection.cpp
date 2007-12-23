@@ -28,10 +28,12 @@
 
 #include "std_afx.h"
 
+#include <nel/misc/md5.h>
 #include <nel/misc/debug.h>
 #include <nel/misc/path.h>
 #include <nel/misc/thread.h>
 #include <nel/net/tcp_sock.h>
+#include <nel/net/login_client.h>
 
 #include "nel_launcher_dlg.h"
 #include "connection.h"
@@ -152,6 +154,27 @@ string checkLogin(const string &login, const string &password, const string &cli
 	Shards.clear();
 	Login = Password = ClientApp = "";
 
+	if (ConfigFile.getVar("UseDirectClient").asBool())
+	{
+		ucstring pwd = ucstring(password);
+		CHashKeyMD5 hk = getMD5((uint8*)pwd.c_str(), pwd.size());
+		string cpwd = hk.toString();
+		nlinfo("The crypted password is %s", cpwd.c_str());
+		string result = CLoginClient::authenticate(ConfigFile.getVar("StartupHost").asString(), login, cpwd, clientApp);
+		if (!result.empty()) return result;
+		for(uint i = 0; i < CLoginClient::ShardList.size(); ++i)
+		{
+			nldebug("Shard '%u' '%s' '%u'", CLoginClient::ShardList[i].Id, CLoginClient::ShardList[i].Name.toString().c_str(), CLoginClient::ShardList[i].NbPlayers);
+			Shards.push_back(CShard("1", true, 
+				CLoginClient::ShardList[i].Id, CLoginClient::ShardList[i].Name.toString(), CLoginClient::ShardList[i].NbPlayers, 
+				"1", "1"));
+		}
+		Login = login;
+		Password = password;
+		ClientApp = clientApp;
+		return "";
+	}
+
 	if(!connect())
 		return "Can't connect (error code 1)";
 
@@ -242,6 +265,9 @@ string checkLogin(const string &login, const string &password, const string &cli
 string selectShard(uint32 shardId, string &cookie, string &addr)
 {
 	cookie = addr = "";
+
+	if (ConfigFile.getVar("UseDirectClient").asBool())
+		return CLoginClient::wantToConnectToShard(shardId, addr, cookie);
 
 	if(!connect()) return "Can't connect (error code 7)";
 
