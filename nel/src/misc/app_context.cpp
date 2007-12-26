@@ -47,17 +47,6 @@ INelContext &INelContext::getInstance()
 {
 	if (*(_getInstance()) == NULL)
 	{
-#ifdef NL_OS_WINDOWS
-		// try to get from this process context
-		char *envContext = getenv("INelContext");
-		if (envContext != NULL)
-		{
-			uint64 v;
-			fromString(envContext, v);
-			_NelContext = (INelContext *)v;
-		}
-		else
-#endif		
 		_NelContext = new CApplicationContext;
 		*(_getInstance()) = _NelContext;
 	}
@@ -95,11 +84,6 @@ void	INelContext::contextReady()
 	nlassert(*(_getInstance()) == NULL);
 	_NelContext = this;
 	*(_getInstance()) = this;
-
-#ifdef NL_OS_WINDOWS
-	// place a pointer to this thing in this process environment vars
-	putenv(toString("INelContext=%"NL_I64"u", (uint64)this).c_str());
-#endif
 
 	// register any pending thinks
 
