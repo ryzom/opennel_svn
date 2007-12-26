@@ -39,6 +39,7 @@
 #include <eax.h>
 
 #include "nel/misc/hierarchical_timer.h"
+#include "nel/misc/dynloadlib.h"
 #include "sound_driver_dsound.h"
 #include "listener_dsound.h"
 
@@ -68,7 +69,13 @@ BOOL WINAPI DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
   return TRUE;
 }
 
-#endif /* NL_STATIC */
+class CSoundDriverDSoundNelLibrary : public NLMISC::INelLibrary { 
+	void onLibraryLoaded(bool firstTime) { } 
+	void onLibraryUnloaded(bool lastTime) { }  
+};
+NLMISC_DECL_PURE_LIB(CSoundDriverDSoundNelLibrary)
+
+#endif /* #ifndef NL_STATIC */
 
 
 // ******************************************************************

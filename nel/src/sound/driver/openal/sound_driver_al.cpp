@@ -28,6 +28,7 @@
 #include "buffer_al.h"
 #include "listener_al.h"
 #include "nel/misc/path.h"
+#include "nel/misc/dynloadlib.h"
 #include "../sound_driver.h"
 
 using namespace std;
@@ -79,6 +80,16 @@ void TestALError()
 #define SOURCE_ALLOC_RATE 8
 
 #define ROLLOFF_FACTOR_DEFAULT 1.0f
+
+#ifndef NL_STATIC
+
+class CSoundDriverALNelLibrary : public NLMISC::INelLibrary { 
+	void onLibraryLoaded(bool firstTime) { } 
+	void onLibraryUnloaded(bool lastTime) { }  
+};
+NLMISC_DECL_PURE_LIB(CSoundDriverALNelLibrary)
+
+#endif /* #ifndef NL_STATIC */
 
 /*
  * Sound driver instance creation

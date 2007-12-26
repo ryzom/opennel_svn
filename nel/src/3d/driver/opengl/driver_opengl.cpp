@@ -51,6 +51,7 @@
 #include "nel/misc/di_event_emitter.h"
 #include "nel/misc/mouse_device.h"
 #include "nel/misc/hierarchical_timer.h"
+#include "nel/misc/dynloadlib.h"
 #include "driver_opengl_vertex_buffer_hard.h"
 
 
@@ -68,8 +69,9 @@ using namespace NLMISC;
 
 
 // ***************************************************************************
-#ifdef NL_OS_WINDOWS
 #ifndef NL_STATIC
+
+#ifdef NL_OS_WINDOWS
 // dllmain::
 BOOL WINAPI DllMain(HINSTANCE hinstDLL,ULONG fdwReason,LPVOID lpvReserved)
 {
@@ -80,8 +82,16 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL,ULONG fdwReason,LPVOID lpvReserved)
 	}
 	return true;
 }
-#endif
-#endif
+
+#endif /* NL_OS_WINDOWS */
+
+class CDriverGLNelLibrary : public INelLibrary { 
+	void onLibraryLoaded(bool firstTime) { } 
+	void onLibraryUnloaded(bool lastTime) { }  
+};
+NLMISC_DECL_PURE_LIB(CDriverGLNelLibrary)
+
+#endif /* #ifndef NL_STATIC */
 
 
 namespace NL3D

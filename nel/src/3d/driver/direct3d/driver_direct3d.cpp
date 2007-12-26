@@ -34,6 +34,7 @@
 #include "nel/misc/rect.h"
 #include "nel/misc/di_event_emitter.h"
 #include "nel/misc/mouse_device.h"
+#include "nel/misc/dynloadlib.h"
 #include "nel/3d/viewport.h"
 #include "nel/3d/scissor.h"
 #include "nel/3d/u_driver.h"
@@ -81,7 +82,13 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL,ULONG fdwReason,LPVOID lpvReserved)
 	return true;
 }
 
-#endif
+class CDriverD3DNelLibrary : public INelLibrary { 
+	void onLibraryLoaded(bool firstTime) { } 
+	void onLibraryUnloaded(bool lastTime) { }  
+};
+NLMISC_DECL_PURE_LIB(CDriverD3DNelLibrary)
+
+#endif /* #ifndef NL_STATIC */
 
 // ***************************************************************************
 

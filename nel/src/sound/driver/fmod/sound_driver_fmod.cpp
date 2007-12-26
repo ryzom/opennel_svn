@@ -36,6 +36,7 @@
 #include "nel/misc/hierarchical_timer.h"
 #include "nel/misc/path.h"
 #include "nel/misc/file.h"
+#include "nel/misc/dynloadlib.h"
 #include "sound_driver_fmod.h"
 #include "listener_fmod.h"
 
@@ -47,6 +48,16 @@ using namespace NLMISC;
 
 
 namespace NLSOUND {
+
+#ifndef NL_STATIC
+
+class CSoundDriverFModNelLibrary : public NLMISC::INelLibrary { 
+	void onLibraryLoaded(bool firstTime) { } 
+	void onLibraryUnloaded(bool lastTime) { }  
+};
+NLMISC_DECL_PURE_LIB(CSoundDriverFModNelLibrary)
+
+#endif /* #ifndef NL_STATIC */
 
 CSoundDriverFMod* CSoundDriverFMod::_Instance = NULL;
 
@@ -63,7 +74,7 @@ BOOL WINAPI DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
   return TRUE;
 }
 
-#endif /* NL_STATIC */
+#endif /* #ifndef NL_STATIC */
 
 // ***************************************************************************
 
