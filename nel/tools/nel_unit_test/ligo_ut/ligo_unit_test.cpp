@@ -188,7 +188,7 @@ auto_ptr<Test::Suite> intRegisterTestSuite(const std::string &workingPath)
 {
 	// initialise a Nel context
 	new CApplicationContext();
-	return static_cast<Test::Suite*>(new CLigoTS(workingPath));
+	return auto_ptr<Test::Suite>(static_cast<Test::Suite*>(new CLigoTS(workingPath)));
 }
 
 NL_LIB_EXPORT_SYMBOL(registerTestSuite, void, intRegisterTestSuite);

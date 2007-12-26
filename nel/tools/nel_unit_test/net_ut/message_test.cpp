@@ -94,7 +94,7 @@ public:
 		}
 
 		// rewind the message
-		master.seek(master.getHeaderSize(), IStream::begin);
+		master.seek(master.getHeaderSize(), NLMISC::IStream::begin);
 
 		// read the first master data
 		for (uint8 i=0; i<10; ++i)
@@ -212,7 +212,7 @@ public:
 		}
 
 		// rewind the message
-		master.seek(master.getHeaderSize(), IStream::begin);
+		master.seek(master.getHeaderSize(), NLMISC::IStream::begin);
 
 		// read the first master data
 		for (uint8 i=0; i<10; ++i)

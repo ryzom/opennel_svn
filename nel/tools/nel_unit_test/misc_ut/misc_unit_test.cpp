@@ -474,7 +474,7 @@ private:
 
 auto_ptr<Test::Suite> intRegisterTestSuite(const std::string &workingPath)
 {
-	return static_cast<Test::Suite*>(new CMiscTS(workingPath));
+	return auto_ptr<Test::Suite>(static_cast<Test::Suite*>(new CMiscTS(workingPath)));
 }
 
 NL_LIB_EXPORT_SYMBOL(registerTestSuite, void, intRegisterTestSuite);
