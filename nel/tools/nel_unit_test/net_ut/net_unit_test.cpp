@@ -14,6 +14,12 @@
 
 using namespace std;
 
+class CNetUnitTestNelLibrary : public NLMISC::INelLibrary { 
+	void onLibraryLoaded(bool firstTime) { } 
+	void onLibraryUnloaded(bool lastTime) { }  
+};
+NLMISC_DECL_PURE_LIB(CNetUnitTestNelLibrary);
+
 Test::Suite *createModuleTS(const std::string &workingPath);
 Test::Suite *createCMessageTS();
 Test::Suite *createServiceAndModuleTS(const std::string &workingPath);
@@ -34,7 +40,7 @@ public:
 		add(auto_ptr<Test::Suite>(createLayer3TS(workingPath)));
 		
 		// initialise the application context
-		new NLMISC::CApplicationContext;
+		NLMISC::CApplicationContext::getInstance();
 		NLNET::IModuleManager::getInstance();
 
 		NLMISC::createDebug();

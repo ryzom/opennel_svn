@@ -14,6 +14,12 @@
 
 using namespace std;
 
+class CMiscUnitTestNelLibrary : public NLMISC::INelLibrary { 
+	void onLibraryLoaded(bool firstTime) { } 
+	void onLibraryUnloaded(bool lastTime) { }  
+};
+NLMISC_DECL_PURE_LIB(CMiscUnitTestNelLibrary);
+
 // Test suite for CInstanceCounter
 class CFoo1
 {

@@ -18,6 +18,12 @@ using namespace std;
 using namespace NLMISC;
 using namespace NLLIGO;
 
+class CLigoUnitTestNelLibrary : public INelLibrary { 
+	void onLibraryLoaded(bool firstTime) { } 
+	void onLibraryUnloaded(bool lastTime) { }  
+};
+NLMISC_DECL_PURE_LIB(CLigoUnitTestNelLibrary);
+
 // Test suite for CFile behavior
 class CPrimitiveTS : public Test::Suite
 {
@@ -187,7 +193,7 @@ private:
 auto_ptr<Test::Suite> intRegisterTestSuite(const std::string &workingPath)
 {
 	// initialise a Nel context
-	new CApplicationContext();
+	CApplicationContext::getInstance();
 	return auto_ptr<Test::Suite>(static_cast<Test::Suite*>(new CLigoTS(workingPath)));
 }
 
