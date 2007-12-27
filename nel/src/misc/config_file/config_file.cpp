@@ -23,7 +23,7 @@
  * MA 02111-1307, USA.
  */
 
-//#include "../stdmisc.h"
+#include "stdmisc.h"
 
 #include "nel/misc/config_file.h"
 

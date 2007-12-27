@@ -27,8 +27,13 @@
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 5
 
-// Manualy added for complient with NL memory, must be added each time source are re-generated.
+/*
+ * START MANUAL ADDITION:
+ *   Manualy added for complient with NL memory, must be added each time source are re-generated.
+ */
+#include "stdmisc.h"
 #include "nel/misc/types_nl.h"
+/* END MANUAL ADDITION */
 
 #include <cstdio>
 
