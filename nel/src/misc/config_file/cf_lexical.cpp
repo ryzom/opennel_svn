@@ -31,7 +31,7 @@
  * START MANUAL ADDITION:
  *   Manualy added for complient with NL memory, must be added each time source are re-generated.
  */
-#include "stdmisc.h"
+#include "../stdmisc.h"
 #include "nel/misc/types_nl.h"
 /* END MANUAL ADDITION */
 
