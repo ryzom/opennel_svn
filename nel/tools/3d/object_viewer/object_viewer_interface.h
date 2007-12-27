@@ -26,7 +26,11 @@
 #define OBJECT_VIEWER_INTERFACE
 
 #ifndef OBJECT_VIEWER_EXPORT
-#define OBJECT_VIEWER_EXPORT __declspec( dllimport ) 
+#	ifdef NL_STATIC
+#		define OBJECT_VIEWER_EXPORT 
+#	else
+#		define OBJECT_VIEWER_EXPORT __declspec( dllimport ) 
+#	endif
 #endif // OBJECT_VIEWER_EXPORT
 
 // Increment this version number each time you distribute a new version of the dll.

@@ -32,7 +32,11 @@
 #include "std_afx.h"
 
 #undef OBJECT_VIEWER_EXPORT
-#define OBJECT_VIEWER_EXPORT __declspec( dllexport ) 
+#ifdef NL_STATIC
+#	define OBJECT_VIEWER_EXPORT 
+#else
+#	define OBJECT_VIEWER_EXPORT __declspec( dllexport ) 
+#endif
 
 #include <vector>
 
@@ -287,28 +291,24 @@ CObjectViewer::CObjectViewer ()
 	_CS = NULL;
 }
 
-
 // ***************************************************************************
 std::string CObjectViewer::getModulePath() const
 {
-	// Get the module path
-	// must test it first, because NL_DEBUG_FAST and NL_DEBUG are declared at same time.
-#ifdef NL_DEBUG_FAST
-	HMODULE hModule = GetModuleHandle("object_viewer_debug_fast.dll");
-#elif defined (NL_DEBUG)
-	HMODULE hModule = GetModuleHandle("object_viewer_debug.dll");
-#elif defined (NL_RELEASE_DEBUG)
-	HMODULE hModule = GetModuleHandle("object_viewer_rd.dll");
-#else
-	HMODULE hModule = GetModuleHandle("object_viewer.dll");
-#endif
-	nlassert (hModule);		
+	// Get the configuration file path (located in same directory as module)
+	HMODULE hModule = AfxGetInstanceHandle();
+#ifdef NL_STATIC // can return null if static, should be same as exe anyway
+	if (!hModule) hModule = GetModuleHandle(NULL);
+#endif /* NL_STATIC */
+	nlassert(hModule); // shouldn't be null now anymore in any case
+#ifndef NL_STATIC // if this is dll, the module handle can't be same as exe
+	nlassert(hModule != GetModuleHandle(NULL));
+#endif /* !NL_STATIC */
 	char sModulePath[256];
-	int res=GetModuleFileName(hModule, sModulePath, 256);
-	nlassert(res);
+	int res = GetModuleFileName(hModule, sModulePath, 256); nlassert(res);
+	nldebug("Object viewer module path is '%s'", sModulePath);
 	_splitpath (sModulePath, SDrive, SDir, NULL, NULL);
 	_makepath (sModulePath, SDrive, SDir, "object_viewer", ".cfg");
-	return sModulePath;	
+	return sModulePath;
 }
 
 
