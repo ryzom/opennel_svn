@@ -187,6 +187,8 @@ extern float								SnowballSpeed;
 extern std::map<uint32, CEntity>			Entities;
 typedef std::map<uint32, CEntity>::iterator	EIT;
 
+extern uint32 NextEID;
+
 //
 // External functions
 //

@@ -158,7 +158,7 @@ void cbPosClient ( CMessage& msgin, TSockId from, CCallbackNetBase& clientcb )
 
 
 /****************************************************************************
- * cdPosService
+ * cbPosService
  *
  * Receive position messages from the Position Service to send it to all the
  * clients.
@@ -189,6 +189,24 @@ void cbPosService (CMessage &msgin, const std::string &serviceName, TServiceId s
 	//nldebug( "SB: Sent ENTITY_POS message to all the connected clients");
 }
 
+/****************************************************************************
+ * cbTeleportService
+ *
+ * Test
+ ****************************************************************************/
+void cbTeleportService (CMessage &msgin, const std::string &serviceName, TServiceId sid)
+{
+	uint32 id;
+	CVector position;
+	msgin.serial(id);
+	msgin.serial(position);
+	CMessage msgout("ENTITY_TP");
+	msgout.serial(id);
+	msgout.serial(position);
+	Clients->send(msgout, InvalidSockId);
+	nldebug("SB: Sent ENTITY_TP message to all the connected clients");
+}
+
 
 /****************************************************************************
  * cbAddClient
@@ -201,7 +219,7 @@ void cbAddClient ( CMessage& msgin, TSockId from, CCallbackNetBase& clientcb )
 	uint32 id;
 	string name;
 	uint8 race;
-	CVector start(1840.0f + ((float)(rand() % 100) / 10.0f), -970.0f + ((float)(rand() % 100) / 10.0f), 0.0f); // kaetemi_todo: from config
+	CVector start(1840.0f + ((float)(rand() % 100) / 10.0f), -970.0f + ((float)(rand() % 100) / 10.0f), -23.0f); // kaetemi_todo: from config
 
 	// Input from the client is stored.
 	msgin.serial(id);
@@ -469,6 +487,7 @@ TUnifiedCallbackItem CallbackArray[] =
 	{ "CHAT",			cbChatService		},
 	{ "ADD_ENTITY",		cbAddService		},
 	{ "ENTITY_POS",		cbPosService		},
+	{ "ENTITY_TP",		cbTeleportService	},
 	{ "REMOVE_ENTITY",	cbRemoveService		},
 	{ "SNOWBALL",		cbSnowballService	},
 	{ "HIT",			cbHitService		},

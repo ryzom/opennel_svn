@@ -278,6 +278,7 @@ void initCore()
 		ShowCommands = ConfigFile.getVar("ShowCommands").asInt() == 1;
 		// Add different path for automatic file lookup
 		CPath::addSearchPath(ConfigFile.getVar("DataPath").asString(), true, false);
+		CPath::remapExtension("dds", "tga", true);
 		// Create a driver	
 		Driver = UDriver::createDriver(0, ConfigFile.getVar("OpenGL").asInt() == 0);
 		// Create the window with config file values
@@ -418,7 +419,7 @@ void initOffline()
 		playMusic(SBCLIENT_MUSIC_WAIT);
 #endif
 
-		uint32 id = rand();
+		uint32 id = NextEID++;
 		Login = ucstring("Entity" + toString(id));
 
 		// Creates the self entity

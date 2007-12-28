@@ -103,6 +103,8 @@ float					SnowballSpeed = 15.0f;	// 36 km/h
 float					EntityNameSize;
 CRGBA					EntityNameColor;
 
+bool _TestCLS = false;
+
 
 // Set the state of the entity (Appear, Normal, Disappear)
 void CEntity::setState (TState state)
@@ -487,7 +489,7 @@ void stateNormal (CEntity &entity)
 				CVector	AimedTarget = getTarget(AimingPosition,
 												direction,
 												100);
-				shotSnowball(rand(), entity.Id, AimingPosition, AimedTarget, SnowballSpeed, 3.0f);
+				shotSnowball(NextEID++, entity.Id, AimingPosition, AimedTarget, SnowballSpeed, 3.0f);
 			}
 			break;
 		case 4:
@@ -609,7 +611,8 @@ void stateNormal (CEntity &entity)
 		if (entity.IsWalking)
 		{
 			entity.ImmediateSpeed = (newPos-oldPos)/(float)dt;
-			entity.MovePrimitive->move(entity.ImmediateSpeed, 0);
+			if (_TestCLS) entity.MovePrimitive->setGlobalPosition(newPos, 0);
+			else entity.MovePrimitive->move(entity.ImmediateSpeed, 0);
 		}
 	}
 	else if (entity.Type == CEntity::Other)
@@ -1015,5 +1018,11 @@ NLMISC_COMMAND(entities, "display all entities info", "")
 		CEntity	&e = (*eit).second;
 		log.displayNL("%s %u (k%u) %s %d", (Self==&e)?"*":" ", e.Id, (*eit).first, e.Name.c_str(), e.Type);
 	}
+	return true;
+}
+
+NLMISC_COMMAND(test_cls, "test the collision service, disables collision test on self", "")
+{
+	_TestCLS = !_TestCLS;
 	return true;
 }

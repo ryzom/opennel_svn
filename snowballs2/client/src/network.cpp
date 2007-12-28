@@ -32,11 +32,14 @@
 #include <nel/misc/command.h>
 #include <nel/misc/log.h>
 #include <nel/misc/displayer.h>
+#include <nel/misc/vectord.h>
 
 #include <nel/net/login_client.h>
 #include <nel/net/login_cookie.h>
 
 #include <nel/3d/u_text_context.h>
+
+#include <nel/pacs/u_move_primitive.h>
 
 #include "client.h"
 #include "commands.h"
@@ -44,6 +47,7 @@
 #include "entities.h"
 #include "interface.h"
 #include "graph.h"
+#include "mouse_listener.h"
 
 //
 // Namespaces
@@ -148,6 +152,25 @@ static void cbEntityPos (CMessage &msgin, TSockId from, CCallbackNetBase &netbas
 	}
 }
 
+static void cbEntityTeleport(CMessage &msgin, TSockId from, CCallbackNetBase &netbase)
+{
+	// temp
+	uint32 id;
+	CVector position;
+	msgin.serial(id, position);
+	nldebug("Received entity %u teleport %f,%f,%f", id, position.x, position.y, position.z);
+	EIT eit = findEntity(id, false);
+	if (eit == Entities.end()) nlwarning("can't find entity %u", id);
+	else
+	{
+		CEntity	&entity = eit->second;
+		entity.ServerPosition = position;
+		entity.Position = position;
+		entity.MovePrimitive->setGlobalPosition(CVectorD(position.x, position.y, position.z), 0);
+		if (&entity == Self) MouseListener->setPosition(position);
+	}
+}
+
 static void cbHit(CMessage &msgin, TSockId from, CCallbackNetBase &netbase)
 {
 	uint32 sid, eid;
@@ -235,6 +258,7 @@ static TCallbackItem ClientCallbackArray[] =
 	{ "ADD_ENTITY", cbAddEntity },
 	{ "REMOVE_ENTITY", cbRemoveEntity },
 	{ "ENTITY_POS", cbEntityPos },
+	{ "ENTITY_TP", cbEntityTeleport },
 	{ "HIT", cbHit },
 	{ "CHAT", cbChat },
 	{ "SNOWBALL", cbSnowball },

@@ -40,6 +40,8 @@
 #include <nel/3d/u_3d_mouse_listener.h>
 #include <nel/3d/u_instance.h>
 
+#include "camera.h"
+
 //
 // External definitions
 //
