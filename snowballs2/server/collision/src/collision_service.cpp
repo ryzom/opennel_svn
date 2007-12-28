@@ -146,9 +146,13 @@ bool CCollisionService::update()
 			CVector serverPosition = _GlobalRetriever->getGlobalPosition(globalPosition);
 			//nlinfo("clientPosition: %f %f %f", entity.NewClientPosition.x, entity.NewClientPosition.y, entity.NewClientPosition.z);
 			//nlinfo("serverPosition: %f %f %f", serverPosition.x, serverPosition.y, serverPosition.z);
-			// allow position difference to be the same as the moved distance.
+			
+			// Allow the difference between the external client position and the 
+			// local server position to be up to half of the traveled distance 
+			// plus the entity's height or radius, twice (using Retry).
+			float allowedDifference = entity.Distance * 0.5f;
 			bool move = false;
-			if (abs(entity.NewClientPosition.z - serverPosition.z) > 1.0f + entity.Distance)
+			if (abs(entity.NewClientPosition.z - serverPosition.z) > entity.MovePrimitive->getHeight() + allowedDifference)
 			{
 				move = true;
 			}
@@ -156,12 +160,12 @@ bool CCollisionService::update()
 			{
 				// fake server position has same z as client position if ok
 				serverPosition.z = entity.NewClientPosition.z;
-				if ((serverPosition - entity.NewClientPosition).norm() > entity.Distance)
+				if ((serverPosition - entity.NewClientPosition).norm() > entity.MovePrimitive->getRadius() + allowedDifference)
 					move = true;
 			}
-			if (move)
-			{
-				// Entity moved incorrectly.
+
+			if (move) // Entity moved incorrectly.
+			{				
 				if (entity.Retry) // If second try.
 				{
 					nldebug("entity.Retry");
@@ -170,7 +174,8 @@ bool CCollisionService::update()
 				else nldebug("!entity.Retry");
 				entity.Retry = !entity.Retry; // Else the entity gets one more chance.
 			}
-			// difference to new position must be from server position
+
+			// The difference to the new position must be from local server position.
 			entity.OldClientPosition = serverPosition;
 		}
 	}
@@ -306,6 +311,11 @@ void CCollisionService::cbRemove(CMessage &msgin, const std::string &serviceName
 	nldebug("Received REMOVE %u", id);
 	
 	// Do something with it
+	if (_Clients[sid.get()].find(id) == _Clients[sid.get()].end())
+	{
+		nlwarning("Unknown entity %u", id);
+		return;
+	}
 	CEntity &entity = _Clients[sid.get()][id];
 	_MoveContainer->removePrimitive(entity.MovePrimitive);
 	_Clients[sid.get()].erase(id);
