@@ -1,13 +1,15 @@
-IF(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
-MESSAGE(FATAL_ERROR "CMake generation for OpenNeL is not allowed within the source directory! 
-Remove the CMakeCache.txt file and try again from another folder, e.g.: 
+#-----------------------------------------------------------------------------
+# Load some macros.
+SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
+INCLUDE(CMakeModules/opennel.cmake)
 
-   rm CMakeCache.txt 
-   mkdir cmake
-   cd cmake
-   cmake -G \"Unix Makefiles\" ..
-")
-ENDIF(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
+# Force out of source builds.
+CHECK_OUT_OF_SOURCE()
+
+IF(WIN32)
+  SET(CMAKE_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/../3rdParty/include;${CMAKE_INCLUDE_PATH}")
+  SET(CMAKE_LIBRARY_PATH "${CMAKE_SOURCE_DIR}/../3rdParty/lib;${CMAKE_INCLUDE_PATH}")
+ENDIF(WIN32)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
 PROJECT(OpenNeL CXX C)
@@ -15,36 +17,28 @@ SET(NL_VERSION "0.6.0")
 
 #-----------------------------------------------------------------------------
 # Redirect output files
-
 SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
 
 #-----------------------------------------------------------------------------
 # Set default config options
 #
+NL_SETUP_DEFAULT_OPTIONS()
 
+#-----------------------------------------------------------------------------
+# Override default options
 ###
 # Features
 ###
-OPTION(WITH_LOGGING		"With Logging"					ON)
-OPTION(WITH_COVERAGE		"With Code Coverage Support"			ON)
+OPTION(WITH_COVERAGE		"With Code Coverage Support"			ON )
 
 ###
 # Core libraries
 ###
-OPTION(WITH_NET			"Build NLNET"					ON )
-OPTION(WITH_3D			"Build NL3D"					ON )
-OPTION(WITH_PACS		"Build NLPACS"					ON )
-OPTION(WITH_GEORGES		"Build NLGEORGES"				ON )
-OPTION(WITH_LIGO		"Build NLLIGO"					ON )
-OPTION(WITH_SOUND		"Build NLSOUND"					ON )
 
 ###
 # Drivers Support
 ###
-OPTION(WITH_DRIVER_OPENAL	"Build OpenAL Driver"				ON )
-OPTION(WITH_DRIVER_OPENGL	"Build OpenGL Driver"				ON )
-OPTION(WITH_DRIVER_DIRECT3D	"Build OpenGL Driver"				OFF)
 
 ###
 # Optional support
@@ -56,136 +50,56 @@ OPTION(WITH_TESTS	"Build NeL Unit Tests"					OFF)
 OPTION(WITH_GTK		"With GTK Support"					OFF)
 
 #-----------------------------------------------------------------------------
-# Load some macros.
-INCLUDE(automacros/opennel.cmake)
-
-#-----------------------------------------------------------------------------
 #Platform specifics
 
+FIND_PACKAGE(Threads)
+FIND_PACKAGE(LibXml2)
+FIND_PACKAGE(OpenAL)
+
+NL_SETUP_BUILD()
+
+IF(WITH_3D)
+  FIND_PACKAGE(FreeType)
+
+  IF(WITH_DRIVER_OPENGL)
+    FIND_PACKAGE(OpenGL)
+  ENDIF(WITH_DRIVER_OPENGL)
+
+#  IF(WITH_CEGUI)
+#    INCLUDE(${CMAKE_SOURCE_DIR}/cmake/FindCEGUI.cmake)
+#  ENDIF(WITH_CEGUI)
+
+  SET(JPEG_LIB jpeg)
+ENDIF(WITH_3D)
+
+IF(WITH_GTK)
+  FIND_PACKAGE(GTK2)
+ENDIF(WITH_GTK)
+
 IF(UNIX)
-  IF(WITH_DRIVER_OPENAL)
-    INCLUDE(${CMAKE_ROOT}/Modules/FindOpenAL.cmake)
-    IF(OPENAL_FOUND)
-      SET(WITH_OPENAL ON)
-      SET(OPENAL_LIB ${OPENAL_LIBRARY})
-      SET(OPENAL_INC ${OPENAL_INCLUDE_DIR})
-    ELSE(OPENAL_FOUND)
-      SET(WITH_OPENAL OFF)
-    ENDIF(OPENAL_FOUND)
-
-    FIND_LIBRARY(ALUT_LIBRARY
-      NAMES alut
-      PATHS
-      /usr/local/lib
-      /usr/lib
-      /sw/lib
-      /opt/local/lib
-      /opt/csw/lib
-      /opt/lib
-    )
-    IF(ALUT_LIBRARY)
-      SET(OPENAL_LIB ${OPENAL_LIB} ${ALUT_LIBRARY})
-    ENDIF(ALUT_LIBRARY)
-  ENDIF(WITH_DRIVER_OPENAL)
-
-  IF(WITH_3D)
-    FIND_PATH(FREETYPE_INC
-      freetype
-      PATHS
-      /usr/local/include/freetype2
-      /usr/include/freetype2
-      /sw/include/freetype2
-      /opt/local/include/freetype2
-      /opt/csw/include/freetype2
-      /opt/include/freetype2
-      NO_DEFAULT_PATH
-    )
-    SET(FREETYPE_LIB freetype)
-
-    SET(JPEG_LIB jpeg)
-
-    IF(WITH_DRIVER_OPENGL)
-      INCLUDE(${CMAKE_ROOT}/Modules/FindOpenGL.cmake)
-    ENDIF(WITH_DRIVER_OPENGL)
-    
-#    IF(WITH_CEGUI)
-#      INCLUDE(${CMAKE_SOURCE_DIR}/cmake/FindCEGUI.cmake)
-#    ENDIF(WITH_CEGUI)
-    
-  ENDIF(WITH_3D)
-
-  IF(WITH_GTK)
-    INCLUDE(${CMAKE_SOURCE_DIR}/cmake/FindGTK2.cmake)
-  ENDIF(WITH_GTK)
-
-  INCLUDE(${CMAKE_ROOT}/Modules/FindLibXml2.cmake)
-
-  INCLUDE(${CMAKE_ROOT}/Modules/FindThreads.cmake)
-
-  #-----------------------------------------------------------------------------
-  # Setup the buildmode variables.
-  #
-  # None                  = NL_RELEASE_DEBUG
-  # Debug                 = NL_DEBUG
-  # Release               = NL_RELEASE
-  # RelWithDebInfo        = NL_RELEASE_DEBUG
-  # MinSizeRel            = NL_RELEASE_DEBUG
-
-  IF(CMAKE_BUILD_TYPE MATCHES "Debug")
-    SET(NL_DEBUG_CFLAGS "-DNL_DEBUG -g")
-    SET(NL_BUILD_MODE "NL_DEBUG")
-  ELSE(CMAKE_BUILD_TYPE MATCHES "Debug")
-    IF(CMAKE_BUILD_TYPE MATCHES "Release")
-      SET(NL_RELEASE_CFLAGS "-DNL_RELEASE -O6")
-      SET(NL_BUILD_MODE "NL_RELEASE")
-    ELSE(CMAKE_BUILD_TYPE MATCHES "Release")
-      SET(NL_RELEASEDEBUG_CFLAGS "-DNL_RELEASE_DEBUG -g -finline-functions -O3 ")
-      SET(NL_NONE_CFLAGS "-DNL_RELEASE_DEBUG -g -finline-functions -O3 ")
-      SET(NL_BUILD_MODE "NL_RELEASE_DEBUG")
-    ENDIF(CMAKE_BUILD_TYPE MATCHES "Release")
-  ENDIF(CMAKE_BUILD_TYPE MATCHES "Debug")
-
-
-  #SET(LLIBS "-lc -lm -lstdc++")
-
-  SET(PLATFORM_CFLAGS "-ftemplate-depth-24 -D_REENTRANT -Wall -ansi -W -Wpointer-arith -Wsign-compare -Wno-deprecated-declarations -Wno-multichar -Wno-long-long -Wno-unused")
-
-  SET(PLATFORM_LINKFLAGS "${CMAKE_THREAD_LIBS_INIT} -lc -lm -lstdc++ -lrt")
 
   INCLUDE_DIRECTORIES(/usr/include /usr/local/include)
   
+  SET(prefix ${CMAKE_INSTALL_PREFIX})
+  SET(exec_prefix ${CMAKE_INSTALL_PREFIX}/bin)
+  SET(libdir ${CMAKE_INSTALL_PREFIX}/lib)
+  SET(includedir ${CMAKE_INSTALL_PREFIX}/include)
+  SET(enable_net ${WITH_NET})
+  SET(enable_3d ${WITH_3D})
+  SET(enable_pacs ${WITH_PACS})
+  SET(enable_sound ${WITH_SOUND})
+  CONFIGURE_FILE(nel-config.in nel-config)
 
+  INSTALL(PROGRAMS ${CMAKE_BINARY_DIR}/nel-config DESTINATION bin)
 
 ENDIF(UNIX)
 
 IF(WIN32)
   INCLUDE(${CMAKE_ROOT}/Modules/Platform/Windows-cl.cmake)
   
-  SET(DEPENDSDIR ${CMAKE_SOURCE_DIR}/../depends)
-  
-  SET(LIBXML2_LIBRARIES libxml2.lib)
-  
   SET(WINSOCK2_LIB ws2_32.lib)
   
-  IF(WITH_DRIVER_OPENAL)
-    SET(OPENAL_LIB OpenAL32.lib)
-  ENDIF(WITH_DRIVER_OPENAL)
-  
-  SET(NL_DEBUG_CFLAGS "") # -g
-  SET(NL_RELEASE_CFLAGS "") # -O6
-  SET(NL_RELEASEDEBUG_CFLAGS "/DNL_RELEASE_DEBUG") # -g -finline-functions -O3 
-  
-  IF(CMAKE_BUILD_TYPE MATCHES "Debug")
-    SET(NL_BUILD_MODE "NL_DEBUG")
-  ELSE(CMAKE_BUILD_TYPE MATCHES "Debug")
-    IF(CMAKE_BUILD_TYPE MATCHES "Release")
-      SET(NL_BUILD_MODE "NL_RELEASE")
-    ELSE(CMAKE_BUILD_TYPE MATCHES "Release")
-      SET(NL_BUILD_MODE "NL_RELEASE_DEBUG")
-    ENDIF(CMAKE_BUILD_TYPE MATCHES "Release")
-  ENDIF(CMAKE_BUILD_TYPE MATCHES "Debug")
-  
-  INCLUDE_DIRECTORIES(${DEPENDSDIR})
+  #INCLUDE_DIRECTORIES(${DEPENDSDIR})
 ENDIF(WIN32)
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/src)
