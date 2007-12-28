@@ -25,8 +25,6 @@
 
 #include "std3d.h"
 
-#if 0
-
 // ace: before including this, #define this define to use it
 //      the goal is to be able to compile every .cpp file with no
 //      special case (GNU/Linux needs)
@@ -1580,4 +1578,3 @@ void	CMeshMRMGeom::applyRawSkinWithNormal(CLod &lod, CRawSkinNormalCache &rawSki
 
 #endif // ADD_MESH_MRM_SKIN_TEMPLATE
 
-#endif // 0

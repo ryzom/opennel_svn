@@ -25,8 +25,6 @@
 
 #include "std3d.h"
 
-#if 0
-
 // ***************************************************************************
 // ***************************************************************************
 // Raw "Vertex/Normal only" ApplySkin methods.
@@ -1119,4 +1117,3 @@ void	CMeshMRMSkinnedGeom::applyRawSkinWithNormal(CLod &lod, CRawSkinnedNormalCac
 
 #endif // ADD_MESH_MRM_SKINNED_TEMPLATE
 
-#endif // 0
