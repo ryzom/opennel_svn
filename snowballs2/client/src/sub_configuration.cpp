@@ -5,6 +5,7 @@
 #include <nel/misc/types_nl.h>
 #include "sub_configuration.h"
 
+using namespace std;
 using namespace NLMISC;
 
 namespace SBCLIENT {
@@ -50,6 +51,51 @@ void CSubConfiguration::setConfigFile()
 	}
 }
 
+float CSubConfiguration::getValue(const string &varName, float defaultValue)
+{
+	if (exists(varName)) return getVar(varName).asFloat();
+	CConfigFile::CVar varToCopy;
+	varToCopy.forceAsDouble((double)defaultValue);	
+	ConfigFile->insertVar(_ConfigPrefixD + varName, varToCopy);
+	return defaultValue;
+}
+
+double CSubConfiguration::getValue(const string &varName, double defaultValue)
+{
+	if (exists(varName)) return getVar(varName).asDouble();
+	CConfigFile::CVar varToCopy;
+	varToCopy.forceAsDouble(defaultValue);	
+	ConfigFile->insertVar(_ConfigPrefixD + varName, varToCopy);
+	return defaultValue;
+}
+
+int CSubConfiguration::getValue(const string &varName, int defaultValue)
+{
+	if (exists(varName)) return getVar(varName).asInt();
+	CConfigFile::CVar varToCopy;
+	varToCopy.forceAsInt(defaultValue);	
+	ConfigFile->insertVar(_ConfigPrefixD + varName, varToCopy);
+	return defaultValue;
+}
+
+std::string CSubConfiguration::getValue(const string &varName, const string &defaultValue)
+{
+	if (exists(varName)) return getVar(varName).asString();
+	CConfigFile::CVar varToCopy;
+	varToCopy.forceAsString(defaultValue);
+	ConfigFile->insertVar(_ConfigPrefixD + varName, varToCopy);
+	return defaultValue;
+}
+
+bool CSubConfiguration::getValue(const string &varName, bool defaultValue)
+{
+	if (exists(varName)) return getVar(varName).asBool();
+	CConfigFile::CVar varToCopy;
+	varToCopy.forceAsInt(defaultValue ? 1 : 0);	
+	ConfigFile->insertVar(_ConfigPrefixD + varName, varToCopy);
+	return defaultValue;
+}
+
 CConfigFile::CVar &CSubConfiguration::getVar(const std::string &varName)
 {
 	return ConfigFile->getVar(_ConfigPrefixD + varName);
@@ -75,6 +121,11 @@ void CSubConfiguration::setCallback(const std::string &varName, void (*cb)(CConf
 		_CVarStates[fullName] = CConfigCallback(cb, context, state);
 		ConfigFile->setCallback(fullName, callback);
 	}
+}
+
+void CSubConfiguration::setCallback(const string &varName, void (*cb)(CConfigFile::CVar &))
+{
+	ConfigFile->setCallback(_ConfigPrefixD + varName, cb);
 }
 
 std::map<std::string, CSubConfiguration::CConfigCallback> CSubConfiguration::_CVarStates;

@@ -341,7 +341,7 @@ void	initNetwork(const std::string &lc, const std::string &addr)
 
 	string fsaddr;
 	if (addr.empty())
-		fsaddr = ConfigFile.getVar("FSHost").asString ();
+		fsaddr = ConfigFile->getVar("FSHost").asString ();
 	else
 		fsaddr = addr;
 

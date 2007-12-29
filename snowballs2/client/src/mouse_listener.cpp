@@ -164,7 +164,6 @@ void C3dMouseListener::operator ()(const CEvent& event)
 		// Normalize, too much transformation could give an ugly matrix..
 		_Matrix.normalize (CMatrix::XYZ);			
 
-
 		// Update mouse position
 		Driver->setMousePos(0.5f, 0.5f);
 		_X = 0.5f;
@@ -447,24 +446,24 @@ void	cbUpdateMouseListenerConfig(CConfigFile::CVar &var)
 
 void	initMouseListenerConfig()
 {
-	ConfigFile.setCallback ("MouseInvert", cbUpdateMouseListenerConfig);
-	ConfigFile.setCallback ("MouseZoomStep", cbUpdateMouseListenerConfig);
-	ConfigFile.setCallback ("ViewLagBehind", cbUpdateMouseListenerConfig);
-	ConfigFile.setCallback ("ViewHeight", cbUpdateMouseListenerConfig);
-	ConfigFile.setCallback ("ViewTargetHeight", cbUpdateMouseListenerConfig);
+	ConfigFile->setCallback ("MouseInvert", cbUpdateMouseListenerConfig);
+	ConfigFile->setCallback ("MouseZoomStep", cbUpdateMouseListenerConfig);
+	ConfigFile->setCallback ("ViewLagBehind", cbUpdateMouseListenerConfig);
+	ConfigFile->setCallback ("ViewHeight", cbUpdateMouseListenerConfig);
+	ConfigFile->setCallback ("ViewTargetHeight", cbUpdateMouseListenerConfig);
 
-	cbUpdateMouseListenerConfig(ConfigFile.getVar ("MouseInvert"));
-	cbUpdateMouseListenerConfig(ConfigFile.getVar ("MouseZoomStep"));
-	cbUpdateMouseListenerConfig(ConfigFile.getVar ("ViewLagBehind"));
-	cbUpdateMouseListenerConfig(ConfigFile.getVar ("ViewHeight"));
-	cbUpdateMouseListenerConfig(ConfigFile.getVar ("ViewTargetHeight"));
+	cbUpdateMouseListenerConfig(ConfigFile->getVar ("MouseInvert"));
+	cbUpdateMouseListenerConfig(ConfigFile->getVar ("MouseZoomStep"));
+	cbUpdateMouseListenerConfig(ConfigFile->getVar ("ViewLagBehind"));
+	cbUpdateMouseListenerConfig(ConfigFile->getVar ("ViewHeight"));
+	cbUpdateMouseListenerConfig(ConfigFile->getVar ("ViewTargetHeight"));
 }
 
 void releaseMouseListenerConfig()
 {
-	ConfigFile.setCallback("MouseInvert", NULL);
-	ConfigFile.setCallback("MouseZoomStep", NULL);
-	ConfigFile.setCallback("ViewLagBehind", NULL);
-	ConfigFile.setCallback("ViewHeight", NULL);
-	ConfigFile.setCallback("ViewTargetHeight", NULL);
+	ConfigFile->setCallback("MouseInvert", NULL);
+	ConfigFile->setCallback("MouseZoomStep", NULL);
+	ConfigFile->setCallback("ViewLagBehind", NULL);
+	ConfigFile->setCallback("ViewHeight", NULL);
+	ConfigFile->setCallback("ViewTargetHeight", NULL);
 }

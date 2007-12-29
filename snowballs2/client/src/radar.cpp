@@ -620,45 +620,45 @@ void cbUpdateRadar (CConfigFile::CVar &var)
 
 void initRadar ()
 {
-	ConfigFile.setCallback ("RadarPosX", cbUpdateRadar);
-	ConfigFile.setCallback ("RadarPosY", cbUpdateRadar);
-	ConfigFile.setCallback ("RadarWidth", cbUpdateRadar);
-	ConfigFile.setCallback ("RadarHeight", cbUpdateRadar);
-	ConfigFile.setCallback ("RadarBackColor", cbUpdateRadar);
-	ConfigFile.setCallback ("RadarFrontColor", cbUpdateRadar);
-	ConfigFile.setCallback ("RadarSelfColor", cbUpdateRadar);
-	ConfigFile.setCallback ("RadarOtherColor", cbUpdateRadar);
-	ConfigFile.setCallback ("RadarPlaceColor", cbUpdateRadar);
-	ConfigFile.setCallback ("RadarEntitySize", cbUpdateRadar);
-	ConfigFile.setCallback ("RadarState", cbUpdateRadar);
-	ConfigFile.setCallback ("RadarDistance", cbUpdateRadar);
-	ConfigFile.setCallback ("RadarMinDistance", cbUpdateRadar);
-	ConfigFile.setCallback ("RadarMaxDistance", cbUpdateRadar);
-	ConfigFile.setCallback ("RadarParticularPlaces", cbUpdateRadar);
-	ConfigFile.setCallback ("RadarFontSize", cbUpdateRadar);
-	ConfigFile.setCallback ("RadarLittlePosX", cbUpdateRadar);
-	ConfigFile.setCallback ("RadarLittlePosY", cbUpdateRadar);
-	ConfigFile.setCallback ("RadarLittleRadius", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarPosX", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarPosY", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarWidth", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarHeight", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarBackColor", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarFrontColor", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarSelfColor", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarOtherColor", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarPlaceColor", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarEntitySize", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarState", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarDistance", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarMinDistance", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarMaxDistance", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarParticularPlaces", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarFontSize", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarLittlePosX", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarLittlePosY", cbUpdateRadar);
+	ConfigFile->setCallback ("RadarLittleRadius", cbUpdateRadar);
 
-	cbUpdateRadar (ConfigFile.getVar ("RadarPosX"));
-	cbUpdateRadar (ConfigFile.getVar ("RadarPosY"));
-	cbUpdateRadar (ConfigFile.getVar ("RadarWidth"));
-	cbUpdateRadar (ConfigFile.getVar ("RadarHeight"));
-	cbUpdateRadar (ConfigFile.getVar ("RadarFrontColor"));
-	cbUpdateRadar (ConfigFile.getVar ("RadarBackColor"));
-	cbUpdateRadar (ConfigFile.getVar ("RadarSelfColor"));
-	cbUpdateRadar (ConfigFile.getVar ("RadarOtherColor"));
-	cbUpdateRadar (ConfigFile.getVar ("RadarPlaceColor"));
-	cbUpdateRadar (ConfigFile.getVar ("RadarEntitySize"));
-	cbUpdateRadar (ConfigFile.getVar ("RadarState"));
-	cbUpdateRadar (ConfigFile.getVar ("RadarDistance"));
-	cbUpdateRadar (ConfigFile.getVar ("RadarMinDistance"));
-	cbUpdateRadar (ConfigFile.getVar ("RadarMaxDistance"));
-	cbUpdateRadar (ConfigFile.getVar ("RadarParticularPlaces"));
-	cbUpdateRadar (ConfigFile.getVar ("RadarFontSize"));
-	cbUpdateRadar (ConfigFile.getVar ("RadarLittlePosX"));
-	cbUpdateRadar (ConfigFile.getVar ("RadarLittlePosY"));
-	cbUpdateRadar (ConfigFile.getVar ("RadarLittleRadius"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarPosX"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarPosY"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarWidth"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarHeight"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarFrontColor"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarBackColor"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarSelfColor"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarOtherColor"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarPlaceColor"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarEntitySize"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarState"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarDistance"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarMinDistance"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarMaxDistance"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarParticularPlaces"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarFontSize"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarLittlePosX"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarLittlePosY"));
+	cbUpdateRadar (ConfigFile->getVar ("RadarLittleRadius"));
 
         RadarMaterial = Driver->createMaterial ();
         RadarMaterial.initUnlit ();
@@ -686,25 +686,25 @@ void updateRadar ()
 
 void releaseRadar ()
 {
-	ConfigFile.setCallback ("RadarPosX", NULL);
-	ConfigFile.setCallback ("RadarPosY", NULL);
-	ConfigFile.setCallback ("RadarWidth", NULL);
-	ConfigFile.setCallback ("RadarHeight", NULL);
-	ConfigFile.setCallback ("RadarBackColor", NULL);
-	ConfigFile.setCallback ("RadarFrontColor", NULL);
-	ConfigFile.setCallback ("RadarSelfColor", NULL);
-	ConfigFile.setCallback ("RadarOtherColor", NULL);
-	ConfigFile.setCallback ("RadarPlaceColor", NULL);
-	ConfigFile.setCallback ("RadarEntitySize", NULL);
-	ConfigFile.setCallback ("RadarState", NULL);
-	ConfigFile.setCallback ("RadarDistance", NULL);
-	ConfigFile.setCallback ("RadarMinDistance", NULL);
-	ConfigFile.setCallback ("RadarMaxDistance", NULL);
-	ConfigFile.setCallback ("RadarParticularPlaces", NULL);
-	ConfigFile.setCallback ("RadarFontSize", NULL);
-	ConfigFile.setCallback ("RadarLittlePosX", NULL);
-	ConfigFile.setCallback ("RadarLittlePosY", NULL);
-	ConfigFile.setCallback ("RadarLittleRadius", NULL);
+	ConfigFile->setCallback ("RadarPosX", NULL);
+	ConfigFile->setCallback ("RadarPosY", NULL);
+	ConfigFile->setCallback ("RadarWidth", NULL);
+	ConfigFile->setCallback ("RadarHeight", NULL);
+	ConfigFile->setCallback ("RadarBackColor", NULL);
+	ConfigFile->setCallback ("RadarFrontColor", NULL);
+	ConfigFile->setCallback ("RadarSelfColor", NULL);
+	ConfigFile->setCallback ("RadarOtherColor", NULL);
+	ConfigFile->setCallback ("RadarPlaceColor", NULL);
+	ConfigFile->setCallback ("RadarEntitySize", NULL);
+	ConfigFile->setCallback ("RadarState", NULL);
+	ConfigFile->setCallback ("RadarDistance", NULL);
+	ConfigFile->setCallback ("RadarMinDistance", NULL);
+	ConfigFile->setCallback ("RadarMaxDistance", NULL);
+	ConfigFile->setCallback ("RadarParticularPlaces", NULL);
+	ConfigFile->setCallback ("RadarFontSize", NULL);
+	ConfigFile->setCallback ("RadarLittlePosX", NULL);
+	ConfigFile->setCallback ("RadarLittlePosY", NULL);
+	ConfigFile->setCallback ("RadarLittleRadius", NULL);
 	Driver->deleteMaterial(RadarMaterial); RadarMaterial = NULL;
 }
 

@@ -86,15 +86,15 @@ void initCompass ()
 	CompassMaterial.setBlendFunc (UMaterial::srcalpha, UMaterial::invsrcalpha);
 	CompassMaterial.setBlend(true);
 
-	ConfigFile.setCallback ("CompassPosX", cbUpdateCompass);
-	ConfigFile.setCallback ("CompassPosY", cbUpdateCompass);
-	ConfigFile.setCallback ("CompassRadius", cbUpdateCompass);
-	ConfigFile.setCallback ("CompassColor", cbUpdateCompass);
+	ConfigFile->setCallback ("CompassPosX", cbUpdateCompass);
+	ConfigFile->setCallback ("CompassPosY", cbUpdateCompass);
+	ConfigFile->setCallback ("CompassRadius", cbUpdateCompass);
+	ConfigFile->setCallback ("CompassColor", cbUpdateCompass);
 
-	cbUpdateCompass (ConfigFile.getVar ("CompassPosX"));
-	cbUpdateCompass (ConfigFile.getVar ("CompassPosY"));
-	cbUpdateCompass (ConfigFile.getVar ("CompassRadius"));
-	cbUpdateCompass (ConfigFile.getVar ("CompassColor"));
+	cbUpdateCompass (ConfigFile->getVar ("CompassPosX"));
+	cbUpdateCompass (ConfigFile->getVar ("CompassPosY"));
+	cbUpdateCompass (ConfigFile->getVar ("CompassRadius"));
+	cbUpdateCompass (ConfigFile->getVar ("CompassColor"));
 }
 
 void updateCompass ()
@@ -173,10 +173,10 @@ void updateCompass ()
 
 void releaseCompass ()
 {
-	ConfigFile.setCallback("CompassPosX", NULL);
-	ConfigFile.setCallback("CompassPosY", NULL);
-	ConfigFile.setCallback("CompassRadius", NULL);
-	ConfigFile.setCallback("CompassColor", NULL);
+	ConfigFile->setCallback("CompassPosX", NULL);
+	ConfigFile->setCallback("CompassPosY", NULL);
+	ConfigFile->setCallback("CompassRadius", NULL);
+	ConfigFile->setCallback("CompassColor", NULL);
 
 	Driver->deleteMaterial (CompassMaterial);
 	CompassMaterial = NULL;

@@ -99,7 +99,7 @@ void initSound2()
 	AudioMixer = UAudioMixer::createAudioMixer ();
 	std::string driverName;
 	NLSOUND::UAudioMixer::TDriver driverType;
-	if (!ConfigFile.exists("SoundDriver")) 
+	if (!ConfigFile->exists("SoundDriver")) 
 #ifdef NL_OS_WINDOWS
 		driverType = NLSOUND::UAudioMixer::DriverFMod;
 #elif defined (NL_OS_UNIX)
@@ -109,7 +109,7 @@ void initSound2()
 #endif
 	else 
 	{
-		driverName = ConfigFile.getVar("SoundDriver").asString();
+		driverName = ConfigFile->getVar("SoundDriver").asString();
 		if (driverName == "Auto") driverType = NLSOUND::UAudioMixer::DriverAuto;
 		else if (driverName == "FMod") driverType = NLSOUND::UAudioMixer::DriverFMod;
 		else if (driverName == "DSound") driverType = NLSOUND::UAudioMixer::DriverDSound;
@@ -118,23 +118,23 @@ void initSound2()
 	}
 
 	AudioMixer->init(
-		ConfigFile.exists("SoundMaxTracks")
-		? ConfigFile.getVar("SoundMaxTracks").asInt() : 32,
-		ConfigFile.exists("SoundUseEax")
-		? ConfigFile.getVar("SoundUseEax").asBool() : true,
-		ConfigFile.exists("SoundUseADPCM")
-		? ConfigFile.getVar("SoundUseADPCM").asBool() : true,
+		ConfigFile->exists("SoundMaxTracks")
+		? ConfigFile->getVar("SoundMaxTracks").asInt() : 32,
+		ConfigFile->exists("SoundUseEax")
+		? ConfigFile->getVar("SoundUseEax").asBool() : true,
+		ConfigFile->exists("SoundUseADPCM")
+		? ConfigFile->getVar("SoundUseADPCM").asBool() : true,
 		NULL, false, driverType,
-		ConfigFile.exists("SoundForceSoftware")
-		? ConfigFile.getVar("SoundForceSoftware").asBool() : true);
+		ConfigFile->exists("SoundForceSoftware")
+		? ConfigFile->getVar("SoundForceSoftware").asBool() : true);
 
-	ConfigFile.setCallback("SoundMaxTracks", cbConfigFileSoundMaxTracks);
-	ConfigFile.setCallback("SoundUseEax", cbConfigFileFail);
-	ConfigFile.setCallback("SoundUseADPCM", cbConfigFileFail);
-	ConfigFile.setCallback("SoundForceSoftware", cbConfigFileFail);
-	ConfigFile.setCallback("SoundDriver", cbConfigFileFail);
+	ConfigFile->setCallback("SoundMaxTracks", cbConfigFileSoundMaxTracks);
+	ConfigFile->setCallback("SoundUseEax", cbConfigFileFail);
+	ConfigFile->setCallback("SoundUseADPCM", cbConfigFileFail);
+	ConfigFile->setCallback("SoundForceSoftware", cbConfigFileFail);
+	ConfigFile->setCallback("SoundDriver", cbConfigFileFail);
 
-	PlaylistManager = new SBCLIENT::CMusicPlaylistManager(AudioMixer, &ConfigFile, "SoundPlaylist");
+	PlaylistManager = new SBCLIENT::CMusicPlaylistManager(AudioMixer, ConfigFile, "SoundPlaylist");
 
 	/* AudioMixer->loadSoundBuffers ("sounds.nss", &SoundIdArray);
 	nlassert( SoundIdArray->size() == 2 );
@@ -148,8 +148,8 @@ void initSound2()
 void initSound()
 {
 #ifdef NL_OS_WINDOWS
-	if (ConfigFile.exists("SoundEnabled") ? ConfigFile.getVar("SoundEnabled").asBool() : false) initSound2();
-	ConfigFile.setCallback("SoundEnabled", cbConfigFileSoundEnabled);
+	if (ConfigFile->exists("SoundEnabled") ? ConfigFile->getVar("SoundEnabled").asBool() : false) initSound2();
+	ConfigFile->setCallback("SoundEnabled", cbConfigFileSoundEnabled);
 #endif
 }
 
@@ -187,11 +187,11 @@ void updateSound()
 void releaseSound2()
 {		
 	SoundEnabled = false;
-	ConfigFile.setCallback("SoundMaxTracks", NULL);
-	ConfigFile.setCallback("SoundUseEax", NULL);
-	ConfigFile.setCallback("SoundUseADPCM", NULL);
-	ConfigFile.setCallback("SoundForceSoftware", NULL);
-	ConfigFile.setCallback("SoundDriver", NULL);
+	ConfigFile->setCallback("SoundMaxTracks", NULL);
+	ConfigFile->setCallback("SoundUseEax", NULL);
+	ConfigFile->setCallback("SoundUseADPCM", NULL);
+	ConfigFile->setCallback("SoundForceSoftware", NULL);
+	ConfigFile->setCallback("SoundDriver", NULL);
 	delete PlaylistManager;
 	PlaylistManager = NULL;
 	delete AudioMixer;
@@ -202,7 +202,7 @@ void releaseSound2()
 void releaseSound()
 {
 #ifdef NL_OS_WINDOWS
-	ConfigFile.setCallback("SoundEnabled", NULL);
+	ConfigFile->setCallback("SoundEnabled", NULL);
 	if (SoundEnabled) releaseSound2();
 #endif
 }

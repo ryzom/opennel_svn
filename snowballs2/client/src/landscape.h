@@ -52,7 +52,6 @@ class CTrajectory;
 // External variables
 //
 
-extern NL3D::ULandscape						*Landscape;
 extern std::vector<NL3D::UInstanceGroup*>	 InstanceGroups;
 extern NLMISC::CVector						 SunDirection;
 
@@ -65,7 +64,6 @@ void initLight();
 void releaseLight();
 
 void initLandscape();
-void updateLandscape();
 void releaseLandscape();
 
 void initAiming();

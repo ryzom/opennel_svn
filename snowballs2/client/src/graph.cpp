@@ -139,9 +139,9 @@ void cbUpdateGraph (CConfigFile::CVar &var)
 
 void initGraph ()
 {
-	ConfigFile.setCallback ("ShowGraph", cbUpdateGraph);
+	ConfigFile->setCallback ("ShowGraph", cbUpdateGraph);
 
-	cbUpdateGraph (ConfigFile.getVar ("ShowGraph"));
+	cbUpdateGraph (ConfigFile->getVar ("ShowGraph"));
 }
 
 void updateGraph ()
@@ -157,7 +157,7 @@ void updateGraph ()
 
 void releaseGraph ()
 {
-	ConfigFile.setCallback("ShowGraph", NULL);
+	ConfigFile->setCallback("ShowGraph", NULL);
 }
 
 NLMISC_COMMAND(graph,"swith on/off graphs","")

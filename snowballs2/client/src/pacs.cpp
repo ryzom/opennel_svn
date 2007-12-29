@@ -56,6 +56,8 @@ using namespace NLMISC;
 using namespace NL3D;
 using namespace NLPACS;
 
+extern ULandscape *Landscape;
+
 //
 // Variables
 //
@@ -80,8 +82,8 @@ vector<UMovePrimitive *>	InstancesMovePrimitives;
 void	initPACS()
 {
 	// init the global retriever and the retriever bank
-	RetrieverBank = URetrieverBank::createRetrieverBank(ConfigFile.getVar("RetrieverBankName").asString().c_str());
-	GlobalRetriever = UGlobalRetriever::createGlobalRetriever(ConfigFile.getVar("GlobalRetrieverName").asString().c_str(), RetrieverBank);
+	RetrieverBank = URetrieverBank::createRetrieverBank(ConfigFile->getVar("RetrieverBankName").asString().c_str());
+	GlobalRetriever = UGlobalRetriever::createGlobalRetriever(ConfigFile->getVar("GlobalRetrieverName").asString().c_str(), RetrieverBank);
 
 	// create the move primitive
 	MoveContainer = UMoveContainer::createMoveContainer(GlobalRetriever, 100, 100, 6.0);

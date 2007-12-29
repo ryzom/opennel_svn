@@ -259,26 +259,26 @@ void	initCommands()
 #endif
 
 	// Add callback for the config file
-	ConfigFile.setCallback ("CommandsBoxX", cbUpdateCommands);
-	ConfigFile.setCallback ("CommandsBoxY", cbUpdateCommands);
-	ConfigFile.setCallback ("CommandsBoxWidth", cbUpdateCommands);
-	ConfigFile.setCallback ("CommandsBoxBorder", cbUpdateCommands);
-	ConfigFile.setCallback ("CommandsNbLines", cbUpdateCommands);
-	ConfigFile.setCallback ("CommandsLineHeight", cbUpdateCommands);
-	ConfigFile.setCallback ("CommandsBackColor", cbUpdateCommands);
-	ConfigFile.setCallback ("CommandsFrontColor", cbUpdateCommands);
-	ConfigFile.setCallback ("CommandsFontSize", cbUpdateCommands);
+	ConfigFile->setCallback ("CommandsBoxX", cbUpdateCommands);
+	ConfigFile->setCallback ("CommandsBoxY", cbUpdateCommands);
+	ConfigFile->setCallback ("CommandsBoxWidth", cbUpdateCommands);
+	ConfigFile->setCallback ("CommandsBoxBorder", cbUpdateCommands);
+	ConfigFile->setCallback ("CommandsNbLines", cbUpdateCommands);
+	ConfigFile->setCallback ("CommandsLineHeight", cbUpdateCommands);
+	ConfigFile->setCallback ("CommandsBackColor", cbUpdateCommands);
+	ConfigFile->setCallback ("CommandsFrontColor", cbUpdateCommands);
+	ConfigFile->setCallback ("CommandsFontSize", cbUpdateCommands);
   
 	// Init the config file variable
-	cbUpdateCommands (ConfigFile.getVar ("CommandsBoxX"));
-	cbUpdateCommands (ConfigFile.getVar ("CommandsBoxY"));
-	cbUpdateCommands (ConfigFile.getVar ("CommandsBoxWidth"));
-	cbUpdateCommands (ConfigFile.getVar ("CommandsBoxBorder"));
-	cbUpdateCommands (ConfigFile.getVar ("CommandsNbLines"));
-	cbUpdateCommands (ConfigFile.getVar ("CommandsLineHeight"));
-	cbUpdateCommands (ConfigFile.getVar ("CommandsBackColor"));
-	cbUpdateCommands (ConfigFile.getVar ("CommandsFrontColor"));
-	cbUpdateCommands (ConfigFile.getVar ("CommandsFontSize"));
+	cbUpdateCommands (ConfigFile->getVar ("CommandsBoxX"));
+	cbUpdateCommands (ConfigFile->getVar ("CommandsBoxY"));
+	cbUpdateCommands (ConfigFile->getVar ("CommandsBoxWidth"));
+	cbUpdateCommands (ConfigFile->getVar ("CommandsBoxBorder"));
+	cbUpdateCommands (ConfigFile->getVar ("CommandsNbLines"));
+	cbUpdateCommands (ConfigFile->getVar ("CommandsLineHeight"));
+	cbUpdateCommands (ConfigFile->getVar ("CommandsBackColor"));
+	cbUpdateCommands (ConfigFile->getVar ("CommandsFrontColor"));
+	cbUpdateCommands (ConfigFile->getVar ("CommandsFontSize"));
 
 	CommandsMaterial = Driver->createMaterial();
     CommandsMaterial.initUnlit();
@@ -351,15 +351,15 @@ void releaseCommands()
 #endif
 
 	// Remove callbacks for the config file
-	ConfigFile.setCallback("CommandsBoxX", NULL);
-	ConfigFile.setCallback("CommandsBoxY", NULL);
-	ConfigFile.setCallback("CommandsBoxWidth", NULL);
-	ConfigFile.setCallback("CommandsBoxBorder", NULL);
-	ConfigFile.setCallback("CommandsNbLines", NULL);
-	ConfigFile.setCallback("CommandsLineHeight", NULL);
-	ConfigFile.setCallback("CommandsBackColor", NULL);
-	ConfigFile.setCallback("CommandsFrontColor", NULL);
-	ConfigFile.setCallback("CommandsFontSize", NULL);
+	ConfigFile->setCallback("CommandsBoxX", NULL);
+	ConfigFile->setCallback("CommandsBoxY", NULL);
+	ConfigFile->setCallback("CommandsBoxWidth", NULL);
+	ConfigFile->setCallback("CommandsBoxBorder", NULL);
+	ConfigFile->setCallback("CommandsNbLines", NULL);
+	ConfigFile->setCallback("CommandsLineHeight", NULL);
+	ConfigFile->setCallback("CommandsBackColor", NULL);
+	ConfigFile->setCallback("CommandsFrontColor", NULL);
+	ConfigFile->setCallback("CommandsFontSize", NULL);
 
 	// Remove the keyboard listener from the server
 	Driver->EventServer.removeListener(EventCharId, &CommandsListener);

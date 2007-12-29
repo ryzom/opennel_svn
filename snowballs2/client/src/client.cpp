@@ -84,6 +84,10 @@
 #endif
 
 
+#include "component_manager.h"
+#include "landscape_component.h"
+using namespace SBCLIENT;
+
 //
 // Namespaces
 //
@@ -100,12 +104,20 @@ using namespace NLNET;
 static const uint8 GameStateLoad = 0, GameStateUnload = 1, GameStateReset = 2, GameStateExit = 3, 
 GameStateLogin = 4, GameStateOnline = 5, GameStateOffline = 6;
 
+
+// Temp
+ULandscape *Landscape;
+
+// Component temp test
+CComponentManager *ComponentManager;
+CLandscapeComponent *LandscapeComponent;
+
 //
 // Globals
 //
 
 // This class contains all variables that are in the client.cfg
-CConfigFile ConfigFile; // core
+CConfigFile *ConfigFile; // core
 // The 3d driver
 UDriver *Driver = NULL; // core
 // This variable is used to display text on the screen
@@ -272,25 +284,23 @@ void initCore()
 		LoadedCore = true;
 		// Seed the randomizer
 		srand(uint(time(0)));
-		// Load config file
-		ConfigFile.load(SNOWBALLS_CONFIG "client.cfg");
 		// Set the ShowCommands with the value set in the client config file
-		ShowCommands = ConfigFile.getVar("ShowCommands").asInt() == 1;
+		ShowCommands = ConfigFile->getVar("ShowCommands").asInt() == 1;
 		// Add different path for automatic file lookup
-		CPath::addSearchPath(ConfigFile.getVar("DataPath").asString(), true, false);
+		CPath::addSearchPath(ConfigFile->getVar("DataPath").asString(), true, false);
 		CPath::remapExtension("dds", "tga", true);
 		// Create a driver	
-		Driver = UDriver::createDriver(0, ConfigFile.getVar("OpenGL").asInt() == 0);
+		Driver = UDriver::createDriver(0, ConfigFile->getVar("OpenGL").asInt() == 0);
 		// Create the window with config file values
-		Driver->setDisplay(UDriver::CMode(ConfigFile.getVar("ScreenWidth").asInt(), 
-			ConfigFile.getVar("ScreenHeight").asInt(),
-			ConfigFile.getVar("ScreenDepth").asInt(),
-			ConfigFile.getVar("ScreenFull").asInt()==0));
+		Driver->setDisplay(UDriver::CMode(ConfigFile->getVar("ScreenWidth").asInt(), 
+			ConfigFile->getVar("ScreenHeight").asInt(),
+			ConfigFile->getVar("ScreenDepth").asInt(),
+			ConfigFile->getVar("ScreenFull").asInt()==0));
 		// Set the cache size for the font manager(in bytes)
 		Driver->setFontManagerMaxMemory(2097152);
 		// Create a Text context for later text rendering
 		displayLoadingState("Initialize Text"); 
-		TextContext = Driver->createTextContext(CPath::lookup(ConfigFile.getVar("FontName").asString()));
+		TextContext = Driver->createTextContext(CPath::lookup(ConfigFile->getVar("FontName").asString()));
 		TextContext->setShaded(true);
 		TextContext->setKeep800x600Ratio(false);
 		// You can't call displayLoadingState() before init the loading state system
@@ -306,7 +316,7 @@ void initCore()
 		displayLoadingState("Initialize Light");
 		initLight();
 
-		ConfigFile.setCallback("OpenGL", cbGraphicsDriver);
+		ConfigFile->setCallback("OpenGL", cbGraphicsDriver);
 	}
 }
 
@@ -331,6 +341,8 @@ void initIngame()
 		Scene = Driver->createScene(false);
 		// Init the landscape using the previously created UScene
 		displayLoadingState("Initialize Landscape");
+		LandscapeComponent = new CLandscapeComponent(
+			ComponentManager, "Landscape", Scene);
 		initLandscape();
 		// Init the pacs
 		displayLoadingState("Initialize PACS ");
@@ -402,6 +414,9 @@ void initOnline()
 	while (Self == NULL) // wait for position etc from server
 		updateLoadingState(ucstring("Connecting"), true, true);
 
+	displayLoadingState("Load Landscape");
+	LandscapeComponent->loadAllZonesAround();
+
 	displayLoadingState("Ready!");
 
 #ifdef NL_OS_WINDOWS
@@ -424,12 +439,15 @@ void initOffline()
 
 		// Creates the self entity
 		displayLoadingState("Creating offline entity");
-		addEntity(id, Login.toUtf8(), CEntity::Self, CVector(ConfigFile.getVar("StartPoint").asFloat(0),
-													 ConfigFile.getVar("StartPoint").asFloat(1),
-													 ConfigFile.getVar("StartPoint").asFloat(2)),
-											 CVector(ConfigFile.getVar("StartPoint").asFloat(0),
-													 ConfigFile.getVar("StartPoint").asFloat(1),
-													 ConfigFile.getVar("StartPoint").asFloat(2)));
+		addEntity(id, Login.toUtf8(), CEntity::Self, CVector(ConfigFile->getVar("StartPoint").asFloat(0),
+													 ConfigFile->getVar("StartPoint").asFloat(1),
+													 ConfigFile->getVar("StartPoint").asFloat(2)),
+											 CVector(ConfigFile->getVar("StartPoint").asFloat(0),
+													 ConfigFile->getVar("StartPoint").asFloat(1),
+													 ConfigFile->getVar("StartPoint").asFloat(2)));
+
+		displayLoadingState("Load Landscape");
+		LandscapeComponent->loadAllZonesAround();
 
 		// Display a local welcome message
 		addLine(">>>>> Welcome to Snowballs!");
@@ -449,7 +467,7 @@ void releaseCore()
 	{
 		LoadedCore = false;
 		// Release configuration callbacks
-		ConfigFile.setCallback("OpenGL", NULL);
+		ConfigFile->setCallback("OpenGL", NULL);
 
 		// Release the sun
 		releaseLight();
@@ -466,10 +484,6 @@ void releaseCore()
 		Driver->release();
 		delete Driver;
 		Driver = NULL;
-		// Save the config file
-		if (ConfigFile.exists("SaveConfig") 
-			&& ConfigFile.getVar("SaveConfig").asInt() == 1) 
-			ConfigFile.save();
 	}
 }
 
@@ -511,6 +525,7 @@ void releaseIngame()
 		releaseAiming();
 		releasePACS();
 		releaseLandscape();
+		delete LandscapeComponent;
 		// Release the mouse listener
 		MouseListener->removeFromServer(Driver->EventServer);
 		delete MouseListener;
@@ -544,19 +559,19 @@ void loopLogin()
 #endif
 	// todo: login screen, move this stuff to a button or something
 	displayLoadingState("Login");
-	if (ConfigFile.getVar("Local").asInt() == 0)
+	if (ConfigFile->getVar("Local").asInt() == 0)
 	{
-		if (ConfigFile.getVar("UseDirectClient").asInt() == 1)
+		if (ConfigFile->getVar("UseDirectClient").asInt() == 1)
 		{
 			string result;
-			string LSHost(ConfigFile.getVar("LSHost").asString());
-			Login = ConfigFile.getVar("Login").asString();
-			ucstring Password = ConfigFile.getVar("Password").asString();
+			string LSHost(ConfigFile->getVar("LSHost").asString());
+			Login = ConfigFile->getVar("Login").asString();
+			ucstring Password = ConfigFile->getVar("Password").asString();
 			CHashKeyMD5 hk = getMD5((uint8*)Password.c_str(), Password.size());
 			string CPassword = hk.toString();
 			nlinfo("The crypted password is %s", CPassword.c_str());
-			string Application = ConfigFile.getVar("ClientApplication").asString();
-			sint32 sid = ConfigFile.getVar("ShardId").asInt();
+			string Application = ConfigFile->getVar("ClientApplication").asString();
+			sint32 sid = ConfigFile->getVar("ShardId").asInt();
 
 			// 1/ Authenticate
 			updateLoadingState(ucstring("Authenticate"), false, false);
@@ -629,7 +644,7 @@ void loopIngame()
 		// -> then update stuffs linked to the camera(snow, sky, lens flare etc.)
 		MouseListener->updateCamera();
 		updateCamera();		
-		updateLandscape(); // Update the landscape
+		LandscapeComponent->update(); // Update the landscape
 #ifdef NL_OS_WINDOWS
 		updateSound(); // Update the sound
 #endif
@@ -764,38 +779,8 @@ void renderInformation()
 
 void cbGraphicsDriver(CConfigFile::CVar &var)
 {
+	// -- give ingame warning or something instead =)
 	NextGameState = GameStateReset;
-}
-
-//
-// Main
-//
-
-#ifdef NL_OS_WINDOWS
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdline, int nCmdShow)
-#else
-int main(int argc, char **argv)
-#endif
-{
-	// use log.log if NEL_LOG_IN_FILE defined as 1
-	createDebug(NULL, true, false);
-
-	// create snowballs_client.log
-	// filedisplayer only deletes the 001 etc
-	if (CFile::isExists("snowballs_client.log"))
-		CFile::deleteFile("snowballs_client.log");
-	// initialize the log file
-	FileDisplayer.setParam("snowballs_client.log", true);
-	DebugLog->addDisplayer(&FileDisplayer);
-	InfoLog->addDisplayer(&FileDisplayer);
-	WarningLog->addDisplayer(&FileDisplayer);
-	AssertLog->addDisplayer(&FileDisplayer);
-	ErrorLog->addDisplayer(&FileDisplayer);
-
-	nlinfo("Starting Snowballs!");
-	switchGameState();
-	nlinfo("See you later!");
-	return EXIT_SUCCESS;
 }
 
 //

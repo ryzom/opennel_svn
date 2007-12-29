@@ -50,7 +50,7 @@ namespace NL3D
 // External variables
 //
 
-extern NLMISC::CConfigFile		 ConfigFile;
+extern NLMISC::CConfigFile		 *ConfigFile;
 
 extern NL3D::UDriver			*Driver;
 extern NL3D::UScene				*Scene;

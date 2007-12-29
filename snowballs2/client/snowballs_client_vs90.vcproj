@@ -640,6 +640,22 @@
 				Name="reusable_classes"
 				>
 				<File
+					RelativePath=".\src\component.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\component.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\component_manager.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\component_manager.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\music_playlist_manager.cpp"
 					>
 				</File>
@@ -657,8 +673,56 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="game_tasks"
+				Name="game_components"
 				>
+			</Filter>
+			<Filter
+				Name="game_core"
+				>
+				<File
+					RelativePath=".\src\snowballs_client.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\snowballs_client.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\snowballs_config.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="game_commands"
+				>
+			</Filter>
+			<Filter
+				Name="reusable_components"
+				>
+				<File
+					RelativePath=".\src\empty_component.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\empty_component.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\landscape_component.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\landscape_component.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\music_component.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\music_component.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>

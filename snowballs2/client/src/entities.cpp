@@ -837,18 +837,18 @@ void cbUpdateEntities (CConfigFile::CVar &var)
 
 void initEntities()
 {
-	ConfigFile.setCallback ("EntityNameColor", cbUpdateEntities);
-	ConfigFile.setCallback ("EntityNameSize", cbUpdateEntities);
+	ConfigFile->setCallback ("EntityNameColor", cbUpdateEntities);
+	ConfigFile->setCallback ("EntityNameSize", cbUpdateEntities);
 
-	cbUpdateEntities (ConfigFile.getVar ("EntityNameColor"));
-	cbUpdateEntities (ConfigFile.getVar ("EntityNameSize"));
+	cbUpdateEntities (ConfigFile->getVar ("EntityNameColor"));
+	cbUpdateEntities (ConfigFile->getVar ("EntityNameSize"));
 }
 
 void releaseEntities()
 {
 	// Remove config file callbacks
-	ConfigFile.setCallback("EntityNameColor", NULL);
-	ConfigFile.setCallback("EntityNameSize", NULL);
+	ConfigFile->setCallback("EntityNameColor", NULL);
+	ConfigFile->setCallback("EntityNameSize", NULL);
 
 	// Delete all entities (should already have been called normally)
 	deleteAllEntities();
@@ -938,7 +938,7 @@ NLMISC_COMMAND(add_entity,"add a local entity","<nb_entities> <auto_update>")
 	for (uint i = 0; i < nb ; i++)
 	{
 		uint32 eid = NextEID++;
-		CVector start(ConfigFile.getVar("StartPoint").asFloat(0), ConfigFile.getVar("StartPoint").asFloat(1), ConfigFile.getVar("StartPoint").asFloat(2));
+		CVector start(ConfigFile->getVar("StartPoint").asFloat(0), ConfigFile->getVar("StartPoint").asFloat(1), ConfigFile->getVar("StartPoint").asFloat(2));
 		addEntity (eid, "Entity"+toString(eid), CEntity::Other, start, start);
 		EIT eit = findEntity (eid);
 		(*eit).second.AutoMove = atoi(args[1].c_str()) == 1;

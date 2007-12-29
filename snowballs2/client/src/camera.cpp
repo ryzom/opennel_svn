@@ -81,9 +81,9 @@ void	initCamera()
 	Camera = Scene->getCam();
 	Camera.setTransformMode (UTransformable::DirectMatrix);
 	Camera.setPerspective ((float)Pi/2.f, 1.33f, 0.1f, 1000);
-	Camera.lookAt (CVector(ConfigFile.getVar("StartPoint").asFloat(0),
-							ConfigFile.getVar("StartPoint").asFloat(1),
-							ConfigFile.getVar("StartPoint").asFloat(2)),
+	Camera.lookAt (CVector(ConfigFile->getVar("StartPoint").asFloat(0),
+							ConfigFile->getVar("StartPoint").asFloat(1),
+							ConfigFile->getVar("StartPoint").asFloat(2)),
 							CVectorD (0,0,0));
 
 	CamCollisionEntity = VisualCollisionManager->createEntity();
