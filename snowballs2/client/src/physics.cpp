@@ -36,6 +36,8 @@
 using namespace std;
 using namespace NLMISC;
 
+// -- -- this file exists twice
+
 CVector	CTrajectory::eval(NLMISC::TTime t) const
 {
 	if (t < _StartTime) return _StartPosition;

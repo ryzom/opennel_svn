@@ -58,6 +58,8 @@ using namespace NLMISC;
 using namespace NLNET;
 using namespace NL3D;
 
+// -- -- random note: most of this needs to change completely anyway
+
 //
 // Variables
 //

@@ -98,6 +98,8 @@ void	initCamera()
 	// Setup the sky scene
 	//
 
+	// -- -- not sure what the sky has to do with the camera
+
 	SkyScene = Driver->createScene(false);
 
 	SkyCamera = SkyScene->getCam ();
@@ -128,6 +130,8 @@ void updateCamera()
 
 void initSky()
 {
+	// -- -- or what the clouds have to do with the sky
+
 	SCloudScapeSetup css;
 	Clouds = Scene->createCloudScape ();
 	Clouds->init (&css);
@@ -140,6 +144,7 @@ void releaseSky()
 	Scene->deleteCloudScape(Clouds);
 }
 
+// -- -- random note: update and render makes more sense than animate and update
 void animateSky(TTime dt)
 {
 	Clouds->anim ((double)dt);

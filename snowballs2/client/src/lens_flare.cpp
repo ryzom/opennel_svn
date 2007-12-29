@@ -82,6 +82,7 @@ class CLensFlare
 		
 		_CFlare(NL3D::UTexture *texture, float width, float height, float location, float scale)
 		{
+			// -- -- nicely re-usable class, but why should it know about the snowballs specific driver global
 			Material = Driver->createMaterial ();
 			Material.initUnlit ();
 			Material.setTexture (texture);
@@ -121,6 +122,7 @@ public:
 		_AlphaCoef = coef;
 	}
 
+	// -- -- random note: show actually shows and is used within update
 	/// lens flare display function
 	void show();
 };
@@ -211,6 +213,8 @@ static UTextureFile *flareTexture7 = NULL;
 
 void initLensFlare ()
 {
+	// -- -- getting this from a config file would be more re-usable
+
 	LensFlare = new CLensFlare ();
 
 	flareTexture1 = Driver->createTextureFile("flare01.tga");
@@ -240,6 +244,9 @@ void initLensFlare ()
 
 void updateLensFlare ()
 {
+	// -- -- todo: see how much of this can be modified to depend on nel 
+	//       things only, and moved into the lensflare class
+
 	// vector to sun
 	//==============
 	CVector userLook = MouseListener->getViewDirection ();
@@ -272,13 +279,13 @@ void updateLensFlare ()
 	tmp = Camera.getFrustum().project(tmp);
 	uint32	w,h;
 	Driver->getWindowSize(w,h);
-	float sunRadius = 24;
+	float sunRadius = 24; // -- -- why 24
 	CRect rect((uint32)(tmp.x*w)-(uint32)sunRadius,(uint32)(tmp.y*h)-(uint32)sunRadius,2*(uint32)sunRadius,2*(uint32)sunRadius);
 	vector<float> zbuff;
 	Driver->getZBufferPart(zbuff, rect);
 	float view = 0.f;
 	float sum = 0;
-	sint i;
+	sint i; // -- -- signed?
 	for(i=0; i<(sint)zbuff.size(); i++)
 	{
 		if(zbuff[i]>=0.99999f) sum ++;

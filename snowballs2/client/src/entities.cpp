@@ -125,7 +125,8 @@ EIT findEntity (uint32 eid, bool needAssert)
 	return entity;
 }
 
-
+// -- -- things like Creature, Effect, Scenery seem more flexible than Self, Other, Snowball
+// -- -- random keywords: entitybehavior (animations), entityinteraction (targetable, menu, )
 // Creates an entity, given its id, its type (Self, Other, Snowball), its start and server positions.
 void addEntity (uint32 eid, std::string name, CEntity::TType type, const CVector &startPosition, const CVector &serverPosition)
 {
@@ -242,6 +243,7 @@ void addEntity (uint32 eid, std::string name, CEntity::TType type, const CVector
 		entity.Skeleton = NULL;
 		entity.Speed = SnowballSpeed;
 
+		// -- -- riiiiight
 #ifdef NL_OS_WINDOWS
 		playSound (entity, SoundId);
 #endif
@@ -444,6 +446,8 @@ void stateNormal (CEntity &entity)
 	CVector	pDeltaOri = pDelta;
 	pDelta.z = 0.0f;
 
+	// -- -- simple random bots =)  share with server
+
 	// find a new random server position
 	if (entity.Type == CEntity::Other && entity.AutoMove)
 	{
@@ -618,6 +622,9 @@ void stateNormal (CEntity &entity)
 	else if (entity.Type == CEntity::Other)
 	{
 		// go to the server position with linear interpolation
+		// -- -- useful for speed limiting on frontend service
+		// -- -- random note: also, get rid of the position service, 
+		//       and move the snowball physics to a more useful service
 
 		// Interpolate orientation for smoother motions
 		// AuxiliaryAngle -> the server imposed angle

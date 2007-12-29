@@ -152,7 +152,7 @@ bool CCollisionService::update()
 			// plus the entity's height or radius, twice (using Retry).
 			float allowedDifference = entity.Distance * 0.5f;
 			bool move = false;
-			if (abs(entity.NewClientPosition.z - serverPosition.z) > entity.MovePrimitive->getHeight() + allowedDifference)
+			if (abs(entity.NewClientPosition.z - serverPosition.z) > 1.0f + allowedDifference)
 			{
 				move = true;
 			}

@@ -88,9 +88,12 @@ void	initPACS()
 
 	// create a visual collision manager
 	// this should not be in pacs, but this is too close to pacs to be put elsewhere
+	// -- -- put it elsewhere anyways, this code can be made re-usable 
+	//       to share between the client and the collision service.
 	VisualCollisionManager = Scene->createVisualCollisionManager();
 	VisualCollisionManager->setLandscape(Landscape);
 
+	// -- -- move this to snowballs specific game task
 	// create a move primitive for each instance in the instance group
 	uint	i, j;
 	for (j=0; j<InstanceGroups.size(); ++j)
@@ -109,6 +112,7 @@ void	initPACS()
 			string	name = InstanceGroups[j]->getShapeName(i);
 			float rad;
 
+			// -- -- improve this
 			     if (strlwr(name) == "pi_po_igloo_a")		rad = 4.5f;
 			else if (strlwr(name) == "pi_po_snowman_a")		rad = 1.0f;
 			else if (strlwr(name) == "pi_po_pinetree_a")	rad = 2.0f;

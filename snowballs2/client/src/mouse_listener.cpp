@@ -66,6 +66,13 @@ static float GroundCamLimit = 0.5f;
 
 C3dMouseListener::C3dMouseListener()
 {
+	// -- -- a mouse listener that can aim at the ground with a shape
+	//       and does a bunch of other random things that should be
+	//       done by something else, really
+
+	// -- -- half of this thing has to be split up into a
+	//       CKeyboardControlledMovePrimitive or something
+
 	_Matrix.identity();
 	_ModelMatrix.identity() ;
 	_EnableModelMatrixEdition = false ;
@@ -96,6 +103,10 @@ C3dMouseListener::C3dMouseListener()
 
 C3dMouseListener::~C3dMouseListener()
 {
+	// -- -- doesn't need to know about the snowballs specific global, 
+	//       scene shout be passed at construction to create aiming instance
+	// -- -- random note: aiminginstance here and aimingentity in landscape.cpp ...
+	//       one of them obviously is in the wrong place
 	Scene->deleteInstance(_AimingInstance);
 }
 
@@ -222,6 +233,8 @@ void C3dMouseListener::update()
 	// CVector
 	CVector dir (0,0,0);
 	bool find=false;
+
+	// -- -- what does the mouse listener have to do with the keyboard?!
 
 	// Key pushed ?
 	if (_AsyncListener.isKeyDown (KeyUP))
