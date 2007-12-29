@@ -88,7 +88,7 @@ void	initPACS()
 
 	// create a visual collision manager
 	// this should not be in pacs, but this is too close to pacs to be put elsewhere
-	// -- -- put it elsewhere anyways, this code can be made re-usable 
+	// -- -- put it elsewhere anyways, the other code in this page can be made re-usable 
 	//       to share between the client and the collision service.
 	VisualCollisionManager = Scene->createVisualCollisionManager();
 	VisualCollisionManager->setLandscape(Landscape);
