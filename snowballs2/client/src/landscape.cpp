@@ -93,13 +93,32 @@ void cbUpdateLandscape (CConfigFile::CVar &var)
 {
 	// -- -- split this whole thing up, lol
 
-	if (var.Name == "FogStart") Driver->setupFog (var.asFloat (), ConfigFile->getVar ("FogEnd").asFloat (), CRGBA(ConfigFile->getVar ("FogColor").asInt (0), ConfigFile->getVar ("FogColor").asInt (1), ConfigFile->getVar ("FogColor").asInt (2)));
-	else if (var.Name == "FogEnd") Driver->setupFog (ConfigFile->getVar ("FogStart").asFloat (), var.asFloat (), CRGBA(ConfigFile->getVar ("FogColor").asInt (0), ConfigFile->getVar ("FogColor").asInt (1), ConfigFile->getVar ("FogColor").asInt (2)));
-	else if (var.Name == "FogColor") Driver->setupFog (ConfigFile->getVar ("FogStart").asFloat (), ConfigFile->getVar ("FogEnd").asFloat (), CRGBA(var.asInt (0), var.asInt (1), var.asInt (2)));
+	if (var.Name == "FogStart") 
+		Driver->setupFog (var.asFloat (), 
+		ConfigFile->getVar ("FogEnd").asFloat (), 
+		CRGBA(ConfigFile->getVar ("FogColor").asInt (0), 
+		ConfigFile->getVar ("FogColor").asInt (1),
+		ConfigFile->getVar ("FogColor").asInt (2)));
+	else if (var.Name == "FogEnd") 
+		Driver->setupFog (ConfigFile->getVar ("FogStart").asFloat (), 
+		var.asFloat (), 
+		CRGBA(ConfigFile->getVar ("FogColor").asInt (0), 
+		ConfigFile->getVar ("FogColor").asInt (1),
+		ConfigFile->getVar ("FogColor").asInt (2)));
+	else if (var.Name == "FogColor")
+		Driver->setupFog(
+		ConfigFile->getVar ("FogStart").asFloat (), 
+		ConfigFile->getVar ("FogEnd").asFloat (), 
+		CRGBA(var.asInt (0), var.asInt (1), var.asInt (2)));
 	else if (var.Name == "FogEnable")
 	{
-		Driver->enableFog (var.asInt () == 1);
-		Driver->setupFog (ConfigFile->getVar ("FogStart").asFloat (), ConfigFile->getVar ("FogStart").asFloat (), CRGBA(ConfigFile->getVar ("FogColor").asInt (0), ConfigFile->getVar ("FogColor").asInt (1), ConfigFile->getVar ("FogColor").asInt (2)));
+		Driver->enableFog(var.asBool());
+		Driver->setupFog(
+			ConfigFile->getVar("FogStart").asFloat(), 
+			ConfigFile->getVar("FogEnd").asFloat(),
+			CRGBA(ConfigFile->getVar("FogColor").asInt(0), 
+			ConfigFile->getVar ("FogColor").asInt(1), 
+			ConfigFile->getVar ("FogColor").asInt(2)));
 	}
 	else if (var.Name == "SunAmbientColor")
 	{
@@ -343,3 +362,16 @@ CVector	getTarget(const CVector &start, const CVector &step, uint numSteps)
 //	}
 //	return true;
 //}
+
+
+NLMISC_COMMAND(add_ig, "add instance group", "name")
+{
+	if (args.size() != 1 ) return false;
+	UInstanceGroup *inst = UInstanceGroup::createInstanceGroup(args[0]);
+	if (inst == NULL) nlwarning("Instance group '%s' not found", args[0].c_str());
+	else
+	{
+		inst->addToScene(*Scene);
+		InstanceGroups.push_back(inst);
+	}
+}

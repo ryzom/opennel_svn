@@ -886,7 +886,7 @@ void displayLoadingState(ucstring state)
 	DiffTime = NewTime - LastTime;
 	renderLoadingState(state, false);
 	Driver->swapBuffers();
-	Driver->EventServer.pump();
+	//Driver->EventServer.pump();
 }
 
 void updateLoadingState(char *state, bool network, bool information)

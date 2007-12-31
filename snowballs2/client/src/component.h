@@ -67,6 +67,7 @@ public:
 	static IComponent *getInstancePtr(const std::string &instanceId);
 protected:
 	void registerConfigCallback(const std::string &varName);
+	void registerAndCallConfigCallback(const std::string &varName);
 	void unregisterConfigCallback(const std::string &varName);
 	virtual void config(const std::string &varName, NLMISC::CConfigFile::CVar &var) { }
 	static void _config(NLMISC::CConfigFile::CVar &var);

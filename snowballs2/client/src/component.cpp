@@ -72,6 +72,12 @@ void IComponent::registerConfigCallback(const string &varName)
 	_Config.setCallback(varName, _config);
 }
 
+void IComponent::registerAndCallConfigCallback(const string &varName)
+{
+	registerConfigCallback(varName);
+	config(varName);
+}
+
 void IComponent::unregisterConfigCallback(const string &varName)
 {
 	_Config.setCallback(varName, NULL);

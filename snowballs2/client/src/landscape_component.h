@@ -46,7 +46,8 @@ protected:
 	NL3D::UScene *_Scene; // get in constructor
 	
 	// instances
-	// ...
+	float _cfgVision;
+	float _cfgVisionInitial;
 public:	
 	/// Basic constructor of a component.
 	/// Requires a pointer to the componentmanager and a unique name.

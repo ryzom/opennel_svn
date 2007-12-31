@@ -51,6 +51,10 @@ CLandscapeComponent::CLandscapeComponent(
 	_Landscape->loadBankFiles(
 		CPath::lookup(_Config.getVar("BankName").asString()), 
 		CPath::lookup(_Config.getVar("FarBankName").asString()));
+	_Landscape->invalidateAllTiles();
+
+	// _Landscape->postfixTileFilename("_au");
+	// _Landscape->postfixTileVegetableDesc("_au");
 
 	// -- -- this doesn't do anything useful
 	//////// setup the zone path
@@ -77,11 +81,11 @@ CLandscapeComponent::CLandscapeComponent(
 		diffuse, ambient,
 		_Config.getVar("MultiplyFactor").asFloat());
 
-	// Enable the landscape to receive dynamic shadows.
-	_Landscape->enableReceiveShadowMap(true);
-
-	registerConfigCallback("TileNear"); IComponent::config("TileNear");
-	registerConfigCallback("Threshold"); IComponent::config("Threshold");
+	registerAndCallConfigCallback("ReceiveShadowMap");
+	registerAndCallConfigCallback("TileNear");
+	registerAndCallConfigCallback("Threshold");
+	registerAndCallConfigCallback("Vision");
+	registerAndCallConfigCallback("VisionInitial");
 }
 
 CLandscapeComponent::~CLandscapeComponent()
@@ -99,11 +103,12 @@ void CLandscapeComponent::update()
 	// -- -- no need to go to snowballs mouse listener, can probly get this 
 	//       from a NL3D::UCamera, NLPACS::UMovePrimitive or NL3D::UInstance too.
 	// -- -- random note: make a CControllableMovePrimitiveEntityInstance or something
+	// -- -- should get the player position and not the camera position,
+	//       most optimal for camera rotating around player.
 
 	// load the zones around the viewpoint
 	_Landscape->refreshZonesAround(
-		_Scene->getCam().getMatrix().getPos(), 
-		_Config.getValue("ViewDistance", 1000.0f));
+		_Scene->getCam().getMatrix().getPos(), _cfgVision);
 	//_Landscape->refreshZonesAround(MouseListener->getViewMatrix().getPos(), 1000.0f);
 }
 
@@ -114,22 +119,28 @@ void CLandscapeComponent::render()
 
 void CLandscapeComponent::config(const string &varName, CConfigFile::CVar &var)
 {
-	if (varName == "TileNear")
-	{
+	if (varName == "TileNear") 
 		_Landscape->setTileNear(var.asFloat());
-	}
-	else if (varName == "Threshold")
-	{
+
+	else if (varName == "Threshold") 
 		_Landscape->setThreshold(var.asFloat());
-	}
+
+	else if (varName == "Vision") 
+		_cfgVision = var.asFloat();
+
+	else if (varName == "VisionInitial") 
+		_cfgVisionInitial = var.asFloat();
+
+	else if (varName == "ReceiveShadowMap")
+		_Landscape->enableReceiveShadowMap(var.asBool());
+
 	else nlwarning("Unknown variable update %s", var.Name.c_str());
 }
 
 void CLandscapeComponent::loadAllZonesAround()
 {
 	_Landscape->loadAllZonesAround(
-		_Scene->getCam().getMatrix().getPos(), 
-		_Config.getValue("ViewDistance", 1000.0f));
+		_Scene->getCam().getMatrix().getPos(), _cfgVisionInitial);
 }
 
 }
