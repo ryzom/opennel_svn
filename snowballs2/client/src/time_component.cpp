@@ -32,7 +32,7 @@ CTimeComponent::CTimeComponent(
 : IComponent(manager, instanceId), 
   GameTime(0.0), ServerTime(0.0), GameCycle(0), 
   LocalTimeDelta(0.0), ServerTimeDelta(0.0), GameTimeDelta(0.0), 
-  FramesPerSecond(0), _SecondsPerCycle(0.0), _GameTimePerCycle(0.0),
+  FramesPerSecond(0.0f), _SecondsPerCycle(0.0), _GameTimePerCycle(0.0),
   _GameTimePerSecond(0.0), _CyclesPerUpdate(0), _LastCycleUpdate(0.0),
   _GameCycle(0.0), _NewGameCycle(0)
 {
@@ -56,9 +56,9 @@ void CTimeComponent::update()
 	// if the game cycle went up
 	if (_NewGameCycle > GameCycle)
 	{
-		TGameCycle gameCycles = _NewGameCycle - GameCycle;
+		TGameCycle gameCycles = _NewGameCycle - (TGameCycle)_GameCycle;
 		GameCycle = _NewGameCycle;
-		_SecondsPerCycle = (_LastCycleUpdate - LocalTime) / (TLocalTime)gameCycles;
+		_SecondsPerCycle = (LocalTime - _LastCycleUpdate) / (TLocalTime)gameCycles;
 		_LastCycleUpdate = LocalTime;
 	}
 
@@ -89,7 +89,7 @@ void CTimeComponent::config(const string &varName, CConfigFile::CVar &var)
 	
 }
 
-void CTimeComponent::setGameCycle(TGameCycle gameCycle, TLocalTime secondsPerCycle, TGameTime gameTimePerSecond,  TGameCycle cyclesPerUpdate)
+void CTimeComponent::setGameCycle(TGameCycle gameCycle, TLocalTime secondsPerCycle, TGameTime gameTimePerSecond, TGameCycle cyclesPerUpdate)
 {
 	_GameCycle = (double)gameCycle;
 	GameCycle = gameCycle;
