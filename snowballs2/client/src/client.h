@@ -59,7 +59,7 @@ extern C3dMouseListener			*MouseListener;
 
 extern NLMISC::TTime			 LastTime, NewTime, DiffTime;
 
-extern ucstring				     Login;
+//extern ucstring				     Login;
 
 #endif // CLIENT_H
 

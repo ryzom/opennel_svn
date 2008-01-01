@@ -637,7 +637,7 @@
 			Name="snowballs3"
 			>
 			<Filter
-				Name="reusable_classes"
+				Name="classes"
 				>
 				<File
 					RelativePath=".\src\component.cpp"
@@ -681,11 +681,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="game_components"
-				>
-			</Filter>
-			<Filter
-				Name="game_core"
+				Name="core"
 				>
 				<File
 					RelativePath=".\src\snowballs_client.cpp"
@@ -701,11 +697,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="game_commands"
-				>
-			</Filter>
-			<Filter
-				Name="reusable_components"
+				Name="components"
 				>
 				<File
 					RelativePath=".\src\driver_component.cpp"
@@ -737,6 +729,22 @@
 				</File>
 				<File
 					RelativePath=".\src\music_component.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\time_component.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\time_component.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\weather_component.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\weather_component.h"
 					>
 				</File>
 			</Filter>

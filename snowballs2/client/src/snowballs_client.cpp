@@ -206,6 +206,86 @@ void CSnowballsClient::disableCore()
 	}
 }
 
+void CSnowballsClient::enableLogin()
+{
+	if (!_HasLogin)
+	{		
+		_HasLogin = true;
+
+		// ...
+	}
+}
+
+void CSnowballsClient::disableLogin()
+{
+	if (_HasLogin)
+	{
+		// ...
+		
+		_HasLogin = false;
+	}
+}
+
+void CSnowballsClient::enableIngame()
+{
+	if (!_HasIngame)
+	{		
+		_HasIngame = true;
+
+		// ...
+	}
+}
+
+void CSnowballsClient::disableIngame()
+{
+	if (_HasIngame)
+	{
+		// ...
+		
+		_HasIngame = false;
+	}
+}
+
+void CSnowballsClient::enableOnline()
+{
+	if (!_HasOnline)
+	{		
+		_HasOnline = true;
+
+		// ...
+	}
+}
+
+void CSnowballsClient::disableOnline()
+{
+	if (_HasOnline)
+	{
+		// ...
+		
+		_HasOnline = false;
+	}
+}
+
+void CSnowballsClient::enableOffline()
+{
+	if (!_HasOffline)
+	{		
+		_HasOffline = true;
+
+		// ...
+	}
+}
+
+void CSnowballsClient::disableOffline()
+{
+	if (_HasOffline)
+	{
+		// ...
+		
+		_HasOffline = false;
+	}
+}
+
 void CSnowballsClient::disableAll()
 {
 	disableOnline();

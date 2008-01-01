@@ -92,14 +92,14 @@ static void cbAddEntity (CMessage &msgin, TSockId from, CCallbackNetBase &netbas
 
 	nlinfo ("New player named '%s' comes in at position (%8.2f, %8.2f, %8.2f)", name.c_str(), startPosition.x, startPosition.y, startPosition.z);
 
-	if (Self == NULL && name == Login.toUtf8())
-	{
-		addEntity(id, name, CEntity::Self, startPosition, startPosition);
-	}
-	else
-	{
-		addEntity(id, name, CEntity::Other, startPosition, startPosition);
-	}
+	//if (Self == NULL && name == Login.toUtf8())
+	//{
+	//	addEntity(id, name, CEntity::Self, startPosition, startPosition);
+	//}
+	//else
+	//{
+	//	addEntity(id, name, CEntity::Other, startPosition, startPosition);
+	//}
 }
 
 static void cbRemoveEntity (CMessage &msgin, TSockId from, CCallbackNetBase &netbase)
@@ -250,8 +250,8 @@ static void cbIdentification (CMessage &msgin, TSockId from, CCallbackNetBase &n
 //	}
 
 	// send to the network my entity
-	std::string login_name(Login.toUtf8());
-	sendAddEntity(id, login_name, 1);
+	/*std::string login_name(Login.toUtf8());
+	sendAddEntity(id, login_name, 1);*/
 }
 
 // Array that contains all callback that could comes from the server

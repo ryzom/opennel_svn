@@ -322,16 +322,16 @@ void initOffline()
 //#endif
 
 		uint32 id = NextEID++;
-		Login = ucstring("Entity" + toString(id));
+		//Login = ucstring("Entity" + toString(id));
 
 		// Creates the self entity
-		displayLoadingState("Creating offline entity");
-		addEntity(id, Login.toUtf8(), CEntity::Self, CVector(ConfigFile->getVar("StartPoint").asFloat(0),
-													 ConfigFile->getVar("StartPoint").asFloat(1),
-													 ConfigFile->getVar("StartPoint").asFloat(2)),
-											 CVector(ConfigFile->getVar("StartPoint").asFloat(0),
-													 ConfigFile->getVar("StartPoint").asFloat(1),
-													 ConfigFile->getVar("StartPoint").asFloat(2)));
+		//displayLoadingState("Creating offline entity");
+		//addEntity(id, Login.toUtf8(), CEntity::Self, CVector(ConfigFile->getVar("StartPoint").asFloat(0),
+		//											 ConfigFile->getVar("StartPoint").asFloat(1),
+		//											 ConfigFile->getVar("StartPoint").asFloat(2)),
+		//									 CVector(ConfigFile->getVar("StartPoint").asFloat(0),
+		//											 ConfigFile->getVar("StartPoint").asFloat(1),
+		//											 ConfigFile->getVar("StartPoint").asFloat(2)));
 
 		displayLoadingState("Load Landscape");
 		LandscapeComponent->loadAllZonesAround();
@@ -452,7 +452,7 @@ void loopLogin()
 		{
 			string result;
 			string LSHost(ConfigFile->getVar("LSHost").asString());
-			Login = ConfigFile->getVar("Login").asString();
+			//Login = ConfigFile->getVar("Login").asString();
 			ucstring Password = ConfigFile->getVar("Password").asString();
 			CHashKeyMD5 hk = getMD5((uint8*)Password.c_str(), Password.size());
 			string CPassword = hk.toString();
@@ -462,7 +462,7 @@ void loopLogin()
 
 			// 1/ Authenticate
 			updateLoadingState(ucstring("Authenticate"), false, false);
-			result = CLoginClient::authenticateBegin(LSHost, Login, CPassword, Application);
+			//result = CLoginClient::authenticateBegin(LSHost, Login, CPassword, Application);
 			if (!result.empty()) goto AuthenticateFail;
 			while (CLoginClient::authenticateUpdate(result))
 				updateLoadingState(ucstring("Authenticate"), false, false);
