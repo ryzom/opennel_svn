@@ -50,9 +50,7 @@ protected:
 public:	
 	/// Basic constructor of a component.
 	/// Requires a pointer to the componentmanager and a unique name.
-	CLandscapeComponent(
-		CComponentManager *manager, const std::string &instanceId, 
-		NL3D::UScene *scene);
+	CLandscapeComponent(CComponentManager *manager, const std::string &instanceId, NLMISC::IProgressCallback &progressCallback);
 	~CLandscapeComponent();
 
 	void update();

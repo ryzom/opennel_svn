@@ -24,6 +24,8 @@
 #include <nel/misc/types_nl.h>
 #include "snowballs_config.h"
 
+#include "loading_screen.h"
+
 namespace NLMISC {
 	class CFileDisplayer;
 	class CConfigFile;
@@ -35,7 +37,8 @@ namespace NL3D {
 
 namespace SBCLIENT {
 	class CComponentManager;
-	class CLoadingScreen;
+	class CDriverComponent;
+
 /**
  * Snowballs client 0.3.
  * \date 2007-2008
@@ -53,13 +56,13 @@ private:
 #endif
 	CComponentManager *_ComponentManager; // deleted here
 	NLMISC::CConfigFile *_ConfigFile; // deleted here
-	CLoadingScreen *_LoadingScreen; // deleted here
 
-	// CDriverComponent // deleted here
-
-	NL3D::UDriver *_Driver; // not deleted here
+	CDriverComponent *_DriverComponent; // temp, deleted here
+	NL3D::UDriver *_Driver; // not deleted here, get from component on reg
 	
 	// instances
+	// the loading screen that always works
+	CLoadingScreen _LoadingScreen;
 	// to know which data has been loaded
 	bool _HasCore, _HasLogin, _HasIngame, _HasOnline, _HasOffline;
 	// true if the online component needs to be initialized

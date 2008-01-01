@@ -44,7 +44,7 @@ protected:
 public:	
 	/// Basic constructor of a component.
 	/// Requires a pointer to the componentmanager and a unique name.
-	CWeatherComponent(CComponentManager *manager, const std::string &instanceId);
+	CWeatherComponent(CComponentManager *manager, const std::string &instanceId, NLMISC::IProgressCallback &progressCallback);
 	~CWeatherComponent();
 
 	void update();

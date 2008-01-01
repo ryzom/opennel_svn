@@ -27,9 +27,9 @@ using namespace NLMISC;
 
 namespace SBCLIENT {
 
-CTimeComponent::CTimeComponent(
-	CComponentManager *manager, const string &instanceId)
-: IComponent(manager, instanceId), 
+CTimeComponent::CTimeComponent(CComponentManager *manager, 
+	const string &instanceId, IProgressCallback &progressCallback)
+: IComponent(manager, instanceId, progressCallback), 
   GameTime(0.0), ServerTime(0.0), GameCycle(0), 
   LocalTimeDelta(0.0), ServerTimeDelta(0.0), GameTimeDelta(0.0), 
   FramesPerSecond(0.0f), _SecondsPerCycle(0.0), _GameTimePerCycle(0.0),

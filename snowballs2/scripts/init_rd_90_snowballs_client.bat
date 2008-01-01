@@ -1,5 +1,5 @@
 cd ..
 cd ..
 cd snowballs2
-cd bin
+cd client
 start snowballs_client_rd

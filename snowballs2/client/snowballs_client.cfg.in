@@ -1,0 +1,16 @@
+RootConfigFilename   = "snowballs_client_default.cfg";
+DataPath             = { "@database@" };
+SoundEnabled         = 0;
+SoundDriver          = "OpenAl";
+OpenGL               = 1;
+Local                = 0;
+UseDirectClient      = 1;
+ClientApplication    = "sample";
+Login                = "login";
+Password             = "password";
+LSHost               = "localhost";
+ShardId              = 300;
+ScreenWidth          = 1024;
+ScreenHeight         = 768;
+CommandsNbLines      = 18;
+SaveConfig           = 1;

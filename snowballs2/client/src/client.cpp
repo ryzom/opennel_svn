@@ -177,19 +177,19 @@ void initCore()
 		// Set the ShowCommands with the value set in the client config file
 		ShowCommands = ConfigFile->getVar("ShowCommands").asInt() == 1;
 		// Create a driver	
-		Driver = UDriver::createDriver(0, ConfigFile->getVar("OpenGL").asInt() == 0);
-		// Create the window with config file values
-		Driver->setDisplay(UDriver::CMode(ConfigFile->getVar("ScreenWidth").asInt(), 
-			ConfigFile->getVar("ScreenHeight").asInt(),
-			ConfigFile->getVar("ScreenDepth").asInt(),
-			ConfigFile->getVar("ScreenFull").asInt()==0));
-		// Set the cache size for the font manager(in bytes)
-		Driver->setFontManagerMaxMemory(2097152);
+		////Driver = UDriver::createDriver(0, ConfigFile->getVar("OpenGL").asInt() == 0);
+		////// Create the window with config file values
+		////Driver->setDisplay(UDriver::CMode(ConfigFile->getVar("ScreenWidth").asInt(), 
+		////	ConfigFile->getVar("ScreenHeight").asInt(),
+		////	ConfigFile->getVar("ScreenDepth").asInt(),
+		////	ConfigFile->getVar("ScreenFull").asInt()==0));
+		////// Set the cache size for the font manager(in bytes)
+		////Driver->setFontManagerMaxMemory(2097152);
 		// Create a Text context for later text rendering
-		displayLoadingState("Initialize Text"); 
-		TextContext = Driver->createTextContext(CPath::lookup(ConfigFile->getVar("FontName").asString()));
-		TextContext->setShaded(true);
-		TextContext->setKeep800x600Ratio(false);
+		//////displayLoadingState("Initialize Text"); 
+		//////TextContext = Driver->createTextContext(CPath::lookup(ConfigFile->getVar("FontName").asString()));
+		//////TextContext->setShaded(true);
+		//////TextContext->setKeep800x600Ratio(false);
 		// You can't call displayLoadingState() before init the loading state system
 		displayLoadingState("Initialize Loading");
 		initLoadingState();
@@ -228,8 +228,8 @@ void initIngame()
 		Scene = Driver->createScene(false);
 		// Init the landscape using the previously created UScene
 		displayLoadingState("Initialize Landscape");
-		LandscapeComponent = new CLandscapeComponent(
-			ComponentManager, "Landscape", Scene);
+		////LandscapeComponent = new CLandscapeComponent(
+		////	ComponentManager, "Landscape", Scene);
 		initLandscape();
 		// Init the pacs
 		displayLoadingState("Initialize PACS ");
@@ -365,12 +365,12 @@ void releaseCore()
 		releaseSound();
 #endif
 		// Release the text context
-		Driver->deleteTextContext(TextContext);
-		TextContext = NULL;
-		// Release the 3d driver
-		Driver->release();
-		delete Driver;
-		Driver = NULL;
+		////Driver->deleteTextContext(TextContext);
+		////TextContext = NULL;
+		////// Release the 3d driver
+		////Driver->release();
+		////delete Driver;
+		////Driver = NULL;
 	//}
 }
 
@@ -515,7 +515,7 @@ void loopIngame()
 		animateSky(NewTime-LastTime);
 
 		// Clear all buffers
-		Driver->clearBuffers(CRGBA(0, 0, 0));
+		////////Driver->clearBuffers(CRGBA(0, 0, 0));
 
 		// Update the time counters
 		LastTime = NewTime;
@@ -552,10 +552,10 @@ void loopIngame()
 
 		// Update network messages
 		updateNetwork();
-		// Swap 3d buffers
-		Driver->swapBuffers();
-		// Pump user input messages
-		Driver->EventServer.pump();
+		////////// Swap 3d buffers
+		////////Driver->swapBuffers();
+		////////// Pump user input messages
+		////////Driver->EventServer.pump();
 
 		// Manage the keyboard
 
@@ -628,12 +628,12 @@ void loopIngame()
 		else if (Driver->AsyncListener.isKeyPushed(KeyF12))
 		{
 			// F12 -> take a screenshot
-			CBitmap btm;
-			Driver->getBuffer(btm);
-			string filename = CFile::findNewFile("screenshot.tga");
-			COFile fs(filename);
-			btm.writeTGA(fs,24,false);
-			nlinfo("Screenshot '%s' saved", filename.c_str());
+			//////CBitmap btm;
+			//////Driver->getBuffer(btm);
+			//////string filename = CFile::findNewFile("screenshot.tga");
+			//////COFile fs(filename);
+			//////btm.writeTGA(fs,24,false);
+			//////nlinfo("Screenshot '%s' saved", filename.c_str());
 		}
 		// Check if the config file was modified by another program
 		CConfigFile::checkConfigFiles();

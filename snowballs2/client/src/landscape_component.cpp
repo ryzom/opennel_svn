@@ -36,15 +36,16 @@ extern ULandscape *Landscape; // temp
 
 namespace SBCLIENT {
 
-CLandscapeComponent::CLandscapeComponent(
-	CComponentManager *manager, const string &instanceId,
-	UScene *scene)
-: IComponent(manager, instanceId), _Landscape(NULL), _Scene(scene)
+CLandscapeComponent::CLandscapeComponent(CComponentManager *manager, 
+	const string &instanceId, IProgressCallback &progressCallback)
+: IComponent(manager, instanceId, progressCallback), 
+  _Landscape(NULL), _Scene(NULL)
 {
 	// -- -- start of init for "landscape around camera that gets data from config"
 
 	// create the landscape
-	_Landscape = _Scene->createLandscape();
+	//////_Landscape = _Scene->createLandscape();
+	nlassert(_Scene); // get from scene component (which must be up and running)!
 	Landscape = _Landscape;
 
 	// load the bank files

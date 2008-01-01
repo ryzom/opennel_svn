@@ -1,5 +1,5 @@
 cd ..
 cd ..
 cd nelns
-cd bin
+cd login_service
 start login_service_rd

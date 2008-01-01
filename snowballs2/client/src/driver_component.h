@@ -26,6 +26,7 @@
 
 namespace NL3D {
 	class UDriver;
+	class UTextContext;
 }
 
 namespace SBCLIENT {
@@ -40,21 +41,29 @@ class CDriverComponent : public IComponent
 {
 protected:
 	// pointers
-	NL3D::UDriver *_Driver;
+	NL3D::UDriver *_Driver; // deleted here
+	NL3D::UTextContext *_TextContext; // deleted here, might be moved
 	
 	// instances
 	// ...
 public:	
 	/// Basic constructor of a component.
 	/// Requires a pointer to the componentmanager and a unique name.
-	CDriverComponent(CComponentManager *manager, const std::string &instanceId);
+	CDriverComponent(CComponentManager *manager, const std::string &instanceId, NLMISC::IProgressCallback &progressCallback);
 	~CDriverComponent();
 
 	void update();
 	void render();
 	void config(const std::string &varName, NLMISC::CConfigFile::CVar &var);
 
-	void setWindowTitle(const std::string &title);
+	void setWindowTitle(const ucstring &title);
+	NL3D::UDriver *getDriver() { return _Driver; };
+	NL3D::UTextContext *getTextContext() { return _TextContext; };
+
+	/// Save a screenshot to the screenshot directory.
+	/// A number and the .tga file extension is added to the name.
+	/// Must be called from an update(), don't call within render().
+	void saveScreenshot(const std::string &name, bool jpg);
 };
 
 }

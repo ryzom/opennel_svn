@@ -25,6 +25,7 @@
 #include "component.h"
 
 #include <nel/misc/config_file.h>
+#include <nel/3d/u_driver.h>
 
 using namespace std;
 using namespace NLMISC;
@@ -32,8 +33,9 @@ using namespace NLMISC;
 namespace SBCLIENT {
 
 CComponentManager::CComponentManager(CConfigFile *configFile)
+: _ConfigFile(configFile), _Driver(NULL)
 {
-	ConfigFile = configFile;
+	
 }
 
 CComponentManager::~CComponentManager()
@@ -43,12 +45,26 @@ CComponentManager::~CComponentManager()
 
 void CComponentManager::update()
 {
+	CConfigFile::checkConfigFiles();
+
 	// call all update thingies
+	// they can have render loops inside them (for loading screen etc)
 }
 
 void CComponentManager::render()
 {
-	// call all render thingies
+	if (_Driver->isLost()) nlSleep(10);
+	else
+	{
+		// clear all buffers
+		_Driver->clearBuffers(CRGBA(0, 0, 0, 255));
+
+		// call all render thingies
+		// ...
+
+		// swap 3d buffers
+		_Driver->swapBuffers();
+	}	
 }
 
 void CComponentManager::registerUpdate(IComponent *component)
@@ -69,6 +85,14 @@ void CComponentManager::registerRender(IComponent *component)
 void CComponentManager::unregisterRender(IComponent *component)
 {
 
+}
+
+void CComponentManager::setDriver(NL3D::UDriver *driver)
+{
+	// make sure the driver isn't set yet
+	if (driver) nlassert(!_Driver);
+	// set the driver (it can be set back to NULL)
+	_Driver = driver;
 }
 
 }

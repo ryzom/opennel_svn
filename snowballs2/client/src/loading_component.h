@@ -1,5 +1,5 @@
-/** \file loading_screen.h
- * CLoadingScreen
+/** \file loading_component.h
+ * CLoadingComponent
  * 
  * This file is part of NEVRAX SNOWBALLS.
  * NEVRAX SNOWBALLS is free software; you can redistribute it and/or modify
@@ -19,48 +19,41 @@
  * $Id$
  */
 
-#ifndef SBCLIENT_LOADING_SCREEN_H
-#define SBCLIENT_LOADING_SCREEN_H
+#ifndef SBCLIENT_LOADING_COMPONENT_H
+#define SBCLIENT_LOADING_COMPONENT_H
 #include <nel/misc/types_nl.h>
-#include <nel/misc/progress_callback.h>
-
-namespace NL3D {
-class UDriver;
-class UTextContext;
-}
+#include "component.h"
 
 namespace SBCLIENT {
+	class CComponentManager;
+	class CLoading;
 
 /**
- * Loading screen.
- * \date 2007-2008
+ * Loading screen component.
+ * Gets the loading screen from the IProgressCallback thingy,
+ * and updates it's driver information, etc.
+ * \author Name
+ * \date Year
  */
-class CLoadingScreen : public NLMISC::IProgressCallback
+class CLoadingComponent : public IComponent
 {
 protected:
 	// pointers
-	NL3D::UDriver *_Driver; // not deleted here
-	NL3D::UTextContext *_TextContext; // not deleted here
+	CLoading *_Loading; // not deleted here
 	
 	// instances
-	std::string _State;
+	// ...
 public:	
 	/// Basic constructor of a component.
 	/// Requires a pointer to the componentmanager and a unique name.
-	CLoadingScreen();
-	virtual ~CLoadingScreen();
+	CLoadingComponent(CComponentManager *manager, const std::string &instanceId, NLMISC::IProgressCallback &progressCallback);
+	~CLoadingComponent();
 
-	void setDriver(NL3D::UDriver *driver) { _Driver = driver; }
-	void setTextContext(NL3D::UTextContext *textContext) { _TextContext = textContext; }
+	void update();
+	void render();
+	void config(const std::string &varName, NLMISC::CConfigFile::CVar &var);
 };
 
 }
 
-// setDirection(CVector)
-// setSpeed(float)
-// addForce(CVector) // average of forces (sum(forces).norm)
-// removeForce
-// average of average of forces and direction multiplied with speed
-// ((sum(forces.norm) + direction).norm * speed
-
-#endif /* #ifndef SBCLIENT_LOADING_SCREEN_H */
+#endif /* #ifndef SBCLIENT_LOADING_COMPONENT_H */

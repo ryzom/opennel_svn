@@ -62,7 +62,7 @@ protected:
 public:	
 	/// Basic constructor of a component.
 	/// Requires a pointer to the componentmanager and a unique name.
-	CTimeComponent(CComponentManager *manager, const std::string &instanceId);
+	CTimeComponent(CComponentManager *manager, const std::string &instanceId, NLMISC::IProgressCallback &progressCallback);
 	~CTimeComponent();
 
 	void update();

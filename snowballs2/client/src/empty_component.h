@@ -44,12 +44,13 @@ protected:
 public:	
 	/// Basic constructor of a component.
 	/// Requires a pointer to the componentmanager and a unique name.
-	CEmptyComponent(CComponentManager *manager, const std::string &instanceId);
+	CEmptyComponent(CComponentManager *manager, const std::string &instanceId, NLMISC::IProgressCallback &progressCallback);
 	~CEmptyComponent();
 
 	void update();
 	void render();
 	void config(const std::string &varName, NLMISC::CConfigFile::CVar &var);
+	void component(IComponent *component);
 };
 
 }

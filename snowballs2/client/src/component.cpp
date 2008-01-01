@@ -25,13 +25,17 @@
 #include "component_manager.h"
 
 #include <nel/misc/app_context.h>
+#include <nel/misc/i18n.h>
 
 using namespace std;
 using namespace NLMISC;
 
 namespace SBCLIENT {
 
-IComponent::IComponent(CComponentManager *manager, const string &instanceId)
+std::string IComponent::I18NPrefix = "i18n";
+bool IComponent::KeepPrefix = false;
+
+IComponent::IComponent(CComponentManager *manager, const string &instanceId, IProgressCallback &progressCallback)
 : _Manager(manager), _Config(), _InstanceId(instanceId)
 {
 	// register this with the app context
@@ -39,7 +43,7 @@ IComponent::IComponent(CComponentManager *manager, const string &instanceId)
 	CApplicationContext::getInstance().setSingletonPointer(
 		string("SBCLIENT::IComponent|") + _InstanceId, this);
 	// initialize the config file manager
-	_Config.setConfigFile(manager->ConfigFile, instanceId);
+	_Config.setConfigFile(manager->getConfig(), instanceId);
 }
 
 IComponent::~IComponent()
@@ -112,6 +116,16 @@ void IComponent::_config(NLMISC::CConfigFile::CVar &var)
 		++i;
 	}
 	instance->config(varName, var);
+}
+
+ucstring IComponent::i18n(const string &label)
+{
+	if (label.substr(0, 4) == I18NPrefix)
+	{
+		if (KeepPrefix) return CI18N::get(label);
+		return CI18N::get(label.substr(4, label.size() - 4));
+	}
+	return ucstring(label);
 }
 
 }

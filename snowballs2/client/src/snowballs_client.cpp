@@ -24,16 +24,15 @@
 #include "snowballs_config.h"
 
 #include "component_manager.h"
+#include "driver_component.h"
 
 #include <nel/misc/config_file.h>
 #include <nel/misc/path.h>
 #include <nel/misc/debug.h>
 #include <nel/misc/time_nl.h>
+#include <nel/misc/i18n.h>
 
 #include <nel/3d/u_driver.h>
-
-extern NLMISC::CConfigFile *ConfigFile; // temp
-extern SBCLIENT::CComponentManager *ComponentManager; // temp
 
 using namespace std;
 using namespace NLMISC;
@@ -41,7 +40,8 @@ using namespace NLMISC;
 namespace SBCLIENT {
 
 CSnowballsClient::CSnowballsClient() 
-: _FileDisplayer(NULL), _ComponentManager(NULL), _ConfigFile(NULL), 
+: _FileDisplayer(NULL), _ComponentManager(NULL), 
+  _ConfigFile(NULL), _DriverComponent(NULL), _Driver(NULL), 
   _CurrentState(Invalid), _NextState(Load),
   _HasCore(false), _HasLogin(false), _HasIngame(false),
   _HasOnline(false), _HasOffline(false),
@@ -86,7 +86,7 @@ int CSnowballsClient::run()
 	// and call the componentmanager update until the state changes
 SwitchState:
 	nlinfo("Switching to the next game state");
-	if (_CurrentState != _NextState)
+	if (_CurrentState == _NextState)
 	{
 		nlwarning("NextGameState wasn't changed");
 	}
@@ -128,12 +128,6 @@ SwitchState:
 	_CurrentState = _NextState;
 	switch(_CurrentState)
 	{
-	case Game:
-		do { if (!_Driver->isActive()) { _NextState = Exit; break; }
-			_ComponentManager->update();
-			if (!_Driver->isLost()) 
-				_ComponentManager->render();
-		} while (_CurrentState == _NextState);
 	case Load: // switch to the default state
 		_NextState = Login;
 		break;
@@ -143,7 +137,12 @@ SwitchState:
 	case Exit: // exit the loop
 		return EXIT_SUCCESS;
 	default:
-		return EXIT_FAILURE;
+		do { if (!_Driver->isActive()) { _NextState = Exit; break; }
+			_DriverComponent->update(); // temp
+			_ComponentManager->update();
+			_ComponentManager->render();
+		} while (_CurrentState == _NextState);
+		break;
 	}
 	goto SwitchState;
 }
@@ -167,27 +166,25 @@ void CSnowballsClient::enableCore()
 		for (uint i = 0; i < varsize; i += 2)
 			CPath::remapExtension(var->asString(i), var->asString(i + 1), true);
 
+		// set the language code
+		CI18N::load(_ConfigFile->getVar(SBCLIENT_NAME "_LanguageCode").asString());
+
 		// initialize the manager
 		_ComponentManager = new CComponentManager(_ConfigFile);
 
-		// some temp stuff to keep the old code running for now
-		::ConfigFile = _ConfigFile; // temp
-		::ComponentManager = _ComponentManager; // temp
+		
 
-		try
-		{
-		// initialize the graphics driver component
+		
 
-		// initialize the sound component
 
-		} // move this to component =)
-		catch (NLMISC::Exception e)
-		{
-			if (_Driver) _Driver->systemMessageBox(e.what(), 
-				"NeL Exception", NL3D::UDriver::okType, 
-				NL3D::UDriver::stopIcon);
-			throw e;
-		}
+
+		// dynamic core, temp
+
+		_DriverComponent = new CDriverComponent(
+			_ComponentManager, "Graphics", _LoadingScreen);
+		//_ComponentManager->registerComponent(_DriverComponent);
+		_Driver = _DriverComponent->getDriver();
+
 	}
 }
 
@@ -195,8 +192,24 @@ void CSnowballsClient::disableCore()
 {
 	if (_HasCore)
 	{
+		// dynamic core, temp
+
+		//_ComponentManager->unregisterComponent(_DriverComponent);
+		delete _DriverComponent;
+
+
+
+
+
+
 		// if they're null, something must've seriously went wrong at some point	
+		// release the component manager
 		nlassert(_ComponentManager); delete _ComponentManager;
+
+		// release of the language data is done when loading new file
+		//CI18N::...
+
+		// release the configuration file
 		nlassert(_ConfigFile); delete _ConfigFile;
 
 		// release the search paths etc

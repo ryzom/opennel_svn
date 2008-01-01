@@ -5,7 +5,7 @@
 	Name="frontend_service"
 	ProjectGUID="{B15398CD-B3F8-4E85-A8BD-6F64CE59F069}"
 	RootNamespace="frontend_service"
-	TargetFrameworkVersion="131072"
+	
 	>
 	<Platforms>
 		<Platform
@@ -62,7 +62,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="winmm.lib odbc32.lib odbccp32.lib"
-				OutputFile="..\..\bin\$(RootNamespace)_d.exe" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
+				OutputFile="$(RootNamespace)_d.exe" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 				
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -139,7 +139,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="winmm.lib odbc32.lib odbccp32.lib"
-				OutputFile="..\..\bin\$(RootNamespace)_df.exe" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
+				OutputFile="$(RootNamespace)_df.exe" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 				
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -215,7 +215,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="winmm.lib odbc32.lib odbccp32.lib"
-				OutputFile="..\..\bin\$(RootNamespace)_ds.exe" IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
+				OutputFile="$(RootNamespace)_ds.exe" IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
 				
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -296,7 +296,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="winmm.lib odbc32.lib odbccp32.lib"
-				OutputFile="..\..\bin\$(RootNamespace).exe" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				OutputFile="$(RootNamespace).exe" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
 				
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -375,7 +375,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="winmm.lib odbc32.lib odbccp32.lib"
-				OutputFile="..\..\bin\$(RootNamespace)_rd.exe" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				OutputFile="$(RootNamespace)_rd.exe" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
 				
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -454,7 +454,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="winmm.lib odbc32.lib odbccp32.lib"
-				OutputFile="..\..\bin\$(RootNamespace)_rds.exe" IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
+				OutputFile="$(RootNamespace)_rds.exe" IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
 				
 				GenerateDebugInformation="true"
 				SubSystem="2"

@@ -23,6 +23,10 @@
 #define SBCLIENT_COMPONENT_MANAGER_H
 #include <nel/misc/types_nl.h>
 
+namespace NL3D {
+	class UDriver;
+}
+
 namespace NLMISC {
 	class CConfigFile;
 }
@@ -32,14 +36,15 @@ namespace SBCLIENT {
 
 // todo: implement the component manager
 /**
- * Loading screen.
+ * Component manager.
  * \date 2007-2008
  */
 class CComponentManager
 {
-public:	
+protected:	
 	// pointers
-	NLMISC::CConfigFile *ConfigFile; // not deleted here
+	NLMISC::CConfigFile *_ConfigFile; // not deleted here
+	NL3D::UDriver *_Driver; // not deleted here, can be NULL, temp
 	
 	// instances
 	// ...
@@ -55,6 +60,20 @@ public:
 	void registerRender(IComponent *component);
 	void unregisterRender(IComponent *component);
 
+	/// Called when a component is initialized,
+	/// other components will be notified.
+	void registerComponent(IComponent *component);
+	/// Called when a component will be destroyed,
+	/// other components will be notified.
+	void unregisterComponent(IComponent *component);
+
+	/// Called by the driver component.
+	/// Only used internally.
+	void setDriver(NL3D::UDriver *driver);
+
+	/// Called by components to get the base config file.
+	/// They can automatically switch to a diffent one.
+	NLMISC::CConfigFile *getConfig() { return _ConfigFile; }
 };
 
 }

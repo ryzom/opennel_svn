@@ -27,8 +27,9 @@ using namespace NLMISC;
 
 namespace SBCLIENT {
 
-CEmptyComponent::CEmptyComponent(CComponentManager *manager, const string &instanceId)
-	: IComponent(manager, instanceId)
+CEmptyComponent::CEmptyComponent(CComponentManager *manager, 
+	const string &instanceId, IProgressCallback &progressCallback)
+: IComponent(manager, instanceId, progressCallback)
 {
 	
 }
@@ -51,6 +52,11 @@ void CEmptyComponent::render()
 void CEmptyComponent::config(const string &varName, CConfigFile::CVar &var)
 {
 	
+}
+
+void CEmptyComponent::component(IComponent *component)
+{ 
+
 }
 
 }

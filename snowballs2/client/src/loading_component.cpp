@@ -1,5 +1,5 @@
-/** \file weather_component.cpp
- * CWeatherComponent
+/** \file loading_component.cpp
+ * CLoadingComponent
  * 
  * This file is part of NEVRAX SNOWBALLS.
  * NEVRAX SNOWBALLS is free software; you can redistribute it and/or modify
@@ -20,36 +20,36 @@
  */
 
 #include <nel/misc/types_nl.h>
-#include "weather_component.h"
+#include "loading_component.h"
 
 using namespace std;
 using namespace NLMISC;
 
 namespace SBCLIENT {
 
-CWeatherComponent::CWeatherComponent(CComponentManager *manager, 
+CLoadingComponent::CLoadingComponent(CComponentManager *manager, 
 	const string &instanceId, IProgressCallback &progressCallback)
 : IComponent(manager, instanceId, progressCallback)
 {
 	
 }
 
-CWeatherComponent::~CWeatherComponent()
+CLoadingComponent::~CLoadingComponent()
 {
 	
 }
 
-void CWeatherComponent::update()
+void CLoadingComponent::update()
 {
 	
 }
 
-void CWeatherComponent::render()
+void CLoadingComponent::render()
 {
 	
 }
 
-void CWeatherComponent::config(const string &varName, CConfigFile::CVar &var)
+void CLoadingComponent::config(const string &varName, CConfigFile::CVar &var)
 {
 	
 }
