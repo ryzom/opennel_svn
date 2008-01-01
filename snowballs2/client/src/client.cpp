@@ -126,22 +126,15 @@ UTextContext *TextContext = NULL; // core
 UScene *Scene = NULL; // ingame
 // This class is used to handle mouse/keyboard input for camera movement
 C3dMouseListener *MouseListener = NULL; // ingame
-// Log file
-CFileDisplayer FileDisplayer; // main
 // The previous and current frame dates
 TTime  LastTime, NewTime, DiffTime; // ingame
 // true if the commands(chat) interface must be display. This variable is set automatically with the config file
 static bool ShowCommands; // ingame
 // if true, the mouse can't go out the client window(work only on Windows)
 static bool CaptureState = false; // ingame
-// Set NextGameState to switch the current game state
-static uint8 CurrentGameState = -1, NextGameState = 0; // state
-// To know which data has been loaded
-static bool LoadedCore = false, LoadedIngame = false, LoadedLogin = false,
-LoadedOnline = false, LoadedOffline = false; // state
 // Stuff for connection
-ucstring Login;
-static string FSAddr, Cookie;
+//ucstring Login;
+//static string FSAddr, Cookie;
 
 //
 // Prototypes
@@ -176,119 +169,13 @@ void cbGraphicsDriver(CConfigFile::CVar &var);
 // Functions
 //
 
-void switchGameState()
-{
-SwitchNextGameState:
-	nlinfo("Switching to the next game state");
-	if (CurrentGameState == NextGameState)
-	{
-		nlwarning("NextGameState wasn't changed");
-	}
-	else
-	{
-		switch(CurrentGameState)
-		{
-		case GameStateOnline:
-			releaseOnline(); // always release online after switch
-			break;
-		case GameStateOffline:
-			releaseOffline(); // always releaes offline after switch
-			break;
-		}
-		switch(NextGameState)
-		{
-		case GameStateLoad:
-			try
-			{
-				initCore(); // core is required
-			}
-			catch (NLMISC::Exception e)
-			{
-#ifdef NL_OS_WINDOWS
-				MessageBox(NULL, e.what(), "NeL Exception", MB_OK | MB_ICONSTOP);
-#else
-				printf(e.what());
-#endif
-				return; // exit if driver loading failed
-			}
-			break;
-		case GameStateUnload:
-			displayLoadingState("Unloading");
-			releaseLogin(); // release all
-			releaseIngame();
-			break;
-		case GameStateReset:
-			displayLoadingState("Reset");
-			releaseLogin(); // release all
-			releaseIngame();
-			releaseCore();
-			break;
-		case GameStateExit:
-			displayLoadingState("See you later!");
-			releaseLogin(); // release all
-			releaseIngame();
-			releaseCore();
-			break;
-		case GameStateLogin:
-			initCore(); // core is required
-			initLogin(); // login is required
-			break;
-		case GameStateOnline:
-			initCore(); // core is required
-			releaseLogin(); //login can be released
-			initIngame(); // ingame is required
-			initOnline(); // connection is required
-			break;
-		case GameStateOffline:
-			initCore(); // core is required
-			releaseLogin(); //login can be released
-			initIngame(); // ingame is required
-			initOffline(); // offline entity required
-			break;
-		}
-	}
-	CurrentGameState = NextGameState;
-	switch(CurrentGameState)
-	{
-	case GameStateLoad: // switch to the default state
-		NextGameState = GameStateLogin;
-		break;
-	case GameStateUnload: // test state, switch back to load for default
-		NextGameState = GameStateLoad;
-		break;
-	case GameStateReset: // used to reset everything
-		NextGameState = GameStateLoad;
-		break;
-	case GameStateExit: // exit the loop
-		return;
-	case GameStateLogin: // loop the login screen
-		loopLogin(); // must loop by itself
-		break;
-	case GameStateOnline: // start offline if not online
-		if (!LoadedOnline)
-		{
-			NextGameState = GameStateOffline;
-			break;
-		}
-	case GameStateOffline: // loop ingame
-		loopIngame(); // must loop by itself
-		break;
-	}	
-	goto SwitchNextGameState;
-}
-
 void initCore()
 {
-	if (!LoadedCore)
+	/*if (!LoadedCore)
 	{
-		LoadedCore = true;
-		// Seed the randomizer
-		srand(uint(time(0)));
+		LoadedCore = true;*/
 		// Set the ShowCommands with the value set in the client config file
 		ShowCommands = ConfigFile->getVar("ShowCommands").asInt() == 1;
-		// Add different path for automatic file lookup
-		CPath::addSearchPath(ConfigFile->getVar("DataPath").asString(), true, false);
-		CPath::remapExtension("dds", "tga", true);
 		// Create a driver	
 		Driver = UDriver::createDriver(0, ConfigFile->getVar("OpenGL").asInt() == 0);
 		// Create the window with config file values
@@ -317,7 +204,7 @@ void initCore()
 		initLight();
 
 		ConfigFile->setCallback("OpenGL", cbGraphicsDriver);
-	}
+	/*}*/
 }
 
 void initLogin()

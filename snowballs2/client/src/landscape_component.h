@@ -35,8 +35,7 @@ class CComponentManager;
 
 /**
  * A landscape component.
- * \author Name
- * \date Year
+ * \date 2007-2008
  */
 class CLandscapeComponent : public IComponent
 {

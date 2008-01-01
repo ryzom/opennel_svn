@@ -50,6 +50,11 @@
 
 
 
+// name for client used in config
+#define SBCLIENT_NAME "Client"
+
+
+
 // some default defines
 #if FINAL_VERSION
 #	if !defined(SBCLIENT_USE_LOG_LOG)

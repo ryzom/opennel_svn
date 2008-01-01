@@ -39,7 +39,7 @@ IComponent::IComponent(CComponentManager *manager, const string &instanceId)
 	CApplicationContext::getInstance().setSingletonPointer(
 		string("SBCLIENT::IComponent|") + _InstanceId, this);
 	// initialize the config file manager
-	_Config.setConfigFile(&manager->ConfigFile, instanceId);
+	_Config.setConfigFile(manager->ConfigFile, instanceId);
 }
 
 IComponent::~IComponent()

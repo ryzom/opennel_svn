@@ -22,22 +22,39 @@
 #ifndef SBCLIENT_COMPONENT_MANAGER_H
 #define SBCLIENT_COMPONENT_MANAGER_H
 #include <nel/misc/types_nl.h>
-#include <nel/misc/config_file.h>
+
+namespace NLMISC {
+	class CConfigFile;
+}
 
 namespace SBCLIENT {
+	class IComponent;
 
 // todo: implement the component manager
+/**
+ * Loading screen.
+ * \date 2007-2008
+ */
 class CComponentManager
 {
 public:	
 	// pointers
-	// ...
+	NLMISC::CConfigFile *ConfigFile; // not deleted here
 	
 	// instances
-	NLMISC::CConfigFile ConfigFile;
+	// ...
 public:
-	CComponentManager(const std::string &configFile);
+	CComponentManager(NLMISC::CConfigFile *configFile);
 	virtual ~CComponentManager();
+
+	void update();
+	void render();
+
+	void registerUpdate(IComponent *component);
+	void unregisterUpdate(IComponent *component);
+	void registerRender(IComponent *component);
+	void unregisterRender(IComponent *component);
+
 };
 
 }

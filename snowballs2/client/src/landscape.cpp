@@ -374,4 +374,5 @@ NLMISC_COMMAND(add_ig, "add instance group", "name")
 		inst->addToScene(*Scene);
 		InstanceGroups.push_back(inst);
 	}
+	return true;
 }

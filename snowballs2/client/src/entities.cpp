@@ -35,6 +35,7 @@
 #include <nel/misc/command.h>
 #include <nel/misc/log.h>
 #include <nel/misc/time_nl.h>
+#include <nel/misc/path.h>
 #include <nel/misc/displayer.h>
 #include <nel/misc/vector.h>
 #include <nel/misc/vectord.h>
@@ -188,8 +189,8 @@ void addEntity (uint32 eid, std::string name, CEntity::TType type, const CVector
 		entity.MovePrimitive->setGlobalPosition(CVectorD(startPosition.x, startPosition.y, startPosition.z), 0);
 
 		// create instance of the mesh character
-		entity.Instance = Scene->createInstance ("gnu.shape");
-		entity.Skeleton = Scene->createSkeleton ("gnu.skel");
+		entity.Instance = Scene->createInstance("gnu.shape");
+		entity.Skeleton = Scene->createSkeleton("gnu.skel");
 		// use the instance on the skeleton
 		entity.Skeleton.bindSkin (entity.Instance);
 
@@ -224,6 +225,7 @@ void addEntity (uint32 eid, std::string name, CEntity::TType type, const CVector
 		entity.Instance = Scene->createInstance ("gnu.shape");
 		entity.Skeleton = Scene->createSkeleton ("gnu.skel");
 		entity.Skeleton.bindSkin (entity.Instance);
+		entity.Skeleton.enableCastShadowMap(true);
 		entity.Instance.hide ();
 
 		entity.Speed = PlayerSpeed;

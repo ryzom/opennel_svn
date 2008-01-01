@@ -22,6 +22,8 @@
 #include <nel/misc/types_nl.h>
 #include "component_manager.h"
 
+#include "component.h"
+
 #include <nel/misc/config_file.h>
 
 using namespace std;
@@ -29,14 +31,44 @@ using namespace NLMISC;
 
 namespace SBCLIENT {
 
-CComponentManager::CComponentManager(const string &configFile)
+CComponentManager::CComponentManager(CConfigFile *configFile)
 {
-	ConfigFile.load(configFile);
+	ConfigFile = configFile;
 }
 
 CComponentManager::~CComponentManager()
 {
 	
+}
+
+void CComponentManager::update()
+{
+	// call all update thingies
+}
+
+void CComponentManager::render()
+{
+	// call all render thingies
+}
+
+void CComponentManager::registerUpdate(IComponent *component)
+{
+
+}
+
+void CComponentManager::unregisterUpdate(IComponent *component)
+{
+
+}
+
+void CComponentManager::registerRender(IComponent *component)
+{
+
+}
+
+void CComponentManager::unregisterRender(IComponent *component)
+{
+
 }
 
 }

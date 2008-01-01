@@ -53,8 +53,8 @@ CLandscapeComponent::CLandscapeComponent(
 		CPath::lookup(_Config.getVar("FarBankName").asString()));
 	_Landscape->invalidateAllTiles();
 
-	// _Landscape->postfixTileFilename("_au");
-	// _Landscape->postfixTileVegetableDesc("_au");
+	 _Landscape->postfixTileFilename("_sp");
+	 _Landscape->postfixTileVegetableDesc("_sp");
 
 	// -- -- this doesn't do anything useful
 	//////// setup the zone path

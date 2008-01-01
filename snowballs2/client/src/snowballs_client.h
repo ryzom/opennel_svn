@@ -25,26 +25,64 @@
 #include "snowballs_config.h"
 
 namespace NLMISC {
+	class CFileDisplayer;
+	class CConfigFile;
+}
 
-class CFileDisplayer;
-
+namespace NL3D {
+	class UDriver;
 }
 
 namespace SBCLIENT {
-
-class CComponentManager;
-
+	class CComponentManager;
+	class CLoadingScreen;
+/**
+ * Snowballs client 0.3.
+ * \date 2007-2008
+ */
 class CSnowballsClient
 {
 private:
+	// constants
+	static const uint8 Invalid = 0, Load = 1, Reset = 2, Exit = 3;
+	static const uint8 Login = 10, Game = 11;
+
+	// pointers
 #if SBCLIENT_USE_LOG
 	NLMISC::CFileDisplayer *_FileDisplayer; // deleted here
 #endif
 	CComponentManager *_ComponentManager; // deleted here
+	NLMISC::CConfigFile *_ConfigFile; // deleted here
+	CLoadingScreen *_LoadingScreen; // deleted here
+
+	// CDriverComponent // deleted here
+
+	NL3D::UDriver *_Driver; // not deleted here
+	
+	// instances
+	// to know which data has been loaded
+	bool _HasCore, _HasLogin, _HasIngame, _HasOnline, _HasOffline;
+	// true if the online component needs to be initialized
+	bool _PlayOnline;
+	// set _NextState to switch the current game state
+	uint8 _CurrentState, _NextState;
 public:
 	CSnowballsClient();
 	~CSnowballsClient();
 	int run();
+private:
+	// temp
+	void enableCore();
+	void disableCore();
+	void enableLogin();
+	void disableLogin();
+	void enableIngame();
+	void disableIngame();
+	void enableOnline();
+	void disableOnline();
+	void enableOffline();
+	void disableOffline();
+	void disableAll();
 };
 
 }

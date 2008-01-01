@@ -28,8 +28,10 @@
 #include <nel/misc/config_file.h>
 #include <nel/misc/path.h>
 #include <nel/misc/debug.h>
+#include <nel/misc/time_nl.h>
 
-void switchGameState(); // temp
+#include <nel/3d/u_driver.h>
+
 extern NLMISC::CConfigFile *ConfigFile; // temp
 extern SBCLIENT::CComponentManager *ComponentManager; // temp
 
@@ -39,10 +41,15 @@ using namespace NLMISC;
 namespace SBCLIENT {
 
 CSnowballsClient::CSnowballsClient() 
-: _FileDisplayer(NULL), _ComponentManager(NULL)
+: _FileDisplayer(NULL), _ComponentManager(NULL), _ConfigFile(NULL), 
+  _CurrentState(Invalid), _NextState(Load),
+  _HasCore(false), _HasLogin(false), _HasIngame(false),
+  _HasOnline(false), _HasOffline(false),
+  _PlayOnline(false) // do not change these
 {
 	// use log.log if NEL_LOG_IN_FILE and SBCLIENT_USE_LOG_LOG defined as 1
 	createDebug(NULL, SBCLIENT_USE_LOG_LOG, false);
+	srand((uint)CTime::getLocalTime());
 
 #if SBCLIENT_USE_LOG
 	// create snowballs_client.log
@@ -60,17 +67,11 @@ CSnowballsClient::CSnowballsClient()
 #endif	
 	nlinfo("Starting Snowballs!");
 	// end of debug/log initialization
-
-	_ComponentManager = new CComponentManager(SBCLIENT_CONFIG_FILE);
-	ConfigFile = &_ComponentManager->ConfigFile;
-
-	::ComponentManager = _ComponentManager; // temp
 }
 
 CSnowballsClient::~CSnowballsClient()
 {
-	// if they're null, something must've seriously went wrong at some point
-	nlassert(_ComponentManager); delete _ComponentManager;
+	disableAll(); // just to be sure
 
 	// begin of debug/log destruction
 	nlinfo("See you later!");
@@ -81,12 +82,137 @@ CSnowballsClient::~CSnowballsClient()
 
 int CSnowballsClient::run()
 {
-	// loop with some important things
-	// and call the componentmanager update
+	// load and unload required components for the current game state
+	// and call the componentmanager update until the state changes
+SwitchState:
+	nlinfo("Switching to the next game state");
+	if (_CurrentState != _NextState)
+	{
+		nlwarning("NextGameState wasn't changed");
+	}
+	else
+	{
+		switch(_CurrentState)
+		{
+		case Game:
+			disableOnline();
+			disableOffline();
+			break;
+		}
+		switch(_NextState)
+		{
+		case Load:
+			enableCore();
+			break;
+		case Reset:
+			// displayLoadingState("Reset");
+			disableAll();
+			break;
+		case Exit:
+			// displayLoadingState("See you later!");
+			disableAll();
+			break;
+		case Login:
+			enableCore(); // core is required
+			enableLogin(); // login is required
+			break;
+		case Game:
+			enableCore(); // core is required
+			disableLogin(); //login can be released
+			enableIngame(); // ingame is required
+			if (_PlayOnline) enableOnline(); // connection is required
+			else enableOffline();
+			break;
+		}
+	}
+	_CurrentState = _NextState;
+	switch(_CurrentState)
+	{
+	case Game:
+		do { if (!_Driver->isActive()) { _NextState = Exit; break; }
+			_ComponentManager->update();
+			if (!_Driver->isLost()) 
+				_ComponentManager->render();
+		} while (_CurrentState == _NextState);
+	case Load: // switch to the default state
+		_NextState = Login;
+		break;
+	case Reset: // used to reset everything
+		_NextState = Load;
+		break;
+	case Exit: // exit the loop
+		return EXIT_SUCCESS;
+	default:
+		return EXIT_FAILURE;
+	}
+	goto SwitchState;
+}
 
-	switchGameState(); // temp
+void CSnowballsClient::enableCore()
+{
+	if (!_HasCore)
+	{
+		_HasCore = true;
+		// init configuration file
+		_ConfigFile = new CConfigFile();
+		_ConfigFile->load(SBCLIENT_CONFIG_FILE);
 
-	return EXIT_SUCCESS;
+		// set the search paths (kinda important)
+		CConfigFile::CVar *var;
+		var = &_ConfigFile->getVar(SBCLIENT_NAME "_SearchPaths");
+		uint varsize = var->size();
+		for (uint i = 0; i < varsize; ++i)
+			CPath::addSearchPath(var->asString(i), true, false);
+		var = &_ConfigFile->getVar(SBCLIENT_NAME "_RemapExtensions");
+		for (uint i = 0; i < varsize; i += 2)
+			CPath::remapExtension(var->asString(i), var->asString(i + 1), true);
+
+		// initialize the manager
+		_ComponentManager = new CComponentManager(_ConfigFile);
+
+		// some temp stuff to keep the old code running for now
+		::ConfigFile = _ConfigFile; // temp
+		::ComponentManager = _ComponentManager; // temp
+
+		try
+		{
+		// initialize the graphics driver component
+
+		// initialize the sound component
+
+		} // move this to component =)
+		catch (NLMISC::Exception e)
+		{
+			if (_Driver) _Driver->systemMessageBox(e.what(), 
+				"NeL Exception", NL3D::UDriver::okType, 
+				NL3D::UDriver::stopIcon);
+			throw e;
+		}
+	}
+}
+
+void CSnowballsClient::disableCore()
+{
+	if (_HasCore)
+	{
+		// if they're null, something must've seriously went wrong at some point	
+		nlassert(_ComponentManager); delete _ComponentManager;
+		nlassert(_ConfigFile); delete _ConfigFile;
+
+		// release the search paths etc
+		CPath::releaseInstance();
+
+		_HasCore = false;
+	}
+}
+
+void CSnowballsClient::disableAll()
+{
+	disableOnline();
+	disableOffline();
+	disableIngame();
+	disableLogin();
+	disableCore();
 }
 
 }

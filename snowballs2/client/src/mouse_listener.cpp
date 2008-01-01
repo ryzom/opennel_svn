@@ -83,9 +83,9 @@ C3dMouseListener::C3dMouseListener()
 	setSpeed (10.f);
 	_LastTime=CTime::getLocalTime ();
 
-	_ViewLagBehind = 20.0f;
-	_ViewHeight = 2.0f;
-	_ViewTargetHeight = 3.0f;
+	_ViewLagBehind = 5.0f;
+	_ViewHeight = 0.0f;
+	_ViewTargetHeight = -5.0f;
 
 	_AimingState = false;
 	_AimingDamage = 0.0f;
@@ -426,11 +426,11 @@ void	C3dMouseListener::updateCamera()
 	CVector	cpos = getPosition()+CVector(-(float)cos(getOrientation())*_ViewLagBehind, -(float)sin(getOrientation())*_ViewLagBehind, _ViewHeight);
 	CVector snapped = cpos,
 			normal;
-	if (CamCollisionEntity->snapToGround(snapped, normal) && (cpos.z-(snapped.z+GroundCamLimit))*normal.z < 0.0f)
+	/*if (CamCollisionEntity->snapToGround(snapped, normal) && (cpos.z-(snapped.z+GroundCamLimit))*normal.z < 0.0f)
 	{
 		cpos = snapped+CVector(0.0f, 0.0f, GroundCamLimit);
 		_ViewHeight = cpos.z - getPosition().z;
-	}
+	}*/
 	_Camera.lookAt(cpos, tpos);
 }
 
