@@ -207,19 +207,19 @@ void initCore()
 	/*}*/
 }
 
-void initLogin()
-{
-	if (!LoadedLogin)
-	{
-		LoadedLogin = true;
-	}
-}
+//void initLogin()
+//{
+//	if (!LoadedLogin)
+//	{
+//		LoadedLogin = true;
+//	}
+//}
 
 void initIngame()
 {
-	if (!LoadedIngame)
-	{
-		LoadedIngame = true;
+	//if (!LoadedIngame)
+	//{
+	//	LoadedIngame = true;
 #ifdef NL_OS_WINDOWS
 		playMusic(SBCLIENT_MUSIC_WAIT);
 #endif
@@ -282,21 +282,21 @@ void initIngame()
 		Driver->showCursor(false);
 		Driver->setCapture(true);
 		Driver->setMousePos(0.5f, 0.5f);
-	}
+	//}
 }
 
 void initOnline()
 {
-	if (LoadedOnline) return;
-#ifdef NL_OS_WINDOWS
-	playMusic(SBCLIENT_MUSIC_WAIT);
-#endif
+//	if (LoadedOnline) return;
+//#ifdef NL_OS_WINDOWS
+//	playMusic(SBCLIENT_MUSIC_WAIT);
+//#endif
 	
-	displayLoadingState("Connecting");
+	//displayLoadingState("Connecting");
 	
 	// connect to the server
-	nlinfo("Try to connect to FS addr '%s' and identify with the cookie '%s'", FSAddr.c_str(), Cookie.c_str());
-	initNetwork(Cookie, FSAddr);
+	//nlinfo("Try to connect to FS addr '%s' and identify with the cookie '%s'", FSAddr.c_str(), Cookie.c_str());
+	//initNetwork(Cookie, FSAddr);
 
 	while (Self == NULL) // wait for position etc from server
 		updateLoadingState(ucstring("Connecting"), true, true);
@@ -304,22 +304,22 @@ void initOnline()
 	displayLoadingState("Load Landscape");
 	LandscapeComponent->loadAllZonesAround();
 
-	displayLoadingState("Ready!");
+	//displayLoadingState("Ready!");
 
-#ifdef NL_OS_WINDOWS
-	playMusic(SBCLIENT_MUSIC_BACKGROUND);
-#endif
-	LoadedOnline = true;
+//#ifdef NL_OS_WINDOWS
+//	playMusic(SBCLIENT_MUSIC_BACKGROUND);
+//#endif
+//	LoadedOnline = true;
 }
 
 void initOffline()
 {
-	if (!LoadedOffline)
-	{
-		LoadedOffline = true;
-#ifdef NL_OS_WINDOWS
-		playMusic(SBCLIENT_MUSIC_WAIT);
-#endif
+//	if (!LoadedOffline)
+//	{
+//		LoadedOffline = true;
+//#ifdef NL_OS_WINDOWS
+//		playMusic(SBCLIENT_MUSIC_WAIT);
+//#endif
 
 		uint32 id = NextEID++;
 		Login = ucstring("Entity" + toString(id));
@@ -342,17 +342,17 @@ void initOffline()
 
 		displayLoadingState("Ready!");
 	
-#ifdef NL_OS_WINDOWS
-		playMusic(SBCLIENT_MUSIC_BACKGROUND);
-#endif
-	}
+//#ifdef NL_OS_WINDOWS
+//		playMusic(SBCLIENT_MUSIC_BACKGROUND);
+//#endif
+//	}
 }
 
 void releaseCore()
 {
-	if (LoadedCore)
-	{
-		LoadedCore = false;
+	//if (LoadedCore)
+	//{
+	//	LoadedCore = false;
 		// Release configuration callbacks
 		ConfigFile->setCallback("OpenGL", NULL);
 
@@ -371,22 +371,22 @@ void releaseCore()
 		Driver->release();
 		delete Driver;
 		Driver = NULL;
-	}
+	//}
 }
 
-void releaseLogin()
-{
-	if (LoadedLogin)
-	{
-		LoadedLogin = false;
-	}
-}
+//void releaseLogin()
+//{
+//	if (LoadedLogin)
+//	{
+//		LoadedLogin = false;
+//	}
+//}
 
 void releaseIngame()
 {
-	if (LoadedIngame)
-	{
-		LoadedIngame = false;
+	//if (LoadedIngame)
+	//{
+	//	LoadedIngame = false;
 
 		// Release the mouse cursor
 		if (CaptureState)
@@ -417,26 +417,26 @@ void releaseIngame()
 		MouseListener->removeFromServer(Driver->EventServer);
 		delete MouseListener;
 		Driver->deleteScene(Scene);
-	}
+	//}
 }
 
 void releaseOnline()
 {
-	if (LoadedOnline)
-	{
-		LoadedOnline = false;
+	//if (LoadedOnline)
+	//{
+	/*	LoadedOnline = false;*/
 		releaseNetwork();
 		deleteAllEntities();
-	}
+	//}
 }
 
 void releaseOffline()
 {
-	if (LoadedOffline)
-	{
-		LoadedOffline = false;
+	//if (LoadedOffline)
+	//{
+	/*	LoadedOffline = false;*/
 		deleteAllEntities();
-	}
+	//}
 }
 
 void loopLogin()
@@ -473,7 +473,7 @@ AuthenticateFail:
 			nlinfo("*** Authenticate failed '%s' ***", result.c_str());
 			for (TTime t = 0; t < 5000; t += DiffTime)
 				updateLoadingState(ucstring("Authenticate failed: ") + ucstring(result), false, false);
-			NextGameState = GameStateOffline;
+		/*	NextGameState = GameStateOffline;*/
 			return;
 AuthenticateSuccess:
 
@@ -487,30 +487,30 @@ AuthenticateSuccess:
 			updateLoadingState(ucstring("Select shard"), false, false);
 			result = CLoginClient::selectShardBegin(sid);
 			if (!result.empty()) goto SelectFail;
-			while (CLoginClient::selectShardUpdate(result, FSAddr, Cookie))
-				updateLoadingState(ucstring("Select shard"), false, false);
+	/*		while (CLoginClient::selectShardUpdate(result, FSAddr, Cookie))
+				updateLoadingState(ucstring("Select shard"), false, false);*/
 			if (!result.empty()) goto SelectFail;
 			goto SelectSuccess;
 SelectFail:
 			nlinfo("*** Connection to the shard failed '%s' ***", result.c_str());
 			for (TTime t = 0; t < 5000; t += DiffTime)
 				updateLoadingState(ucstring("Select shard failed: ") + ucstring(result), false, false);
-			NextGameState = GameStateOffline;
+			/*NextGameState = GameStateOffline;*/
 			return;
 SelectSuccess:;
 		}
-		NextGameState = GameStateOnline;
+		/*NextGameState = GameStateOnline;*/
 		return;
 	}
-	NextGameState = GameStateOffline;
+	/*NextGameState = GameStateOffline;*/
 	return;
 }
 
 void loopIngame()
 {
-	while (CurrentGameState == NextGameState)
+	while (true/*CurrentGameState == NextGameState*/)
 	{
-		if (!Driver->isActive()) { NextGameState = GameStateExit; return; }
+	/*	if (!Driver->isActive()) { NextGameState = GameStateExit; return; }*/
 
 		animateSky(NewTime-LastTime);
 
@@ -562,7 +562,7 @@ void loopIngame()
 		if (Driver->AsyncListener.isKeyDown(KeySHIFT) && Driver->AsyncListener.isKeyDown(KeyESCAPE))
 		{
 			// Shift Escape -> quit
-			NextGameState = GameStateExit;
+			/*NextGameState = GameStateExit;*/
 		}
 		else if (Driver->AsyncListener.isKeyPushed(KeyF3))
 		{
@@ -616,8 +616,8 @@ void loopIngame()
 		else if (Driver->AsyncListener.isKeyPushed(KeyF10))
 		{
 			// F10 -> switch beteen online and offline
-			if (isOnline()) NextGameState = GameStateOffline;
-			else NextGameState = GameStateLogin;
+			/*if (isOnline()) NextGameState = GameStateOffline;
+			else NextGameState = GameStateLogin;*/
 		}
 		else if (Driver->AsyncListener.isKeyPushed(KeyF11))
 		{
@@ -667,7 +667,7 @@ void renderInformation()
 void cbGraphicsDriver(CConfigFile::CVar &var)
 {
 	// -- give ingame warning or something instead =)
-	NextGameState = GameStateReset;
+	/*NextGameState = GameStateReset;*/
 }
 
 //
@@ -808,43 +808,43 @@ void update3dLogo()
 
 
 
-// Command to quit the client
-NLMISC_COMMAND(sb_quit,"quit the client","")
-{
-	// check args, if there s not the right number of parameter, return bad
-	if (args.size() != 0) return false;
-
-	log.displayNL("Exit requested");
-
-	NextGameState = GameStateExit;
-
-	return true;
-}
-
-NLMISC_COMMAND(sb_offline, "go offline", "")
-{
-	if (args.size() != 0) return false;
-	NextGameState = GameStateOffline;
-	return true;
-}
-
-NLMISC_COMMAND(sb_unload, "unload game", "")
-{
-	if (args.size() != 0) return false;
-	NextGameState = GameStateUnload;
-	return true;
-}
-
-NLMISC_COMMAND(sb_reset, "reset game", "")
-{
-	if (args.size() != 0) return false;
-	NextGameState = GameStateReset;
-	return true;
-}
-
-NLMISC_COMMAND(sb_login, "go to the login screen", "")
-{
-	if (args.size() != 0) return false;
-	NextGameState = GameStateLogin;
-	return true;
-}
+//// Command to quit the client
+//NLMISC_COMMAND(sb_quit,"quit the client","")
+//{
+//	// check args, if there s not the right number of parameter, return bad
+//	if (args.size() != 0) return false;
+//
+//	log.displayNL("Exit requested");
+//
+//	NextGameState = GameStateExit;
+//
+//	return true;
+//}
+//
+//NLMISC_COMMAND(sb_offline, "go offline", "")
+//{
+//	if (args.size() != 0) return false;
+//	NextGameState = GameStateOffline;
+//	return true;
+//}
+//
+//NLMISC_COMMAND(sb_unload, "unload game", "")
+//{
+//	if (args.size() != 0) return false;
+//	NextGameState = GameStateUnload;
+//	return true;
+//}
+//
+//NLMISC_COMMAND(sb_reset, "reset game", "")
+//{
+//	if (args.size() != 0) return false;
+//	NextGameState = GameStateReset;
+//	return true;
+//}
+//
+//NLMISC_COMMAND(sb_login, "go to the login screen", "")
+//{
+//	if (args.size() != 0) return false;
+//	NextGameState = GameStateLogin;
+//	return true;
+//}
