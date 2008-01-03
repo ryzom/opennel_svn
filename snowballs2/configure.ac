@@ -44,6 +44,7 @@ CXXFLAGS="$CXXFLAGS -ftemplate-depth-24"
 
 AC_CHECK_LIB([pthread], [pthread_create])
 AC_CHECK_LIB([dl], [dlopen])
+AC_CHECK_LIB([rt], [clock_gettime])
 
 dnl ====================================================================
 dnl Checks Snowballs modules (Client / Server) to install / Disable
