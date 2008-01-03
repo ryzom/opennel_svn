@@ -45,7 +45,7 @@
 #	define H_AUTO(__name)		static NLMISC::CHTimer	__name##_timer(#__name); NLMISC::CAutoTimer	__name##_auto(&__name##_timer);
 
 // Same as H_AUTO but you don't have to give a name, it uses the function/line
-#	define H_AUTO2				static NLMISC::CHTimer __timer_##__LINE__(__FUNCTION__ ":" NL_MACRO_TO_STR(__LINE__)); NLMISC::CAutoTimer __auto_##__LINE__(&__timer_##__LINE__);
+#	define H_AUTO2				static std::string __str_##__LINE__(NLMISC::toString("%s:%d", __FUNCTION__, __LINE__)); static NLMISC::CHTimer __timer_##__LINE__(__str_##__LINE__.c_str()); NLMISC::CAutoTimer __auto_##__LINE__(&__timer_##__LINE__);
 
 // If you want to bench a specific part of the code
 #	define H_BEFORE(__name)		static NLMISC::CHTimer	__name##_timer(#__name); __name##_timer.before();
