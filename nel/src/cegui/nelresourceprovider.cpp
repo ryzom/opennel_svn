@@ -45,8 +45,8 @@
 
 // CEGUI includes
 #include "nel/cegui/nelresourceprovider.h"
-#include "CEGUIExceptions.h"
-#include "CEGUILogger.h"
+#include "CEGUI/CEGUIExceptions.h"
+#include "CEGUI/CEGUILogger.h"
 #include <xercesc/framework/MemBufInputSource.hpp>
 #include <xercesc/framework/MemoryManager.hpp>
 #include <memory.h>

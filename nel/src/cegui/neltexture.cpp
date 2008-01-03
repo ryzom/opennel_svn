@@ -39,7 +39,7 @@
 #include "nel/cegui/nelrenderer.h"
 
 // CEGUI includes
-#include "CEGUIExceptions.h"
+#include "CEGUI/CEGUIExceptions.h"
 
 // ditch min/max, they mess stuff up.
 #undef max
