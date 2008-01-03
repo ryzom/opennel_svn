@@ -35,10 +35,18 @@ SET(WITH_COVERAGE	ON )
 ###
 # Core libraries
 ###
+SET(WITH_NET                 ON )
+SET(WITH_3D                  ON )
+SET(WITH_PACS                ON )
+SET(WITH_GEORGES             ON )
+SET(WITH_LIGO                ON )
+SET(WITH_SOUND               ON )
 
 ###
 # Drivers Support
 ###
+SET(WITH_DRIVER_OPENAL       ON )
+SET(WITH_DRIVER_OPENGL       ON )
 
 ###
 # Optional support
@@ -46,14 +54,14 @@ SET(WITH_COVERAGE	ON )
 SET(WITH_CEGUI		ON )
 SET(WITH_TOOLS		OFF)
 SET(WITH_SAMPLES	ON )
-SET(WITH_TESTS		OFF)
+SET(WITH_TESTS		ON )
 SET(WITH_GTK		OFF)
 
 #-----------------------------------------------------------------------------
 #Platform specifics
 
-FIND_PACKAGE(Threads)
-FIND_PACKAGE(LibXml2)
+FIND_PACKAGE(Threads REQUIRED)
+FIND_PACKAGE(LibXml2 REQUIRED)
 NL_SETUP_BUILD()
 
 IF(WITH_3D)
@@ -80,10 +88,11 @@ IF(WITH_GTK)
   FIND_PACKAGE(GTK2)
 ENDIF(WITH_GTK)
 
-IF(UNIX)
+IF(WITH_TESTS)
+  FIND_PACKAGE(CppUnit)
+ENDIF(WITH_TESTS)
 
-  INCLUDE_DIRECTORIES(/usr/include /usr/local/include)
-  
+IF(UNIX)
   SET(prefix ${CMAKE_INSTALL_PREFIX})
   SET(exec_prefix ${CMAKE_INSTALL_PREFIX}/bin)
   SET(libdir ${CMAKE_INSTALL_PREFIX}/lib)
@@ -95,7 +104,6 @@ IF(UNIX)
   CONFIGURE_FILE(nel-config.in nel-config)
 
   INSTALL(PROGRAMS ${CMAKE_BINARY_DIR}/nel-config DESTINATION bin)
-
 ENDIF(UNIX)
 
 IF(WIN32)
@@ -118,3 +126,7 @@ ENDIF(WITH_SAMPLES)
 IF(WITH_TOOLS)
   SUBDIRS(tools)
 ENDIF(WITH_TOOLS)
+
+#IF(WITH_TESTS)
+#  SUBDIRS(tests)
+#ENDIF(WITH_TESTS)
