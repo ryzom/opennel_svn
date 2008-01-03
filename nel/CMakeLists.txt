@@ -130,3 +130,21 @@ ENDIF(WITH_TOOLS)
 #IF(WITH_TESTS)
 #  SUBDIRS(tests)
 #ENDIF(WITH_TESTS)
+
+# For Doxygen
+INCLUDE(${CMAKE_ROOT}/Modules/Documentation.cmake OPTIONAL)
+
+# To build the documention, you will have to enable it
+# and then do the equivalent of "make DoxygenDoc".
+IF(BUILD_DOCUMENTATION)
+    IF(DOT)
+        SET(HAVE_DOT YES)
+    ELSE(DOT)
+        SET(HAVE_DOT NO)
+    ENDIF(DOT)
+    # This processes our Doxyfile.in and substitutes paths to generate
+    # a final Doxyfile
+    CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/doc/Doxyfile.cmake.in ${CMAKE_BINARY_DIR}/doc/Doxyfile)
+
+    ADD_CUSTOM_TARGET(DoxygenDoc ${DOXYGEN} ${CMAKE_BINARY_DIR}/doc/Doxyfile)
+ENDIF(BUILD_DOCUMENTATION)
