@@ -30,7 +30,7 @@
 
 
 // the config file name
-#define SBCLIENT_CONFIG_FILE "snowballs_client.cfg"
+// #define SBCLIENT_CONFIG_FILE "snowballs_client.cfg"
 
 
 
@@ -65,4 +65,11 @@
 #endif
 #if !defined (SBCLIENT_USE_LOG)
 #	define SBCLIENT_USE_LOG 1
+#endif
+
+// for compatibility with old configuration
+#ifndef SNOWBALLS_CONFIG
+#	define SBCLIENT_CONFIG_FILE "snowballs_client.cfg"
+#else
+#	define SBCLIENT_CONFIG_FILE SNOWBALLS_CONFIG "client.cfg"
 #endif

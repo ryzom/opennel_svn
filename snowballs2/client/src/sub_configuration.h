@@ -40,11 +40,11 @@ public:
 	void setConfigFile(const std::string &configFile, const std::string &configPrefix); // ConfigFiled created and deleted
 	void setConfigFile(NLMISC::CConfigFile *configFile, const std::string &configPrefix); // configFile is NOT deleted
 	void setConfigFile();
-	float CSubConfiguration::getValue(const std::string &varName, float defaultValue);
-	double CSubConfiguration::getValue(const std::string &varName, double defaultValue);
-	int CSubConfiguration::getValue(const std::string &varName, int defaultValue);
-	std::string CSubConfiguration::getValue(const std::string &varName, const std::string &defaultValue);
-	bool CSubConfiguration::getValue(const std::string &varName, bool defaultValue);
+	float getValue(const std::string &varName, float defaultValue);
+	double getValue(const std::string &varName, double defaultValue);
+	int getValue(const std::string &varName, int defaultValue);
+	std::string getValue(const std::string &varName, const std::string &defaultValue);
+	bool getValue(const std::string &varName, bool defaultValue);
 	NLMISC::CConfigFile::CVar &getVar(const std::string &varName);
 	bool exists(const std::string &varName);
 	void setCallback(const std::string &varName, void (*cb)(NLMISC::CConfigFile::CVar &, void *, void *), void *context, void *state);
