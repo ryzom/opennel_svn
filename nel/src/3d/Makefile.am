@@ -4,7 +4,7 @@
 
 MAINTAINERCLEANFILES = Makefile.in
 
-SUBDIRS              = driver
+#SUBDIRS              = driver
 
 lib_LTLIBRARIES      = libnel3d.la
 
