@@ -715,14 +715,6 @@
 					RelativePath=".\src\landscape_component.h"
 					>
 				</File>
-				<File
-					RelativePath=".\src\music_component.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\music_component.h"
-					>
-				</File>
 			</Filter>
 		</Filter>
 	</Files>
