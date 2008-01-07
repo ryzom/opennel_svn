@@ -38,7 +38,7 @@ namespace SBCLIENT {
 
 CLandscapeComponent::CLandscapeComponent(CComponentManager *manager, 
 	const string &instanceId, IProgressCallback &progressCallback)
-: IComponent(manager, instanceId, progressCallback), 
+: IConfigurableComponent(manager, instanceId, progressCallback), 
   _Landscape(NULL), _Scene(NULL)
 {
 	// -- -- start of init for "landscape around camera that gets data from config"

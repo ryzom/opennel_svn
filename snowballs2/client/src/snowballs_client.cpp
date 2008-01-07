@@ -24,7 +24,11 @@
 #include "snowballs_config.h"
 
 #include "component_manager.h"
+
+// temp
 #include "driver_component.h"
+#include "loading_component.h"
+#include "hello_world_component.h"
 
 #include <nel/misc/config_file.h>
 #include <nel/misc/path.h>
@@ -137,8 +141,8 @@ SwitchState:
 	case Exit: // exit the loop
 		return EXIT_SUCCESS;
 	default:
-		do { if (!_Driver->isActive()) { _NextState = Exit; break; }
-			_DriverComponent->update(); // temp
+		do { if (!_Driver->isActive()) 
+				{ _NextState = Exit; break; }
 			_ComponentManager->update();
 			_ComponentManager->render();
 		} while (_CurrentState == _NextState);
@@ -179,11 +183,20 @@ void CSnowballsClient::enableCore()
 
 
 		// dynamic core, temp
+		_LoadingComponent = new CLoadingComponent(
+			_ComponentManager, "LoadingScreen", _LoadingScreen);
+		_ComponentManager->registerComponent(_LoadingComponent);
 
 		_DriverComponent = new CDriverComponent(
 			_ComponentManager, "Graphics", _LoadingScreen);
-		//_ComponentManager->registerComponent(_DriverComponent);
+		_ComponentManager->registerComponent(_DriverComponent);
+		_ComponentManager->registerUpdate(_DriverComponent, 100);
 		_Driver = _DriverComponent->getDriver();
+
+		_HelloWorldComponent = new CHelloWorldComponent(
+			_ComponentManager, "HelloWorld", _LoadingScreen);
+		_ComponentManager->registerComponent(_HelloWorldComponent);
+		_ComponentManager->registerRender(_HelloWorldComponent, 200);
 
 	}
 }
@@ -193,9 +206,14 @@ void CSnowballsClient::disableCore()
 	if (_HasCore)
 	{
 		// dynamic core, temp
+		_ComponentManager->unregisterComponent(_HelloWorldComponent);
+		delete _HelloWorldComponent;
 
-		//_ComponentManager->unregisterComponent(_DriverComponent);
+		_ComponentManager->unregisterComponent(_DriverComponent);
 		delete _DriverComponent;
+
+		_ComponentManager->unregisterComponent(_LoadingComponent);
+		delete _LoadingComponent;
 
 
 
@@ -317,5 +335,7 @@ int main(int argc, char **argv)
 #endif
 {
 	SBCLIENT::CSnowballsClient *client = new SBCLIENT::CSnowballsClient();
-	int result = client->run(); delete client; return result;
+	int result = client->run(); 
+	delete client;
+	return result;
 }

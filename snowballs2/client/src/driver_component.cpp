@@ -38,7 +38,7 @@ namespace SBCLIENT {
 
 CDriverComponent::CDriverComponent(CComponentManager *manager, 
 	const string &instanceId, IProgressCallback &progressCallback)
-: IComponent(manager, instanceId, progressCallback)
+: IConfigurableComponent(manager, instanceId, progressCallback)
 {
 	// create the driver
 	_Driver = UDriver::createDriver(0, 
@@ -50,7 +50,7 @@ CDriverComponent::CDriverComponent(CComponentManager *manager,
 		_Config.getValue("ScreenDepth", 32),
 		!_Config.getValue("ScreenFull", false)));
 	// set the cache size for the font manager(in bytes)
-	_Driver->setFontManagerMaxMemory(2097152);	
+	_Driver->setFontManagerMaxMemory(2097152);
 	// let the manager know a driver exists, temp
 	_Manager->setDriver(_Driver);
 	// register config callbacks

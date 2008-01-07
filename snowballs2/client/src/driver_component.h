@@ -22,7 +22,7 @@
 #ifndef SBCLIENT_DRIVER_COMPONENT_H
 #define SBCLIENT_DRIVER_COMPONENT_H
 #include <nel/misc/types_nl.h>
-#include "component.h"
+#include "configurable_component.h"
 
 namespace NL3D {
 	class UDriver;
@@ -37,7 +37,7 @@ class CComponentManager;
  * Driver component.
  * \date 2007-2008
  */
-class CDriverComponent : public IComponent
+class CDriverComponent : public IConfigurableComponent
 {
 protected:
 	// pointers

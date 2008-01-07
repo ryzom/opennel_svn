@@ -49,6 +49,8 @@ void CComponentManager::update()
 
 	// call all update thingies
 	// they can have render loops inside them (for loading screen etc)
+	for (std::list<IComponent *>::iterator it = _Updates.begin(); it != _Updates.end(); it++)
+		(*it)->update();
 }
 
 void CComponentManager::render()
@@ -60,31 +62,58 @@ void CComponentManager::render()
 		_Driver->clearBuffers(CRGBA(0, 0, 0, 255));
 
 		// call all render thingies
-		// ...
-
+		for (std::list<IComponent *>::iterator it = _Renders.begin(); it != _Renders.end(); it++)
+			(*it)->render();
+	
 		// swap 3d buffers
 		_Driver->swapBuffers();
 	}	
 }
 
-void CComponentManager::registerUpdate(IComponent *component)
+void CComponentManager::registerUpdate(IComponent *component, sint32 priority)
 {
-
+	component->UpdatePriority = priority;
+	for (std::list<IComponent *>::iterator it = _Updates.begin(); it != _Updates.end(); it++)
+		if ((*it)->UpdatePriority > priority) { _Updates.insert(it, component); return; }
+	_Updates.push_back(component);
 }
 
 void CComponentManager::unregisterUpdate(IComponent *component)
 {
-
+	_Updates.remove(component);
 }
 
-void CComponentManager::registerRender(IComponent *component)
+void CComponentManager::registerRender(IComponent *component, sint32 priority)
 {
-
+	component->RenderPriority = priority;
+	for (std::list<IComponent *>::iterator it = _Renders.begin(); it != _Renders.end(); it++)
+		if ((*it)->RenderPriority > priority) { _Renders.insert(it, component); return; }
+	_Renders.push_back(component);
 }
 
 void CComponentManager::unregisterRender(IComponent *component)
 {
+	_Renders.remove(component);
+}
 
+void CComponentManager::registerComponent(IComponent *component)
+{
+	_Components.push_back(component);
+	std::list<IComponent *> notifiers = _Notifiers[component->getInstanceId()];
+	for (std::list<IComponent *>::iterator it = notifiers.begin(); it != notifiers.end(); it++)
+		(*it)->componentUp(component);
+}
+
+void CComponentManager::unregisterComponent(IComponent *component)
+{
+	_Components.remove(component);
+	std::list<IComponent *> notifiers = _Notifiers[component->getInstanceId()];
+	for (std::list<IComponent *>::iterator it = notifiers.begin(); it != notifiers.end(); it++)
+		(*it)->componentDown(component);
+	for (std::list<IComponent *>::iterator it = _Updates.begin(); it != _Updates.end(); it++)
+		if ((*it) == component) { _Updates.remove(component); return; }
+	for (std::list<IComponent *>::iterator it = _Renders.begin(); it != _Renders.end(); it++)
+		if ((*it) == component) { _Renders.remove(component); return; }
 }
 
 void CComponentManager::setDriver(NL3D::UDriver *driver)
@@ -93,6 +122,28 @@ void CComponentManager::setDriver(NL3D::UDriver *driver)
 	if (driver) nlassert(!_Driver);
 	// set the driver (it can be set back to NULL)
 	_Driver = driver;
+}
+
+void CComponentManager::registerNotifier(IComponent *source, const std::string &target)
+{
+	if (!target.empty())
+	{
+		if (_Notifiers.find(target) == _Notifiers.end()) _Notifiers[target] = std::list<IComponent *>();
+		_Notifiers[target].push_back(source);
+		IComponent *component = IComponent::getInstancePtr(target);
+		if (component) source->componentUp(component);
+	}
+}
+
+void CComponentManager::unregisterNotifier(IComponent *source, const std::string &target)
+{
+	if (!target.empty())
+	{
+		_Notifiers[target].remove(source);
+		if (_Notifiers[target].size() == 0) _Notifiers.erase(target);
+		IComponent *component = IComponent::getInstancePtr(target);
+		if (component) source->componentDown(component);
+	}
 }
 
 }

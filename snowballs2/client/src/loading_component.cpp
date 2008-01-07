@@ -22,6 +22,9 @@
 #include <nel/misc/types_nl.h>
 #include "loading_component.h"
 
+#include "driver_component.h"
+#include "loading_screen.h"
+
 using namespace std;
 using namespace NLMISC;
 
@@ -29,9 +32,10 @@ namespace SBCLIENT {
 
 CLoadingComponent::CLoadingComponent(CComponentManager *manager, 
 	const string &instanceId, IProgressCallback &progressCallback)
-: IComponent(manager, instanceId, progressCallback)
+: IConfigurableComponent(manager, instanceId, progressCallback)
 {
-	
+	_LoadingScreen = (CLoadingScreen *)(&progressCallback);
+	registerAndCallConfigCallback("DriverInstanceId");
 }
 
 CLoadingComponent::~CLoadingComponent()
@@ -51,7 +55,36 @@ void CLoadingComponent::render()
 
 void CLoadingComponent::config(const string &varName, CConfigFile::CVar &var)
 {
-	
+	if (varName == "DriverInstanceId")
+	{
+		unregisterNotifier(_DriverInstanceId);
+		_DriverInstanceId = var.asString();
+		registerNotifier(_DriverInstanceId);
+	}
+	else nlwarning("Unknown IComponent config call");
+}
+
+void CLoadingComponent::componentUp(IComponent *component)
+{
+	std::string instanceId = component->getInstanceId();
+	if (instanceId == _DriverInstanceId)
+	{
+		CDriverComponent *c = (CDriverComponent *)component;
+		_LoadingScreen->setDriver(c->getDriver());
+		_LoadingScreen->setTextContext(c->getTextContext());
+	}
+	else nlwarning("Unknown IComponent componentUp call");
+}
+
+void CLoadingComponent::componentDown(IComponent *component)
+{
+	std::string instanceId = component->getInstanceId();
+	if (instanceId == _DriverInstanceId)
+	{
+		_LoadingScreen->setDriver(NULL);
+		_LoadingScreen->setTextContext(NULL);
+	}
+	else nlwarning("Unknown IComponent componentDown call");
 }
 
 }

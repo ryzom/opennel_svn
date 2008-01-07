@@ -22,18 +22,17 @@
 #ifndef SBCLIENT_EMPTY_COMPONENT_H
 #define SBCLIENT_EMPTY_COMPONENT_H
 #include <nel/misc/types_nl.h>
-#include "component.h"
+#include "configurable_component.h"
 
 namespace SBCLIENT {
-
-class CComponentManager;
+	class CComponentManager;
 
 /**
  * An empty snowballs component that does nothing.
  * \author Name
  * \date Year
  */
-class CEmptyComponent : public IComponent
+class CEmptyComponent : public IConfigurableComponent
 {
 protected:
 	// pointers
@@ -50,7 +49,8 @@ public:
 	void update();
 	void render();
 	void config(const std::string &varName, NLMISC::CConfigFile::CVar &var);
-	void component(IComponent *component);
+	void componentUp(IComponent *component);
+	void componentDown(IComponent *component);
 };
 
 }

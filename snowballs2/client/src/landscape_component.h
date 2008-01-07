@@ -22,7 +22,7 @@
 #ifndef SBCLIENT_LANDSCAPE_COMPONENT_H
 #define SBCLIENT_LANDSCAPE_COMPONENT_H
 #include <nel/misc/types_nl.h>
-#include "component.h"
+#include "configurable_component.h"
 
 namespace NL3D {
 	class ULandscape;
@@ -37,7 +37,7 @@ class CComponentManager;
  * A landscape component.
  * \date 2007-2008
  */
-class CLandscapeComponent : public IComponent
+class CLandscapeComponent : public IConfigurableComponent
 {
 protected:
 	// pointers

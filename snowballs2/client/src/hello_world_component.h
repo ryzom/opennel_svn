@@ -1,5 +1,5 @@
-/** \file weather_component.h
- * CWeatherComponent
+/** \file hello_world_component.h
+ * CHelloWorldComponent
  * 
  * This file is part of NEVRAX SNOWBALLS.
  * NEVRAX SNOWBALLS is free software; you can redistribute it and/or modify
@@ -19,33 +19,38 @@
  * $Id$
  */
 
-#ifndef SBCLIENT_WEATHER_COMPONENT_H
-#define SBCLIENT_WEATHER_COMPONENT_H
+#ifndef SBCLIENT_HELLO_WORLD_COMPONENT_H
+#define SBCLIENT_HELLO_WORLD_COMPONENT_H
 #include <nel/misc/types_nl.h>
 #include "configurable_component.h"
 
-namespace SBCLIENT {
+namespace NL3D {
+	class UTextContext;
+}
 
-class CComponentManager;
+namespace SBCLIENT {
+	class CComponentManager;
 
 /**
- * A weather component that does nothing.
- * \author Jan Boon (Kaetemi)
- * \date 2008
+ * A component that displays hello world by default.
+ * The message can be modified in the config at runtime, 
+ * and can make use of internationalized strings.
+ * \author Name
+ * \date Year
  */
-class CWeatherComponent : public IConfigurableComponent
+class CHelloWorldComponent : public IConfigurableComponent
 {
 protected:
 	// pointers
-	// ...
+	NL3D::UTextContext *_TextContext; // not deleted here
 	
 	// instances
-	// ...
+	ucstring _Message;
 public:	
 	/// Basic constructor of a component.
 	/// Requires a pointer to the componentmanager and a unique name.
-	CWeatherComponent(CComponentManager *manager, const std::string &instanceId, NLMISC::IProgressCallback &progressCallback);
-	~CWeatherComponent();
+	CHelloWorldComponent(CComponentManager *manager, const std::string &instanceId, NLMISC::IProgressCallback &progressCallback);
+	~CHelloWorldComponent();
 
 	void update();
 	void render();
@@ -54,4 +59,4 @@ public:
 
 }
 
-#endif /* #ifndef SBCLIENT_WEATHER_COMPONENT_H */
+#endif /* #ifndef SBCLIENT_HELLO_WORLD_COMPONENT_H */

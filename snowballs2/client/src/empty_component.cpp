@@ -29,7 +29,7 @@ namespace SBCLIENT {
 
 CEmptyComponent::CEmptyComponent(CComponentManager *manager, 
 	const string &instanceId, IProgressCallback &progressCallback)
-: IComponent(manager, instanceId, progressCallback)
+: IConfigurableComponent(manager, instanceId, progressCallback)
 {
 	
 }
@@ -54,7 +54,12 @@ void CEmptyComponent::config(const string &varName, CConfigFile::CVar &var)
 	
 }
 
-void CEmptyComponent::component(IComponent *component)
+void CEmptyComponent::componentUp(IComponent *component)
+{ 
+
+}
+
+void CEmptyComponent::componentDown(IComponent *component)
 { 
 
 }

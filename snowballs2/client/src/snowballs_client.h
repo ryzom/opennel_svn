@@ -37,7 +37,9 @@ namespace NL3D {
 
 namespace SBCLIENT {
 	class CComponentManager;
-	class CDriverComponent;
+	class CDriverComponent; // temp
+	class CLoadingComponent; // temp
+	class CHelloWorldComponent; // temp
 
 /**
  * Snowballs client 0.3.
@@ -58,6 +60,8 @@ private:
 	NLMISC::CConfigFile *_ConfigFile; // deleted here
 
 	CDriverComponent *_DriverComponent; // temp, deleted here
+	CLoadingComponent *_LoadingComponent; // temp, deleted here
+	CHelloWorldComponent *_HelloWorldComponent;
 	NL3D::UDriver *_Driver; // not deleted here, get from component on reg
 	
 	// instances

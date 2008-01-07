@@ -84,10 +84,10 @@ void CTimeComponent::render()
 	
 }
 
-void CTimeComponent::config(const string &varName, CConfigFile::CVar &var)
-{
-	
-}
+//void CTimeComponent::config(const string &varName, CConfigFile::CVar &var)
+//{
+//	
+//}
 
 void CTimeComponent::setGameCycle(TGameCycle gameCycle, TLocalTime secondsPerCycle, TGameTime gameTimePerSecond, TGameCycle cyclesPerUpdate)
 {

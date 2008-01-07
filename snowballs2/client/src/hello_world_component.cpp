@@ -1,5 +1,5 @@
-/** \file weather_component.cpp
- * CWeatherComponent
+/** \file hello_world_component.cpp
+ * CHelloWorldComponent
  * 
  * This file is part of NEVRAX SNOWBALLS.
  * NEVRAX SNOWBALLS is free software; you can redistribute it and/or modify
@@ -20,38 +20,53 @@
  */
 
 #include <nel/misc/types_nl.h>
-#include "weather_component.h"
+#include "hello_world_component.h"
+
+#include "driver_component.h"
+
+#include <nel/3d/u_text_context.h>
 
 using namespace std;
 using namespace NLMISC;
+using namespace NL3D;
 
 namespace SBCLIENT {
 
-CWeatherComponent::CWeatherComponent(CComponentManager *manager, 
+CHelloWorldComponent::CHelloWorldComponent(CComponentManager *manager, 
 	const string &instanceId, IProgressCallback &progressCallback)
 : IConfigurableComponent(manager, instanceId, progressCallback)
 {
-	
+	_TextContext = ((CDriverComponent &)getInstance(_Config.getVar("DriverInstanceId").asString())).getTextContext();
+	if (_Config.exists("Message")) registerAndCallConfigCallback("Message");
+	else
+	{
+		_Message = i18nGet("HelloWorldNoConfig");
+		registerConfigCallback("Message");
+	}
 }
 
-CWeatherComponent::~CWeatherComponent()
+CHelloWorldComponent::~CHelloWorldComponent()
 {
 	
 }
 
-void CWeatherComponent::update()
+void CHelloWorldComponent::update()
 {
 	
 }
 
-void CWeatherComponent::render()
+void CHelloWorldComponent::render()
 {
-	
+	_TextContext->setHotSpot(UTextContext::TopLeft);
+    _TextContext->setColor(CRGBA(255, 255, 255));
+    _TextContext->setFontSize(18);
+    _TextContext->printAt(0.01f, 0.99f, _Message);
 }
 
-void CWeatherComponent::config(const string &varName, CConfigFile::CVar &var)
+void CHelloWorldComponent::config(const string &varName, CConfigFile::CVar &var)
 {
-	
+	if (varName == "Message") _Message = i18n(var.asString());
+	else nlwarning("Unknown IComponent config call");
 }
 
 }

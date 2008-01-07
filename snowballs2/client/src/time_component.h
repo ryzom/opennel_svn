@@ -67,7 +67,7 @@ public:
 
 	void update();
 	void render();
-	void config(const std::string &varName, NLMISC::CConfigFile::CVar &var);
+	//void config(const std::string &varName, NLMISC::CConfigFile::CVar &var);
 
 	/// Set the game cycle configuration.
 	/// This is done by the online or offline component.

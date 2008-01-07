@@ -23,6 +23,8 @@
 #define SBCLIENT_COMPONENT_MANAGER_H
 #include <nel/misc/types_nl.h>
 
+#include <map>
+
 namespace NL3D {
 	class UDriver;
 }
@@ -47,7 +49,10 @@ protected:
 	NL3D::UDriver *_Driver; // not deleted here, can be NULL, temp
 	
 	// instances
-	// ...
+	std::list<IComponent *>	_Components;
+	std::list<IComponent *>	_Updates;
+	std::list<IComponent *>	_Renders;
+	std::map<std::string, std::list<IComponent *>> _Notifiers;
 public:
 	CComponentManager(NLMISC::CConfigFile *configFile);
 	virtual ~CComponentManager();
@@ -55,16 +60,20 @@ public:
 	void update();
 	void render();
 
-	void registerUpdate(IComponent *component);
+	void registerUpdate(IComponent *component, sint32 priority);
 	void unregisterUpdate(IComponent *component);
-	void registerRender(IComponent *component);
+	void registerRender(IComponent *component, sint32 priority);
 	void unregisterRender(IComponent *component);
 
-	/// Called when a component is initialized,
+	/// Called when a component is fully initialized,
 	/// other components will be notified.
+	/// (not called by component itself, but by the creator)
+	/// (you don't need to call it if the instance isn't shared)
 	void registerComponent(IComponent *component);
 	/// Called when a component will be destroyed,
 	/// other components will be notified.
+	/// (not called by the component itself, but by the creator)
+	/// Also automagically removes the component from update and render.
 	void unregisterComponent(IComponent *component);
 
 	/// Called by the driver component.
@@ -74,6 +83,13 @@ public:
 	/// Called by components to get the base config file.
 	/// They can automatically switch to a diffent one.
 	NLMISC::CConfigFile *getConfig() { return _ConfigFile; }
+
+	/// Tells the source IComponent when target comes up or goes down
+	/// Automagically tells so when target is already up or too.
+	/// Does nothing if target is an empty string.
+	void registerNotifier(IComponent *source, const std::string &target);
+	/// This will call componentDown if the target is still up.
+	void unregisterNotifier(IComponent *source, const std::string &target);
 };
 
 }

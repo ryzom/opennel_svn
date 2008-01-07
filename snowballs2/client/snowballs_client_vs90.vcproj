@@ -520,14 +520,6 @@
 					>
 				</File>
 				<File
-					RelativePath="src\landscape.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\landscape.h"
-					>
-				</File>
-				<File
 					RelativePath="src\lens_flare.cpp"
 					>
 				</File>
@@ -624,6 +616,14 @@
 					>
 				</File>
 				<File
+					RelativePath="src\landscape.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\landscape.h"
+					>
+				</File>
+				<File
 					RelativePath="src\sound.cpp"
 					>
 				</File>
@@ -653,6 +653,14 @@
 				</File>
 				<File
 					RelativePath=".\src\component_manager.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\configurable_component.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\configurable_component.h"
 					>
 				</File>
 				<File
@@ -713,6 +721,14 @@
 				</File>
 				<File
 					RelativePath=".\src\empty_component.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\hello_world_component.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\hello_world_component.h"
 					>
 				</File>
 				<File

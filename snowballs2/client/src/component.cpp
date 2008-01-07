@@ -36,14 +36,12 @@ std::string IComponent::I18NPrefix = "i18n";
 bool IComponent::KeepPrefix = false;
 
 IComponent::IComponent(CComponentManager *manager, const string &instanceId, IProgressCallback &progressCallback)
-: _Manager(manager), _Config(), _InstanceId(instanceId)
+: _Manager(manager), _InstanceId(instanceId)
 {
 	// register this with the app context
 	// this ensures that the same component configuration isn't init twice
 	CApplicationContext::getInstance().setSingletonPointer(
 		string("SBCLIENT::IComponent|") + _InstanceId, this);
-	// initialize the config file manager
-	_Config.setConfigFile(manager->getConfig(), instanceId);
 }
 
 IComponent::~IComponent()
@@ -67,55 +65,7 @@ IComponent *IComponent::getInstancePtr(const string &instanceId)
 	IComponent *instance = 
 		(IComponent *)CApplicationContext::getInstance()
 		.getSingletonPointer(string("SBCLIENT::IComponent|") + instanceId);
-	// don't allow null result for now
-	nlassert(instance); return instance;
-}
-
-void IComponent::registerConfigCallback(const string &varName)
-{
-	_Config.setCallback(varName, _config);
-}
-
-void IComponent::registerAndCallConfigCallback(const string &varName)
-{
-	registerConfigCallback(varName);
-	config(varName);
-}
-
-void IComponent::unregisterConfigCallback(const string &varName)
-{
-	_Config.setCallback(varName, NULL);
-}
-
-void IComponent::config(const std::string &varName)
-{
-	config(varName, _Config.getVar(varName));
-}
-
-void IComponent::_config(NLMISC::CConfigFile::CVar &var)
-{
-	vector<string> nameVector;
-	std::string instanceId = nameVector[0];
-	explode(var.Name, string("_"), nameVector, false);
-	IComponent *instance = getInstancePtr(instanceId);
-	uint i = 1;
-	while (!instance)
-	{
-		if (i > nameVector.size() - 2) // need extra for var name
-		{
-			nlwarning("Config var callback %s not linked to any IComponent", var.Name.c_str());
-			return;
-		}
-		instanceId = instanceId + string("_") + nameVector[i];
-		++i;
-	}
-	std::string varName = nameVector[i]; ++i;
-	while (i < nameVector.size());
-	{
-		varName = varName + string("_") + nameVector[i];
-		++i;
-	}
-	instance->config(varName, var);
+	return instance;
 }
 
 ucstring IComponent::i18n(const string &label)
@@ -126,6 +76,21 @@ ucstring IComponent::i18n(const string &label)
 		return CI18N::get(label.substr(4, label.size() - 4));
 	}
 	return ucstring(label);
+}
+
+ucstring IComponent::i18nGet(const string &label)
+{
+	return CI18N::get(label);
+}
+
+void IComponent::registerNotifier(const std::string &target)
+{
+	_Manager->registerNotifier(this, target);
+}
+
+void IComponent::unregisterNotifier(const std::string &target)
+{
+	_Manager->unregisterNotifier(this, target);
 }
 
 }

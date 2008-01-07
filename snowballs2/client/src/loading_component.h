@@ -22,11 +22,11 @@
 #ifndef SBCLIENT_LOADING_COMPONENT_H
 #define SBCLIENT_LOADING_COMPONENT_H
 #include <nel/misc/types_nl.h>
-#include "component.h"
+#include "configurable_component.h"
 
 namespace SBCLIENT {
 	class CComponentManager;
-	class CLoading;
+	class CLoadingScreen;
 
 /**
  * Loading screen component.
@@ -35,14 +35,14 @@ namespace SBCLIENT {
  * \author Name
  * \date Year
  */
-class CLoadingComponent : public IComponent
+class CLoadingComponent : public IConfigurableComponent
 {
 protected:
 	// pointers
-	CLoading *_Loading; // not deleted here
+	CLoadingScreen *_LoadingScreen; // not deleted here
 	
 	// instances
-	// ...
+	std::string _DriverInstanceId;
 public:	
 	/// Basic constructor of a component.
 	/// Requires a pointer to the componentmanager and a unique name.
@@ -52,6 +52,8 @@ public:
 	void update();
 	void render();
 	void config(const std::string &varName, NLMISC::CConfigFile::CVar &var);
+	void componentUp(IComponent *component);
+	void componentDown(IComponent *component);
 };
 
 }
