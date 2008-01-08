@@ -114,6 +114,10 @@ const uint CDriverGL::_EVSNumConstant = 97;
 
 #ifdef NL_STATIC
 
+#	pragma comment(lib, "opengl32")
+#	pragma comment(lib, "dinput8")
+#	pragma comment(lib, "dxguid")
+
 IDriver* createIDriverInstance ()
 {
 	return new CDriverGL;
