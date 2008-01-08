@@ -31,7 +31,6 @@ SET(NL_VERSION_MINOR 6)
 SET(NL_VERSION_PATCH 0)
 SET(NL_VERSION "${NL_VERSION_MAJOR}.${NL_VERSION_MINOR}.${NL_VERSION_PATCH}")
 
-MESSAGE(STATUS "CPU: ${CMAKE_SYSTEM_PROCESSOR}")
 #-----------------------------------------------------------------------------
 # Redirect output files
 SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
