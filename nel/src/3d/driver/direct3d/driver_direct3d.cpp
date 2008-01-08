@@ -1401,7 +1401,7 @@ bool CDriverD3D::setDisplay(void* wnd, const GfxMode& mode, bool show, bool resi
 	// Set default settings
 	_Rasterizer = RASTERIZER;
 #ifdef NL_D3D_USE_NV_PERF_HUD
-/*		// Look for 'NVIDIA NVPerfHUD' adapter
+		// Look for 'NVIDIA NVPerfHUD' adapter
 		// If it is present, override default settings
 		for (UINT adapterIndex = 0; adapterIndex < _D3D->GetAdapterCount(); adapterIndex++)
 		{
@@ -1415,7 +1415,7 @@ bool CDriverD3D::setDisplay(void* wnd, const GfxMode& mode, bool show, bool resi
 				nlinfo("Using NVIDIA NVPerfHUD adapter");
 				break;
 			}
-		}*/
+		}
 #endif
 
 	// Create device options
