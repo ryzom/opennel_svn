@@ -362,14 +362,23 @@ uint8 CBitmap::readDDS(NLMISC::IStream &f, uint mipMapSkip)
 		PixelFormat=DXTC5;
 		break;
 	}
-	
+
 	flags = _DDSSurfaceDesc[19]; //PixelFormat flags
 	
-	if(PixelFormat==DXTC1 && _DDSSurfaceDesc[21]>0) //AlphaBitDepth
+/*	ace: I changed this code because it's not a way to detect if DXTC1 has a alpha channel or not
+		There's no easy way to detect if the DXTC1 has an alpha channel or not, so, for now, we'll suppose
+		that all DXTC1 has alpha channel per default.
+
+		"There is no flag unfortunately, you need to read each block of DXT1 data, check if one of the colors
+		contains alpha, and check if that color is used in the data.
+		It's not that hard to write, but it IS a pain that it's the only way that I've found to check for alpha."
+		http://www.gamedev.net/community/forums/topic.asp?topic_id=177475
+*/
+	if(PixelFormat==DXTC1 /*&& _DDSSurfaceDesc[21]>0*/) //AlphaBitDepth
 	{
 		PixelFormat = DXTC1Alpha;
 	}
-	
+
 	if(PixelFormat!= DXTC1 && PixelFormat!= DXTC1Alpha && PixelFormat!= DXTC3 && PixelFormat!= DXTC5)
 	{
 		throw EDDSBadHeader();
@@ -382,7 +391,7 @@ uint8 CBitmap::readDDS(NLMISC::IStream &f, uint mipMapSkip)
 	//------------- manage mipMapSkip 
 	if(_MipMapCount>1 && mipMapSkip>0 && minSizeLevel>2)
 	{
-		// Keep at least the level where width and height are at leat 4.
+		// Keep at least the level where width and height are at least 4.
 		mipMapSkip= min(mipMapSkip, minSizeLevel-2);
 		// skip any mipmap
 		uint	seekSize= 0;
