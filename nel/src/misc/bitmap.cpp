@@ -373,11 +373,22 @@ uint8 CBitmap::readDDS(NLMISC::IStream &f, uint mipMapSkip)
 		contains alpha, and check if that color is used in the data.
 		It's not that hard to write, but it IS a pain that it's the only way that I've found to check for alpha."
 		http://www.gamedev.net/community/forums/topic.asp?topic_id=177475
+
+		UPDATE: worst... on linux/opengl, it generates random alpha values
+		if we use alpha dxtc1 by default. So I only to that for windows
+		and leave the old test on linux
 */
-	if(PixelFormat==DXTC1 /*&& _DDSSurfaceDesc[21]>0*/) //AlphaBitDepth
+#ifdef NL_OS_WINDOWS
+	if(PixelFormat==DXTC1) //AlphaBitDepth
 	{
 		PixelFormat = DXTC1Alpha;
 	}
+#else
+	if(PixelFormat==DXTC1 && _DDSSurfaceDesc[21]>0) //AlphaBitDepth
+	{
+		PixelFormat = DXTC1Alpha;
+	}
+#endif
 
 	if(PixelFormat!= DXTC1 && PixelFormat!= DXTC1Alpha && PixelFormat!= DXTC3 && PixelFormat!= DXTC5)
 	{
