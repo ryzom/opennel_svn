@@ -24,8 +24,6 @@
  */
 
 
-
-#include <conio.h>
 #include "nel/misc/file.h"
 #include "nel/misc/path.h"
 #include "nel/../../src/3d/scene_group.h"
@@ -36,6 +34,29 @@
 #include "nel/../../src/3d/mesh_mrm.h"
 #include "nel/../../src/3d/mesh_mrm_skinned.h"
 #include "nel/../../src/3d/mesh_multi_lod.h"
+
+#ifdef NL_OS_WINDOWS
+#include <conio.h>
+#endif // NL_OS_WINDOWS
+
+#ifdef NL_OS_UNIX
+#include <stdio.h>
+#include <termios.h>
+#include <unistd.h>
+
+int _getch( ) {
+struct termios oldt,
+newt;
+int ch;
+tcgetattr( STDIN_FILENO, &oldt );
+newt = oldt;
+newt.c_lflag &= ~( ICANON | ECHO );
+tcsetattr( STDIN_FILENO, TCSANOW, &newt );
+ch = getchar();
+tcsetattr( STDIN_FILENO, TCSANOW, &oldt );
+return ch;
+}
+#endif // NL_OS_UNIX
 
 
 using	namespace std;
