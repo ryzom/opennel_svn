@@ -45,7 +45,10 @@
 #include "nel/../../src/3d/event_mouse_listener.h"
 #include "nel/../../src/3d/text_context.h"
 
-#include <windows.h>
+#ifdef NL_OS_WINDOWS
+#	define NOMINMAX
+#	include <windows.h>
+#endif // NL_OS_WINDOWS
 
 using namespace std;
 using namespace NL3D;
@@ -199,7 +202,11 @@ void LoadSceneScript (const char *ScriptName, CScene* pScene, vector<SDispCS> &D
 // Main
 // ---------------------------------------------------------------------------
 
+#ifdef NL_OS_WINDOWS
 int CALLBACK WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
+#else // NL_OS_WINDOWS
+int main(int argc, char **argv)
+#endif // NL_OS_WINDOWS
 {
 	double rGlobalTime = 0;
 	double rOldGlobalTime = 0;
