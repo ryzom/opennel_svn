@@ -26,9 +26,14 @@
 
 #include "stdopengl.h"
 
+#include "nel/misc/common.h"
+
 #include "driver_opengl.h"
 #include "driver_opengl_extension.h"
 #include "../../material.h"
+
+using namespace std;
+using namespace NLMISC;
 
 // ***************************************************************************
 #ifdef NL_OS_WINDOWS
@@ -1222,8 +1227,16 @@ void	registerGlExtensions(CGlExtensions &ext)
 	const char	*glext= (const char*)glGetString(GL_EXTENSIONS);
 	GLint	ntext;
 
-	nldebug("GLExt: %s", glext);
-
+	nldebug("Available OpenGL Extensions:");
+	vector<string> exts;
+	explode(string(glext), string(" "), exts);
+	for(uint i = 0; i < exts.size(); i++)
+	{
+		if(i%5==0) DebugLog->displayRaw("    ");
+		DebugLog->displayRaw(string(exts[i]+" ").c_str());
+		if(i%5==4) DebugLog->displayRaw("\n");
+	}
+	DebugLog->displayRaw("\n");
 
 	// Check ARBMultiTexture
 	ext.ARBMultiTexture= setupARBMultiTexture(glext);
@@ -1417,7 +1430,16 @@ void	registerWGlExtensions(CGlExtensions &ext, HDC hDC)
 		return;
 	}
 
-	nldebug("WGLExt: %s", glext);
+	nldebug("Available WGL Extensions:");
+	vector<string> exts;
+	explode(string(glext), string(" "), exts);
+	for(uint i = 0; i < exts.size(); i++)
+	{
+		if(i%5==0) DebugLog->displayRaw("    ");
+		DebugLog->displayRaw(string(exts[i]+" ").c_str());
+		if(i%5==4) DebugLog->displayRaw("\n");
+	}
+	DebugLog->displayRaw("\n");
 
 	// Check for pbuffer
 	ext.WGLARBPBuffer= setupWGLARBPBuffer(glext);
