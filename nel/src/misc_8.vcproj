@@ -346,7 +346,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="NL_STATIC;__STL_DEBUG;_LIB;LIBXML_STATIC;_DEBUG;WIN32"
+				PreprocessorDefinitions="NL_STATIC;_LIB;LIBXML_STATIC;_DEBUG;WIN32"
 				StringPooling="true"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
