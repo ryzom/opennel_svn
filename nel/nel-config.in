@@ -12,8 +12,8 @@
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 
-lib_dir=@libdir@
-include_dir=@includedir@
+lib_dir="@libdir@"
+include_dir="@includedir@"
 
 enable_net=@enable_net@
 enable_3d=@enable_3d@
