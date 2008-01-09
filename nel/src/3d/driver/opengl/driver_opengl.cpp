@@ -2808,8 +2808,11 @@ bool CDriverGL::supportTextureShaders() const
 // ***************************************************************************
 bool CDriverGL::isWaterShaderSupported() const
 {
-	H_AUTO_OGL(CDriverGL_isWaterShaderSupported)
-	
+	H_AUTO_OGL(CDriverGL_isWaterShaderSupported);
+
+// This case can happen if the extension exists but fragment cannot be handled in native form
+	if(_Extensions.ARBFragmentProgram && ARBWaterShader[0] == 0) return false;
+
 	if (!_Extensions.EXTVertexShader && !_Extensions.NVVertexProgram && !_Extensions.ARBVertexProgram) return false; // should support vertex programms
 	if (!_Extensions.NVTextureShader && !_Extensions.ATIFragmentShader && !_Extensions.ARBFragmentProgram) return false;
 	return true;
@@ -3359,11 +3362,19 @@ END ";
   */
 uint loadARBFragmentProgramStringNative(const char *prog)
 {
-	H_AUTO_OGL(loadARBFragmentProgramStringNative)
-	if (!prog) return 0;
+	H_AUTO_OGL(loadARBFragmentProgramStringNative);
+	if (!prog)
+	{
+		nlwarning("The param 'prog' is null, cannot load");
+		return 0;
+	}
 	GLuint progID;
 	nglGenProgramsARB(1, &progID);
-	if (!progID) return false;
+	if (!progID)
+	{
+		nlwarning("nglGenProgramsARB returns a progID NULL");
+		return 0;
+	}
 	nglBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, progID);
 	GLint errorPos, isNative;
 	nglProgramStringARB(GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_FORMAT_ASCII_ARB, strlen(prog), prog);
@@ -3376,14 +3387,14 @@ uint loadARBFragmentProgramStringNative(const char *prog)
 	}
 	else
 	{
+		nlwarning("init failed: errorPos: %d isNative: %d", errorPos, isNative);
 		if (errorPos == -1)
 		{
-			nglDeleteProgramsARB(1, &progID);			
+			nlwarning("There's no error in the fragment but the hardware doesn't support the fragment in native");
+			nglDeleteProgramsARB(1, &progID);
 		}
 		return 0;
 	}
-	
-		
 }
 
 
@@ -3428,7 +3439,7 @@ void CDriverGL::initFragmentShaders()
 	// the ARB_fragment_program is prioritary over other extensions when present
 	if (_Extensions.ARBFragmentProgram)
 	{
-		
+		nlinfo("WATER: Try ARB_fragment_program");
 		ARBWaterShader[0] = loadARBFragmentProgramStringNative(WaterCodeNoDiffuseForARBFragmentProgram);
 		ARBWaterShader[1] = loadARBFragmentProgramStringNative(WaterCodeNoDiffuseWithFogForARBFragmentProgram);
 		ARBWaterShader[2] = loadARBFragmentProgramStringNative(WaterCodeForARBFragmentProgram);
@@ -3440,23 +3451,27 @@ void CDriverGL::initFragmentShaders()
 			{
 				ok = false;
 				deleteARBFragmentPrograms();
+				nlwarning("WATER: fragment %d is not loaded, not using ARB_fragment_program at all", k);
 				break;
 			}
 		}	
-		if (ok) return;
+		if (ok)
+		{
+			nlinfo("WATER: ARB_fragment_program OK, Use it");
+			return;
+		}
 	}
 	
 	if (_Extensions.ATIFragmentShader)
 	{
+		nlinfo("WATER: Try ATI_fragment_program");
 		///////////
 		// WATER //
 		///////////
 		ATIWaterShaderHandleNoDiffuseMap = nglGenFragmentShadersATI(1);
-		
-			
+
 		ATIWaterShaderHandle = nglGenFragmentShadersATI(1);
 		
-			
 		if (!ATIWaterShaderHandle || !ATIWaterShaderHandleNoDiffuseMap)
 		{
 			ATIWaterShaderHandleNoDiffuseMap = ATIWaterShaderHandle = 0;
@@ -3464,7 +3479,6 @@ void CDriverGL::initFragmentShaders()
 		}
 		else
 		{
-
 			glGetError();
 			// Water shader for R200 : we just add the 2 bump map contributions (du, dv). We then use this contribution to perturbate the envmap
 			nglBindFragmentShaderATI(ATIWaterShaderHandleNoDiffuseMap);
@@ -3496,11 +3510,11 @@ void CDriverGL::initFragmentShaders()
 			
 				
 		}
+
 		////////////
 		// CLOUDS //
 		////////////
-		ATICloudShaderHandle = nglGenFragmentShadersATI(1);		
-		
+		ATICloudShaderHandle = nglGenFragmentShadersATI(1);
 			
 		if (!ATICloudShaderHandle)
 		{			
@@ -3525,13 +3539,10 @@ void CDriverGL::initFragmentShaders()
 			GLenum error = glGetError();
 			nlassert(error == GL_NONE);	
 			nglBindFragmentShaderATI(0);
-			
-				
 		}
 	}	
 
 	// if none of the previous programs worked, fallback on NV_texture_shader, or (todo) simpler shader
-	
 }
 
 // ***************************************************************************
@@ -3545,8 +3556,6 @@ void CDriverGL::deleteARBFragmentPrograms()
 		{
 			GLuint progId = (GLuint) ARBWaterShader[k];
 			nglDeleteProgramsARB(1, &progId);
-			
-				
 			ARBWaterShader[k] = 0;
 		}
 	}
@@ -3557,10 +3566,9 @@ void CDriverGL::deleteARBFragmentPrograms()
 void CDriverGL::deleteFragmentShaders()
 {	
 	H_AUTO_OGL(CDriverGL_deleteFragmentShaders)
-	
+ 
 	deleteARBFragmentPrograms();
-	
-		
+
 	if (ATIWaterShaderHandleNoDiffuseMap)
 	{		
 		nglDeleteFragmentShaderATI((GLuint) ATIWaterShaderHandleNoDiffuseMap);		

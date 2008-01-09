@@ -2123,33 +2123,24 @@ void CDriverGL::setupWaterPassR200(const CMaterial &mat)
 	if (mat.getTexture(3) != NULL) // is there a diffuse map ?
 	{
 		nglBindFragmentShaderATI(ATIWaterShaderHandle);
-		
-			
 	}
 	else
 	{
 		nglBindFragmentShaderATI(ATIWaterShaderHandleNoDiffuseMap);
-		
-			
 	}
 	glEnable(GL_FRAGMENT_SHADER_ATI);
-	
-		
+
 	// set constants
 	if (mat.getTexture(0) && mat.getTexture(0)->isBumpMap())
 	{
 		float factor = NLMISC::safe_cast<CTextureBump *>(mat.getTexture(0))->getNormalizationFactor();
 		float cst[4] = { factor, factor, factor, 0.f };
 		nglSetFragmentShaderConstantATI(GL_CON_0_ATI, cst);
-		
-			
 	}
 	else
 	{
 		float cst[4] = { 1.f, 1.f, 1.f, 0.f };
 		nglSetFragmentShaderConstantATI(GL_CON_0_ATI, cst);
-		
-			
 	}
 	//
 	if (mat.getTexture(1) && mat.getTexture(1)->isBumpMap())
@@ -2157,15 +2148,11 @@ void CDriverGL::setupWaterPassR200(const CMaterial &mat)
 		float factor = NLMISC::safe_cast<CTextureBump *>(mat.getTexture(1))->getNormalizationFactor();
 		float cst[4] = { factor, factor, factor, 0.f };
 		nglSetFragmentShaderConstantATI(GL_CON_1_ATI, cst);
-		
-			
 	}
 	else
 	{
 		float cst[4] = { 1.f, 1.f, 1.f, 0.f };
 		nglSetFragmentShaderConstantATI(GL_CON_0_ATI, cst);
-		
-			
 	}
 }
 
@@ -2375,7 +2362,6 @@ void CDriverGL::setupWaterPassNV20(const CMaterial &mat)
 		activateTexture(k, NULL);
 	}
 
-
 	// setup the texture shaders
 	enableNVTextureShader(true);
 	activateTexEnvMode(0, texEnvReplace);
@@ -2406,17 +2392,14 @@ void CDriverGL::setupWaterPass(uint pass)
 	{
 		setupWaterPassNV20(mat);
 	}
-	else
-	if (ARBWaterShader[0])	
+	else if (ARBWaterShader[0])
 	{
-		setupWaterPassARB(mat);	
+		setupWaterPassARB(mat);
 	}
-	else
-	if (ATIWaterShaderHandleNoDiffuseMap)	
+	else if (ATIWaterShaderHandleNoDiffuseMap)
 	{
 		setupWaterPassR200(mat);
-	}	
-	
+	}
 }
 
 // ***************************************************************************
@@ -2426,18 +2409,14 @@ void CDriverGL::endWaterMultiPass()
 	nlassert(_CurrentMaterial->getShader() == CMaterial::Water);
 	// NB : as fragment shaders / programms bypass the texture envs, no special env enum is added (c.f CTexEnvSpecial)
 	if (_Extensions.NVTextureShader) return;
-	if (ARBWaterShader[0])	
+	if (ARBWaterShader[0])
 	{
 		glDisable(GL_FRAGMENT_PROGRAM_ARB);
-		
-			
 	}
-	else
-	if (ATIWaterShaderHandleNoDiffuseMap)	
+	else if (ATIWaterShaderHandleNoDiffuseMap)
 	{
-		glDisable(GL_FRAGMENT_SHADER_ATI);											
-	}			
+		glDisable(GL_FRAGMENT_SHADER_ATI);
+	}
 }
-
 
 } // NL3D
