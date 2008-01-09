@@ -1,4 +1,4 @@
-/** \file main.cpp
+n/** \file main.cpp
  * Display info on sheetid.bin
  *
  * $Id$
@@ -80,6 +80,8 @@ int		main(int argc, const char *argv[])
 		_getch();
 		return -1;
 	}
+
+	NLMISC::CApplicationContext appContext;
 
 	CPath::addSearchPath(argv[1]);
 
