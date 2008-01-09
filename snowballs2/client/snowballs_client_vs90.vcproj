@@ -776,6 +776,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\scene_component.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\scene_component.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\time_component.cpp"
 					>
 				</File>

@@ -44,12 +44,12 @@ protected:
 	
 	// instances
 	std::string _State;
-public:	
+public:
 	/// Basic constructor of a component.
 	/// Requires a pointer to the componentmanager and a unique name.
 	CLoadingScreen();
 	virtual ~CLoadingScreen();
-
+	
 	void setDriver(NL3D::UDriver *driver) { _Driver = driver; }
 	void setTextContext(NL3D::UTextContext *textContext) { _TextContext = textContext; }
 };

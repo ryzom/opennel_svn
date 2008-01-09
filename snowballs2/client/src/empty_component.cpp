@@ -41,37 +41,37 @@ namespace SBCLIENT {
 CEmptyComponent::CEmptyComponent(CComponentManager *manager, const string &instanceId, IProgressCallback &progressCallback)
 	: IConfigurableComponent(manager, instanceId, progressCallback)
 {
-	
+	nlwarning("Unknown IComponent CEmptyComponent() call");
 }
 
 CEmptyComponent::~CEmptyComponent()
 {
-	
+	nlwarning("Unknown IComponent ~CEmptyComponent() call");
 }
 
 void CEmptyComponent::update()
 {
-	
+	nlwarning("Unknown IComponent update() call");
 }
 
 void CEmptyComponent::render()
 {
-	
+	nlwarning("Unknown IComponent render() call");
 }
 
 void CEmptyComponent::config(const string &varName, CConfigFile::CVar &var)
 {
-	
+	nlwarning("Unknown IConfigurableComponent config(varName, var) call");
 }
 
 void CEmptyComponent::componentUp(IComponent *component)
 {
-
+	nlwarning("Unknown IComponent componentUp(component) call");
 }
 
 void CEmptyComponent::componentDown(IComponent *component)
 {
-
+	nlwarning("Unknown IComponent componentDown(component) call");
 }
 
 } /* namespace SBCLIENT */

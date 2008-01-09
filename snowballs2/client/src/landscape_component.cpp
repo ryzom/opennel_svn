@@ -1,27 +1,38 @@
-/** \file landscape_component.cpp
+/**
+ * \file landscape_component.cpp
+ * \brief CLandscapeComponent
+ * \date 2007-12-29 19:37GMT
+ * \author Jan Boon (Kaetemi)
  * CLandscapeComponent
  * 
+ * $Id$
+ */
+
+/* 
+ * Copyright (C) 2007-2008  Jan Boon (Kaetemi)
+ * Based on NEVRAX SNOWBALLS 0.2, Copyright (C) 2001  Nevrax Ltd.
+ * 
  * This file is part of NEVRAX SNOWBALLS.
- * NEVRAX SNOWBALLS is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * NEVRAX SNOWBALLS is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 2 of the
+ * License, or (at your option) any later version.
  * 
  * NEVRAX SNOWBALLS is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License
  * along with NEVRAX SNOWBALLS; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * 
- * $Id$
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301 USA.
  */
 
 #include <nel/misc/types_nl.h>
 #include "landscape_component.h"
 
+// #include <nel/misc/debug.h>
 #include <nel/misc/path.h>
 
 #include <nel/3d/u_landscape.h>
@@ -37,10 +48,9 @@ extern UScene *Scene;
 
 namespace SBCLIENT {
 
-CLandscapeComponent::CLandscapeComponent(CComponentManager *manager, 
-	const string &instanceId, IProgressCallback &progressCallback)
-: IConfigurableComponent(manager, instanceId, progressCallback), 
-  _Landscape(NULL), _Scene(NULL)
+CLandscapeComponent::CLandscapeComponent(CComponentManager *manager, const string &instanceId, IProgressCallback &progressCallback)
+	: IConfigurableComponent(manager, instanceId, progressCallback), 
+	_Landscape(NULL), _Scene(NULL)
 {
 	// -- -- start of init for "landscape around camera that gets data from config"
 
@@ -117,27 +127,27 @@ void CLandscapeComponent::update()
 
 void CLandscapeComponent::render()
 {
-	
+	nlwarning("Unknown IComponent render() call");
+}
+
+void CLandscapeComponent::componentUp(IComponent *component)
+{
+	nlwarning("Unknown IComponent componentUp(component) call");
+}
+
+void CLandscapeComponent::componentDown(IComponent *component)
+{
+	nlwarning("Unknown IComponent componentDown(component) call");
 }
 
 void CLandscapeComponent::config(const string &varName, CConfigFile::CVar &var)
 {
-	if (varName == "TileNear") 
-		_Landscape->setTileNear(var.asFloat());
-
-	else if (varName == "Threshold") 
-		_Landscape->setThreshold(var.asFloat());
-
-	else if (varName == "Vision") 
-		_cfgVision = var.asFloat();
-
-	else if (varName == "VisionInitial") 
-		_cfgVisionInitial = var.asFloat();
-
-	else if (varName == "ReceiveShadowMap")
-		_Landscape->enableReceiveShadowMap(var.asBool());
-
-	else nlwarning("Unknown variable update %s", var.Name.c_str());
+	if (varName == "TileNear") _Landscape->setTileNear(var.asFloat());
+	else if (varName == "Threshold") _Landscape->setThreshold(var.asFloat());
+	else if (varName == "Vision") _cfgVision = var.asFloat();
+	else if (varName == "VisionInitial") _cfgVisionInitial = var.asFloat();
+	else if (varName == "ReceiveShadowMap") _Landscape->enableReceiveShadowMap(var.asBool());
+	else nlwarning("Unknown IConfigurableComponent config(varName, var) call");
 }
 
 void CLandscapeComponent::loadAllZonesAround()
@@ -146,4 +156,6 @@ void CLandscapeComponent::loadAllZonesAround()
 		_Scene->getCam().getMatrix().getPos(), _cfgVisionInitial);
 }
 
-}
+} /* namespace SBCLIENT */
+
+/* end of file */
