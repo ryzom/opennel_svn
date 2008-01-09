@@ -49,8 +49,7 @@ void CComponentManager::update()
 
 	// call all update thingies
 	// they can have render loops inside them (for loading screen etc)
-	for (std::list<IComponent *>::iterator it = _Updates.begin(); it != _Updates.end(); it++)
-		(*it)->update();
+	_UpdateFunctions.execute();
 }
 
 void CComponentManager::render()
@@ -62,38 +61,37 @@ void CComponentManager::render()
 		_Driver->clearBuffers(CRGBA(0, 0, 0, 255));
 
 		// call all render thingies
-		for (std::list<IComponent *>::iterator it = _Renders.begin(); it != _Renders.end(); it++)
-			(*it)->render();
+		_RenderFunctions.execute();
 	
 		// swap 3d buffers
 		_Driver->swapBuffers();
 	}	
 }
 
-void CComponentManager::registerUpdate(IComponent *component, sint32 priority)
+void CComponentManager::registerUpdate(IComponent *component, sint priority)
 {
-	component->UpdatePriority = priority;
-	for (std::list<IComponent *>::iterator it = _Updates.begin(); it != _Updates.end(); it++)
-		if ((*it)->UpdatePriority > priority) { _Updates.insert(it, component); return; }
-	_Updates.push_back(component);
+	nlassert(!component->UpdateId); // id is never 0
+	component->UpdateId = _UpdateFunctions.add(
+		IComponent::update, component, &_UpdateFunctions, priority);
 }
 
 void CComponentManager::unregisterUpdate(IComponent *component)
 {
-	_Updates.remove(component);
+	_UpdateFunctions.remove(component->UpdateId);
+	component->UpdateId = 0;
 }
 
-void CComponentManager::registerRender(IComponent *component, sint32 priority)
+void CComponentManager::registerRender(IComponent *component, sint priority)
 {
-	component->RenderPriority = priority;
-	for (std::list<IComponent *>::iterator it = _Renders.begin(); it != _Renders.end(); it++)
-		if ((*it)->RenderPriority > priority) { _Renders.insert(it, component); return; }
-	_Renders.push_back(component);
+	nlassert(!component->RenderId); // id is never 0
+	component->RenderId = _RenderFunctions.add(
+		IComponent::render, component, &_RenderFunctions, priority);
 }
 
 void CComponentManager::unregisterRender(IComponent *component)
 {
-	_Renders.remove(component);
+	_RenderFunctions.remove(component->RenderId);
+	component->RenderId = 0;
 }
 
 void CComponentManager::registerComponent(IComponent *component)
@@ -110,10 +108,10 @@ void CComponentManager::unregisterComponent(IComponent *component)
 	std::list<IComponent *> notifiers = _Notifiers[component->getInstanceId()];
 	for (std::list<IComponent *>::iterator it = notifiers.begin(); it != notifiers.end(); it++)
 		(*it)->componentDown(component);
-	for (std::list<IComponent *>::iterator it = _Updates.begin(); it != _Updates.end(); it++)
-		if ((*it) == component) { _Updates.remove(component); return; }
-	for (std::list<IComponent *>::iterator it = _Renders.begin(); it != _Renders.end(); it++)
-		if ((*it) == component) { _Renders.remove(component); return; }
+
+	// remove and give warnings, should already been removed
+	_UpdateFunctions.removeC(component, true);
+	_RenderFunctions.removeC(component, true);
 }
 
 void CComponentManager::setDriver(NL3D::UDriver *driver)

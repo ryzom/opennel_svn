@@ -33,6 +33,7 @@ using namespace NL3D;
 using namespace NLMISC;
 
 extern ULandscape *Landscape; // temp
+extern UScene *Scene;
 
 namespace SBCLIENT {
 
@@ -44,8 +45,9 @@ CLandscapeComponent::CLandscapeComponent(CComponentManager *manager,
 	// -- -- start of init for "landscape around camera that gets data from config"
 
 	// create the landscape
-	//////_Landscape = _Scene->createLandscape();
-	nlassert(_Scene); // get from scene component (which must be up and running)!
+	_Landscape = Scene->createLandscape();
+	_Scene = Scene;
+	//nlassert(_Scene); // get from scene component (which must be up and running)!
 	Landscape = _Landscape;
 
 	// load the bank files

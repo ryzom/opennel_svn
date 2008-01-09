@@ -172,7 +172,7 @@ void deleteSound (CEntity &entity)
 	}
 */}
 
-void updateSound()
+void updateSound(void *context, void *tag)
 {
 #ifdef NL_OS_WINDOWS
 	if (SoundEnabled)
@@ -181,6 +181,11 @@ void updateSound()
 		AudioMixer->update();
 	}
 #endif
+}
+
+void updateSound()
+{
+	updateSound(NULL, NULL);
 }
 
 #ifdef NL_OS_WINDOWS

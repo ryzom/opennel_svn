@@ -113,7 +113,7 @@ class CCommandsDisplayer : public IDisplayer
 };
 
 // Instance of the displayer
-static CCommandsDisplayer CommandsDisplayer;
+static CCommandsDisplayer *CommandsDisplayer;
 
 // Check if the user line is a command or not (a commands precede by a '/')
 bool commandLine (const string &str)
@@ -248,14 +248,15 @@ void	initCommands()
 	// Add the keyboard listener in the event server
 	Driver->EventServer.addListener (EventCharId, &CommandsListener);
 
+	CommandsDisplayer = new CCommandsDisplayer();
 	// Add the command displayer to the standard log (to display NeL info)
-	CommandsLog.addDisplayer (&CommandsDisplayer);
+	CommandsLog.addDisplayer(CommandsDisplayer);
 #ifndef NL_RELEASE
-	InfoLog->addDisplayer (&CommandsDisplayer);
-	InfoLog->addDisplayer (&CommandsDisplayer);
-	WarningLog->addDisplayer (&CommandsDisplayer);
-	AssertLog->addDisplayer (&CommandsDisplayer);
-	ErrorLog->addDisplayer (&CommandsDisplayer);
+	InfoLog->addDisplayer(CommandsDisplayer);
+	InfoLog->addDisplayer(CommandsDisplayer);
+	WarningLog->addDisplayer(CommandsDisplayer);
+	AssertLog->addDisplayer(CommandsDisplayer);
+	ErrorLog->addDisplayer(CommandsDisplayer);
 #endif
 
 	// Add callback for the config file
@@ -341,14 +342,15 @@ void	clearCommands ()
 void releaseCommands()
 {
 	// Remove the displayers
-	CommandsLog.removeDisplayer(&CommandsDisplayer);
+	CommandsLog.removeDisplayer(CommandsDisplayer);
 #ifndef NL_RELEASE
-	InfoLog->removeDisplayer(&CommandsDisplayer);
-	InfoLog->removeDisplayer(&CommandsDisplayer);
-	WarningLog->removeDisplayer(&CommandsDisplayer);
-	AssertLog->removeDisplayer(&CommandsDisplayer);
-	ErrorLog->removeDisplayer(&CommandsDisplayer);
+	InfoLog->removeDisplayer(CommandsDisplayer);
+	InfoLog->removeDisplayer(CommandsDisplayer);
+	WarningLog->removeDisplayer(CommandsDisplayer);
+	AssertLog->removeDisplayer(CommandsDisplayer);
+	ErrorLog->removeDisplayer(CommandsDisplayer);
 #endif
+	delete CommandsDisplayer;
 
 	// Remove callbacks for the config file
 	ConfigFile->setCallback("CommandsBoxX", NULL);

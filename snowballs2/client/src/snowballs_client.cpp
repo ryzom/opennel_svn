@@ -35,11 +35,72 @@
 #include <nel/misc/debug.h>
 #include <nel/misc/time_nl.h>
 #include <nel/misc/i18n.h>
+#include <nel/misc/app_context.h>
 
 #include <nel/3d/u_driver.h>
 
 using namespace std;
 using namespace NLMISC;
+
+// temp
+#define SBCLIENT_MUSIC_WAIT (0), (0)
+#define SBCLIENT_MUSIC_LOGIN (1), (0)
+#define SBCLIENT_MUSIC_BACKGROUND (2), (0)
+#define SBCLIENT_MUSIC_BACKGROUND_BEAT (2), (1)
+extern NLMISC::CConfigFile *ConfigFile;
+extern NL3D::UDriver *Driver;
+extern NL3D::UTextContext *TextContext;
+#include <nel/3d/u_scene.h>
+extern NL3D::UScene *Scene;
+#include "mouse_listener.h"
+#include <nel/misc/vectord.h>
+extern C3dMouseListener *MouseListener;
+extern float PlayerSpeed;
+extern bool CaptureState;
+#include "landscape_component.h"
+SBCLIENT::CLandscapeComponent *LandscapeComponent;
+void initLoadingState();
+void initSound();
+void displayLoadingState(char *state);
+void playMusic(sint32 playlist, sint32 track);
+void initLight();
+void releaseLight();
+void releaseLoadingState();
+void releaseSound();
+void updateTime(void *context, void *tag);
+void updateSound(void *context, void *tag);
+void initLandscape();
+void initPACS();
+void initAiming();
+void initCamera();
+void initMouseListenerConfig();
+void initInterface();
+void initRadar();
+void initCompass();
+void initGraph();
+void initCommands();
+void initEntities();
+void initAnimation();
+void initLensFlare();
+void initSky();
+void releaseLensFlare();
+void releaseRadar();
+void releaseCommands();
+void releaseEntities();
+void releaseGraph();
+void releaseCompass();
+void releaseInterface();
+void releaseNetwork();
+void releaseAnimation();
+void releaseAiming();
+void releasePACS();
+void releaseLandscape();
+extern uint32 NextEID;
+#include "entities.h"
+void addLine(const std::string &line);
+void deleteAllEntities();
+void updateClient(void *context, void *tag);
+void renderClient(void *context, void *tag);
 
 namespace SBCLIENT {
 
@@ -68,7 +129,7 @@ CSnowballsClient::CSnowballsClient()
 	WarningLog->addDisplayer(_FileDisplayer);
 	AssertLog->addDisplayer(_FileDisplayer);
 	ErrorLog->addDisplayer(_FileDisplayer);
-#endif	
+#endif
 	nlinfo("Starting Snowballs!");
 	// end of debug/log initialization
 }
@@ -76,11 +137,17 @@ CSnowballsClient::CSnowballsClient()
 CSnowballsClient::~CSnowballsClient()
 {
 	disableAll(); // just to be sure
-
+	
 	// begin of debug/log destruction
 	nlinfo("See you later!");
 #if SBCLIENT_USE_LOG
-	nlassert(_FileDisplayer); delete _FileDisplayer;
+	nlassert(_FileDisplayer);
+	DebugLog->removeDisplayer(_FileDisplayer);
+	InfoLog->removeDisplayer(_FileDisplayer);
+	WarningLog->removeDisplayer(_FileDisplayer);
+	AssertLog->removeDisplayer(_FileDisplayer);
+	ErrorLog->removeDisplayer(_FileDisplayer);
+	delete _FileDisplayer;
 #endif
 }
 
@@ -133,7 +200,8 @@ SwitchState:
 	switch(_CurrentState)
 	{
 	case Load: // switch to the default state
-		_NextState = Login;
+		_PlayOnline = false;
+		_NextState = Game;// _NextState = Login;
 		break;
 	case Reset: // used to reset everything
 		_NextState = Load;
@@ -196,8 +264,29 @@ void CSnowballsClient::enableCore()
 		_HelloWorldComponent = new CHelloWorldComponent(
 			_ComponentManager, "HelloWorld", _LoadingScreen);
 		_ComponentManager->registerComponent(_HelloWorldComponent);
-		_ComponentManager->registerRender(_HelloWorldComponent, 200);
+		_ComponentManager->registerRender(_HelloWorldComponent, -2000);
 
+
+		// and some more compatibility code
+		Driver = _DriverComponent->getDriver();
+		TextContext = _DriverComponent->getTextContext();
+		ConfigFile = _ConfigFile;
+
+		/// even more temp!
+		CFunctionCaller &updates = _ComponentManager->getUpdateCaller();
+		updates.add(updateTime, NULL, NULL, 1000000);
+		displayLoadingState("Initialize Loading");
+		initLoadingState();
+		// Initialize sound for loading screens etc
+#if SBCLIENT_WITH_SOUND
+		displayLoadingState("Initialize Sound");
+		initSound();
+		playMusic(SBCLIENT_MUSIC_WAIT);
+		updates.add(updateSound, NULL, NULL, 0);
+#endif
+		// Required for 3d rendering (3d nel logo etc)
+		displayLoadingState("Initialize Light");
+		initLight();
 	}
 }
 
@@ -205,6 +294,16 @@ void CSnowballsClient::disableCore()
 {
 	if (_HasCore)
 	{
+		/// EVEN MORE TEMP!
+		// Release the sun
+		releaseLight();
+		// Release the loading state textures
+		releaseLoadingState();
+		// Release the sound
+#if SBCLIENT_WITH_SOUND
+		releaseSound();
+#endif
+
 		// dynamic core, temp
 		_ComponentManager->unregisterComponent(_HelloWorldComponent);
 		delete _HelloWorldComponent;
@@ -263,7 +362,76 @@ void CSnowballsClient::enableIngame()
 	{		
 		_HasIngame = true;
 
-		// ...
+		// just temp things
+#if SBCLIENT_WITH_SOUND
+		playMusic(SBCLIENT_MUSIC_WAIT);
+#endif
+
+		// Create a scene
+		Scene = Driver->createScene(false);
+		// Init the landscape using the previously created UScene
+		displayLoadingState("Initialize Landscape");
+		LandscapeComponent = new CLandscapeComponent(
+			_ComponentManager, "Landscape", _LoadingScreen);
+		initLandscape();
+		// Init the pacs
+		displayLoadingState("Initialize PACS ");
+		initPACS();
+		// Init the aiming system
+		displayLoadingState("Initialize Aiming ");
+		initAiming();
+		// Init the user camera
+		displayLoadingState("Initialize Camera ");
+		initCamera();
+		// Create a 3D mouse listener
+		displayLoadingState("Initialize MouseListener ");
+		MouseListener = new C3dMouseListener();
+		MouseListener->addToServer(Driver->EventServer);
+		MouseListener->setCamera(Camera);
+		MouseListener->setHotSpot(CVectorD(0,0,0));
+		MouseListener->setFrustrum(Camera.getFrustum());
+		MouseListener->setMatrix(Camera.getMatrix());
+		MouseListener->setSpeed(PlayerSpeed);
+		initMouseListenerConfig();
+		// Init interface
+		displayLoadingState("Initialize Interface ");
+		initInterface();
+		// Init radar
+		displayLoadingState("Initialize Radar ");
+		initRadar();
+		// Init compass
+		displayLoadingState("Initialize Compass ");
+		initCompass();
+		// Init graph
+		displayLoadingState("Initialize Graph ");
+		initGraph();
+		// Init the command control
+		displayLoadingState("Initialize Commands ");
+		initCommands();
+		// Init the entities prefs
+		displayLoadingState("Initialize Entities ");
+		initEntities();
+		// Init animation system
+		displayLoadingState("Initialize Animation ");
+		initAnimation();
+		// Init the lens flare
+		displayLoadingState("Initialize LensFlare ");
+		initLensFlare();
+		// Init the sky
+		displayLoadingState("Initialize Sky ");
+		initSky();
+
+		// Init the mouse so it's trapped by the main window.
+		Driver->showCursor(false);
+		Driver->setCapture(true);
+		Driver->setMousePos(0.5f, 0.5f);
+
+
+		// render adds
+		CFunctionCaller &updates = _ComponentManager->getUpdateCaller();		
+		updates.add(updateClient, NULL, NULL, -1000); // meh
+		CFunctionCaller &renderers = _ComponentManager->getRenderCaller();
+		renderers.add(renderClient, NULL, NULL, -1000); // meh
 	}
 }
 
@@ -271,7 +439,40 @@ void CSnowballsClient::disableIngame()
 {
 	if (_HasIngame)
 	{
-		// ...
+		// more temp
+		CFunctionCaller &updates = _ComponentManager->getUpdateCaller();		
+		updates.removeF(updateClient, true);
+		CFunctionCaller &renderers = _ComponentManager->getRenderCaller();
+		updates.removeF(renderClient, true);
+
+		if (CaptureState)
+		{
+			Driver->setCapture(false);
+			Driver->showCursor(true);
+		}
+
+		// Release all before quit
+
+		releaseSky();
+		releaseLensFlare();
+		releaseRadar();
+		releaseCommands();
+		releaseEntities();
+		releaseGraph();
+		releaseCompass();
+		releaseInterface();
+		releaseNetwork();
+		releaseAnimation();
+		releaseMouseListenerConfig();
+		releaseCamera();
+		releaseAiming();
+		releasePACS();
+		releaseLandscape();
+		delete LandscapeComponent;
+		// Release the mouse listener
+		MouseListener->removeFromServer(Driver->EventServer);
+		delete MouseListener;
+		Driver->deleteScene(Scene);
 		
 		_HasIngame = false;
 	}
@@ -303,7 +504,38 @@ void CSnowballsClient::enableOffline()
 	{		
 		_HasOffline = true;
 
-		// ...
+		// another bunch of temp stuff
+#if SBCLIENT_WITH_SOUND
+		playMusic(SBCLIENT_MUSIC_WAIT);
+#endif
+
+		uint32 id = NextEID++;
+		ucstring Login = ucstring("Entity" + toString(id));
+
+		// Creates the self entity
+		displayLoadingState("Creating offline entity");
+		addEntity(id, Login.toUtf8(), 
+			CEntity::Self, CVector(
+					ConfigFile->getVar("StartPoint").asFloat(0),
+					ConfigFile->getVar("StartPoint").asFloat(1),
+					ConfigFile->getVar("StartPoint").asFloat(2)),
+				CVector(
+					ConfigFile->getVar("StartPoint").asFloat(0),
+					ConfigFile->getVar("StartPoint").asFloat(1),
+					ConfigFile->getVar("StartPoint").asFloat(2)));
+
+		displayLoadingState("Load Landscape");
+		LandscapeComponent->loadAllZonesAround();
+
+		// Display a local welcome message
+		addLine(">>>>> Welcome to Snowballs!");
+		addLine(">>>>> Press SHIFT-ESC to exit the game.");
+
+		displayLoadingState("Ready!");
+	
+#if SBCLIENT_WITH_SOUND
+		playMusic(SBCLIENT_MUSIC_BACKGROUND);
+#endif
 	}
 }
 
@@ -311,7 +543,8 @@ void CSnowballsClient::disableOffline()
 {
 	if (_HasOffline)
 	{
-		// ...
+		// temp
+		deleteAllEntities();
 		
 		_HasOffline = false;
 	}
@@ -328,14 +561,21 @@ void CSnowballsClient::disableAll()
 
 }
 
+
+void end();
+SBCLIENT::CSnowballsClient *client = NULL;
 #ifdef NL_OS_WINDOWS
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdline, int nCmdShow)
 #else
 int main(int argc, char **argv)
 #endif
+{	
+	client = new SBCLIENT::CSnowballsClient();
+	atexit(end); exit(client->run());
+	return EXIT_FAILURE;
+}
+
+void end()
 {
-	SBCLIENT::CSnowballsClient *client = new SBCLIENT::CSnowballsClient();
-	int result = client->run(); 
 	delete client;
-	return result;
 }

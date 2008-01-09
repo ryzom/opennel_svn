@@ -36,7 +36,7 @@ std::string IComponent::I18NPrefix = "i18n";
 bool IComponent::KeepPrefix = false;
 
 IComponent::IComponent(CComponentManager *manager, const string &instanceId, IProgressCallback &progressCallback)
-: _Manager(manager), _InstanceId(instanceId)
+: _Manager(manager), _InstanceId(instanceId), RenderId(0), UpdateId(0)
 {
 	// register this with the app context
 	// this ensures that the same component configuration isn't init twice
@@ -91,6 +91,16 @@ void IComponent::registerNotifier(const std::string &target)
 void IComponent::unregisterNotifier(const std::string &target)
 {
 	_Manager->unregisterNotifier(this, target);
+}
+
+void IComponent::update(void *context, void *tag)
+{
+	((IComponent *)context)->update();
+}
+
+void IComponent::render(void *context, void *tag)
+{
+	((IComponent *)context)->render();
 }
 
 }

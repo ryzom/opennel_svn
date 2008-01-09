@@ -23,6 +23,8 @@
 #define SBCLIENT_COMPONENT_MANAGER_H
 #include <nel/misc/types_nl.h>
 
+#include "function_caller.h"
+
 #include <map>
 
 namespace NL3D {
@@ -36,10 +38,11 @@ namespace NLMISC {
 namespace SBCLIENT {
 	class IComponent;
 
-// todo: implement the component manager
 /**
- * Component manager.
- * \date 2007-2008
+ * \brief CComponentManager (helper)
+ * \date 2007
+ * \author Jan Boon (Kaetemi)
+ * Component manager. Based on task manager.
  */
 class CComponentManager
 {
@@ -49,9 +52,9 @@ protected:
 	NL3D::UDriver *_Driver; // not deleted here, can be NULL, temp
 	
 	// instances
-	std::list<IComponent *>	_Components;
-	std::list<IComponent *>	_Updates;
-	std::list<IComponent *>	_Renders;
+	std::list<IComponent *> _Components;
+	CFunctionCaller _UpdateFunctions;
+	CFunctionCaller _RenderFunctions;
 	std::map<std::string, std::list<IComponent *>> _Notifiers;
 public:
 	CComponentManager(NLMISC::CConfigFile *configFile);
@@ -60,9 +63,9 @@ public:
 	void update();
 	void render();
 
-	void registerUpdate(IComponent *component, sint32 priority);
+	void registerUpdate(IComponent *component, sint priority);
 	void unregisterUpdate(IComponent *component);
-	void registerRender(IComponent *component, sint32 priority);
+	void registerRender(IComponent *component, sint priority);
 	void unregisterRender(IComponent *component);
 
 	/// Called when a component is fully initialized,
@@ -90,6 +93,10 @@ public:
 	void registerNotifier(IComponent *source, const std::string &target);
 	/// This will call componentDown if the target is still up.
 	void unregisterNotifier(IComponent *source, const std::string &target);
+
+	// NOTE: The following should only be used during development.
+	CFunctionCaller &getRenderCaller() { return _RenderFunctions; }
+	CFunctionCaller &getUpdateCaller() { return _UpdateFunctions; }
 };
 
 }

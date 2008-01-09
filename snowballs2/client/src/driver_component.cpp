@@ -29,6 +29,7 @@
 #include <nel/misc/path.h>
 #include <nel/misc/file.h>
 #include <nel/misc/bitmap.h>
+#include <nel/misc/app_context.h>
 
 using namespace std;
 using namespace NLMISC;
@@ -36,13 +37,17 @@ using namespace NL3D;
 
 namespace SBCLIENT {
 
+void (*CDriverComponent::DriverExit)() = NULL;
+
 CDriverComponent::CDriverComponent(CComponentManager *manager, 
 	const string &instanceId, IProgressCallback &progressCallback)
 : IConfigurableComponent(manager, instanceId, progressCallback)
 {
+	// make sure there's only one instance, there can only be one driver
+	INelContext::getInstance().setSingletonPointer("SBCLIENT::CDriverComponent", this);
 	// create the driver
-	_Driver = UDriver::createDriver(0, 
-		_Config.getValue("Driver", string("OpenGL")) == string("Direct3D"));
+	_Driver = UDriver::createDriver(0, _Config.getValue(
+		"Driver", string("OpenGL")) == string("Direct3D"), DriverExit);
 	// initialize the window with config file values
 	_Driver->setDisplay(UDriver::CMode(
 		_Config.getValue("ScreenWidth", 800), 
@@ -72,6 +77,7 @@ CDriverComponent::~CDriverComponent()
 	_Driver->deleteTextContext(_TextContext);
 	_Driver->release();
 	delete _Driver;
+	INelContext::getInstance().releaseSingletonPointer("SBCLIENT::CDriverComponent", this);
 }
 
 void CDriverComponent::update()

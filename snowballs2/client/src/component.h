@@ -30,9 +30,10 @@ namespace SBCLIENT {
 	class CComponentManager;
 
 /**
- * Base class for components that can be identified uniquely by name.
- * \author Jan Boon
+ * \brief IComponent (helper)
  * \date 2007
+ * \author Jan Boon (Kaetemi)
+ * Base class for components that can be identified uniquely by name.
  */
 class IComponent
 {
@@ -40,8 +41,8 @@ public:
 	static std::string I18NPrefix;
 	static bool KeepPrefix;
 
-	sint32 UpdatePriority; // set and used
-	sint32 RenderPriority; // by the component manager
+	uint UpdateId; // set and used
+	uint RenderId; // by the component manager
 protected:
 	// pointers
 	CComponentManager *_Manager; // not deleted here
@@ -55,7 +56,9 @@ public:
 	virtual ~IComponent();
 
 	virtual void update() { }
+	static void update(void *context, void *tag);
 	virtual void render() { }
+	static void render(void *context, void *tag);
 
 	/// Get the instance id of this component.
 	std::string getInstanceId() { return _InstanceId; }
