@@ -20,7 +20,8 @@ SUBDIRS(	build_coarse_mesh
 		tga_cut
 		tga_resize
 		zone_check_bind
-		zone_dump)
+		zone_dump
+		zviewer)
 
 # These use WIndows-specific things that need to be fixed.
 #ig_elevation
