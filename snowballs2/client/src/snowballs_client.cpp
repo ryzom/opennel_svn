@@ -105,6 +105,8 @@ void renderClient(void *context, void *tag);
 SBCLIENT::CSceneComponent *SceneComponent;
 #include "time_component.h"
 SBCLIENT::CTimeComponent *TimeComponent;
+#include "weather_component.h"
+SBCLIENT::CWeatherComponent *WeatherComponent;
 
 namespace SBCLIENT {
 
@@ -388,6 +390,7 @@ void CSnowballsClient::enableIngame()
 		LandscapeComponent = new CLandscapeComponent(
 			_ComponentManager, "Landscape", _LoadingScreen);
 		_ComponentManager->registerComponent(LandscapeComponent);
+		_ComponentManager->registerUpdate(LandscapeComponent, -1100);
 		initLandscape();
 		// Init the pacs
 		displayLoadingState("Initialize PACS ");
@@ -398,6 +401,13 @@ void CSnowballsClient::enableIngame()
 		// Init the user camera
 		displayLoadingState("Initialize Camera ");
 		initCamera();
+		// init weather
+		displayLoadingState("Initialize Weather");
+		WeatherComponent = new CWeatherComponent(
+			_ComponentManager, "Weather", _LoadingScreen);
+		_ComponentManager->registerComponent(WeatherComponent);
+		_ComponentManager->registerRender(WeatherComponent, -250);
+		_ComponentManager->registerUpdate(WeatherComponent, 5000);
 		// Create a 3D mouse listener
 		displayLoadingState("Initialize MouseListener ");
 		MouseListener = new C3dMouseListener();
@@ -432,9 +442,6 @@ void CSnowballsClient::enableIngame()
 		// Init the lens flare
 		displayLoadingState("Initialize LensFlare ");
 		initLensFlare();
-		// Init the sky
-		displayLoadingState("Initialize Sky ");
-		initSky();
 
 		// Init the mouse so it's trapped by the main window.
 		Driver->showCursor(false);
@@ -468,7 +475,6 @@ void CSnowballsClient::disableIngame()
 
 		// Release all before quit
 
-		releaseSky();
 		releaseLensFlare();
 		releaseRadar();
 		releaseCommands();

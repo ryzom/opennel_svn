@@ -47,13 +47,10 @@ namespace SBCLIENT {
 CSceneComponent::CSceneComponent(CComponentManager *manager, const string &instanceId, IProgressCallback &progressCallback)
 	: IConfigurableComponent(manager, instanceId, progressCallback)
 {
-	// get the existing driver component, 
-	// cannot change at runtime for now; asserts by itself
-	CDriverComponent &dc = (CDriverComponent &)getInstance(
+	// get the existing driver from the driver component, 
+	// cannot change at runtime; asserts by itself
+	_Driver = CDriverComponent::getDriver(
 		_Config.getVar("DriverInstanceId").asString());
-
-	// get the driver from the component
-	_Driver = dc.getDriver(); // asserts by itself
 
 	// get the existing time component
 	// cannot change at runtime; asserts by itself

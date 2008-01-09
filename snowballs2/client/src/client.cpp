@@ -244,13 +244,7 @@ void updateTime(void *context, void *tag)
 //}
 
 void renderClient(void *context, void *tag)
-{	
-	
-
-	////////Scene->animate(float(NewTime)/1000); // Set new animation date
-	updateSky(); // Render the sky scene before the main scene
-
-	////////Scene->render(); // Render		
+{
 	updateLensFlare(); // Render the lens flare
 	updateCompass(); // Update the compass		
 	updateRadar(); // Update the radar
@@ -261,9 +255,7 @@ void renderClient(void *context, void *tag)
 	updateInterface(); // Update interface
 	renderInformation();
 	update3dLogo();
-
 	// Update network messages
-
 }
 
 void updateClient(void *context, void *tag)
@@ -346,16 +338,6 @@ void updateClient(void *context, void *tag)
 	// Check if the config file was modified by another program
 	CConfigFile::checkConfigFiles();
 
-	animateSky(NewTime-LastTime);
-
-	// Clear all buffers
-	////////Driver->clearBuffers(CRGBA(0, 0, 0));
-
-	// Update the time counters
-	//////LastTime = NewTime;
-	//////NewTime = CTime::getLocalTime();
-	//////DiffTime = NewTime - LastTime;
-
 	// Update all entities positions
 	MouseListener->update();
 	updateEntities();
@@ -364,9 +346,6 @@ void updateClient(void *context, void *tag)
 	// -> first update camera position directly from the mouselistener
 	// -> then update stuffs linked to the camera(snow, sky, lens flare etc.)
 	MouseListener->updateCamera();
-	updateCamera();		
-	LandscapeComponent->update(); // Update the landscape
-
 }
 
 void renderInformation()

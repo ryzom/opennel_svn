@@ -58,6 +58,7 @@ public:
 	
 	void setWindowTitle(const ucstring &title);
 	NL3D::UDriver *getDriver();
+	static NL3D::UDriver *getDriver(const std::string &instanceId);
 	NL3D::UTextContext *getTextContext();
 	
 	/// Save a screenshot to the screenshot directory.

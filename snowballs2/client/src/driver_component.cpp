@@ -127,6 +127,12 @@ UDriver *CDriverComponent::getDriver()
 	nlassert(_Driver); return _Driver;
 }
 
+NL3D::UDriver *CDriverComponent::getDriver(const string &instanceId)
+{
+	CDriverComponent &dc = (CDriverComponent &)getInstance(instanceId);
+	nlassert(dc._Driver); return dc._Driver;
+}
+
 UTextContext *CDriverComponent::getTextContext()
 {
 	nlassert(_TextContext); return _TextContext;

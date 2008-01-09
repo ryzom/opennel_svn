@@ -120,27 +120,27 @@ void cbUpdateLandscape (CConfigFile::CVar &var)
 			ConfigFile->getVar ("FogColor").asInt(1), 
 			ConfigFile->getVar ("FogColor").asInt(2)));
 	}
-	else if (var.Name == "SunAmbientColor")
-	{
-		Sun->setAmbiant (CRGBA (var.asInt(0), var.asInt(1), var.asInt(2)));
-		Driver->setLight (0, *Sun);
-	}
-	else if (var.Name == "SunDiffuseColor")
-	{
-		Sun->setDiffuse (CRGBA (var.asInt(0), var.asInt(1), var.asInt(2)));
-		Driver->setLight (0, *Sun);
-	}
-	else if (var.Name == "SunSpecularColor")
-	{
-		Sun->setSpecular (CRGBA (var.asInt(0), var.asInt(1), var.asInt(2)));
-		Driver->setLight (0, *Sun);
-	}
-	else if (var.Name == "SunDirection")
-	{
-		SunDirection.set (var.asFloat(0), var.asFloat(1), var.asFloat(2));
-		Sun->setDirection (SunDirection);
-		Driver->setLight (0, *Sun);
-	}
+	////else if (var.Name == "SunAmbientColor")
+	////{
+	////	Sun->setAmbiant (CRGBA (var.asInt(0), var.asInt(1), var.asInt(2)));
+	////	Driver->setLight (0, *Sun);
+	////}
+	////else if (var.Name == "SunDiffuseColor")
+	////{
+	////	Sun->setDiffuse (CRGBA (var.asInt(0), var.asInt(1), var.asInt(2)));
+	////	Driver->setLight (0, *Sun);
+	////}
+	////else if (var.Name == "SunSpecularColor")
+	////{
+	////	Sun->setSpecular (CRGBA (var.asInt(0), var.asInt(1), var.asInt(2)));
+	////	Driver->setLight (0, *Sun);
+	////}
+	////else if (var.Name == "SunDirection")
+	////{
+	////	SunDirection.set (var.asFloat(0), var.asFloat(1), var.asFloat(2));
+	////	Sun->setDirection (SunDirection);
+	////	Driver->setLight (0, *Sun);
+	////}
 	else nlwarning ("Unknown variable update %s", var.Name.c_str());
 }
 
@@ -148,32 +148,32 @@ void initLight()
 {
 	// -- -- sun or whatever light, simple use, doesn't need class yet
 
-	Sun = ULight::createLight();
-	nlassert(Sun != NULL);
-	Sun->setMode(ULight::DirectionalLight);
-	Driver->enableLight(0);
+	////Sun = ULight::createLight();
+	////nlassert(Sun != NULL);
+	////Sun->setMode(ULight::DirectionalLight);
+	////Driver->enableLight(0);
 
-	ConfigFile->setCallback("SunAmbientColor", cbUpdateLandscape);
-	ConfigFile->setCallback("SunDiffuseColor", cbUpdateLandscape);
-	ConfigFile->setCallback("SunSpecularColor", cbUpdateLandscape);
-	ConfigFile->setCallback("SunDirection", cbUpdateLandscape);
+	////ConfigFile->setCallback("SunAmbientColor", cbUpdateLandscape);
+	////ConfigFile->setCallback("SunDiffuseColor", cbUpdateLandscape);
+	////ConfigFile->setCallback("SunSpecularColor", cbUpdateLandscape);
+	////ConfigFile->setCallback("SunDirection", cbUpdateLandscape);
 
-	cbUpdateLandscape(ConfigFile->getVar("SunAmbientColor"));
-	cbUpdateLandscape(ConfigFile->getVar("SunDiffuseColor"));
-	cbUpdateLandscape(ConfigFile->getVar("SunSpecularColor"));
-	cbUpdateLandscape(ConfigFile->getVar("SunDirection"));
+	////cbUpdateLandscape(ConfigFile->getVar("SunAmbientColor"));
+	////cbUpdateLandscape(ConfigFile->getVar("SunDiffuseColor"));
+	////cbUpdateLandscape(ConfigFile->getVar("SunSpecularColor"));
+	////cbUpdateLandscape(ConfigFile->getVar("SunDirection"));
 }
 
 void releaseLight()
 {
 	// -- -- just data
 
-	ConfigFile->setCallback("SunAmbientColor", NULL);
-	ConfigFile->setCallback("SunDiffuseColor", NULL);
-	ConfigFile->setCallback("SunSpecularColor", NULL);
-	ConfigFile->setCallback("SunDirection", NULL);
+	////ConfigFile->setCallback("SunAmbientColor", NULL);
+	////ConfigFile->setCallback("SunDiffuseColor", NULL);
+	////ConfigFile->setCallback("SunSpecularColor", NULL);
+	////ConfigFile->setCallback("SunDirection", NULL);
 
-	delete Sun; Sun = NULL;
+	////delete Sun; Sun = NULL;
 }
 
 void	initLandscape()

@@ -61,21 +61,12 @@ UCamera					Camera = NULL;
 // The collision entity use to snap the camera on the ground
 UVisualCollisionEntity	*CamCollisionEntity = NULL;
 
-// The particle system for the snowing effect
-static UInstance			Snow = NULL;
-
-// The sky 3D objects
-static UScene				*SkyScene = NULL;
-static UCamera				SkyCamera = NULL;
-static UInstance			Sky = NULL;
-
-static UCloudScape			*Clouds = NULL;
 
 //
 // Functions
 //
 
-void	initCamera()
+void	initCamera() // init weather component after this
 {
 	// Set up directly the camera
 	Camera = Scene->getCam();
@@ -89,80 +80,14 @@ void	initCamera()
 	CamCollisionEntity = VisualCollisionManager->createEntity();
 	CamCollisionEntity->setCeilMode(true);
 
-	// Create the snowing particle system
-	Snow = Scene->createInstance("snow.ps");
-	// And setup it
-	Snow.setTransformMode (UTransformable::DirectMatrix);
-
-	//
-	// Setup the sky scene
-	//
-
-	// -- -- not sure what the sky has to do with the camera
-
-	SkyScene = Driver->createScene(false);
-
-	SkyCamera = SkyScene->getCam ();
-	SkyCamera.setTransformMode (UTransformable::DirectMatrix);
-	// Set the very same frustum as the main camera
-	SkyCamera.setFrustum (Camera.getFrustum ());
-
-	Sky = SkyScene->createInstance("sky.shape");
-	Sky.setTransformMode (UTransformable::DirectMatrix);
-	Sky.setMatrix(CMatrix::Identity);
 }
 
 void releaseCamera()
 {
-	SkyScene->deleteInstance(Sky);
-	Driver->deleteScene(SkyScene);
-	Scene->deleteInstance(Snow);
+	///////*SkyScene->deleteInstance(Sky);
+	//////Driver->deleteScene(SkyScene);*/
+	////Scene->deleteInstance(Snow);
 	VisualCollisionManager->deleteEntity(CamCollisionEntity);
 }
 
-void updateCamera()
-{
-	// Set the new position of the snow emitter
-	CMatrix	mat = CMatrix::Identity;
-	mat.setPos (Camera.getMatrix().getPos()/*+CVector (0.0f, 0.0f, -10.0f)*/);
-	Snow.setMatrix(mat);
-}
 
-void initSky()
-{
-	// -- -- or what the clouds have to do with the sky
-
-	SCloudScapeSetup css;
-	Clouds = Scene->createCloudScape ();
-	Clouds->init (&css);
-	Clouds->setQuality (160);
-	Clouds->setNbCloudToUpdateIn80ms (1);
-}
-
-void releaseSky()
-{
-	Scene->deleteCloudScape(Clouds);
-}
-
-// -- -- random note: update and render makes more sense than animate and update
-void animateSky(TTime dt)
-{
-	Clouds->anim ((double)dt);
-}
-
-void updateSky()
-{
-	CMatrix skyCameraMatrix;
-	skyCameraMatrix.identity();
-	// 
-	skyCameraMatrix= Camera.getMatrix();
-	skyCameraMatrix.setPos(CVector::Null);
-	SkyCamera.setMatrix(skyCameraMatrix);
-
-	SkyScene->animate (float(NewTime)/1000);
-	SkyScene->render ();
-	// Must clear ZBuffer For incoming rendering.
-	Driver->clearZBuffer();
-
-	Clouds->render ();
-}
