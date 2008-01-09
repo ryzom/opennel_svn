@@ -45,7 +45,7 @@
 using namespace std;
 
 #ifdef NL_OS_WINDOWS
-	#pragma message( " " )
+#pragma message( " " )
 
 	#if FINAL_VERSION
 		#pragma message( "************************" )
@@ -206,7 +206,7 @@ sint64 atoiInt64 (const char *ident, sint64 base)
 
 	// empty string
 	if (*ident == '\0') goto end;
-	
+
 	// + sign
 	if (*ident == '+') ident++;
 
@@ -261,17 +261,17 @@ void itoaInt64 (sint64 number, char *str, sint64 base)
 	{
 		sint num = (sint)(x % base);
 		b[64 - n] = baseTable[num];
-		if(!x) 
+		if(!x)
 		{
 			int k;
 			int j = 0;
-	
+
 			if (number < 0)
 			{
 				str[j++] = '-';
 			}
 
-			for(k = 64 - n + 1; k <= 64; k++) 	
+			for(k = 64 - n + 1; k <= 64; k++)
 			{
 				str[j ++] = b[k];
 			}
@@ -287,7 +287,7 @@ uint raiseToNextPowerOf2(uint v)
 	uint	res=1;
 	while(res<v)
 		res<<=1;
-	
+
 	return res;
 }
 
@@ -300,7 +300,7 @@ uint	getPowerOf2(uint v)
 		ret++;
 		res<<=1;
 	}
-	
+
 	return ret;
 }
 
@@ -391,7 +391,7 @@ NLMISC_CATEGORISED_COMMAND(nel,btohr, "Convert a bytes number into an human read
 {
 	if (args.size() != 1)
 		return false;
-	
+
 	log.displayNL("%s -> %s", args[0].c_str(), bytesToHumanReadable(args[0]).c_str());
 
 	return true;
@@ -402,9 +402,9 @@ NLMISC_CATEGORISED_COMMAND(nel,hrtob, "Convert a human readable number into a by
 {
 	if (args.size() != 1)
 		return false;
-	
+
 	log.displayNL("%s -> %u", args[0].c_str(), humanReadableToBytes(args[0]));
-	
+
 	return true;
 }
 
@@ -422,7 +422,7 @@ string secondsToHumanReadable (uint32 time)
 			break;
 
 		newres /= divCoef[div];
-		
+
 		if(newres < 3)
 			break;
 
@@ -463,9 +463,9 @@ NLMISC_CATEGORISED_COMMAND(nel,stohr, "Convert a second number into an human rea
 {
 	if (args.size() != 1)
 		return false;
-	
+
 	log.displayNL("%s -> %s", args[0].c_str(), secondsToHumanReadable(atoi(args[0].c_str())).c_str());
-	
+
 	return true;
 }
 
@@ -601,12 +601,12 @@ bool launchProgram (const std::string &programName, const std::string &arguments
 #ifdef NL_OS_WINDOWS
 	STARTUPINFOA         si;
     PROCESS_INFORMATION pi;
-	
+
     memset(&si, 0, sizeof(si));
     memset(&pi, 0, sizeof(pi));
-	
+
     si.cb = sizeof(si);
-	
+
 /*	SECURITY_ATTRIBUTES sa;
 	sa.nLength = sizeof (sa);
 	sa.lpSecurityDescriptor = NULL;
@@ -632,13 +632,13 @@ bool launchProgram (const std::string &programName, const std::string &arguments
 	{
 		SetEnvironmentVariable( SE_TRANSLATOR_IN_MAIN_MODULE, NULL );
 	}
-	
+
 	string arg = " " + arguments;
 	BOOL res = CreateProcessA(programName.c_str(), (char*)arg.c_str(), 0, 0, FALSE, CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW, 0, 0, &si, &pi);
 
 	if (res)
 	{
-		nldebug("LAUNCH: Successful launch '%s' with arg '%s'", programName.c_str(), arguments.c_str());
+		//nldebug("LAUNCH: Successful launch '%s' with arg '%s'", programName.c_str(), arguments.c_str());
 		CloseHandle( pi.hProcess );
 		CloseHandle( pi.hThread );
 		return true;
@@ -670,7 +670,7 @@ bool launchProgram (const std::string &programName, const std::string &arguments
 		// But it works fine on my GNU/Linux so I do this because it's easier :) and I don't know exactly
 		// what to do to be portable.
 		signal(SIGCHLD,SIG_IGN);
-		
+
 		firstLaunchProgram = false;
 	}
 
@@ -699,7 +699,7 @@ bool launchProgram (const std::string &programName, const std::string &arguments
 	int status = vfork ();
 	/////////////////////////////////////////////////////////
 	/// WARNING : NO MORE INSTRCUTION AFTER VFORK !
-	/// READ VFORK manual 
+	/// READ VFORK manual
 	/////////////////////////////////////////////////////////
 	if (status == -1)
 	{
@@ -720,7 +720,7 @@ bool launchProgram (const std::string &programName, const std::string &arguments
 	}
 	else
 	{
-		nldebug("LAUNCH: Successful launch '%s' with arg '%s'", programName.c_str(), arguments.c_str());
+		//nldebug("LAUNCH: Successful launch '%s' with arg '%s'", programName.c_str(), arguments.c_str());
 		return true;
 	}
 #else
@@ -784,7 +784,7 @@ void displayDwordBits( uint32 b, uint nbits, sint beginpos, bool displayBegin, N
 int	nlfseek64( FILE *stream, sint64 offset, int origin )
 {
 #ifdef NL_OS_WINDOWS
-	
+
 	//
 	fpos_t pos64 = 0;
 	switch (origin)
@@ -797,20 +797,20 @@ int	nlfseek64( FILE *stream, sint64 offset, int origin )
 		if (pos64 == -1L)
 			return -1;
 	};
-	
+
 	// Seek
 	pos64 += offset;
-	
+
 	// Set the final position
 	return fsetpos (stream, &pos64);
-	
+
 #else // NL_OS_WINDOWS
-	
+
 	// This code doesn't work under windows : fseek() implementation uses a signed 32 bits offset. What ever we do, it can't seek more than 2 Go.
 	// For the moment, i don't know if it works under linux for seek of more than 2 Go.
-	
+
 	nlassert ((offset < SINT64_CONSTANT(2147483647)) && (offset > SINT64_CONSTANT(-2147483648)));
-	
+
 	bool first = true;
 	do
 	{
@@ -820,39 +820,37 @@ int	nlfseek64( FILE *stream, sint64 offset, int origin )
 			nextSeek = (sint)std::min ((sint64)SINT64_CONSTANT(2147483647), offset);
 		else
 			nextSeek = (sint)std::max ((sint64)-SINT64_CONSTANT(2147483648), offset);
-		
+
 		// Make a seek
 		int result = fseek ( stream, nextSeek, first?origin:SEEK_CUR );
 		if (result != 0)
 			return result;
-		
+
 		// Remaining
 		offset -= nextSeek;
 		first = false;
 	}
 	while (offset);
-	
+
 	return 0;
-	
+
 #endif // NL_OS_WINDOWS
 }
 
 sint64 nlftell64(FILE *stream)
 {
-	#ifdef NL_OS_WINDOWS		
-		fpos_t pos64 = 0;
-		if (fgetpos(stream, &pos64) == 0)
-		{
-			return (sint64) pos64;
-		}
-		else return -1;
-	#else
-		nlerror("Not implemented");
-		return -1;
-	#endif
+#ifdef NL_OS_WINDOWS
+	fpos_t pos64 = 0;
+	if (fgetpos(stream, &pos64) == 0)
+	{
+		return (sint64) pos64;
+	}
+	else return -1;
+#else
+	nlerror("Not implemented");
+	return -1;
+#endif
 }
-
-
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -864,19 +862,19 @@ sint64 nlftell64(FILE *stream)
 NLMISC_CATEGORISED_COMMAND(nel, sleep, "Freeze the service for N seconds (for debug purpose)", "<N>")
 {
 	if(args.size() != 1) return false;
-	
+
 	sint32 n = atoi (args[0].c_str());
-	
+
 	log.displayNL ("Sleeping during %d seconds", n);
-	
-	nlSleep(n * 1000);	
+
+	nlSleep(n * 1000);
 	return true;
 }
 
 NLMISC_CATEGORISED_COMMAND(nel, system, "Execute the command line using system() function call (wait until the end of the command)", "<commandline>")
 {
 	if(args.size() != 1) return false;
-	
+
 	string cmd = args[0];
 	log.displayNL ("Executing '%s'", cmd.c_str());
 	system(cmd.c_str());
@@ -887,7 +885,7 @@ NLMISC_CATEGORISED_COMMAND(nel, system, "Execute the command line using system()
 NLMISC_CATEGORISED_COMMAND(nel, launchProgram, "Execute the command line using launcProgram() function call (launch in background task without waiting the end of the execution)", "<programName> <arguments>")
 {
 	if(args.size() != 2) return false;
-	
+
 	string cmd = args[0];
 	string arg = args[1];
 	log.displayNL ("Executing '%s' with argument '%s'", cmd.c_str(), arg.c_str());
@@ -909,7 +907,7 @@ LONG GetRegKey(HKEY key, LPCSTR subkey, LPSTR retdata)
     HKEY hkey;
     LONG retval = RegOpenKeyExA(key, subkey, 0, KEY_QUERY_VALUE, &hkey);
 
-    if (retval == ERROR_SUCCESS) 
+    if (retval == ERROR_SUCCESS)
 	{
         long datasize = MAX_PATH;
         char data[MAX_PATH];
@@ -926,16 +924,16 @@ bool openURL (const char *url)
 {
 #ifdef NL_OS_WINDOWS
     char key[1024];
-    if (GetRegKey(HKEY_CLASSES_ROOT, ".html", key) == ERROR_SUCCESS) 
+    if (GetRegKey(HKEY_CLASSES_ROOT, ".html", key) == ERROR_SUCCESS)
 	{
         lstrcatA(key, "\\shell\\open\\command");
 
-        if (GetRegKey(HKEY_CLASSES_ROOT,key,key) == ERROR_SUCCESS) 
+        if (GetRegKey(HKEY_CLASSES_ROOT,key,key) == ERROR_SUCCESS)
 		{
             char *pos;
             pos = strstr(key, "\"%1\"");
             if (pos == NULL) {                     // No quotes found
-                pos = strstr(key, "%1");       // Check for %1, without quotes 
+                pos = strstr(key, "%1");       // Check for %1, without quotes
                 if (pos == NULL)                   // No parameter at all...
                     pos = key+lstrlenA(key)-1;
                 else
@@ -948,8 +946,12 @@ bool openURL (const char *url)
             lstrcatA(pos, url);
             int res = WinExec(key,SW_SHOWDEFAULT);
 			return (res>31);
-        }
-    }
+		}
+	}
+#elif defined(NL_OS_UNIX)
+	return launchProgram("/etc/alternatives/x-www-browser", url);
+#else
+	nlwarning("openURL() is not implemented for this OS");
 #endif // NL_OS_WINDOWS
 	return false;
 }
@@ -964,18 +966,18 @@ bool openDoc (const char *document)
     HINSTANCE result = ShellExecuteA(NULL, "open", document, NULL,NULL, SW_SHOWDEFAULT);
 
     // If it failed, get the .htm regkey and lookup the program
-    if ((UINT)result <= HINSTANCE_ERROR) 
+    if ((UINT)result <= HINSTANCE_ERROR)
 	{
-        if (GetRegKey(HKEY_CLASSES_ROOT, ext.c_str(), key) == ERROR_SUCCESS) 
+        if (GetRegKey(HKEY_CLASSES_ROOT, ext.c_str(), key) == ERROR_SUCCESS)
 		{
             lstrcatA(key, "\\shell\\open\\command");
 
-            if (GetRegKey(HKEY_CLASSES_ROOT,key,key) == ERROR_SUCCESS) 
+            if (GetRegKey(HKEY_CLASSES_ROOT,key,key) == ERROR_SUCCESS)
 			{
                 char *pos;
                 pos = strstr(key, "\"%1\"");
                 if (pos == NULL) {                     // No quotes found
-                    pos = strstr(key, "%1");       // Check for %1, without quotes 
+                    pos = strstr(key, "%1");       // Check for %1, without quotes
                     if (pos == NULL)                   // No parameter at all...
                         pos = key+lstrlenA(key)-1;
                     else
