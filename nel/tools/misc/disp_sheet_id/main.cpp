@@ -1,4 +1,4 @@
-n/** \file main.cpp
+/** \file main.cpp
  * Display info on sheetid.bin
  *
  * $Id$
@@ -23,7 +23,7 @@ n/** \file main.cpp
  * MA 02111-1307, USA.
  */
 
-
+#include "nel/misc/types_nl.h"
 #ifdef NL_OS_WINDOWS
 #include <conio.h>
 #else
