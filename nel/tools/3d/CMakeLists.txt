@@ -16,7 +16,20 @@ SUBDIRS(	build_coarse_mesh
 		file_info
 		get_neighbors
 		ig_add
-		ig_info)
+		ig_info
+		tga_cut
+		tga_resize
+		zone_check_bind
+		zone_dump)
 
 # These use WIndows-specific things that need to be fixed.
 #ig_elevation
+#lightmap_optimizer
+#ligo
+#object_viewer
+#object_viewer_exe
+#panoply_maker
+#hls_bank_maker
+#s3tc_compressor_lib
+#tga_2_dds
+#plugin_max
