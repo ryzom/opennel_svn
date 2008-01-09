@@ -648,13 +648,11 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 			return false;
 		}
 
-		
-
 		// Register WGL functions
 		registerWGlExtensions (_Extensions, tempHDC);
 
 		HDC hdc = wglGetCurrentDC ();
-		
+
 		if (hdc == NULL)
 		{
 			DWORD error = GetLastError ();
@@ -3603,10 +3601,7 @@ void CDriverGL::finish()
 void CDriverGL::flush()
 {
 	H_AUTO_OGL(CDriverGL_flush)
-	
 	glFlush();
-	
-		
 }
 
 
@@ -3619,8 +3614,6 @@ void	CDriverGL::setSwapVBLInterval(uint interval)
 	if(_Extensions.WGLEXTSwapControl && _Initialized)
 	{
 		wglSwapIntervalEXT(_Interval);
-		
-			
 	}
 #endif
 }
