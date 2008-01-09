@@ -1,3 +1,5 @@
+SUBDIRS(misc)
+
 IF(WITH_3D)
   SUBDIRS(3d)
 ENDIF(WITH_3D)
