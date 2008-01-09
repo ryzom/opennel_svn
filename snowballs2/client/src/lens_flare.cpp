@@ -1,160 +1,164 @@
-/** \file lens_flare.cpp
- * Snowballs 2 specific code for managing the lens flare.
+/**
+ * \file lens_flare.cpp
+ * \brief CLensFlare
+ * Generic code for managing the lens flare.
+ * This code was taken and modified from Snowballs 2 specific code.
  * This code was taken from Snowballs 1.
- *
+ * 
  * $Id$
  */
 
-/* Copyright, 2001 Nevrax Ltd.
- *
+/* 
+ * Copyright (C) 2001  Nevrax Ltd.
+ * 
  * This file is part of NEVRAX SNOWBALLS.
- * NEVRAX SNOWBALLS is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
-
- * NEVRAX SNOWBALLS is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * NEVRAX SNOWBALLS is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 2 of the
+ * License, or (at your option) any later version.
+ * 
+ * NEVRAX SNOWBALLS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
-
+ * 
  * You should have received a copy of the GNU General Public License
- * along with NEVRAX SNOWBALLS; see the file COPYING. If not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
- * MA 02111-1307, USA.
+ * along with NEVRAX SNOWBALLS; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301 USA.
  */
-
-//
-// Includes
-//
 
 #include <nel/misc/types_nl.h>
-#include <nel/misc/vector.h>
-#include <nel/misc/matrix.h>
+#include "lens_flare.h"
 
-#include <nel/3d/u_material.h>
-#include <nel/3d/u_camera.h>
+// #include <nel/misc/debug.h>
 #include <nel/3d/u_driver.h>
-#include <nel/3d/u_text_context.h>
 #include <nel/3d/u_texture.h>
 
-#include "camera.h"
-#include "landscape.h"
-#include "client.h"
-#include "mouse_listener.h"
-
-//
-// Namespaces
-//
-
+using namespace std;
 using namespace NLMISC;
 using namespace NL3D;
-using namespace std;
 
-/// If axis segment is longer than this value then no lens flare is displayed
-static const float _MaxLensFlareLenght = 0.4f;
+#include "mouse_listener.h"
+#include <nel/misc/vectord.h> // temp!
+extern C3dMouseListener *MouseListener;
 
-//
-// Functions
-//
+namespace SBCLIENT {
 
-/**
- * A lens-flare class
- * \author Stephane Coutelas
- * \author Nevrax France
- * \date 2000
- */
-class CLensFlare
+CLensFlare::CLensFlare(NL3D::UDriver *driver, const NL3D::UCamera &camera) 
+	: _AlphaCoef(1.0f), _MaxLensFlareLenght(0.4f), 
+	_Camera(camera), _SunRadius(24)
 {
-	float _AlphaCoef;
+	nlassert(driver); _Driver = driver;
+	_SunDirection = CVector::Null;
+}
 
-	/// flare
-	struct _CFlare
-	{
-		NL3D::UMaterial Material;
-
-		float Width;
-		float Height;
-
-		float Location;
-
-		float Scale;
-		
-		_CFlare(NL3D::UTexture *texture, float width, float height, float location, float scale)
-		{
-			// -- -- nicely re-usable class, but why should it know about the snowballs specific driver global
-			Material = Driver->createMaterial ();
-			Material.initUnlit ();
-			Material.setTexture (texture);
-			Material.setBlendFunc (UMaterial::srcalpha, UMaterial::one);
-			Material.setBlend(true);
-			Material.setZFunc (UMaterial::always);
-			Material.setZWrite (false);
-
-			// quad dimension
-			Width = width;
-			Height = height;
-
-			// location on the lens-flare ray
-			Location = location;
-
-			// texture scale
-			Scale = scale;
-		}
-	};
-
-	/// flares due to light
-	std::vector<_CFlare *> _Flares;
-
-public:
-
-	/// constructor
-	CLensFlare()
-	{
-		_AlphaCoef = 1.0f;
-	}
-
-	/// add a flare to the flare list
-	void addFlare(NL3D::UTexture * texture, float width, float height, float location = 1.f, float scale = 1.f);
-
-	void setAlphaCoef(float coef)
-	{
-		_AlphaCoef = coef;
-	}
-
-	// -- -- random note: show actually shows and is used within update
-	/// lens flare display function
-	void show();
-};
-
+CLensFlare::~CLensFlare()
+{
+	for(_CFlares::iterator it = _Flares.begin(); it != _Flares.end(); it++)
+		_Driver->deleteMaterial(it->Material);
+}
 
 /*********************************************************\
 					addFlare()
 \*********************************************************/
-void CLensFlare::addFlare(UTexture * texture, float width, float height, float location, float scale)
+void CLensFlare::addFlare(UTexture *texture, float width, float height, float location, float scale)
 {
-	_Flares.push_back(new _CFlare(texture, width, height, location, scale));
+	_CFlare flare;
+	flare.Material = _Driver->createMaterial();
+	flare.Material.initUnlit();
+	flare.Material.setTexture(texture);
+	flare.Material.setBlendFunc(UMaterial::srcalpha, UMaterial::one);
+	flare.Material.setBlend(true);
+	flare.Material.setZFunc(UMaterial::always);
+	flare.Material.setZWrite(false);
+	
+	// quad dimension
+	flare.Width = width;
+	flare.Height = height;
+	
+	// location on the lens-flare ray
+	flare.Location = location;
+	
+	// texture scale
+	flare.Scale = scale;
+	flare.Width = width;
+	flare.Height = height;
+	_Flares.push_back(flare);
 }
 
-
 /*********************************************************\
-						show()
+						render()
 \*********************************************************/
 void CLensFlare::show()
 {
+	// vector to sun
+	//==============
+	CVector userLook = MouseListener->getViewDirection();
+	CVector sunDirection = (-100000 * _SunDirection);
+
+	// cosinus between the two previous vectors
+	//=========================================
+	float cosAngle = sunDirection * userLook / sunDirection.norm();	
+
+	// alpha
+	//======
+	float alphaf = cosAngle < 0 ? 0.0f : 255 * (float)(pow(cosAngle, 20));
+
+	// landscape's masking sun ?
+	//==========================
+	CMatrix camMatrix;
+	camMatrix = _Camera.getMatrix();
+	camMatrix.setPos(CVector::Null);
+	camMatrix.invert();
+	CVector tmp = camMatrix * sunDirection;
+	tmp = _Camera.getFrustum().project(tmp);
+	uint32 w,h;
+	_Driver->getWindowSize(w, h);
+	uint32 sun_radius = (uint32)_SunRadius;
+	CRect rect(
+		(uint32)(tmp.x * (float)w) - sun_radius,
+		(uint32)(tmp.y * (float)h) - sun_radius,
+		2 * sun_radius,
+		2 * sun_radius);
+	vector<float> zbuff;
+	_Driver->getZBufferPart(zbuff, rect); // !!!!!! not working in d3d apparently .........
+	float view = 0.0f;
+	float sum = 0.0f;
+	for (uint i = 0; i < zbuff.size(); ++i)
+	{
+		if (zbuff[i] >= 0.99999f) ++sum;
+	}
+	view = sum / (_SunRadius * 2 * _SunRadius * 2);
+
+	_Driver->setMatrixMode2D11();
+
+	// quad for dazzle 
+	//================
+	uint8 alpha = (uint8)(alphaf * view / 2.0f);
+	if(alpha != 0)
+	{
+		_Driver->drawQuad(0, 0, 1, 1, CRGBA(255, 255, 255, alpha));
+	}
+
+	// Set the alpha
+	setAlphaCoef(1.0f - (float)cos(alphaf * view * Pi / (2.0f * 255.0f)));
+
+	// Display the lens flare
+
 	CMatrix mtx;
 	mtx.identity();
 
-	nlassert(Driver!=NULL && !Camera.empty());
+	nlassert(_Driver != NULL && !_Camera.empty());
 
-	Driver->setMatrixMode2D11 ();
+	_Driver->setMatrixMode2D11();
 
 	// Determining axis "screen center - light" vector
-	CMatrix cameraMatrix = Camera.getMatrix();
+	CMatrix cameraMatrix = _Camera.getMatrix();
 	cameraMatrix.invert();
-	CVector light = (-100000 * SunDirection);
+	CVector light = (-100000 * _SunDirection);
 	light = cameraMatrix * light;
-	light = Camera.getFrustum().project(light);
+	light = _Camera.getFrustum().project(light);
 	
 	CVector screenCenter(0.5f,0.5f,0);
 	CVector axis = light - screenCenter;
@@ -165,33 +169,32 @@ void CLensFlare::show()
 	}
 
 	// rendering flares
-	vector<_CFlare *>::iterator itflr;
-	for(itflr = _Flares.begin(); itflr!=_Flares.end(); itflr++)
+	for(_CFlares::iterator itflr = _Flares.begin(); itflr != _Flares.end(); itflr++)
 	{
-		(*itflr)->Material.setColor(CRGBA(255,255,255,(uint8)(_AlphaCoef*255)));
+		itflr->Material.setColor(CRGBA(255,255,255,(uint8)(_AlphaCoef*255)));
 			
 		CQuadUV quad;
 		
-		float xCenterQuad = screenCenter.x + (*itflr)->Location * axis.x;
-		float yCenterQuad = screenCenter.y + (*itflr)->Location * axis.y;
+		float xCenterQuad = screenCenter.x + itflr->Location * axis.x;
+		float yCenterQuad = screenCenter.y + itflr->Location * axis.y;
 		
 		float x,y;
 
 
-		x = xCenterQuad - (*itflr)->Width * (*itflr)->Scale / 2.f;
-		y = yCenterQuad - (*itflr)->Height * (*itflr)->Scale / 2.f;
+		x = xCenterQuad - itflr->Width * itflr->Scale / 2.f;
+		y = yCenterQuad - itflr->Height * itflr->Scale / 2.f;
 		quad.V0.set (x, y, 0);
 		
-		x = xCenterQuad + (*itflr)->Width * (*itflr)->Scale / 2.f;
-		y = yCenterQuad - (*itflr)->Height * (*itflr)->Scale / 2.f;
+		x = xCenterQuad + itflr->Width * itflr->Scale / 2.f;
+		y = yCenterQuad - itflr->Height * itflr->Scale / 2.f;
 		quad.V1.set (x, y, 0);
 		
-		x = xCenterQuad + (*itflr)->Width * (*itflr)->Scale / 2.f;
-		y = yCenterQuad + (*itflr)->Height * (*itflr)->Scale / 2.f;
+		x = xCenterQuad + itflr->Width * itflr->Scale / 2.f;
+		y = yCenterQuad + itflr->Height * itflr->Scale / 2.f;
 		quad.V2.set (x, y, 0);
 		
-		x = xCenterQuad - (*itflr)->Width * (*itflr)->Scale / 2.f;
-		y = yCenterQuad + (*itflr)->Height * (*itflr)->Scale / 2.f;
+		x = xCenterQuad - itflr->Width * itflr->Scale / 2.f;
+		y = yCenterQuad + itflr->Height * itflr->Scale / 2.f;
 		quad.V3.set (x, y, 0);
 
 		quad.Uv0.U = 0.0f; quad.Uv0.V = 1.0f;
@@ -199,121 +202,10 @@ void CLensFlare::show()
 		quad.Uv2.U = 1.0f; quad.Uv2.V = 0.0f;
 		quad.Uv3.U = 0.0f; quad.Uv3.V = 0.0f;
 
-		Driver->drawQuad (quad, (*itflr)->Material);
+		_Driver->drawQuad(quad, itflr->Material);
 	}
 }
 
-static CLensFlare *LensFlare = NULL;
-static UTextureFile *flareTexture1 = NULL;
-static UTextureFile *flareTexture3 = NULL;
-static UTextureFile *flareTexture4 = NULL;
-static UTextureFile *flareTexture5 = NULL;
-static UTextureFile *flareTexture6 = NULL;
-static UTextureFile *flareTexture7 = NULL;
+} /* namespace SBCLIENT */
 
-void initLensFlare ()
-{
-	// -- -- getting this from a config file would be more re-usable
-
-	LensFlare = new CLensFlare ();
-
-	flareTexture1 = Driver->createTextureFile("flare01.tga");
-	flareTexture3 = Driver->createTextureFile("flare03.tga");
-	flareTexture4 = Driver->createTextureFile("flare04.tga");
-	flareTexture5 = Driver->createTextureFile("flare05.tga");
-	flareTexture6 = Driver->createTextureFile("flare06.tga");
-	flareTexture7 = Driver->createTextureFile("flare07.tga");
-
-	float w = 30/800.0f;
-	float h = 30/600.0f;
-
-	// shine
-	LensFlare->addFlare (flareTexture3, w, h, 1.f, 16.f);
-
-	LensFlare->addFlare (flareTexture1, w, h, 1.f, 6.f);
-	LensFlare->addFlare (flareTexture6, w, h, 1.3f, 1.2f);
-	LensFlare->addFlare (flareTexture7, w, h, 1.0f, 3.f);
-	LensFlare->addFlare (flareTexture6, w, h, 0.5f, 4.f);
-	LensFlare->addFlare (flareTexture5, w, h, 0.2f, 2.f);
-	LensFlare->addFlare (flareTexture7, w, h, 0.0f, 0.8f);
-	LensFlare->addFlare (flareTexture7, w, h, -0.25f, 2.f);
-	LensFlare->addFlare (flareTexture1, w, h, -0.4f, 1.f);
-	LensFlare->addFlare (flareTexture4, w, h, -1.0f, 12.f);
-	LensFlare->addFlare (flareTexture5, w, h, -0.6f, 6.f);
-}
-
-void updateLensFlare ()
-{
-	// -- -- todo: see how much of this can be modified to depend on nel 
-	//       things only, and moved into the lensflare class
-
-	// vector to sun
-	//==============
-	CVector userLook = MouseListener->getViewDirection ();
-
-	CVector sunDirection = (-100000 * SunDirection);
-
-	// cosinus between the two previous vectors
-	//=========================================
-	float cosAngle = sunDirection*userLook/sunDirection.norm();	
-
-	// alpha
-	//======
-	float alphaf;
-	if(cosAngle<0) 
-	{
-		alphaf = 0;
-	}
-	else
-	{
-		alphaf = 255*(float)(pow(cosAngle,20));
-	}
-
-	// landscape's masking sun ?
-	//==========================
-	CMatrix camMatrix;
-	camMatrix = Camera.getMatrix();
-	camMatrix.setPos(CVector::Null);
-	camMatrix.invert();
-	CVector tmp = camMatrix * sunDirection;
-	tmp = Camera.getFrustum().project(tmp);
-	uint32	w,h;
-	Driver->getWindowSize(w,h);
-	float sunRadius = 24; // -- -- why 24
-	CRect rect((uint32)(tmp.x*w)-(uint32)sunRadius,(uint32)(tmp.y*h)-(uint32)sunRadius,2*(uint32)sunRadius,2*(uint32)sunRadius);
-	vector<float> zbuff;
-	Driver->getZBufferPart(zbuff, rect);
-	float view = 0.f;
-	float sum = 0;
-	sint i; // -- -- signed?
-	for(i=0; i<(sint)zbuff.size(); i++)
-	{
-		if(zbuff[i]>=0.99999f) sum ++;
-	}
-	view = sum/(sunRadius*2*sunRadius*2);
-
-	Driver->setMatrixMode2D11 ();
-
-	// quad for dazzle 
-	//================
-	uint8 alpha = (uint8)(alphaf*view/2.0f);
-	if(alpha!=0)
-	{
-		Driver->drawQuad(0,0,1,1,CRGBA(255,255,255,alpha));
-	}
-
-	// Display lens-flare
-	LensFlare->setAlphaCoef( 1.f - (float)cos(alphaf*view*Pi/(2.f*255.f)) );
-	LensFlare->show();
-}
-
-void releaseLensFlare ()
-{
-	delete LensFlare; LensFlare = NULL;
-	Driver->deleteTextureFile(flareTexture1); flareTexture1 = NULL;
-	Driver->deleteTextureFile(flareTexture3); flareTexture3 = NULL;
-	Driver->deleteTextureFile(flareTexture4); flareTexture4 = NULL;
-	Driver->deleteTextureFile(flareTexture5); flareTexture5 = NULL;
-	Driver->deleteTextureFile(flareTexture6); flareTexture6 = NULL;
-	Driver->deleteTextureFile(flareTexture7); flareTexture7 = NULL;
-}
+/* end of file */

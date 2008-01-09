@@ -107,6 +107,8 @@ SBCLIENT::CSceneComponent *SceneComponent;
 SBCLIENT::CTimeComponent *TimeComponent;
 #include "weather_component.h"
 SBCLIENT::CWeatherComponent *WeatherComponent;
+#include "lens_flare_component.h"
+SBCLIENT::CLensFlareComponent *LensFlareComponent;
 
 namespace SBCLIENT {
 
@@ -295,9 +297,6 @@ void CSnowballsClient::enableCore()
 		playMusic(SBCLIENT_MUSIC_WAIT);
 		updates.add(updateSound, NULL, NULL, 0);
 #endif
-		// Required for 3d rendering (3d nel logo etc)
-		displayLoadingState("Initialize Light");
-		initLight();
 	}
 }
 
@@ -306,8 +305,6 @@ void CSnowballsClient::disableCore()
 	if (_HasCore)
 	{
 		/// EVEN MORE TEMP!
-		// Release the sun
-		releaseLight();
 		// Release the loading state textures
 		releaseLoadingState();
 		// Release the sound
@@ -441,7 +438,11 @@ void CSnowballsClient::enableIngame()
 		initAnimation();
 		// Init the lens flare
 		displayLoadingState("Initialize LensFlare ");
-		initLensFlare();
+		LensFlareComponent = new CLensFlareComponent(
+			_ComponentManager, "LensFlare", _LoadingScreen);
+		_ComponentManager->registerComponent(LensFlareComponent);
+		_ComponentManager->registerRender(LensFlareComponent, -900);
+		
 
 		// Init the mouse so it's trapped by the main window.
 		Driver->showCursor(false);
@@ -451,7 +452,7 @@ void CSnowballsClient::enableIngame()
 
 		// render adds
 		CFunctionCaller &updates = _ComponentManager->getUpdateCaller();		
-		updates.add(updateClient, NULL, NULL, -1000); // meh
+		updates.add(updateClient, NULL, NULL, 10000); // meh
 		CFunctionCaller &renderers = _ComponentManager->getRenderCaller();
 		renderers.add(renderClient, NULL, NULL, -1000); // meh
 	}
@@ -475,7 +476,6 @@ void CSnowballsClient::disableIngame()
 
 		// Release all before quit
 
-		releaseLensFlare();
 		releaseRadar();
 		releaseCommands();
 		releaseEntities();
@@ -488,7 +488,6 @@ void CSnowballsClient::disableIngame()
 		releaseCamera();
 		releaseAiming();
 		releasePACS();
-		releaseLandscape();
 		delete LandscapeComponent;
 		// Release the mouse listener
 		MouseListener->removeFromServer(Driver->EventServer);

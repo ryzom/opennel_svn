@@ -35,6 +35,7 @@
 #include "driver_component.h"
 #include "time_component.h"
 #include "scene_component.h"
+#include "lens_flare_component.h"
 
 #include <nel/misc/debug.h>
 #include <nel/3d/u_driver.h>
@@ -50,7 +51,8 @@ using namespace NL3D;
 namespace SBCLIENT {
 
 CWeatherComponent::CWeatherComponent(CComponentManager *manager, const string &instanceId, IProgressCallback &progressCallback)
-	: IConfigurableComponent(manager, instanceId, progressCallback)
+	: IConfigurableComponent(manager, instanceId, progressCallback),
+	_LensFlareComponent(NULL)
 {
 	// get the existing driver from the driver component, 
 	// cannot change at runtime; asserts by itself
@@ -78,6 +80,9 @@ CWeatherComponent::CWeatherComponent(CComponentManager *manager, const string &i
 	_Sun->setDirection(CVector(-2.935f, 0.107f, -1.22f));
 	_Driver->setLight(0, *_Sun);
 
+	// hook up with the lens flare component once it exists
+	registerAndCallConfigCallback("LensFlareInstanceId");
+
 	// create the sky scene
 	_SkyScene = _Driver->createScene(false);
 	UCamera sky_camera = _SkyScene->getCam();
@@ -89,7 +94,7 @@ CWeatherComponent::CWeatherComponent(CComponentManager *manager, const string &i
 	_Sky = _SkyScene->createInstance("sky.shape");
 	_Sky.setTransformMode(UTransformable::DirectMatrix);
 	_Sky.setMatrix(CMatrix::Identity);
-
+	
 	// create the cloud scape
 	_Clouds = _GameScene->createCloudScape();
 	// create a default cloud scape setup
@@ -105,7 +110,11 @@ CWeatherComponent::CWeatherComponent(CComponentManager *manager, const string &i
 
 	// create the snowing particle system
 	_Snow = _GameScene->createInstance("snow.ps");
-	_Snow.setTransformMode (UTransformable::DirectMatrix);
+	_Snow.setTransformMode(UTransformable::DirectMatrix);
+
+	// set the fog (temp)
+	_Driver->enableFog(false);
+	_Driver->setupFog(100.0f, 250.0f, CRGBA(80, 77, 118));
 }
 
 CWeatherComponent::~CWeatherComponent()
@@ -150,17 +159,48 @@ void CWeatherComponent::render()
 
 void CWeatherComponent::config(const string &varName, CConfigFile::CVar &var)
 {
-	nlwarning("Unknown IConfigurableComponent config(varName, var) call");
+	if (varName == "LensFlareInstanceId")
+	{
+		// switch to a different lens flare component
+		unregisterNotifier(_LensFlareInstanceId);
+		_LensFlareInstanceId = var.asString();
+		registerNotifier(_LensFlareInstanceId);
+	}
+	else if (varName == "SunDirection")
+	{
+		// todo
+		CVector direction = CVector(0, 0, 0);
+		_Sun->setDirection(direction);
+		if (_LensFlareComponent) 
+			_LensFlareComponent->setSunDirection(direction);
+	}
+	else nlwarning("Unknown IConfigurableComponent config(varName, var) call");
 }
 
 void CWeatherComponent::componentUp(IComponent *component)
 {
-	nlwarning("Unknown IComponent componentUp(component) call");
+	std::string instanceId = component->getInstanceId();
+	if (instanceId == _LensFlareInstanceId)
+	{
+		// set the lens flare component and give it the sun direction
+		nlassert(!_LensFlareComponent);
+		_LensFlareComponent = (CLensFlareComponent *)component;
+		_LensFlareComponent->setSunDirection(_Sun->getDirection());
+	}
+	else nlwarning("Unknown IComponent componentUp(component) call");
 }
 
 void CWeatherComponent::componentDown(IComponent *component)
 {
-	nlwarning("Unknown IComponent componentDown(component) call");
+	std::string instanceId = component->getInstanceId();
+	if (instanceId == _LensFlareInstanceId)
+	{
+		// remove the lens flare component
+		nlassert(_LensFlareComponent);
+		_LensFlareComponent->setSunDirection(CVector::Null);
+		_LensFlareComponent = NULL;
+	}
+	else nlwarning("Unknown IComponent componentDown(component) call");
 }
 
 } /* namespace SBCLIENT */

@@ -520,14 +520,6 @@
 					>
 				</File>
 				<File
-					RelativePath="src\lens_flare.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\lens_flare.h"
-					>
-				</File>
-				<File
 					RelativePath="src\mouse_listener.cpp"
 					>
 				</File>
@@ -671,6 +663,14 @@
 					Name="game"
 					>
 					<File
+						RelativePath=".\src\lens_flare.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\lens_flare.h"
+						>
+					</File>
+					<File
 						RelativePath=".\src\loading_screen.cpp"
 						>
 					</File>
@@ -757,6 +757,14 @@
 				</File>
 				<File
 					RelativePath=".\src\landscape_component.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\lens_flare_component.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\lens_flare_component.h"
 					>
 				</File>
 				<File

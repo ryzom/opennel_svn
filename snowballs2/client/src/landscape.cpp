@@ -81,10 +81,6 @@ UVisualCollisionEntity	*AimingEntity = NULL;
 vector<UInstanceGroup*>	 InstanceGroups;
 
 
-ULight					*Sun = NULL;
-NLMISC::CVector			 SunDirection;
-
-
 //
 // Functions
 //
@@ -93,33 +89,33 @@ void cbUpdateLandscape (CConfigFile::CVar &var)
 {
 	// -- -- split this whole thing up, lol
 
-	if (var.Name == "FogStart") 
-		Driver->setupFog (var.asFloat (), 
-		ConfigFile->getVar ("FogEnd").asFloat (), 
-		CRGBA(ConfigFile->getVar ("FogColor").asInt (0), 
-		ConfigFile->getVar ("FogColor").asInt (1),
-		ConfigFile->getVar ("FogColor").asInt (2)));
-	else if (var.Name == "FogEnd") 
-		Driver->setupFog (ConfigFile->getVar ("FogStart").asFloat (), 
-		var.asFloat (), 
-		CRGBA(ConfigFile->getVar ("FogColor").asInt (0), 
-		ConfigFile->getVar ("FogColor").asInt (1),
-		ConfigFile->getVar ("FogColor").asInt (2)));
-	else if (var.Name == "FogColor")
-		Driver->setupFog(
-		ConfigFile->getVar ("FogStart").asFloat (), 
-		ConfigFile->getVar ("FogEnd").asFloat (), 
-		CRGBA(var.asInt (0), var.asInt (1), var.asInt (2)));
-	else if (var.Name == "FogEnable")
-	{
-		Driver->enableFog(var.asBool());
-		Driver->setupFog(
-			ConfigFile->getVar("FogStart").asFloat(), 
-			ConfigFile->getVar("FogEnd").asFloat(),
-			CRGBA(ConfigFile->getVar("FogColor").asInt(0), 
-			ConfigFile->getVar ("FogColor").asInt(1), 
-			ConfigFile->getVar ("FogColor").asInt(2)));
-	}
+	////if (var.Name == "FogStart") 
+	////	Driver->setupFog (var.asFloat (), 
+	////	ConfigFile->getVar ("FogEnd").asFloat (), 
+	////	CRGBA(ConfigFile->getVar ("FogColor").asInt (0), 
+	////	ConfigFile->getVar ("FogColor").asInt (1),
+	////	ConfigFile->getVar ("FogColor").asInt (2)));
+	////else if (var.Name == "FogEnd") 
+	////	Driver->setupFog (ConfigFile->getVar ("FogStart").asFloat (), 
+	////	var.asFloat (), 
+	////	CRGBA(ConfigFile->getVar ("FogColor").asInt (0), 
+	////	ConfigFile->getVar ("FogColor").asInt (1),
+	////	ConfigFile->getVar ("FogColor").asInt (2)));
+	////else if (var.Name == "FogColor")
+	////	Driver->setupFog(
+	////	ConfigFile->getVar ("FogStart").asFloat (), 
+	////	ConfigFile->getVar ("FogEnd").asFloat (), 
+	////	CRGBA(var.asInt (0), var.asInt (1), var.asInt (2)));
+	////else if (var.Name == "FogEnable")
+	////{
+	////	Driver->enableFog(var.asBool());
+	////	Driver->setupFog(
+	////		ConfigFile->getVar("FogStart").asFloat(), 
+	////		ConfigFile->getVar("FogEnd").asFloat(),
+	////		CRGBA(ConfigFile->getVar("FogColor").asInt(0), 
+	////		ConfigFile->getVar ("FogColor").asInt(1), 
+	////		ConfigFile->getVar ("FogColor").asInt(2)));
+	////}
 	////else if (var.Name == "SunAmbientColor")
 	////{
 	////	Sun->setAmbiant (CRGBA (var.asInt(0), var.asInt(1), var.asInt(2)));
@@ -141,55 +137,55 @@ void cbUpdateLandscape (CConfigFile::CVar &var)
 	////	Sun->setDirection (SunDirection);
 	////	Driver->setLight (0, *Sun);
 	////}
-	else nlwarning ("Unknown variable update %s", var.Name.c_str());
+	nlwarning ("Unknown variable update %s", var.Name.c_str());
 }
-
-void initLight()
-{
-	// -- -- sun or whatever light, simple use, doesn't need class yet
-
-	////Sun = ULight::createLight();
-	////nlassert(Sun != NULL);
-	////Sun->setMode(ULight::DirectionalLight);
-	////Driver->enableLight(0);
-
-	////ConfigFile->setCallback("SunAmbientColor", cbUpdateLandscape);
-	////ConfigFile->setCallback("SunDiffuseColor", cbUpdateLandscape);
-	////ConfigFile->setCallback("SunSpecularColor", cbUpdateLandscape);
-	////ConfigFile->setCallback("SunDirection", cbUpdateLandscape);
-
-	////cbUpdateLandscape(ConfigFile->getVar("SunAmbientColor"));
-	////cbUpdateLandscape(ConfigFile->getVar("SunDiffuseColor"));
-	////cbUpdateLandscape(ConfigFile->getVar("SunSpecularColor"));
-	////cbUpdateLandscape(ConfigFile->getVar("SunDirection"));
-}
-
-void releaseLight()
-{
-	// -- -- just data
-
-	////ConfigFile->setCallback("SunAmbientColor", NULL);
-	////ConfigFile->setCallback("SunDiffuseColor", NULL);
-	////ConfigFile->setCallback("SunSpecularColor", NULL);
-	////ConfigFile->setCallback("SunDirection", NULL);
-
-	////delete Sun; Sun = NULL;
-}
+//
+//void initLight()
+//{
+//	// -- -- sun or whatever light, simple use, doesn't need class yet
+//
+//	////Sun = ULight::createLight();
+//	////nlassert(Sun != NULL);
+//	////Sun->setMode(ULight::DirectionalLight);
+//	////Driver->enableLight(0);
+//
+//	////ConfigFile->setCallback("SunAmbientColor", cbUpdateLandscape);
+//	////ConfigFile->setCallback("SunDiffuseColor", cbUpdateLandscape);
+//	////ConfigFile->setCallback("SunSpecularColor", cbUpdateLandscape);
+//	////ConfigFile->setCallback("SunDirection", cbUpdateLandscape);
+//
+//	////cbUpdateLandscape(ConfigFile->getVar("SunAmbientColor"));
+//	////cbUpdateLandscape(ConfigFile->getVar("SunDiffuseColor"));
+//	////cbUpdateLandscape(ConfigFile->getVar("SunSpecularColor"));
+//	////cbUpdateLandscape(ConfigFile->getVar("SunDirection"));
+//}
+//
+//void releaseLight()
+//{
+//	// -- -- just data
+//
+//	////ConfigFile->setCallback("SunAmbientColor", NULL);
+//	////ConfigFile->setCallback("SunDiffuseColor", NULL);
+//	////ConfigFile->setCallback("SunSpecularColor", NULL);
+//	////ConfigFile->setCallback("SunDirection", NULL);
+//
+//	////delete Sun; Sun = NULL;
+//}
 
 void	initLandscape()
 {
 
 
 
-	ConfigFile->setCallback ("FogStart", cbUpdateLandscape);
-	ConfigFile->setCallback ("FogEnd", cbUpdateLandscape);
-	ConfigFile->setCallback ("FogColor", cbUpdateLandscape);
-	ConfigFile->setCallback ("FogEnable", cbUpdateLandscape);
+	////ConfigFile->setCallback ("FogStart", cbUpdateLandscape);
+	////ConfigFile->setCallback ("FogEnd", cbUpdateLandscape);
+	////ConfigFile->setCallback ("FogColor", cbUpdateLandscape);
+	////ConfigFile->setCallback ("FogEnable", cbUpdateLandscape);
 
-	cbUpdateLandscape (ConfigFile->getVar ("FogStart"));
-	cbUpdateLandscape (ConfigFile->getVar ("FogEnd"));
-	cbUpdateLandscape (ConfigFile->getVar ("FogColor"));
-	cbUpdateLandscape (ConfigFile->getVar ("FogEnable"));
+	////cbUpdateLandscape (ConfigFile->getVar ("FogStart"));
+	////cbUpdateLandscape (ConfigFile->getVar ("FogEnd"));
+	////cbUpdateLandscape (ConfigFile->getVar ("FogColor"));
+	////cbUpdateLandscape (ConfigFile->getVar ("FogEnable"));
 
 
 
@@ -212,16 +208,16 @@ void	initLandscape()
 		}
 	}
 }
-
-void	releaseLandscape()
-{
-
-	ConfigFile->setCallback("FogStart", NULL);
-	ConfigFile->setCallback("FogEnd", NULL);
-	ConfigFile->setCallback("FogColor", NULL);
-	ConfigFile->setCallback("FogEnable", NULL);
-
-}
+//
+//void	releaseLandscape()
+//{
+//
+//	////ConfigFile->setCallback("FogStart", NULL);
+//	////ConfigFile->setCallback("FogEnd", NULL);
+//	////ConfigFile->setCallback("FogColor", NULL);
+//	////ConfigFile->setCallback("FogEnable", NULL);
+//
+//}
 
 
 void	initAiming()

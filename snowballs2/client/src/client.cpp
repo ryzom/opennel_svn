@@ -245,7 +245,7 @@ void updateTime(void *context, void *tag)
 
 void renderClient(void *context, void *tag)
 {
-	updateLensFlare(); // Render the lens flare
+	//updateLensFlare(); // Render the lens flare
 	updateCompass(); // Update the compass		
 	updateRadar(); // Update the radar
 	updateGraph(); // Update the radar		

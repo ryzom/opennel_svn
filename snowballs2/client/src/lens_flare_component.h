@@ -1,9 +1,9 @@
 /**
- * \file weather_component.h
- * \brief CWeatherComponent
- * \date 2008-01-09 16:59GMT
+ * \file lens_flare_component.h
+ * \brief CLensFlareComponent
+ * \date 2008-01-09 20:47GMT
  * \author Jan Boon (Kaetemi)
- * CWeatherComponent
+ * CLensFlareComponent
  * 
  * $Id$
  */
@@ -29,59 +29,62 @@
  * 02110-1301 USA.
  */
 
-#ifndef SBCLIENT_WEATHER_COMPONENT_H
-#define SBCLIENT_WEATHER_COMPONENT_H
+#ifndef SBCLIENT_LENS_FLARE_COMPONENT_H
+#define SBCLIENT_LENS_FLARE_COMPONENT_H
 #include <nel/misc/types_nl.h>
 #include "configurable_component.h"
 
-#include <nel/3d/u_instance.h>
+namespace NLMISC {
+	class CVector;
+}
 
 namespace NL3D {
-	class UScene;
+	class UTextureFile;
 	class UDriver;
-	class ULight;
-	class UCloudScape;
+	class UScene;
 }
 
 namespace SBCLIENT {
-	class CTimeComponent;
-	class CSceneComponent;
-	class CLensFlareComponent;
+	class CLensFlare;
 
 /**
- * \brief CWeatherComponent
- * \date 2008-01-09 16:59GMT
+ * \brief CLensFlareComponent
+ * \date 2008-01-09 20:47GMT
  * \author Jan Boon (Kaetemi)
- * CWeatherComponent
+ * CLensFlareComponent
  */
-class CWeatherComponent : public IConfigurableComponent
+class CLensFlareComponent : public IConfigurableComponent
 {
 protected:
 	// pointers
-	CTimeComponent *_TimeComponent; // not deleted here
-	CLensFlareComponent *_LensFlareComponent; // not deleted here
 	NL3D::UDriver *_Driver; // not deleted here
-	NL3D::UScene *_GameScene; // not deleted here
-	NL3D::UScene *_SkyScene; // created and deleted here trough _Driver
-	NL3D::ULight *_Sun; // created and deleted here trough _Driver
-	NL3D::UCloudScape *_Clouds; // created and deleted here trough _GameScene
+	NL3D::UScene *_Scene; // not deleted here
+	CLensFlare *_LensFlare; // created and deleted here
+	
+	// temp!
+	NL3D::UTextureFile *flareTexture1;
+	NL3D::UTextureFile *flareTexture3;
+	NL3D::UTextureFile *flareTexture4;
+	NL3D::UTextureFile *flareTexture5;
+	NL3D::UTextureFile *flareTexture6;
+	NL3D::UTextureFile *flareTexture7;
 
 	// instances
-	NL3D::UInstance _Sky; // created and deleted here trough _SkyScene
-	NL3D::UInstance _Snow; // created and deleted here trough _GameScene
-	std::string _LensFlareInstanceId;
+	// ...
 public:
-	CWeatherComponent(CComponentManager *manager, const std::string &instanceId, NLMISC::IProgressCallback &progressCallback);
-	~CWeatherComponent();
+	CLensFlareComponent(CComponentManager *manager, const std::string &instanceId, NLMISC::IProgressCallback &progressCallback);
+	~CLensFlareComponent();
 	void update();
 	void render();
 	void config(const std::string &varName, NLMISC::CConfigFile::CVar &var);
 	void componentUp(IComponent *component);
 	void componentDown(IComponent *component);
-}; /* class CWeatherComponent */
+
+	void setSunDirection(const NLMISC::CVector &direction);
+}; /* class CLensFlareComponent */
 
 } /* namespace SBCLIENT */
 
-#endif /* #ifndef SBCLIENT_WEATHER_COMPONENT_H */
+#endif /* #ifndef SBCLIENT_LENS_FLARE_COMPONENT_H */
 
 /* end of file */
