@@ -341,7 +341,9 @@ void displayZones()
 
 	// HeightField.
 	CBitmap		heightBitmap;
-	if( ViewerCfg.HeightFieldName!="" && heightBitmap.load(CIFile(ViewerCfg.HeightFieldName)) )
+	CIFile		heightfieldFile(ViewerCfg.HeightFieldName);
+
+	if( ViewerCfg.HeightFieldName!="" && heightBitmap.load(heightfieldFile) )
 	{
 		CHeightMap	heightMap;
 		heightMap.buildFromBitmap(heightBitmap);
@@ -954,7 +956,7 @@ void initViewerConfig(const char * configFileName)
 /****************************************************************\
 							MAIN
 \****************************************************************/
-void main()
+int main()
 {
 	try
 	{
@@ -981,4 +983,6 @@ void main()
 	{
 		fprintf (stderr,"main trapped an exception: '%s'", e.what ());
 	}
+
+	return 0;
 }
