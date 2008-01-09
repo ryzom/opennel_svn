@@ -26,7 +26,6 @@
 #include "component.h"
 
 namespace SBCLIENT {
-	class CComponentManager;
 
 /**
  * Base class for components that can be identified uniquely by name,
