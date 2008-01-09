@@ -246,31 +246,11 @@ void updateTime(void *context, void *tag)
 void renderClient(void *context, void *tag)
 {	
 	
-	animateSky(NewTime-LastTime);
 
-	// Clear all buffers
-	////////Driver->clearBuffers(CRGBA(0, 0, 0));
-
-	// Update the time counters
-	//////LastTime = NewTime;
-	//////NewTime = CTime::getLocalTime();
-	//////DiffTime = NewTime - LastTime;
-
-	// Update all entities positions
-	MouseListener->update();
-	updateEntities();
-
-	// setup the camera
-	// -> first update camera position directly from the mouselistener
-	// -> then update stuffs linked to the camera(snow, sky, lens flare etc.)
-	MouseListener->updateCamera();
-	updateCamera();		
-	LandscapeComponent->update(); // Update the landscape
-
-	Scene->animate(float(NewTime)/1000); // Set new animation date
+	////////Scene->animate(float(NewTime)/1000); // Set new animation date
 	updateSky(); // Render the sky scene before the main scene
 
-	Scene->render(); // Render		
+	////////Scene->render(); // Render		
 	updateLensFlare(); // Render the lens flare
 	updateCompass(); // Update the compass		
 	updateRadar(); // Update the radar
@@ -361,8 +341,32 @@ void updateClient(void *context, void *tag)
 		// F12 -> take a screenshot
 		// _DriverComponent->saveScreenshot("screenshot", false);
 	}
+
+
 	// Check if the config file was modified by another program
 	CConfigFile::checkConfigFiles();
+
+	animateSky(NewTime-LastTime);
+
+	// Clear all buffers
+	////////Driver->clearBuffers(CRGBA(0, 0, 0));
+
+	// Update the time counters
+	//////LastTime = NewTime;
+	//////NewTime = CTime::getLocalTime();
+	//////DiffTime = NewTime - LastTime;
+
+	// Update all entities positions
+	MouseListener->update();
+	updateEntities();
+
+	// setup the camera
+	// -> first update camera position directly from the mouselistener
+	// -> then update stuffs linked to the camera(snow, sky, lens flare etc.)
+	MouseListener->updateCamera();
+	updateCamera();		
+	LandscapeComponent->update(); // Update the landscape
+
 }
 
 void renderInformation()

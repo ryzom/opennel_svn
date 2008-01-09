@@ -34,10 +34,11 @@ CTimeComponent::CTimeComponent(CComponentManager *manager,
   LocalTimeDelta(0.0), ServerTimeDelta(0.0), GameTimeDelta(0.0), 
   FramesPerSecond(0.0f), _SecondsPerCycle(0.0), _GameTimePerCycle(0.0),
   _GameTimePerSecond(0.0), _CyclesPerUpdate(0), _LastCycleUpdate(0.0),
-  _GameCycle(0.0), _NewGameCycle(0)
+  _GameCycle(0.0), _NewGameCycle(0), _AnimateServer(false),
+  AnimationTime(0.0), AnimationDelta(0.0)
 {
 	_Time = CTime::getLocalTime();
-	LocalTime = (TLocalTime)_Time;
+	LocalTime = ((TLocalTime)_Time) / 1000.0;
 }
 
 CTimeComponent::~CTimeComponent()
@@ -51,7 +52,9 @@ void CTimeComponent::update()
 	TTime delta = time - _Time;
 	_Time = time;
 
-	LocalTime = (TLocalTime)time;
+	TLocalTime localTime = ((TLocalTime)time) / 1000.0;
+	LocalTimeDelta = localTime - LocalTime;
+	LocalTime = localTime;
 
 	// if the game cycle went up
 	if (_NewGameCycle > GameCycle)
@@ -77,6 +80,12 @@ void CTimeComponent::update()
 	}
 
 	_LastCycleUpdate += LocalTimeDelta;
+
+
+	// component specific	
+	if (_AnimateServer) AnimationDelta = ServerTimeDelta;
+	else AnimationDelta = LocalTimeDelta;
+	AnimationTime += AnimationDelta;
 }
 
 void CTimeComponent::render()

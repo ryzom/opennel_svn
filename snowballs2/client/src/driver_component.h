@@ -57,8 +57,8 @@ public:
 	void config(const std::string &varName, NLMISC::CConfigFile::CVar &var);
 	
 	void setWindowTitle(const ucstring &title);
-	NL3D::UDriver *getDriver() { return _Driver; };
-	NL3D::UTextContext *getTextContext() { return _TextContext; };
+	NL3D::UDriver *getDriver();
+	NL3D::UTextContext *getTextContext();
 	
 	/// Save a screenshot to the screenshot directory.
 	/// A number and the .tga file extension is added to the name.

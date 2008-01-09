@@ -26,6 +26,11 @@
 
 #include <nel/misc/time_nl.h>
 
+// component specific
+#include <nel/3d/animation_time.h>
+
+// todo: split basic time sync off
+
 namespace SBCLIENT {
 
 class CComponentManager;
@@ -46,6 +51,10 @@ public:
 	NLMISC::TLocalTime ServerTimeDelta;
 	NLMISC::TGameTime GameTimeDelta;
 	float FramesPerSecond;
+
+	// component specific
+	NL3D::TGlobalAnimationTime AnimationTime;
+	NL3D::TGlobalAnimationTime AnimationDelta;
 protected:
 	// pointers
 	// ...
@@ -59,6 +68,9 @@ protected:
 	NLMISC::TLocalTime _LastCycleUpdate; // updated when update detects cycle up
 	double _GameCycle; // goes up as long as it's not too high
 	NLMISC::TGameCycle _NewGameCycle; // set by updateGameCycle
+
+	// component specific
+	bool _AnimateServer;
 public:	
 	/// Basic constructor of a component.
 	/// Requires a pointer to the componentmanager and a unique name.

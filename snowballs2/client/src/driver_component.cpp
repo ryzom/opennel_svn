@@ -122,4 +122,14 @@ void CDriverComponent::saveScreenshot(const string &name, bool jpg)
 	nlinfo("Screenshot '%s' saved", filename.c_str());
 }
 
+UDriver *CDriverComponent::getDriver()
+{
+	nlassert(_Driver); return _Driver;
+}
+
+UTextContext *CDriverComponent::getTextContext()
+{
+	nlassert(_TextContext); return _TextContext;
+}
+
 }

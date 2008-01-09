@@ -101,6 +101,10 @@ void addLine(const std::string &line);
 void deleteAllEntities();
 void updateClient(void *context, void *tag);
 void renderClient(void *context, void *tag);
+#include "scene_component.h"
+SBCLIENT::CSceneComponent *SceneComponent;
+#include "time_component.h"
+SBCLIENT::CTimeComponent *TimeComponent;
 
 namespace SBCLIENT {
 
@@ -266,6 +270,11 @@ void CSnowballsClient::enableCore()
 		_ComponentManager->registerComponent(_HelloWorldComponent);
 		_ComponentManager->registerRender(_HelloWorldComponent, -2000);
 
+		TimeComponent = new CTimeComponent(
+			_ComponentManager, "Time", _LoadingScreen);
+		_ComponentManager->registerComponent(TimeComponent);
+		_ComponentManager->registerUpdate(TimeComponent, 1000000);
+
 
 		// and some more compatibility code
 		Driver = _DriverComponent->getDriver();
@@ -368,11 +377,17 @@ void CSnowballsClient::enableIngame()
 #endif
 
 		// Create a scene
-		Scene = Driver->createScene(false);
+		SceneComponent = new CSceneComponent(
+			_ComponentManager, "Scene", _LoadingScreen);
+		_ComponentManager->registerComponent(SceneComponent);
+		_ComponentManager->registerUpdate(SceneComponent, -2000);
+		_ComponentManager->registerRender(SceneComponent, -500);
+		Scene = SceneComponent->getScene();
 		// Init the landscape using the previously created UScene
 		displayLoadingState("Initialize Landscape");
 		LandscapeComponent = new CLandscapeComponent(
 			_ComponentManager, "Landscape", _LoadingScreen);
+		_ComponentManager->registerComponent(LandscapeComponent);
 		initLandscape();
 		// Init the pacs
 		displayLoadingState("Initialize PACS ");
