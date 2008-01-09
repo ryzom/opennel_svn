@@ -647,7 +647,7 @@ bool CDriverGL::setupTextureEx (ITexture& tex, bool bUpload, bool &bAllUploaded,
 		But this is grave only if a new texture is created, with the same pointer (bad luck). 
 		Since an newly allocated texture always pass here before use, we are sure to avoid any problems.
 	*/
-	for(sint stage=0 ; stage<inlGetNumTextStages() ; stage++)
+	for(uint stage = 0; stage < inlGetNumTextStages(); stage++)
 	{
 		activateTexture(stage, NULL);
 	}
@@ -1814,7 +1814,7 @@ void		CDriverGL::swapTextureHandle(ITexture &tex0, ITexture &tex1)
 	setupTexture(tex1);
 
 	// avoid any problem, disable all textures
-	for(sint stage=0; stage<inlGetNumTextStages() ; stage++)
+	for(uint stage = 0; stage < inlGetNumTextStages(); stage++)
 	{
 		activateTexture(stage, NULL);
 	}

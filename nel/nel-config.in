@@ -139,27 +139,27 @@ then
     lib_net="-lnelnet"
     lib_3d="-lnel3d"
     lib_pacs="-lnelpacs"
-    lib_sound="-lnelsnd"
+    lib_sound="-lnelsound"
     lib_ai="-lnelai"
 
     libs="$lib_misc"
 
-    if test "$without_net" != "yes" -a "$enable_net" = "yes"
+    if test "$without_net" != "yes" -a '(' "$enable_net" = "yes" -o "$enable_net" = "ON" ')'
     then
         libs="$libs $lib_net"
     fi
 
-    if test "$without_3d" != "yes" -a "$enable_3d" = "yes"
+    if test "$without_3d" != "yes" -a '(' "$enable_3d" = "yes" -o "$enable_3d" = "ON" ')'
     then
         libs="$libs $lib_3d"
     fi
 
-    if test "$without_pacs" != "yes" -a "$enable_pacs" = "yes"
+    if test "$without_pacs" != "yes" -a '(' "$enable_pacs" = "yes" -o "$enable_pacs" = "ON" ')'
     then
         libs="$libs $lib_pacs"
     fi
 
-    if test "$without_sound" != "yes" -a "$enable_sound" = "yes"
+    if test "$without_sound" != "yes" -a '(' "$enable_sound" = "yes" -o "$enable_sound" = "ON" ')'
     then
         libs="$libs $lib_sound"
     fi

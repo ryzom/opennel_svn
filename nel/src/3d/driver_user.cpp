@@ -1204,6 +1204,7 @@ void			CDriverUser::drawQuad (float x0, float y0, float x1, float y1, CRGBA col)
 
 	_MatFlat.setColor(col);
 	_MatFlat.setBlend(true);
+	_MatFlat.setBlendFunc(UMaterial::srcalpha, UMaterial::invsrcalpha);
 
 	CQuad		quad;
 	quad.V0.set(x0,y0,0);

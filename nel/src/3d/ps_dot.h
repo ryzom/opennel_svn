@@ -48,7 +48,8 @@ public:
 	CPSDot() 
 	{ 
 		init(); 
-		if (CParticleSystem::getSerializeIdentifierFlag()); _Name = std::string("point");
+		CParticleSystem::getSerializeIdentifierFlag();
+		_Name = std::string("point");
 	}
 
 	NLMISC_DECLARE_CLASS(CPSDot);

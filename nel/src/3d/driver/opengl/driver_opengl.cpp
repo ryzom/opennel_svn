@@ -1641,6 +1641,7 @@ bool CDriverGL::getModes(std::vector<GfxMode> &modes)
     //nldebug("  Mode %d: width %d height %d freq %d", j, ms[j]->hdisplay,ms[j]->vdisplay, 1000 * ms[j]->dotclock / (ms[j]->htotal * ms[j]->vtotal));
     modes.push_back (mode);
   }
+  XFree(ms);
 #	endif
 
 #endif

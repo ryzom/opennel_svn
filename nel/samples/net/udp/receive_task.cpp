@@ -74,9 +74,9 @@ void	TReceivedMessage::vectorToAddress()
  * Constructor
  */
 CReceiveTask::CReceiveTask( uint16 port, uint32 msgsize ) :
+	_DatagramLength( msgsize ),
 	_ReceivedMessage(),
 	_WriteQueue( "WriteQueue" ), // value unspecified
-	_DatagramLength( msgsize ),
 	_ExitRequired( false )
 {
 	// Socket

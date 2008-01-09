@@ -287,7 +287,7 @@ bool CDriverGL::setupMaterial(CMaterial& mat)
 	CShaderGL*	pShader;
 	GLenum		glenum;
 	uint32		touched=mat.getTouched();
-	sint		stage;
+	uint		stage;
 
 
 	// profile.
@@ -399,9 +399,9 @@ bool CDriverGL::setupMaterial(CMaterial& mat)
 	// Here, for Lightmap materials, setup the lightmaps.
 	if(matShader == CMaterial::LightMap)
 	{
-		for(stage=0 ; stage<(sint)mat._LightMaps.size() ; stage++)
+		for(stage = 0; stage < mat._LightMaps.size(); stage++)
 		{
-			ITexture	*text= mat._LightMaps[stage].Texture;
+			ITexture *text = mat._LightMaps[stage].Texture;
 			if (text != NULL && !setupTexture(*text))
 				return(false);
 		}
@@ -775,7 +775,7 @@ void			CDriverGL::setupLightMapPass(uint pass)
 		_DriverGLStates.setTexGenMode(0, 0);
 
 		// And disable other stages.
-		for(sint stage=1 ; stage<inlGetNumTextStages() ; stage++)
+		for(uint stage = 1; stage < inlGetNumTextStages(); stage++)
 		{
 			// disable texturing.
 			activateTexture(stage, NULL);
@@ -1102,7 +1102,7 @@ void			CDriverGL::resetLightMapVertexSetup()
 {
 	H_AUTO_OGL(CDriverGL_resetLightMapVertexSetup)
 	// special for all stage, std UV behavior.
-	for(sint i=0; i<inlGetNumTextStages(); i++)
+	for(uint i = 0; i < inlGetNumTextStages(); i++)
 	{
 		// normal behavior: each texture has its own UV.
 		setupUVPtr(i, _LastVB, i);
@@ -1142,8 +1142,8 @@ void			CDriverGL::setupSpecularBegin()
 {
 	H_AUTO_OGL(CDriverGL_setupSpecularBegin)
 	// ---- Reset any textures with id>=2
-	sint	stage= 2;
-	for(; stage<inlGetNumTextStages() ; stage++)
+	uint stage = 2;
+	for(; stage < inlGetNumTextStages(); stage++)
 	{
 		// disable texturing
 		activateTexture(stage, NULL);
@@ -1201,7 +1201,7 @@ sint			CDriverGL::beginSpecularMultiPass()
 
 	// activate the 2 textures here
 	uint	stage;
-	uint	numStages= std::min(2, inlGetNumTextStages());
+	uint	numStages= std::min((uint)2, inlGetNumTextStages());
 	for(stage=0 ; stage<numStages; stage++)
 	{
 		ITexture	*text= mat.getTexture(stage);

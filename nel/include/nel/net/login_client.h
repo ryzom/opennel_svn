@@ -54,7 +54,7 @@ public:
 	struct CShardEntry
 	{
 		CShardEntry() { NbPlayers = 0; Id = -1; }
-		CShardEntry(const ucstring &name, uint8 nbp, sint32 sid) : Name(name), NbPlayers(nbp), Id(sid) { }
+		CShardEntry(const ucstring &name, uint8 nbp, sint32 sid) : Id(sid), Name(name), NbPlayers(nbp) { }
 		sint32		Id;
 		ucstring	Name;
 		uint8		NbPlayers;
