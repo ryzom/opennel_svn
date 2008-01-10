@@ -79,7 +79,7 @@ TMouseButton getMouseButton (uint32 state)
 	// TODO manage ALT key
 	//	if (GetAsyncKeyState(VK_MENU)&(1<<15))
 	//	(int&)button|=altButton;
- 
+
 	return button;
 }
 
@@ -274,17 +274,19 @@ void CUnixEventEmitter::processMessage (XEvent &event, CEventServer &server)
 	KeySym k;
 	int c;
 	c = XLookupString(&event.xkey, Text, 1024-1, &k, NULL);
-     
+
 	TKey key = getKey (k);
 	// TODO manage the bool (first time pressed)
 	server.postEvent (new CEventKeyDown (key, noKeyButton, true, this));
 
 	Text[c] = '\0';
 	if(c>0)
-	  {
-	    for (int i = 0; i < c; i++)
-		server.postEvent (new CEventChar (Text[i], noKeyButton, this));
-	  }
+	{
+		for (int i = 0; i < c; i++)
+		{
+			server.postEvent (new CEventChar ((ucchar)(unsigned char)Text[i], noKeyButton, this));
+		}
+	}
 	break;
       }
     Case (KeyRelease)
@@ -293,7 +295,7 @@ void CUnixEventEmitter::processMessage (XEvent &event, CEventServer &server)
 	KeySym k;
 	int c;
 	c = XLookupString(&event.xkey, Text, 1024-1, &k, NULL);
-     
+
 	TKey key = getKey (k);
 	// TODO manage the bool (first time pressed)
 	server.postEvent (new CEventKeyUp (key, noKeyButton, this));
