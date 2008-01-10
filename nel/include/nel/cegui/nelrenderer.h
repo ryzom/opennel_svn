@@ -51,10 +51,10 @@
 #include <list>
 
 // CEGUI includes
-#include "CEGUI/CEGUIBase.h"
-#include "CEGUI/CEGUIRenderer.h"
-#include "CEGUI/CEGUITexture.h"
-#include "CEGUI/CEGUISystem.h"
+#include "CEGUIBase.h"
+#include "CEGUIRenderer.h"
+#include "CEGUITexture.h"
+#include "CEGUISystem.h"
 
 // NeL includes
 #include <nel/misc/file.h>

@@ -37,9 +37,9 @@
 #define __NELTEXTURE_H__
 
 // cegui includes
-#include "CEGUI/CEGUIBase.h"
-#include "CEGUI/CEGUIRenderer.h"
-#include "CEGUI/CEGUITexture.h"
+#include "CEGUIBase.h"
+#include "CEGUIRenderer.h"
+#include "CEGUITexture.h"
 
 // nelrenderer
 #include "nelrenderer.h"

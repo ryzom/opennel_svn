@@ -33,11 +33,11 @@
 	This file contains code that is specific to NeL (http://www.nevrax.org)
 *************************************************************************/
 
-#include "CEGUI/CEGUIImagesetManager.h"
-#include "CEGUI/CEGUIImageset.h"
-#include "CEGUI/CEGUIImage.h"
-#include "CEGUI/CEGUIExceptions.h"
-#include "CEGUI/CEGUISystem.h"
+#include "CEGUIImagesetManager.h"
+#include "CEGUIImageset.h"
+#include "CEGUIImage.h"
+#include "CEGUIExceptions.h"
+#include "CEGUISystem.h"
 
 #include "nel/cegui/nelrenderer.h"
 #include "nel/cegui/neltexture.h"

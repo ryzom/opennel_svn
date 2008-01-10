@@ -34,9 +34,8 @@
 *************************************************************************/
 
 #ifdef NL_OS_WINDOWS
+#	define NOMINMAX
 #	include <windows.h>
-#	undef min
-#	undef max
 #endif
 
 // standard includes
@@ -45,10 +44,8 @@
 
 // CEGUI includes
 #include "nel/cegui/nelresourceprovider.h"
-#include "CEGUI/CEGUIExceptions.h"
-#include "CEGUI/CEGUILogger.h"
-#include <xercesc/framework/MemBufInputSource.hpp>
-#include <xercesc/framework/MemoryManager.hpp>
+#include "CEGUIExceptions.h"
+#include "CEGUILogger.h"
 #include <memory.h>
 
 // NeL includes
