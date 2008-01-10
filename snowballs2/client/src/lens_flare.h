@@ -35,6 +35,7 @@
 #include <nel/misc/vector.h>
 #include <nel/3d/u_material.h>
 #include <nel/3d/u_camera.h>
+#include <nel/misc/bitmap.h>
 
 namespace NL3D {
 	class UDriver;
@@ -78,6 +79,14 @@ protected:
 	NLMISC::CVector _SunDirection;
 	/** used camera */
 	NL3D::UCamera _Camera;
+	/** materials */
+	NL3D::UMaterial _Black;
+	NL3D::UMaterial _White;
+	NL3D::UMaterial _Dazzle;
+	/** things for the d3d workaround */
+	NLMISC::CBitmap _BitmapOriginal;
+	NLMISC::CBitmap _BitmapBlack;
+	NLMISC::CBitmap _BitmapWhite;
 public:
 	CLensFlare(NL3D::UDriver *driver, const NL3D::UCamera &camera);
 	virtual ~CLensFlare();

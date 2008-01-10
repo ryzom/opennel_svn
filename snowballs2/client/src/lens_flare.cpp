@@ -51,10 +51,29 @@ CLensFlare::CLensFlare(NL3D::UDriver *driver, const NL3D::UCamera &camera)
 {
 	nlassert(driver); _Driver = driver;
 	_SunDirection = CVector::Null;
+
+	_Black = _Driver->createMaterial();
+    _Black.initUnlit();
+    _Black.setBlend(true);
+	_Black.setColor(CRGBA(0, 0, 0, 255));
+
+	_White = _Driver->createMaterial();
+    _White.initUnlit();
+    _White.setBlend(true);
+	_White.setColor(CRGBA(255, 255, 255, 255));
+
+	_Dazzle = _Driver->createMaterial();
+    _Dazzle.initUnlit();
+    _Dazzle.setBlend(true);
+	_Dazzle.setColor(CRGBA(255, 0, 0, 255));
 }
 
 CLensFlare::~CLensFlare()
 {
+	_Driver->deleteMaterial(_Black);
+	_Driver->deleteMaterial(_Dazzle);
+	_Driver->deleteMaterial(_White);
+
 	for(_CFlares::iterator it = _Flares.begin(); it != _Flares.end(); it++)
 		_Driver->deleteMaterial(it->Material);
 }
@@ -105,6 +124,8 @@ void CLensFlare::show()
 	//======
 	float alphaf = cosAngle < 0 ? 0.0f : 255 * (float)(pow(cosAngle, 20));
 
+	if (!(alphaf > 0.0f)) return;
+
 	// landscape's masking sun ?
 	//==========================
 	CMatrix camMatrix;
@@ -123,22 +144,67 @@ void CLensFlare::show()
 		2 * sun_radius);
 	vector<float> zbuff;
 	_Driver->getZBufferPart(zbuff, rect); // !!!!!! not working in d3d apparently .........
-	float view = 0.0f;
-	float sum = 0.0f;
-	for (uint i = 0; i < zbuff.size(); ++i)
-	{
-		if (zbuff[i] >= 0.99999f) ++sum;
-	}
-	view = sum / (_SunRadius * 2 * _SunRadius * 2);
-
 	_Driver->setMatrixMode2D11();
+	float view = 0.0f;
+	if (zbuff.size() == 0) // workaround for direct3d problem (slow!)
+	{
+		// rect for reading pixels
+		CRect pixels(rect.X, 
+			h - rect.bottom(), 
+			rect.Width, rect.Height);
+
+		// quad for drawing rectangles to screen
+		float x0 = rect.X / (float)w;
+		float y0 = rect.Y / (float)h;
+		float x1 = rect.right() / (float)w;
+		float y1 = rect.bottom() / (float)h;
+		CQuad quad = CQuad(
+			CVector(x0, y0, -1), CVector(x1, y0, -1),
+			CVector(x1, y1, -1), CVector(x0, y1, -1));
+
+		// get the original view, todo: copy to texture to place back		
+		_Driver->getBufferPart(_BitmapOriginal, pixels);		 
+		CObjectVector<uint8> &pixelsOriginal = _BitmapOriginal.getPixels();
+
+		// draw a black and a white square behind everything else
+		_Driver->drawQuad(quad, _Black);
+		_Driver->getBufferPart(_BitmapBlack, pixels);
+		CObjectVector<uint8> &pixelsBlack = _BitmapBlack.getPixels();
+		uint8 *bitsBlack = pixelsBlack.getPtr();
+
+		_Driver->drawQuad(quad, _White);
+		_Driver->getBufferPart(_BitmapWhite, pixels);
+		CObjectVector<uint8> &pixelsWhite = _BitmapWhite.getPixels();
+		uint8 *bitsWhite = pixelsWhite.getPtr();
+
+		// compare the black and white squares
+		nlassert(pixelsWhite.size() == pixelsBlack.size());
+		uint32 difference = 0;
+		uint pixelcount = (uint)pixelsWhite.size();
+		for (uint i = 0; i < pixelcount; ++i)
+			difference += (uint32)(bitsWhite[i] - bitsBlack[i]); // black is less than white
+		view = (float)((double)difference / (double)pixelcount / 255.0);
+	}
+	else // normal way
+	{
+		float sum = 0.0f;
+		for (uint i = 0; i < zbuff.size(); ++i)
+		{
+			if (zbuff[i] >= 0.99999f) ++sum;
+		}
+		view = sum / (_SunRadius * 2 * _SunRadius * 2);
+	}
 
 	// quad for dazzle 
 	//================
 	uint8 alpha = (uint8)(alphaf * view / 2.0f);
 	if(alpha != 0)
 	{
-		_Driver->drawQuad(0, 0, 1, 1, CRGBA(255, 255, 255, alpha));
+		_Dazzle.setColor(CRGBA(255, 255, 255, alpha));
+		static const CQuad quad(
+			CVector(0, 0, 0), CVector(1, 0, 0),
+			CVector(1, 1, 0), CVector(0, 1, 0));
+		_Driver->drawQuad(quad, _Dazzle);
 	}
 
 	// Set the alpha
