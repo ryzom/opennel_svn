@@ -209,7 +209,7 @@ static void sigHandler(int Sig)
 				  if (IService::getInstance()->haveLongArg("nobreak"))
 				    {
 				      // ignore ctrl-c
-				      nlinfo("Ignoring ctrl-c");
+				      nlinfo("SERVICE: Ignoring ctrl-c");
 				      return;
 				    }
 				case SIGABRT :
@@ -336,7 +336,7 @@ void IService::anticipateShardId( uint32 shardId )
 void IService::setShardId( uint32 shardId )
 {
 	if ( ! ((_ShardId == DEFAULT_SHARD_ID) || (shardId == _ShardId)) )
-		nlwarning( "The shardId from the WS (%u) is different from the anticipated shardId (%u)", shardId, _ShardId );
+		nlwarning( "SERVICE: The shardId from the WS (%u) is different from the anticipated shardId (%u)", shardId, _ShardId );
 	_ShardId = shardId;
 }
 
@@ -595,7 +595,7 @@ sint IService::main (const char *serviceShortName, const char *serviceLongName, 
 
 	try
 	{
-		nlinfo("Just in case");
+		createDebug();
 		// init the module manager
 		IModuleManager::getInstance();
 		//
@@ -965,14 +965,14 @@ sint IService::main (const char *serviceShortName, const char *serviceLongName, 
 		if (varAliasName != NULL)
 		{
 			_AliasName = varAliasName->asString();
-			nlinfo("Setting alias name to: '%s'",_AliasName.c_str());
+			nlinfo("SERVICE: Setting alias name to: '%s'",_AliasName.c_str());
 		}
 
 		// set the aes aliasname if is present in the command line
 		if (haveArg('N'))
 		{
 			_AliasName = getArg('N');
-			nlinfo("Setting alias name to: '%s'",_AliasName.c_str());
+			nlinfo("SERVICE: Setting alias name to: '%s'",_AliasName.c_str());
 		}
 
 		// Load the recording state from the config file
@@ -1254,7 +1254,7 @@ sint IService::main (const char *serviceShortName, const char *serviceLongName, 
 
 		_Initialized = true;
 
-		nlinfo ("SERVICE: Service initialised, executing StartCommands");
+		nlinfo ("SERVICE: Service initialized, executing StartCommands");
 
 		//
 		// Call the user command from the config file if any
