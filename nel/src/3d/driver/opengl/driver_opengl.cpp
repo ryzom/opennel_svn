@@ -3582,16 +3582,7 @@ void CDriverGL::finish()
 void CDriverGL::flush()
 {
 	H_AUTO_OGL(CDriverGL_flush)
-<<<<<<< .mine
-
-=======
->>>>>>> .r494
 	glFlush();
-<<<<<<< .mine
-
-
-=======
->>>>>>> .r494
 }
 
 
@@ -3604,11 +3595,6 @@ void	CDriverGL::setSwapVBLInterval(uint interval)
 	if(_Extensions.WGLEXTSwapControl && _Initialized)
 	{
 		wglSwapIntervalEXT(_Interval);
-<<<<<<< .mine
-
-
-=======
->>>>>>> .r494
 	}
 #endif
 }
