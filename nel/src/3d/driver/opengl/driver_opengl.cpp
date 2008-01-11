@@ -648,11 +648,6 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 			return false;
 		}
 
-<<<<<<< .mine
-
-=======
->>>>>>> .r494
-
 		// Register WGL functions
 		registerWGlExtensions (_Extensions, tempHDC);
 
