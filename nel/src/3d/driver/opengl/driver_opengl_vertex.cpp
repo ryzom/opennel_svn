@@ -345,7 +345,6 @@ bool CDriverGL::renderTriangles(CMaterial& mat, uint32 firstIndex, uint32 ntris)
 			else
 			{
 				nlassert(_LastIB._Format == CIndexBuffer::Indices32);
-				printf("draw triangles %d %d uint firsind %d %p\n", ntris, 3*ntris, firstIndex, _LastIB._Values);
 				glDrawElements(GL_TRIANGLES,3*ntris,GL_UNSIGNED_INT, ((uint32 *) _LastIB._Values)+firstIndex);
 			}
 		}
