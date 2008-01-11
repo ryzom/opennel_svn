@@ -578,7 +578,7 @@ void SelectionTerritoire::OnPath()
 									goodPath=false;
 
 									// Make a message
-									sprintf (msg, "Path %s can't be found in bitmap %s. Continue ?", path, bitmapPath.c_str());
+									sprintf (msg, "Path '%s' can't be found in bitmap '%s'. Continue ?", path, bitmapPath.c_str());
 
 									// Message
 									if (MessageBox (msg, "TileEdit", MB_YESNO|MB_ICONQUESTION)==IDNO)
@@ -607,7 +607,7 @@ void SelectionTerritoire::OnPath()
 							goodPath=false;
 
 							// Make a message
-							sprintf (msg, "Path %s can't be found in bitmap %s. Continue ?", path, bitmapPath);
+							sprintf (msg, "Path '%s' can't be found in bitmap '%s'. Continue ?", path, bitmapPath);
 
 							// Message
 							if (MessageBox (msg, "TileEdit", MB_YESNO|MB_ICONQUESTION)==IDNO)

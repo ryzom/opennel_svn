@@ -547,6 +547,17 @@ bool RPatchMesh::exportZone(INode* pNode, PatchMesh* pPM, NL3D::CZone& zone, CZo
 					// Get the tile index
 					uint tile = desc.getLayer (l).Tile;
 					uint tileRotation = desc.getLayer (l).Rotate;
+				    if (tile >= bank.getTileCount())
+					{
+						std::string error = NLMISC::toString(
+							"Incorrect tileset for this zone.\r\n"
+							"Tile %u does not exist.\r\n"
+							"There are %u tiles in the tilebank.",
+							tile, bank.getTileCount());
+						nlwarning(error.c_str());
+						MessageBoxA(NULL, error.c_str(), "RPO2NEL", MB_OK | MB_ICONERROR);
+						return false;
+					}
 
 					// Set the tile
 					patchInfo.Tiles[u+v*patchInfo.OrderS].Tile[l] = tile;
