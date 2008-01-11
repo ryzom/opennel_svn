@@ -472,7 +472,7 @@ void CCloudScape::set (SCloudScapeSetup &css)
 // ------------------------------------------------------------------------------------------------
 void CCloudScape::anim (double dt, NL3D::CCamera *pCamera)
 {
-	double startDate = CTime::getLocalTime();
+	double startDate = double(CTime::getLocalTime())/1000.0;
 	sint32 i;
 
 	// Disable fog
@@ -626,7 +626,7 @@ void CCloudScape::anim (double dt, NL3D::CCamera *pCamera)
 			i++;
 		}
 	}
-	double endDate = CTime::getLocalTime();
+	double endDate = double(CTime::getLocalTime())/1000.0;
 	_LastAnimRenderTime = endDate - startDate;
 }
 

@@ -488,8 +488,8 @@ public:
 	  */
 	virtual const char*		getVideocardInformation () = 0;
 
-	/// Get the number of texture stage avaliable, for multitexturing (Normal material shaders). Valid only after setDisplay().
-	virtual	sint			getNbTextureStages()=0;
+	/// Get the number of texture stage available, for multitexturing (Normal material shaders). Valid only after setDisplay().
+	virtual	uint			getNbTextureStages() = 0;
 
 	/// Get the width and the height of the window
 	virtual void			getWindowSize (uint32 &width, uint32 &height) = 0;

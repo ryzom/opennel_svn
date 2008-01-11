@@ -1353,7 +1353,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 
 	// Activate the default texture environnments for all stages.
 	//===========================================================
-	for(sint stage=0;stage<inlGetNumTextStages(); stage++)
+	for(uint stage=0;stage<inlGetNumTextStages(); stage++)
 	{
 		// init no texture.
 		_CurrentTexture[stage]= NULL;
@@ -1653,7 +1653,7 @@ void CDriverGL::resetTextureShaders()
 		glEnable(GL_TEXTURE_SHADER_NV);
 
 
-		for (uint stage = 0; stage < (uint) inlGetNumTextStages(); ++stage)
+		for (uint stage = 0; stage < inlGetNumTextStages(); ++stage)
 		{
 			_DriverGLStates.activeTextureARB(stage);
 			if (stage != 0)
@@ -1887,7 +1887,7 @@ bool CDriverGL::swapBuffers()
 	//===========================================================
 	// This is not a requirement, but it ensure a more stable state each frame.
 	// (well, maybe the good reason is "it hides much more the bugs"  :o) ).
-	for(sint stage=0;stage<inlGetNumTextStages(); stage++)
+	for(uint stage=0;stage<inlGetNumTextStages(); stage++)
 	{
 		// init no texture.
 		_CurrentTexture[stage]= NULL;
@@ -2815,7 +2815,7 @@ void CDriverGL::setMatrix2DForTextureOffsetAddrMode(const uint stage, const floa
 
 	if (!supportTextureShaders()) return;
 	//nlassert(supportTextureShaders());
-	nlassert(stage < (uint) inlGetNumTextStages() );
+	nlassert(stage < inlGetNumTextStages() );
 	_DriverGLStates.activeTextureARB(stage);
 	glTexEnvfv(GL_TEXTURE_SHADER_NV, GL_OFFSET_TEXTURE_MATRIX_NV, mat);
 
@@ -3020,7 +3020,7 @@ NLMISC::CRGBA	CDriverGL::getBlendConstantColor() const
 }
 
 // ***************************************************************************
-sint			CDriverGL::getNbTextureStages() const
+uint			CDriverGL::getNbTextureStages() const
 {
 	H_AUTO_OGL(CDriverGL_getNbTextureStages)
 	return inlGetNumTextStages();
@@ -3992,7 +3992,7 @@ void CDriverGL::checkTextureOn() const
 	// tmp for debug
 	CDriverGLStates &dgs = const_cast<CDriverGLStates &>(_DriverGLStates);
 	uint currTexStage = dgs.getActiveTextureARB();
-	for(sint k = 0; k < this->getNbTextureStages(); ++k)
+	for(uint k = 0; k < this->getNbTextureStages(); ++k)
 	{
 		dgs.activeTextureARB(k);
 		GLboolean flag2D;

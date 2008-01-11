@@ -325,7 +325,7 @@ public:
 
 	virtual bool			activate();
 
-	virtual	sint			getNbTextureStages() const;
+	virtual	uint			getNbTextureStages() const;
 
 	virtual bool			isTextureExist(const ITexture&tex);
 
@@ -1194,7 +1194,7 @@ private:
 	// @}
 
 	/// Same as getNbTextureStages(), but faster because inline, and not virtual!!
-	uint			inlGetNumTextStages() const {return _Extensions.NbTextureStages;}
+	uint			inlGetNumTextStages() const { return _Extensions.NbTextureStages; }
 
 
 	NLMISC::CRGBA					_CurrentBlendConstantColor;

@@ -392,7 +392,7 @@ public:
 	virtual uint32			getImplementationVersion () const;
 	virtual const char*		getDriverInformation ();
 	virtual const char*		getVideocardInformation ();
-	virtual	sint			getNbTextureStages();
+	virtual	uint			getNbTextureStages();
 	virtual void			getWindowSize (uint32 &width, uint32 &height);
 	virtual uint			getWindowWidth ();
 	virtual uint			getWindowHeight ();

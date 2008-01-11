@@ -1029,7 +1029,7 @@ void CDriverD3D::swapTextureHandle(ITexture &tex0, ITexture &tex1)
 	setupTexture(tex1);
 
 	// avoid any problem, disable all textures
-	for(sint stage=0; stage<inlGetNumTextStages() ; stage++)
+	for(uint stage=0; stage<inlGetNumTextStages() ; stage++)
 	{
 		setTexture (stage, (LPDIRECT3DBASETEXTURE9)NULL);
 	}

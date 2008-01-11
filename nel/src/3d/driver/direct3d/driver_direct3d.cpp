@@ -2100,7 +2100,7 @@ CVertexBuffer::TVertexColorType CDriverD3D::getVertexColorFormat() const
 
 // ***************************************************************************
 
-sint CDriverD3D::getNbTextureStages() const
+uint CDriverD3D::getNbTextureStages() const
 {
 	return _NbNeLTextureStages;
 }
@@ -3044,14 +3044,14 @@ bool CDriverD3D::isEMBMSupportedAtStage(uint stage) const
 {
 	H_AUTO_D3D(CDriverD3D_isEMBMSupportedAtStage);	
 	// we assume EMBM is supported at all stages except the last one
-	return stage < (uint) _NbNeLTextureStages - 1;
+	return stage < _NbNeLTextureStages - 1;
 }
 
 //****************************************************************************
 void CDriverD3D::setEMBMMatrix(const uint stage, const float mat[4])
 {
 	H_AUTO_D3D(CDriverD3D_setEMBMMatrix);
-	nlassert(stage < (uint) _NbNeLTextureStages - 1);
+	nlassert(stage < _NbNeLTextureStages - 1);
 	SetTextureStageState(stage, D3DTSS_BUMPENVMAT00, (DWORD &) mat[0]);
 	SetTextureStageState(stage, D3DTSS_BUMPENVMAT01, (DWORD &) mat[1]);
 	SetTextureStageState(stage, D3DTSS_BUMPENVMAT10, (DWORD &) mat[2]);

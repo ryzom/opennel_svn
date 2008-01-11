@@ -779,7 +779,7 @@ public:
 	virtual bool			setAdapter(uint adapter);
 	virtual uint32			getAvailableVertexAGPMemory ();
 	virtual uint32			getAvailableVertexVRAMMemory ();
-	virtual	sint			getNbTextureStages() const;
+	virtual	uint			getNbTextureStages() const;
 	virtual void			getNumPerStageConstant(uint &lightedMaterial, uint &unlightedMaterial) const;
 	virtual	bool			supportVertexBufferHard() const;
 	virtual bool			supportVolatileVertexBuffer() const;
@@ -1020,7 +1020,7 @@ public:
 	bool					supportPixelShaders() const { return _PixelShader; }
 
 		// *** Inline info
-	sint			inlGetNumTextStages() const {return _NbNeLTextureStages;}
+	uint					inlGetNumTextStages() const { return _NbNeLTextureStages; }
 
 //private:
 public:
@@ -2128,7 +2128,7 @@ private:
 	bool					_EMBMSupported;
 	bool					_CubbedMipMapSupported;
 	bool					_IsGeforce;
-	sint					_NbNeLTextureStages;			// Number of texture stage for NeL (max IDRV_MAT_MAXTEXTURES)
+	uint					_NbNeLTextureStages;			// Number of texture stage for NeL (max IDRV_MAT_MAXTEXTURES)
 	uint					_MaxVerticesByVertexBufferHard;
 	uint					_MaxLight;
 	uint32					_PixelShaderVersion;

@@ -1464,7 +1464,7 @@ const char*		CDriverUser::getVideocardInformation ()
 
 	return _Driver->getVideocardInformation ();
 }
-sint			CDriverUser::getNbTextureStages()
+uint			CDriverUser::getNbTextureStages()
 {
 	NL3D_HAUTO_UI_DRIVER;
 

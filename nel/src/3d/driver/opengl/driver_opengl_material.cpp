@@ -433,7 +433,7 @@ bool CDriverGL::setupMaterial(CMaterial& mat)
 			// activate the texture, or disable texturing if NULL.
 			activateTexture(stage,text);
 
-			// If texture not NULL, Change texture env fonction.
+			// If texture not NULL, Change texture env function.
 			//==================================================
 			setTextureEnvFunction(stage, mat);
 		}				
@@ -562,7 +562,7 @@ bool CDriverGL::setupMaterial(CMaterial& mat)
 	// Textures user matrix
 	if (matShader == CMaterial::Normal)
 	{
-		setupUserTextureMatrix((uint) inlGetNumTextStages(), mat);		
+		setupUserTextureMatrix(inlGetNumTextStages(), mat);		
 	}
 	else // deactivate texture matrix
 	{
@@ -825,7 +825,7 @@ void			CDriverGL::setupLightMapPass(uint pass)
 	}
 					
 	// setup all stages.
-	for(uint stage= 0; stage<(uint)inlGetNumTextStages(); stage++)
+	for(uint stage= 0; stage<inlGetNumTextStages(); stage++)
 	{
 		// if must setup a lightmap stage.
 		if(stage<nstages-1)
@@ -1584,7 +1584,7 @@ void			CDriverGL::setupPPLPass(uint pass)
 	activateTexture(1, mat.getTexture(0));
 	activateTexture(2, tex2);
 
-	for (uint k = 3; k < (uint) inlGetNumTextStages(); ++k)
+	for (uint k = 3; k < inlGetNumTextStages(); ++k)
 	{
 		activateTexture(k, NULL);
 	}
@@ -1762,7 +1762,7 @@ void			CDriverGL::setupPPLNoSpecPass(uint pass)
 	activateTexture(1, mat.getTexture(0));
 
 
-	for (uint k = 2; k < (uint) inlGetNumTextStages(); ++k)
+	for (uint k = 2; k < inlGetNumTextStages(); ++k)
 	{
 		activateTexture(k, NULL);
 	}
@@ -2116,7 +2116,7 @@ void CDriverGL::setupWaterPassR200(const CMaterial &mat)
 		setupTexture(*tex);
 		activateTexture(3, tex);
 	}		
-	for (k = 4; k < (uint) inlGetNumTextStages(); ++k)
+	for (k = 4; k < inlGetNumTextStages(); ++k)
 	{
 		activateTexture(k, NULL);
 	}
@@ -2190,7 +2190,7 @@ void CDriverGL::setupWaterPassARB(const CMaterial &mat)
 		setupTexture(*tex);
 		activateTexture(3, tex);
 	}		
-	for (k = 4; k < (uint) inlGetNumTextStages(); ++k)
+	for (k = 4; k < inlGetNumTextStages(); ++k)
 	{
 		activateTexture(k, NULL);
 	}	
@@ -2357,7 +2357,7 @@ void CDriverGL::setupWaterPassNV20(const CMaterial &mat)
 		setupTexture(*tex);
 		activateTexture(3, tex);
 	}		
-	for (uint k = 4; k < (uint) inlGetNumTextStages(); ++k)
+	for (uint k = 4; k < inlGetNumTextStages(); ++k)
 	{
 		activateTexture(k, NULL);
 	}
