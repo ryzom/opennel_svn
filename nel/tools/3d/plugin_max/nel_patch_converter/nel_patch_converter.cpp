@@ -122,7 +122,7 @@ void PO2RPO::ModifyObject(TimeValue t, ModContext &mc, ObjectState * os, INode *
 }
 
 // -----------------------------------------------------------------------------------------------------------------------------------------------------------
-
+extern HINSTANCE hInstance;
 BOOL CALLBACK DlgProc_Panel(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 {
 	switch (message) 
@@ -131,7 +131,7 @@ BOOL CALLBACK DlgProc_Panel(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		case WM_INITDIALOG: 
 		{
 			// Get the module path
-			HMODULE hModule = GetModuleHandle("nelconvertpatch.dlm");
+			HMODULE hModule = hInstance;
 			if (hModule)
 			{
 				// Get module file name
@@ -185,7 +185,7 @@ BOOL CALLBACK DlgProc_Panel(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 					SetWindowText (GetDlgItem (hWnd, IDC_VERSION), "GetModuleFileName failed");
 			}
 			else
-				SetWindowText (GetDlgItem (hWnd, IDC_VERSION), "GetModuleHandle failed");
+				SetWindowText (GetDlgItem (hWnd, IDC_VERSION), "hInstance NULL");
 		}
 
 		// -----

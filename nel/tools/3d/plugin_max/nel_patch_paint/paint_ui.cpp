@@ -387,11 +387,11 @@ void setBackgroundColor ()
 }
 
 /*-------------------------------------------------------------------*/
-
+extern HINSTANCE hInstance;
 void LoadKeyCfg ()
 {
 	// Path of the dll
-	HMODULE hModule = GetModuleHandle("nelpaintpatch.dlm");
+	HMODULE hModule = hInstance;
 	if (hModule)
 	{
 		char sModulePath[256];
@@ -436,11 +436,11 @@ void LoadKeyCfg ()
 }
 
 /*-------------------------------------------------------------------*/
-
+extern HINSTANCE hInstance;
 void LoadVarCfg ()
 {
 	// Path of the dll
-	HMODULE hModule = GetModuleHandle("nelpaintpatch.dlm");
+	HMODULE hModule = hInstance;
 	if (hModule)
 	{
 		char sModulePath[256];

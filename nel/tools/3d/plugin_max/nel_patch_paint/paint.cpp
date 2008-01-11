@@ -4013,10 +4013,11 @@ void EPM_PaintCMode::DoPaint ()
 	setlocale (LC_NUMERIC, "");
 }
 
+extern HINSTANCE hInstance;
 bool loadLigoConfigFile (CLigoConfig& config, Interface& it)
 {
 	// Get the module path
-	HMODULE hModule = GetModuleHandle("nelpaintpatch.dlm");
+	HMODULE hModule = hInstance;
 	if (hModule)
 	{
 		// Get the path

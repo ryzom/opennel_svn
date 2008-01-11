@@ -33,6 +33,7 @@
 #define TILE_UTILITY_CLASS_ID	Class_ID(0x2301c0, 0x4c156b46)
 
 extern ClassDesc* GetRGBAddDesc();
+extern HINSTANCE hInstance;
 
 using namespace NLMISC;
 using namespace NL3D;
@@ -100,7 +101,7 @@ static BOOL CALLBACK Tile_utilityDlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPA
 			//  load the sampler dropdown
 
 			// Get the module path
-			HMODULE hModule = GetModuleHandle("neltileutility.dlu");
+			HMODULE hModule = hInstance;
 			if (hModule)
 			{
 				// Get module file name
@@ -154,7 +155,7 @@ static BOOL CALLBACK Tile_utilityDlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPA
 					SetWindowText (GetDlgItem (hWnd, IDC_VERSION), "GetModuleFileName failed");
 			}
 			else
-				SetWindowText (GetDlgItem (hWnd, IDC_VERSION), "GetModuleHandle failed");
+				SetWindowText (GetDlgItem (hWnd, IDC_VERSION), "hInstance NULL");
 
 
 			theTile_utility.Init(hWnd);

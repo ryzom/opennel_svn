@@ -30,7 +30,7 @@
 #include "nel/misc/app_context.h"
 
 extern ClassDesc2* GetPO2RPODesc();
-//extern ClassDesc* GetRPODesc();
+extern ClassDesc* GetRPODesc();
 
 using namespace NLMISC;
 
@@ -87,7 +87,7 @@ __declspec( dllexport ) ClassDesc* LibClassDesc(int i)
 {
 	switch(i) {
 		case 0: return GetPO2RPODesc();
-//		case 1: return GetRPODesc();
+		case 1: return GetRPODesc();
 		//case 1: return GetRykolPatchMeshDesc();
 		default: return 0;
 	}
