@@ -78,14 +78,37 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sound_lowlevel", "..\..\..\src\sound\driver\sound_lowlevel_vs90.vcproj", "{AE9529CA-CA90-44D0-ADDA-6B26CD945FFF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "driver_openal", "..\..\..\src\sound\driver\openal\driver_openal_vs90.vcproj", "{1A4B6D56-4BD8-435F-9D2A-B3F102F6E5DD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{44B21233-EFCC-4825-B5E5-3A3BD6CC5516} = {44B21233-EFCC-4825-B5E5-3A3BD6CC5516}
+		{EDB369A3-D7A4-4593-982C-96DEF4F9D485} = {EDB369A3-D7A4-4593-982C-96DEF4F9D485}
+		{AE9529CA-CA90-44D0-ADDA-6B26CD945FFF} = {AE9529CA-CA90-44D0-ADDA-6B26CD945FFF}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "driver_fmod", "..\..\..\src\sound\driver\fmod\driver_fmod_vs90.vcproj", "{9440443B-97BA-43C2-A762-31EEC8958BEE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{44B21233-EFCC-4825-B5E5-3A3BD6CC5516} = {44B21233-EFCC-4825-B5E5-3A3BD6CC5516}
+		{EDB369A3-D7A4-4593-982C-96DEF4F9D485} = {EDB369A3-D7A4-4593-982C-96DEF4F9D485}
+		{AE9529CA-CA90-44D0-ADDA-6B26CD945FFF} = {AE9529CA-CA90-44D0-ADDA-6B26CD945FFF}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "driver_dsound", "..\..\..\src\sound\driver\dsound\driver_dsound_vs90.vcproj", "{309F8A55-BFBA-433B-8C3E-CB2223F799C3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{44B21233-EFCC-4825-B5E5-3A3BD6CC5516} = {44B21233-EFCC-4825-B5E5-3A3BD6CC5516}
+		{EDB369A3-D7A4-4593-982C-96DEF4F9D485} = {EDB369A3-D7A4-4593-982C-96DEF4F9D485}
+		{AE9529CA-CA90-44D0-ADDA-6B26CD945FFF} = {AE9529CA-CA90-44D0-ADDA-6B26CD945FFF}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "driver_opengl", "..\..\..\src\3d\driver\opengl\driver_opengl_vs90.vcproj", "{1D9576F6-3321-4036-8C86-B5361CCCD4FB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{44B21233-EFCC-4825-B5E5-3A3BD6CC5516} = {44B21233-EFCC-4825-B5E5-3A3BD6CC5516}
+		{2B48BE83-108B-4E8E-8A55-6627CF09AC5A} = {2B48BE83-108B-4E8E-8A55-6627CF09AC5A}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "driver_direct3d", "..\..\..\src\3d\driver\direct3d\driver_direct3d_vs90.vcproj", "{1FEE8B42-BE4C-4E23-9101-0EA410D41E29}"
+	ProjectSection(ProjectDependencies) = postProject
+		{44B21233-EFCC-4825-B5E5-3A3BD6CC5516} = {44B21233-EFCC-4825-B5E5-3A3BD6CC5516}
+		{2B48BE83-108B-4E8E-8A55-6627CF09AC5A} = {2B48BE83-108B-4E8E-8A55-6627CF09AC5A}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
