@@ -61,9 +61,8 @@ IObjParam *PO2RPO::ip			= NULL;
 
 // -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-PO2RPO::PO2RPO()
+PO2RPO::PO2RPO() : pblock(NULL)
 {
-	pblock=NULL;
 	PO2RPODesc.MakeAutoParamBlocks(this);
 }
 
@@ -112,13 +111,21 @@ void PO2RPO::ModifyObject(TimeValue t, ModContext &mc, ObjectState * os, INode *
 		return;
 	}
 */
-	// Is our source is a MAX Patch Object ?
-	nlassert(os->obj->ClassID() == Class_ID(PATCHOBJ_CLASS_ID, 0));
+	// Note the default implementation: a class is considered to also be a subclass of itself.
+	if (os->obj->IsSubClassOf(RYKOLPATCHOBJ_CLASS_ID))
+	{
+		pRPO = (RPO*)os->obj;
+	}
+	else
+	{
+		// Is our source is a MAX Patch Object ?
+		nlassert(os->obj->IsSubClassOf(patchObjectClassID));
 
-	// Create the RykolPatchObject
-	pRPO=new RPO( *((PatchObject*)os->obj) );
-	os->obj=pRPO;
-	pRPO->rpatch->UpdateBinding (pRPO->patch, t);
+		// Create the RykolPatchObject
+		pRPO=new RPO( *((PatchObject*)os->obj) );
+		os->obj=pRPO;
+		pRPO->rpatch->UpdateBinding (pRPO->patch, t);
+	}
 }
 
 // -----------------------------------------------------------------------------------------------------------------------------------------------------------

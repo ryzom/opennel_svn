@@ -547,7 +547,7 @@ bool RPatchMesh::exportZone(INode* pNode, PatchMesh* pPM, NL3D::CZone& zone, CZo
 					// Get the tile index
 					uint tile = desc.getLayer (l).Tile;
 					uint tileRotation = desc.getLayer (l).Rotate;
-				    if (tile >= bank.getTileCount())
+				    if (tile >= (uint)bank.getTileCount())
 					{
 						std::string error = NLMISC::toString(
 							"Incorrect tileset for this zone.\r\n"

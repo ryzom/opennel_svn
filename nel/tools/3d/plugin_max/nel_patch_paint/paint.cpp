@@ -3687,6 +3687,13 @@ void EPM_PaintCMode::DoPaint ()
 					int offsetEdge=0;
 					int dividEdge=0;
 					int mYedge=patch->patches[p].edge[e];
+					if (mYedge == -1)
+					{
+					 	std::string error = NLMISC::toString("Invalid edge '%i' with value '%i' in patch '%i' in PatchMesh", p, mYedge, e);
+					 	nlwarning(error.c_str());
+					 	MessageBox(NULL, error.c_str(), "NeL Patch Painter", MB_OK | MB_ICONSTOP);
+					 	return;
+					}
 #if (MAX_RELEASE < 4000)
 					int otherPatch=(patch->edges[mYedge].patch1==p)?patch->edges[mYedge].patch2:patch->edges[mYedge].patch1;
 #else // (MAX_RELEASE < 4000)

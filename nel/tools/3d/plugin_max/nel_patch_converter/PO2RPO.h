@@ -123,7 +123,7 @@ class PO2RPOClassDesc:public ClassDesc2 {
 		return new PO2RPO();
 	}
 
-	const TCHAR *	ClassName() {return "NeLConvert";}
+	const TCHAR *	ClassName() {return "NeL Convert";}
 	SClass_ID		SuperClassID() {return OSM_CLASS_ID;}
 	Class_ID		ClassID() {return PO2RPO_CLASS_ID;}
 	const TCHAR* 	Category() {return "NeL Tools";}
