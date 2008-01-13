@@ -1,2 +1,6 @@
-SUBDIRS(command configfile debug i18n log strings)
-
+ADD_SUBDIRECTORY(command)
+ADD_SUBDIRECTORY(configfile)
+ADD_SUBDIRECTORY(debug)
+ADD_SUBDIRECTORY(i18n)
+ADD_SUBDIRECTORY(log)
+ADD_SUBDIRECTORY(strings)

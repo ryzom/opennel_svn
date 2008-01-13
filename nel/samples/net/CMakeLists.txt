@@ -1,4 +1,6 @@
-SUBDIRS(chat udp login_system)
+ADD_SUBDIRECTORY(chat)
+ADD_SUBDIRECTORY(udp)
+ADD_SUBDIRECTORY(login_system)
 
 #multi_shards
 #net_layer3
