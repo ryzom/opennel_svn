@@ -948,6 +948,8 @@ bool openURL (const char *url)
 			return (res>31);
 		}
 	}
+#elif defined(NL_OS_MAC)
+	return launchProgram("open", url);
 #elif defined(NL_OS_UNIX)
 	return launchProgram("/etc/alternatives/x-www-browser", url);
 #else

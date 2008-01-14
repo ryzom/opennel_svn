@@ -132,7 +132,7 @@ TTime CTime::getLocalTime ()
 #endif
 #endif
 		{
-			nlwarning( "Monotonic local time not supported, caution with time sync" );
+//			nlwarning( "Monotonic local time not supported, caution with time sync" );
 		}
 
 		initdone = true;
