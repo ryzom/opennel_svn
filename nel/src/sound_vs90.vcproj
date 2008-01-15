@@ -64,7 +64,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_d.lib" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
+				OutputFile="..\lib\nl$(RootNamespace)_d.lib"
+				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -132,7 +133,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_df.lib" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
+				OutputFile="..\lib\nl$(RootNamespace)_df.lib"
+				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -199,7 +201,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_ds.lib" IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
+				OutputFile="..\lib\nl$(RootNamespace)_ds.lib"
+				IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -271,7 +274,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_r.lib" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				OutputFile="..\lib\nl$(RootNamespace)_r.lib"
+				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -339,7 +343,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_rd.lib" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				OutputFile="..\lib\nl$(RootNamespace)_rd.lib"
+				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -407,7 +412,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_rds.lib" IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
+				OutputFile="..\lib\nl$(RootNamespace)_rds.lib"
+				IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -437,10 +443,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\nel\sound\u_env_sound.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\nel\sound\u_listener.h"
 				>
 			</File>
@@ -458,62 +460,6 @@
 			</File>
 			<File
 				RelativePath="sound\audio_mixer_user.h"
-				>
-			</File>
-			<File
-				RelativePath="sound\env_sound_user.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugFast|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugStatic|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="ReleaseDebug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="ReleaseDebugStatic|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="sound\env_sound_user.h"
 				>
 			</File>
 			<File
@@ -703,10 +649,6 @@
 		</File>
 		<File
 			RelativePath="sound\sound_bank.h"
-			>
-		</File>
-		<File
-			RelativePath="sound\sound_controller.h"
 			>
 		</File>
 		<File
