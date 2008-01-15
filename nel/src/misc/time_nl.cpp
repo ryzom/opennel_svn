@@ -52,7 +52,7 @@ uint32 CTime::getSecondsSince1970 ()
 
 /** Return the number of second since midnight (00:00:00), January 1, 1970,
  * coordinated universal time, according to the system clock.
- * The time returned is UTC (aka GMT+0), ie it does not have the local time ajustement 
+ * The time returned is UTC (aka GMT+0), ie it does not have the local time ajustement
  * nor it have the daylight saving ajustement.
  * This values is the same on all computer if computers are synchronized (with NTP for example).
  */
@@ -124,7 +124,7 @@ TTime CTime::getLocalTime ()
 		if ( (clock_gettime( CLOCK_MONOTONIC, &tv ) == 0) &&
 			 (clock_getres( CLOCK_MONOTONIC, &tv ) == 0) )
 		{
-			nldebug( "Monotonic local time supported (resolution %.6f ms)", ((float)tv.tv_sec)*1000.0f + ((float)tv.tv_nsec)/1000000.0f );
+//			nldebug( "Monotonic local time supported (resolution %.6f ms)", ((float)tv.tv_sec)*1000.0f + ((float)tv.tv_nsec)/1000000.0f );
 			isMonotonicClockSupported = true;
 		}
 		else
@@ -207,7 +207,7 @@ TTicks CTime::getPerformanceTime ()
                       asm volatile ("push %eax\n\t" "push %edx"); \
                       asm volatile ("rdtsc"); \
                       asm volatile ("movl %eax, (%esi)\n\t" "movl %edx, 4(%esi)"); \
-                      asm volatile ("pop %edx\n\t" "pop %eax\n\t" "pop %esi"); 
+                      asm volatile ("pop %edx\n\t" "pop %eax\n\t" "pop %esi");
 */
 
 
@@ -278,7 +278,7 @@ std::string	CTime::getHumanRelativeTime(sint32 nbSeconds)
 
 	month = delta / oneMonth;
 	delta %= oneMonth;
-	
+
 	week = delta / oneWeek;
 	delta %= oneWeek;
 

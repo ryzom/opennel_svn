@@ -11,8 +11,14 @@ Darwin)
 	;;
 esac
 
+# be able to customize the aclocal (for example to add extra param)
+if test "x$ACLOCAL" = "x"
+then
+	ACLOCAL=aclocal
+fi
+
 echo "Creating macros..." && \
-aclocal -I automacros/ && \
+$ACLOCAL -I automacros/ && \
 echo "Creating library tools..." && \
 $LIBTOOLIZE --force && \
 echo "Creating header templates..." && \
