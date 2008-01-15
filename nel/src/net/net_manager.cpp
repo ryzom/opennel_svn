@@ -23,8 +23,7 @@
  * MA 02111-1307, USA.
  */
 
-
-
+#include "stdnet.h"
 
 /**************************************************************************
 ********************* THIS CLASS IS DEPRECATED ****************************
@@ -34,8 +33,6 @@
 #else // NL_OS_UNIX
 #	warning "You are using a deprecated feature of NeL, consider rewriting your code with replacement feature"
 #endif
-
-#include "stdnet.h"
 
 #include "nel/misc/time_nl.h"
 
