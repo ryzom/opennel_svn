@@ -193,6 +193,9 @@ public:
 	virtual bool			setMode(const GfxMode& mode)=0;
 	virtual bool			getModes(std::vector<GfxMode> &modes)=0;
 
+	/// Set the title of the NeL window
+	virtual void			setWindowTitle(const std::string &title)=0;
+
 	/// return the current screen mode (if we are in windowed, return the screen mode behind the window)
 	virtual bool			getCurrentScreenMode(GfxMode &mode)=0;
 

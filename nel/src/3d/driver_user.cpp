@@ -310,6 +310,13 @@ bool CDriverUser::getCurrentScreenMode(CMode &mode)
 }
 
 // ***************************************************************************
+void CDriverUser::setWindowTitle(const std::string &title)
+{
+	NL3D_HAUTO_UI_DRIVER;
+	_Driver->setWindowTitle(title);
+}
+
+// ***************************************************************************
 void			CDriverUser::release() 
 {
 	NL3D_HAUTO_UI_DRIVER;

@@ -2167,6 +2167,12 @@ bool CDriverD3D::getCurrentScreenMode(GfxMode &gfxMode)
 }
 
 // ***************************************************************************
+void CDriverD3D::setWindowTitle(const std::string &title)
+{
+	SetWindowTextA(_HWnd,title.c_str());
+}
+
+// ***************************************************************************
 
 uint CDriverD3D::getNumAdapter() const
 {

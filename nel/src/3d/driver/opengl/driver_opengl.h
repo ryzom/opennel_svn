@@ -309,6 +309,9 @@ public:
 	virtual void			beginDialogMode();
 	virtual void			endDialogMode();
 
+	/// Set the title of the NeL window
+	virtual void			setWindowTitle(const std::string &title);
+
 	virtual void*			getDisplay()
 	{
 #ifdef NL_OS_WINDOWS

@@ -154,6 +154,9 @@ public:
 	virtual void			beginDialogMode();
 	virtual void			endDialogMode();
 
+	/// Set the title of the NeL window
+	virtual void			setWindowTitle(const std::string &title);
+
 	/// Release the window.
 	virtual	void			release();
 
