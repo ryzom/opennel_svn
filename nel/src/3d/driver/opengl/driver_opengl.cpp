@@ -1652,7 +1652,6 @@ void CDriverGL::setWindowTitle(const std::string &title)
 #elif defined(NL_OS_UNIX) // NL_OS_WINDOWS
 	XTextProperty text_property;
 	char *t = (char*)title.c_str();
-	nlinfo("******************change win to '%s'", t);
 	XStringListToTextProperty(&t, 1, &text_property);
 	XSetWMName(dpy, win, &text_property);
 #endif // NL_OS_WINDOWS
