@@ -32,6 +32,7 @@
 #else
 #	include <sys/types.h>
 #	include <sys/stat.h>
+#	include <sys/sysctl.h>
 #	include <fcntl.h>
 #	include <unistd.h>
 #	include <cerrno>
@@ -72,9 +73,11 @@ static sint64 getsysctlnum64(const string &name)
 static string getsysctlstr(const string &name)
 {
 	string value("Unknown");
+	size_t len;
+	char *p;
 	if(sysctlbyname(name.c_str(), NULL, &len, NULL, 0) == 0)
 	{
-		p = malloc(len);
+		p = (char*)malloc(len);
 		if(sysctlbyname(name.c_str(), p, &len, NULL, 0) == 0)
 		{
 			value = p;
@@ -381,9 +384,9 @@ string CSystemInfo::getProc ()
 	ProcString = getsysctlstr("machdep.cpu.brand_string");
 	ProcString += " / ";
 	ProcString += getsysctlstr("hw.machine");
-	ProcString += " Family " + getsysctlstr("machdep.cpu.family");
-	ProcString += " Model " + getsysctlstr("machdep.cpu.model");
-	ProcString += " Stepping " + getsysctlstr("machdep.cpu.stepping");
+	ProcString += " Family " + toString(getsysctlnum("machdep.cpu.family"));
+	ProcString += " Model " + toString(getsysctlnum("machdep.cpu.model"));
+	ProcString += " Stepping " + toString(getsysctlnum("machdep.cpu.stepping"));
 	ProcString += " / ";
 	ProcString += getsysctlstr("machdep.cpu.vendor");
 	ProcString += " / ";
