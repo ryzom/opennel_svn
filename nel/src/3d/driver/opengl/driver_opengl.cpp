@@ -1645,13 +1645,15 @@ bool CDriverGL::getCurrentScreenMode(GfxMode &mode)
 }
 
 // --------------------------------------------------
-void CDriverGL::setWindowTitle(const std::string &title);
+void CDriverGL::setWindowTitle(const std::string &title)
 {
 #ifdef NL_OS_WINDOWS
 	SetWindowTextA(_hWnd,title.c_str());
 #elif defined(NL_OS_UNIX) // NL_OS_WINDOWS
 	XTextProperty text_property;
-	XStringListToTextProperty(&title.c_str(), 1, &text_property);
+	char *t = (char*)title.c_str();
+	nlinfo("******************change win to '%s'", t);
+	XStringListToTextProperty(&t, 1, &text_property);
 	XSetWMName(dpy, win, &text_property);
 #endif // NL_OS_WINDOWS
 }
