@@ -338,12 +338,12 @@ string bytesToHumanReadable (const std::string &bytes)
 	return toString ("%"NL_I64"u%s", res, divTable[div]);
 }
 
-string bytesToHumanReadable (uint32 bytes)
+string bytesToHumanReadable (uint64 bytes)
 {
 	static const char *divTable[]= { "B", "KB", "MB", "GB" };
 	uint div = 0;
-	uint32 res = bytes;
-	uint32 newres = res;
+	uint64 res = bytes;
+	uint64 newres = res;
 	while (true)
 	{
 		newres /= 1024;

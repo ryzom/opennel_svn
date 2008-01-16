@@ -296,7 +296,7 @@ void itoaInt64 (sint64 number, char *str, sint64 base = 10);
 
 /// Convert a number in bytes into a string that is easily readable by an human, for example 105123 -> "102kb"
 std::string bytesToHumanReadable (const std::string &bytes);
-std::string bytesToHumanReadable (uint32 bytes);
+std::string bytesToHumanReadable (uint64 bytes);
 
 /// Convert a human readable into a bytes,  for example "102kb" -> 105123
 uint32 humanReadableToBytes (const std::string &str);

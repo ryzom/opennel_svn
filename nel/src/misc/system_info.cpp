@@ -46,6 +46,80 @@ using namespace std;
 
 namespace NLMISC {
 
+#ifdef NL_OS_UNIX
+	static string getCpuInfo(const string &colname)
+	{
+		if (colname.empty())
+			return "";
+
+		int fd = open("/proc/cpuinfo", O_RDONLY);
+		if (fd == -1)
+		{
+			nlwarning ("SI: Can't open /proc/cpuinfo: %s", strerror (errno));
+			return "";
+		}
+		else
+		{
+			char buffer[4096+1];
+			uint32 len = read(fd, buffer, sizeof(buffer)-1);
+			close(fd);
+			buffer[len] = '\0';
+
+			vector<string> splitted;
+			explode(string(buffer), string("\n"), splitted, true);
+
+			for(uint32 i = 0; i < splitted.size(); i++)
+			{
+				vector<string> sline;
+				explode(splitted[i], string(":"), sline, true);
+				if(sline.size() == 2 && trim(sline[0]) == colname)
+				{
+					return trim(sline[1]);
+				}
+			}
+		}
+		nlwarning ("SI: Can't find the colname '%s' in /proc/cpuinfo", colname.c_str());
+		return "";
+	}
+
+	// return the value of the colname in bytes from /proc/meminfo
+	static uint64 getSystemMemory (const string &colname)
+	{
+		if (colname.empty())
+			return 0;
+
+		int fd = open("/proc/meminfo", O_RDONLY);
+		if (fd == -1)
+		{
+			nlwarning ("SI: Can't open /proc/meminfo: %s", strerror (errno));
+			return 0;
+		}
+		else
+		{
+			char buffer[4096+1];
+			uint32 len = read(fd, buffer, sizeof(buffer)-1);
+			close(fd);
+			buffer[len] = '\0';
+
+			vector<string> splitted;
+			explode(string(buffer), string("\n"), splitted, true);
+
+			for(uint32 i = 0; i < splitted.size(); i++)
+			{
+				vector<string> sline;
+				explode(splitted[i], string(" "), sline, true);
+				if(sline.size() == 3 && sline[0] == colname)
+				{
+					uint64 val = atoiInt64(sline[1].c_str());
+					if(sline[2] == "kB") val *= 1024;
+					return val;
+				}
+			}
+		}
+		nlwarning ("SI: Can't find the colname '%s' in /proc/meminfo", colname.c_str());
+		return 0;
+	}
+#endif // NL_OS_UNIX
 
 #ifdef NL_OS_MAC
 static sint32 getsysctlnum(const string &name)
@@ -94,7 +168,7 @@ static string getsysctlstr(const string &name)
 	}
 	return value;
 }
-#endif
+#endif // NL_OS_MAC
 
 string CSystemInfo::getOS()
 {
@@ -723,86 +797,6 @@ bool CSystemInfo::isNT()
 #endif
 }
 
-
-#ifdef NL_OS_UNIX
-
-static string getCpuInfo(const string &colname)
-{
-	if (colname.empty())
-		return "";
-
-	int fd = open("/proc/cpuinfo", O_RDONLY);
-	if (fd == -1)
-	{
-		nlwarning ("SI: Can't open /proc/cpuinfo: %s", strerror (errno));
-		return "";
-	}
-	else
-	{
-		char buffer[4096+1];
-		uint32 len = read(fd, buffer, sizeof(buffer)-1);
-		close(fd);
-		buffer[len] = '\0';
-
-		vector<string> splitted;
-		explode(string(buffer), string("\n"), splitted, true);
-
-		for(uint32 i = 0; i < splitted.size(); i++)
-		{
-			vector<string> sline;
-			explode(splitted[i], string(":"), sline, true);
-			if(sline.size() == 2 && trim(sline[0]) == colname)
-			{
-				return trim(sline[1]);
-			}
-		}
-	}
-	nlwarning ("SI: Can't find the colname '%s' in /proc/cpuinfo", colname.c_str());
-	return "";
-}
-
-// return the value of the colname in bytes from /proc/meminfo
-static uint32 getSystemMemory (const string &colname)
-{
-    if (colname.empty())
-        return 0;
-
-    int fd = open("/proc/meminfo", O_RDONLY);
-    if (fd == -1)
-    {
-		nlwarning ("SI: Can't open /proc/meminfo: %s", strerror (errno));
-		return 0;
-    }
-    else
-    {
-        char buffer[4096+1];
-        uint32 len = read(fd, buffer, sizeof(buffer)-1);
-        close(fd);
-        buffer[len] = '\0';
-
-        vector<string> splitted;
-        explode(string(buffer), string("\n"), splitted, true);
-
-        for(uint32 i = 0; i < splitted.size(); i++)
-        {
-            vector<string> sline;
-            explode(splitted[i], string(" "), sline, true);
-            if(sline.size() == 3 && sline[0] == colname)
-            {
-                uint32 val = atoi(sline[1].c_str());
-                if(sline[2] == "kB")
-                    val *= 1024;
-                return val;
-            }
-        }
-    }
-	nlwarning ("SI: Can't find the colname '%s' in /proc/meminfo", colname.c_str());
-	return 0;
-}
-
-#endif // NL_OS_UNIX
-
-
 string CSystemInfo::availableHDSpace (const string &filename)
 {
 #ifdef NL_OS_UNIX
@@ -846,29 +840,28 @@ string CSystemInfo::availableHDSpace (const string &filename)
 #endif
 }
 
-
-uint32 CSystemInfo::availablePhysicalMemory ()
+uint64 CSystemInfo::availablePhysicalMemory ()
 {
 #ifdef NL_OS_WINDOWS
 	MEMORYSTATUS ms;
 	GlobalMemoryStatus (&ms);
-	return ms.dwAvailPhys;
+	return uint64(ms.dwAvailPhys);
 #elif defined NL_OS_MAC
-	return uint32(getsysctlnum64("hw.usermem")/1024);
+	return uint64(getsysctlnum64("hw.usermem"));
 #elif defined NL_OS_UNIX
 	return getSystemMemory("MemFree:")+getSystemMemory("Buffers:")+getSystemMemory("Cached:");
 #endif
 	return 0;
 }
 
-uint32 CSystemInfo::totalPhysicalMemory ()
+uint64 CSystemInfo::totalPhysicalMemory ()
 {
 #ifdef NL_OS_WINDOWS
 	MEMORYSTATUS ms;
 	GlobalMemoryStatus (&ms);
-	return ms.dwTotalPhys;
+	return uint64(ms.dwTotalPhys);
 #elif defined NL_OS_MAC
-	return uint32(getsysctlnum64("hw.physmem")/1024);
+	return uint64(getsysctlnum64("hw.physmem"));
 #elif defined NL_OS_UNIX
 	return getSystemMemory("MemTotal:");
 #endif
@@ -890,9 +883,9 @@ static inline char *skipToken(const char *p)
 }
 #endif
 
-uint32 CSystemInfo::getAllocatedSystemMemory ()
+uint64 CSystemInfo::getAllocatedSystemMemory ()
 {
-	uint systemMemory = 0;
+	uint64 systemMemory = 0;
 #ifdef NL_OS_WINDOWS
 	// Get system memory informations
 	HANDLE hHeap[100];
@@ -1237,12 +1230,12 @@ bool CSystemInfo::getVideoInfo (std::string &deviceName, uint64 &driverVersion)
 	return false;
 }
 
-uint32 CSystemInfo::virtualMemory ()
+uint64 CSystemInfo::virtualMemory ()
 {
 #ifdef NL_OS_WINDOWS
 	MEMORYSTATUS ms;
 	GlobalMemoryStatus (&ms);
-	return ms.dwTotalVirtual - ms.dwAvailVirtual;
+	return uint64(ms.dwTotalVirtual - ms.dwAvailVirtual);
 #endif
 	return 0;
 }
