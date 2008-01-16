@@ -100,6 +100,8 @@ void CDriverComponent::setWindowTitle(const ucstring &title)
 {
 #ifdef NL_OS_WINDOWS
 	SetWindowTextW((HWND)_Driver->getDisplay(), (LPCWSTR)title.c_str());
+#else
+	_Driver->setWindowTitle(title.toString());	
 #endif
 }
 
