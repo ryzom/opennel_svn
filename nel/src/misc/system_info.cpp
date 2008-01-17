@@ -472,7 +472,7 @@ string CSystemInfo::getProc ()
 
 	ProcString = getCpuInfo("model name");
 	ProcString += " / ?";
-	ProcString += " Family " + getCpuInfo("cpy family");
+	ProcString += " Family " + getCpuInfo("cpu family");
 	ProcString += " Model " + getCpuInfo("model");
 	ProcString += " Stepping " + getCpuInfo("stepping");
 	ProcString += " / ";
