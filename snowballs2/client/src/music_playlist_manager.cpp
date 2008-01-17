@@ -250,4 +250,5 @@ void CMusicPlaylistManager::cbPlaylistLoop(NLMISC::CConfigFile::CVar &var, void 
 
 }
 
-#endif
+#endif 
+

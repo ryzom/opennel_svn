@@ -467,3 +467,4 @@ void releaseMouseListenerConfig()
 	ConfigFile->setCallback("ViewHeight", NULL);
 	ConfigFile->setCallback("ViewTargetHeight", NULL);
 }
+
