@@ -84,15 +84,15 @@ struct Anim
 
 Anim AnimIdArray[][2] =
 {
-	{ { "patterfeet.anim", false }, { "" } },
-	{ { "marche.anim", true }, { "" } },
-	{ { "idle.anim", true }, { "" } },
-	{ { "log_on.anim", false }, { "" } },
-	{ { "log_off.anim", false }, { "" } },
-	{ { "lancelaboule.anim", false }, { "" } },
-	{ { "prepaboule.anim", false }, { "" } },
-	{ { "prepaboulecycle.anim", true }, { "" } },
-	{ { "impact.anim", false }, { "" } },
+	{ { "patterfeet.anim", false, 0, NULL }, { "", false, 0, NULL } },
+	{ { "marche.anim", true, 0, NULL }, { "", false, 0, NULL } },
+	{ { "idle.anim", true, 0, NULL }, { "", false, 0, NULL } },
+	{ { "log_on.anim", false, 0, NULL }, { "", false, 0, NULL } },
+	{ { "log_off.anim", false, 0, NULL }, { "", false, 0, NULL } },
+	{ { "lancelaboule.anim", false, 0, NULL }, { "", false, 0, NULL } },
+	{ { "prepaboule.anim", false, 0, NULL }, { "", false, 0, NULL } },
+	{ { "prepaboulecycle.anim", true, 0, NULL }, { "", false, 0, NULL } },
+	{ { "impact.anim", false, 0, NULL }, { "", false, 0, NULL } },
 };
 
 

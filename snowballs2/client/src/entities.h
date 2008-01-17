@@ -76,10 +76,10 @@ public:
 	
 	// Create a default entity
 	CEntity () :
-		Id(0xffffffff), Name("<Unknown>"), AutoMove(false), Instance(NULL), Skeleton(NULL),
-		Particule(NULL), PlayList(NULL), /*CurrentAnim(NoAnim), */NextEmptySlot(0), Source (NULL),
-		Angle(0.0f), AuxiliaryAngle(0.0f), InterpolatedAuxiliaryAngle(0.0f),
-		IsWalking(false), WasWalking(false), IsAiming(false), WasAiming(false), BotState(0)
+		Id(0xffffffff), Name("<Unknown>"), Angle(0.0f), AuxiliaryAngle(0.0f), InterpolatedAuxiliaryAngle(0.0f),
+		AutoMove(false), Instance(NULL), Skeleton(NULL),
+		Particule(NULL), Source(NULL), IsWalking(false), WasWalking(false), IsAiming(false), WasAiming(false),
+		/*CurrentAnim(NoAnim), */NextEmptySlot(0), PlayList(NULL), BotState(0)
 		{ }
 
 
