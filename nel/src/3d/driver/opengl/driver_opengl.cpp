@@ -3117,10 +3117,18 @@ bool			CDriverGL::setMonitorColorProperties (const CMonitorColorProperties &prop
 // ***************************************************************************
 bool CDriverGL::supportEMBM() const
 {
-	H_AUTO_OGL(CDriverGL_supportEMBM)
+	H_AUTO_OGL(CDriverGL_supportEMBM);
 
+#ifdef NL_OS_UNIX
+	// It seems that there're some bug in the linux driver of ATI video card.
+	// It *crashs* in the call of nglGetTexBumpParameterivATI(GL_BUMP_NUM_TEX_UNITS_ATI, &numEMBMUnits);
+	// So we prefer to disable EMBM on ATI under linux
+	// you can reproduce the crash with this code : http://www.mantris.net/spex/nel/ati_embm_test.c
+	return false;
+#else
 	// For now, supported via ATI extension
 	return _Extensions.ATIEnvMapBumpMap;
+#endif
 }
 
 // ***************************************************************************
@@ -3163,8 +3171,8 @@ void CDriverGL::initEMBM()
 		{
 			// Test which stage support EMBM
 			GLint numEMBMUnits;
+			// This line crashs on ATI cards under Linux (why? we don't know, so supportEMBM always returns false on linux/ati)
 			nglGetTexBumpParameterivATI(GL_BUMP_NUM_TEX_UNITS_ATI, &numEMBMUnits);
-
 
 			std::vector<GLint> EMBMUnits(numEMBMUnits);
 			// get array of units that supports EMBM
