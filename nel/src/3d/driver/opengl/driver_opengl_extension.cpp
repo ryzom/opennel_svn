@@ -314,9 +314,7 @@ PFNGLUNMAPBUFFERARBPROC 						nglUnmapBufferARB;
 PFNGLGETBUFFERPARAMETERIVARBPROC 				nglGetBufferParameterivARB;
 PFNGLGETBUFFERPOINTERVARBPROC 					nglGetBufferPointervARB;
 
-
 // GL_ARB_vertex_program
-//==================================
 PFNGLVERTEXATTRIB1SARBPROC						nglVertexAttrib1sARB;
 PFNGLVERTEXATTRIB1FARBPROC						nglVertexAttrib1fARB;
 PFNGLVERTEXATTRIB1DARBPROC						nglVertexAttrib1dARB;
@@ -443,7 +441,7 @@ namespace	NL3D
 // Debug: don't return false if the procaddr returns 0
 // It means that it can crash if nel calls this extension but at least we have a warning to know why the extension is available but not the procaddr
 #define CHECK_ADDRESS(type, ext) \
-	if(!(n##ext=(type)nglGetProcAddress(#ext))) { nlwarning("3D: GetProcAddress(\"%s\") returns NULL", #ext); /*return false;*/ } else { nldebug("3D: GetProcAddress(\"%s\") succeed", #ext); }
+	if(!(n##ext=(type)nglGetProcAddress(#ext))) { nlwarning("3D: GetProcAddress(\"%s\") returns NULL", #ext); return false; } else { nldebug("3D: GetProcAddress(\"%s\") succeed", #ext); }
 
 // ***************************************************************************
 // Extensions registrations, and Windows function Registration.
@@ -499,9 +497,7 @@ static bool setupARBMultiTexture(const char	*glext)
 static bool setupEXTTextureEnvCombine(const char	*glext)
 {
 	H_AUTO_OGL(setupEXTTextureEnvCombine);
-	CHECK_EXT("GL_EXT_texture_env_combine");
-	CHECK_EXT("GL_ARB_texture_env_combine");
-	return true;
+	return (strstr(glext, "GL_EXT_texture_env_combine")!=NULL || strstr(glext, "GL_ARB_texture_env_combine")!=NULL);
 }
 
 
@@ -625,7 +621,7 @@ static bool	setupATIEnvMapBumpMap(const char	*glext)
 	CHECK_ADDRESS(PFNGLTEXBUMPPARAMETERIVATIPROC, glTexBumpParameterivATI);
 	CHECK_ADDRESS(PFNGLTEXBUMPPARAMETERFVATIPROC, glTexBumpParameterfvATI);
 	CHECK_ADDRESS(PFNGLGETTEXBUMPPARAMETERIVATIPROC, glGetTexBumpParameterivATI);
-	CHECK_ADDRESS(PFNGLGETTEXBUMPPARAMETERFVATIPROC, glGetTexBumpParameterfvATI);		
+	CHECK_ADDRESS(PFNGLGETTEXBUMPPARAMETERFVATIPROC, glGetTexBumpParameterfvATI);
 
 	return true;
 }
@@ -641,7 +637,7 @@ static bool	setupARBTextureCubeMap(const char	*glext)
 
 // *********************************
 static bool	setupNVVertexProgram(const char	*glext)
-{	
+{
 	H_AUTO_OGL(setupNVVertexProgram);
 	CHECK_EXT("GL_NV_vertex_program");
 
@@ -714,7 +710,7 @@ static bool	setupNVVertexProgram(const char	*glext)
 
 // *********************************
 static bool	setupEXTVertexShader(const char	*glext)
-{					
+{
 	H_AUTO_OGL(setupEXTVertexShader);
 	CHECK_EXT("GL_EXT_vertex_shader");
 
@@ -771,18 +767,18 @@ static bool	setupEXTVertexShader(const char	*glext)
 	//
 	GLint numVSLocalConstants;
 	glGetIntegerv(GL_MAX_VERTEX_SHADER_LOCAL_CONSTANTS_EXT, &numVSLocalConstants);
-	if (numVSLocalConstants < 2) return false;	
+	if (numVSLocalConstants < 2) return false;
 	//
 	GLint numVSInvariants;
 	glGetIntegerv(GL_MAX_OPTIMIZED_VERTEX_SHADER_INVARIANTS_EXT, &numVSInvariants);
 	if (numVSInvariants < 96 + 1) return false;
-	//	
+	//
 	GLint numVSVariants;
 	glGetIntegerv(GL_MAX_VERTEX_SHADER_VARIANTS_EXT, &numVSVariants);
 	if (numVSInvariants < 4) return false;
 
 	return true;
-	
+
 }
 
 
@@ -878,7 +874,7 @@ static bool	setupATIVertexArrayObject(const char *glext)
 {
 	H_AUTO_OGL(setupATIVertexArrayObject);
 	CHECK_EXT("GL_ATI_vertex_array_object");
-	
+
 	CHECK_ADDRESS(NEL_PFNGLNEWOBJECTBUFFERATIPROC, glNewObjectBufferATI);
 	CHECK_ADDRESS(NEL_PFNGLISOBJECTBUFFERATIPROC, glIsObjectBufferATI);
 	CHECK_ADDRESS(NEL_PFNGLUPDATEOBJECTBUFFERATIPROC, glUpdateObjectBufferATI);
@@ -896,7 +892,7 @@ static bool	setupATIVertexArrayObject(const char *glext)
 	CHECK_ADDRESS(NEL_PFNGLGETARRAYOBJECTIVATIPROC, glGetArrayObjectivATI);
 
 	if(strstr(glext, "GL_EXT_vertex_shader") != NULL)
-	{	
+	{
 		// the following exist only if ext vertex shader is present
 		CHECK_ADDRESS(NEL_PFNGLVARIANTARRAYOBJECTATIPROC, glVariantArrayObjectATI);
 		CHECK_ADDRESS(NEL_PFNGLGETVARIANTARRAYOBJECTFVATIPROC, glGetVariantArrayObjectfvATI);
@@ -907,12 +903,12 @@ static bool	setupATIVertexArrayObject(const char *glext)
 
 
 static bool	setupATIMapObjectBuffer(const char *glext)
-{		
+{
 	H_AUTO_OGL(setupATIMapObjectBuffer);
 	CHECK_EXT("GL_ATI_map_object_buffer");
 	CHECK_ADDRESS(NEL_PFNGLMAPOBJECTBUFFERATIPROC, glMapObjectBufferATI);
 	CHECK_ADDRESS(NEL_PFNGLUNMAPOBJECTBUFFERATIPROC, glUnmapObjectBufferATI);
-	return true;	
+	return true;
 }
 
 
@@ -1000,7 +996,7 @@ static bool	setupARBVertexBufferObject(const char	*glext)
 	CHECK_ADDRESS(PFNGLUNMAPBUFFERARBPROC, glUnmapBufferARB);
 	CHECK_ADDRESS(PFNGLGETBUFFERPARAMETERIVARBPROC, glGetBufferParameterivARB);
 	CHECK_ADDRESS(PFNGLGETBUFFERPOINTERVARBPROC, glGetBufferPointervARB);
-	
+
 	return true;
 }
 
@@ -1090,7 +1086,7 @@ static bool	setupNVOcclusionQuery(const char	*glext)
 	CHECK_ADDRESS(NEL_PFNGLGETOCCLUSIONQUERYIVNVPROC, glGetOcclusionQueryivNV);
 	CHECK_ADDRESS(NEL_PFNGLGETOCCLUSIONQUERYUIVNVPROC, glGetOcclusionQueryuivNV);
 
-	return true;	
+	return true;
 }
 
 
@@ -1121,7 +1117,7 @@ static bool	setupFrameBufferObject(const char	*glext)
 	CHECK_ADDRESS(NEL_PFNGLDELETERENDERBUFFERSEXTPROC, glDeleteRenderbuffersEXT);
 	CHECK_ADDRESS(NEL_PFNGLDELETEFRAMEBUFFERSEXTPROC, glDeleteFramebuffersEXT);
 
-	return true;	
+	return true;
 }
 
 // ***************************************************************************
@@ -1164,7 +1160,7 @@ void	registerGlExtensions(CGlExtensions &ext)
 	if(ext.ARBMultiTexture)
 	{
 		glGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, &ntext);
-		// We could have more than IDRV_MAT_MAXTEXTURES but the interface only 
+		// We could have more than IDRV_MAT_MAXTEXTURES but the interface only
 		// support IDRV_MAT_MAXTEXTURES texture stages so take min
 		ext.NbTextureStages= (ntext<((GLint)IDRV_MAT_MAXTEXTURES)?ntext:IDRV_MAT_MAXTEXTURES);
 	}
@@ -1176,19 +1172,19 @@ void	registerGlExtensions(CGlExtensions &ext)
 	ext.ARBTextureCompression= setupARBTextureCompression(glext);
 
 	// Check NVVertexArrayRange
-	// Disable feature ???			
+	// Disable feature ???
 	if(!ext.DisableHardwareVertexArrayAGP)
-		ext.NVVertexArrayRange= setupNVVertexArrayRange(glext);	
+		ext.NVVertexArrayRange= setupNVVertexArrayRange(glext);
 	if(ext.NVVertexArrayRange)
 	{
 		GLint	nverts;
 		glGetIntegerv((GLenum)GL_MAX_VERTEX_ARRAY_RANGE_ELEMENT_NV, &nverts);
 		ext.NVVertexArrayRangeMaxVertex= nverts;
-	}	
+	}
 
 
 	// Compression S3TC OK iff ARBTextureCompression.
-	ext.EXTTextureCompressionS3TC= (ext.ARBTextureCompression && setupEXTTextureCompressionS3TC(glext)); 
+	ext.EXTTextureCompressionS3TC= (ext.ARBTextureCompression && setupEXTTextureCompressionS3TC(glext));
 
 	// Check if NVidia GL_EXT_vertex_weighting is available.
 	ext.EXTVertexWeighting= setupEXTVertexWeighting(glext);
@@ -1198,7 +1194,7 @@ void	registerGlExtensions(CGlExtensions &ext)
 
 	// Check NVTextureEnvCombine4.
 	ext.NVTextureEnvCombine4= setupNVTextureEnvCombine4(glext);
-	
+
 
 	// Check for cube mapping
 	ext.ARBTextureCubeMap = setupARBTextureCubeMap(glext);
@@ -1206,10 +1202,10 @@ void	registerGlExtensions(CGlExtensions &ext)
 	// Check vertex program
 	// Disable feature ???
 	if(!ext.DisableHardwareVertexProgram)
-	{		
+	{
 		ext.NVVertexProgram = setupNVVertexProgram(glext);
 		ext.EXTVertexShader = setupEXTVertexShader(glext);
-		ext.ARBVertexProgram= setupARBVertexProgram(glext);				
+		ext.ARBVertexProgram= setupARBVertexProgram(glext);
 	}
 	else
 	{
@@ -1217,15 +1213,15 @@ void	registerGlExtensions(CGlExtensions &ext)
 		ext.EXTVertexShader = false;
 		ext.ARBVertexProgram = false;
 	}
-			
+
 	// Check texture shaders
 	// Disable feature ???
 	if(!ext.DisableHardwareTextureShader)
-	{	
-		ext.NVTextureShader = setupNVTextureShader(glext);		
-		ext.ATIEnvMapBumpMap = setupATIEnvMapBumpMap(glext);		
-		ext.ATIFragmentShader = setupATIFragmentShader(glext);	
-		ext.ARBFragmentProgram = setupARBFragmentProgram(glext);		
+	{
+		ext.NVTextureShader = setupNVTextureShader(glext);
+		ext.ATIEnvMapBumpMap = setupATIEnvMapBumpMap(glext);
+		ext.ATIFragmentShader = setupATIFragmentShader(glext);
+		ext.ARBFragmentProgram = setupARBFragmentProgram(glext);
 	}
 	else
 	{
@@ -1235,7 +1231,7 @@ void	registerGlExtensions(CGlExtensions &ext)
 		ext.ARBFragmentProgram = false;
 	}
 
-	
+
 
 	// For now, the only way to know if emulation, is to test some extension which exist only on GeForce3.
 	// if GL_NV_texture_shader is not here, then we are not on GeForce3.
@@ -1247,7 +1243,7 @@ void	registerGlExtensions(CGlExtensions &ext)
 	// Check EXTBlendColor
 	ext.EXTBlendColor= setupEXTBlendColor(glext);
 
-	// Check NVVertexArrayRange2		
+	// Check NVVertexArrayRange2
 	ext.NVVertexArrayRange2= setupNVVertexArrayRange2(glext);
 	// if supported
 	if(ext.NVVertexArrayRange2)
@@ -1275,16 +1271,16 @@ void	registerGlExtensions(CGlExtensions &ext)
 	// Check ATIVertexArrayObject
 	// Disable feature ???
 	if(!ext.DisableHardwareVertexArrayAGP)
-	{	
+	{
 		ext.ATIVertexArrayObject= setupATIVertexArrayObject(glext);
 		ext.ATIMapObjectBuffer= setupATIMapObjectBuffer(glext);
-		ext.ATIVertexAttribArrayObject = setupATIVertexAttribArrayObject(glext);		
+		ext.ATIVertexAttribArrayObject = setupATIVertexAttribArrayObject(glext);
 	}
 	// Check ATIXTextureEnvCombine3.
 	ext.ATITextureEnvCombine3= setupATITextureEnvCombine3(glext);
 	// Check ATIXTextureEnvRoute
 	ext.ATIXTextureEnvRoute= setupATIXTextureEnvRoute(glext);
-		
+
 	if (ext.ATITextureEnvCombine3)
 	{
 		ext.IsATI9500OrAbove = setupARBFragmentProgram(glext);
@@ -1295,15 +1291,15 @@ void	registerGlExtensions(CGlExtensions &ext)
 	if(!ext.DisableHardwareVertexArrayAGP)
 	{
 		ext.ARBVertexBufferObject = setupARBVertexBufferObject(glext);
-	}		
+	}
 	// In my tries ATI_fragment_shader doesn't like to be used With ARB_fragment_program (maybe a driver bug, display become corrupted)
 	if (ext.IsATI9500OrAbove)
-	{		
+	{
 		ext.ATIFragmentShader = false;
-	}	
+	}
 
 	ext.IsGeforceFXOrAbove = setupNVVertexProgram(glext) && setupARBFragmentProgram(glext);
-	 
+
 	// fix for radeon 7200 -> disable agp
 	if (ext.NbTextureStages == 3 && (ext.ATIVertexArrayObject || ext.ARBVertexBufferObject))
 	{
