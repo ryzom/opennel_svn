@@ -39,7 +39,7 @@ using namespace NLMISC;
 #ifdef NL_OS_WINDOWS
 #define	nglGetProcAddress wglGetProcAddress
 #else	// NL_OS_WINDOWS
-void (*nglGetProcAddress(const char *procName))() { return nglXGetProcAddressARB((const GLubyte *)procName); }
+void (*nglGetProcAddress(const char *procName))() { return glXGetProcAddressARB((const GLubyte *)procName); }
 #endif	// NL_OS_WINDOWS
 
 
