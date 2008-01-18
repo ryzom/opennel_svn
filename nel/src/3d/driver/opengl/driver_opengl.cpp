@@ -105,7 +105,7 @@ uint CDriverGL::_Registered=0;
 #endif // NL_OS_WINDOWS
 
 // Version of the driver. Not the interface version!! Increment when implementation of the driver change.
-const uint32		CDriverGL::ReleaseVersion = 0xc; // nico
+const uint32 CDriverGL::ReleaseVersion = 0xc; // nico
 
 // Number of register to allocate for the EXTVertexShader extension
 const uint CDriverGL::_EVSNumConstant = 97;
@@ -1615,7 +1615,7 @@ bool CDriverGL::getModes(std::vector<GfxMode> &modes)
 		nldebug("3D:   Mode %d: width %d height %d freq %d", j, ms[j]->hdisplay,ms[j]->vdisplay, 1000 * ms[j]->dotclock / (ms[j]->htotal * ms[j]->vtotal));
 		modes.push_back (mode);
 	}
-  XFree(ms);
+	XFree(ms);
 #	endif
 
 #endif
@@ -2793,7 +2793,7 @@ bool CDriverGL::isWaterShaderSupported() const
 {
 	H_AUTO_OGL(CDriverGL_isWaterShaderSupported);
 
-	if(_Extensions.ARBFragmentProgram && ARBWaterShader[0] != NULL) return true;
+	if(_Extensions.ARBFragmentProgram && ARBWaterShader[0] != 0) return true;
 
 	if (!_Extensions.EXTVertexShader && !_Extensions.NVVertexProgram && !_Extensions.ARBVertexProgram) return false; // should support vertex programs
 	if (!_Extensions.NVTextureShader && !_Extensions.ATIFragmentShader && !_Extensions.ARBFragmentProgram) return false;

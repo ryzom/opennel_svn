@@ -617,6 +617,12 @@ static bool	setupNVTextureEnvCombine4(const char	*glext)
 static bool	setupATITextureEnvCombine3(const char	*glext)
 {
 	H_AUTO_OGL(setupATITextureEnvCombine3);
+
+#ifdef NL_OS_MAC
+// Water doesn't render on GeForce 8600M GT (on MAC OS X) if this extension is enabled
+	return false;
+#endif
+
 	CHECK_EXT("GL_ATI_texture_env_combine3");
 	return true;
 }
@@ -657,8 +663,13 @@ static bool	setupARBTextureCubeMap(const char	*glext)
 static bool	setupNVVertexProgram(const char	*glext)
 {
 	H_AUTO_OGL(setupNVVertexProgram);
-	CHECK_EXT("GL_NV_vertex_program");
 
+#ifdef NL_OS_MAC
+// Water doesn't render on GeForce 8600M GT (on MAC OS X) if this extension is enabled
+	return false;
+#endif
+
+	CHECK_EXT("GL_NV_vertex_program");
 	CHECK_ADDRESS(NEL_PFNGLAREPROGRAMSRESIDENTNVPROC, glAreProgramsResidentNV);
 	CHECK_ADDRESS(NEL_PFNGLBINDPROGRAMNVPROC, glBindProgramNV);
 	CHECK_ADDRESS(NEL_PFNGLDELETEPROGRAMSNVPROC, glDeleteProgramsNV);
@@ -863,6 +874,12 @@ static bool	setupWGLARBPixelFormat (const char	*glext)
 static bool	setupNVTextureShader(const char	*glext)
 {
 	H_AUTO_OGL(setupNVTextureShader);
+
+#ifdef NL_OS_MAC
+// Water doesn't render on GeForce 8600M GT (on MAC OS X) if this extension is enabled
+	return false;
+#endif
+
 	CHECK_EXT("GL_NV_texture_shader");
 	return true;
 }
