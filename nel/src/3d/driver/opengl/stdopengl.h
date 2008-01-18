@@ -23,3 +23,5 @@
 #include "nel/misc/mem_stream.h"
 #include "nel/misc/time_nl.h"
 #include "nel/misc/command.h"
+
+#define GL_GLEXT_PROTOTYPES 1

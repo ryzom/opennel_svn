@@ -3150,8 +3150,6 @@ void CDriverGL::setEMBMMatrix(const uint stage,const float mat[4])
 	{
 		_DriverGLStates.activeTextureARB(stage);
 		nglTexBumpParameterfvATI(GL_BUMP_ROT_MATRIX_ATI, const_cast<float *>(mat));
-
-
 	}
 }
 
@@ -3360,18 +3358,18 @@ uint loadARBFragmentProgramStringNative(const char *prog)
 		return 0;
 	}
 	GLuint progID;
-	nglGenProgramsARB(1, &progID);
+	glGenProgramsARB(1, &progID);
 	if (!progID)
 	{
-		nlwarning("nglGenProgramsARB returns a progID NULL");
+		nlwarning("glGenProgramsARB returns a progID NULL");
 		return 0;
 	}
-	nglBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, progID);
+	glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, progID);
 	GLint errorPos, isNative;
-	nglProgramStringARB(GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_FORMAT_ASCII_ARB, strlen(prog), prog);
-	nglBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, 0);
+	glProgramStringARB(GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_FORMAT_ASCII_ARB, strlen(prog), prog);
+	glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, 0);
 	glGetIntegerv(GL_PROGRAM_ERROR_POSITION_ARB, &errorPos);
-	nglGetProgramivARB(GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB, &isNative);
+	glGetProgramivARB(GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB, &isNative);
 	if ((errorPos == -1) && (isNative == 1))
 	{
 		return progID;
@@ -3382,7 +3380,7 @@ uint loadARBFragmentProgramStringNative(const char *prog)
 		if (errorPos == -1)
 		{
 			nlwarning("There's no error in the fragment but the hardware doesn't support the fragment in native");
-			nglDeleteProgramsARB(1, &progID);
+			glDeleteProgramsARB(1, &progID);
 		}
 		return 0;
 	}
@@ -3408,14 +3406,10 @@ static void fetchPerturbedEnvMapR200()
 	nglColorFragmentOp3ATI(GL_MAD_ATI, GL_REG_2_ATI, GL_NONE, GL_NONE, GL_REG_0_ATI, GL_NONE, GL_BIAS_BIT_ATI|GL_2X_BIT_ATI, GL_CON_0_ATI, GL_NONE, GL_NONE, GL_REG_2_ATI, GL_NONE, GL_NONE); // scale bumpmap 1 & add envmap coords
 	nglColorFragmentOp3ATI(GL_MAD_ATI, GL_REG_2_ATI, GL_NONE, GL_NONE, GL_REG_1_ATI, GL_NONE, GL_BIAS_BIT_ATI|GL_2X_BIT_ATI, GL_CON_1_ATI, GL_NONE, GL_NONE, GL_REG_2_ATI, GL_NONE, GL_NONE); // scale bumpmap 2 & add to bump map 1
 
-
-
 	////////////
 	// PASS 2 //
 	////////////
 	nglSampleMapATI(GL_REG_2_ATI, GL_REG_2_ATI, GL_SWIZZLE_STR_ATI); // fetch envmap at perturbed texcoords
-
-
 }
 
 // ***************************************************************************
@@ -3493,13 +3487,10 @@ void CDriverGL::initFragmentShaders()
 			nglColorFragmentOp2ATI(GL_MUL_ATI, GL_REG_0_ATI, GL_NONE, GL_NONE, GL_REG_3_ATI, GL_NONE, GL_NONE, GL_REG_2_ATI, GL_NONE, GL_NONE); // scale bumpmap 1 & add envmap coords
 			nglAlphaFragmentOp2ATI(GL_MUL_ATI, GL_REG_0_ATI, GL_NONE, GL_REG_3_ATI, GL_NONE, GL_NONE, GL_REG_2_ATI, GL_NONE, GL_NONE);
 
-
 			nglEndFragmentShaderATI();
 			error = glGetError();
 		    nlassert(error == GL_NONE);
 			nglBindFragmentShaderATI(0);
-
-
 		}
 
 		////////////
@@ -3546,7 +3537,7 @@ void CDriverGL::deleteARBFragmentPrograms()
 		if (ARBWaterShader[k])
 		{
 			GLuint progId = (GLuint) ARBWaterShader[k];
-			nglDeleteProgramsARB(1, &progId);
+			glDeleteProgramsARB(1, &progId);
 			ARBWaterShader[k] = 0;
 		}
 	}
@@ -3575,8 +3566,6 @@ void CDriverGL::deleteFragmentShaders()
 		nglDeleteFragmentShaderATI((GLuint) ATICloudShaderHandle);
 		ATICloudShaderHandle = 0;
 	}
-
-
 }
 
 
@@ -3926,7 +3915,6 @@ bool CDriverGL::getAdapter(uint adapter, CAdapter &desc) const
 		desc.DeviceName = (const char *) glGetString (GL_RENDERER);
 		desc.Driver = (const char *) glGetString (GL_VERSION);
 		desc.Vendor= (const char *) glGetString (GL_VENDOR);
-
 
 		desc.Description = "Default openGL adapter";
 		desc.DeviceId = 0;
