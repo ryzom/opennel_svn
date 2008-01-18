@@ -235,7 +235,7 @@ extern "C"
 /*
 static Bool WndProc(Display *d, XEvent *e, char *arg)
 {
-  nlinfo("glop %d %d", e->type, e->xmap.window);
+  nlinfo("3D: glop %d %d", e->type, e->xmap.window);
   CDriverGL *pDriver = (CDriverGL*)arg;
   if (pDriver != NULL)
     {
@@ -709,7 +709,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 		// requirements.
 		int pformat[20];
 		unsigned int nformats;
-		if ( !wglChoosePixelFormatARB ( hdc, iattributes, fattributes,
+		if ( !nwglChoosePixelFormatARB ( hdc, iattributes, fattributes,
 			20, pformat, &nformats ) )
 		{
 			nlwarning ( "pbuffer creation error: Couldn't find a suitable pixel format." );
@@ -724,7 +724,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 			returned in the list in step #2 and call the function: */
 		int iattributes2[1] = {0};
 		// int iattributes2[] = {WGL_PBUFFER_LARGEST_ARB, 1, 0};
-		_PBuffer = wglCreatePbufferARB( hdc, pformat[0], width, height, iattributes2 );
+		_PBuffer = nwglCreatePbufferARB( hdc, pformat[0], width, height, iattributes2 );
 		if (_PBuffer == NULL)
 		{
 			DWORD error = GetLastError ();
@@ -740,7 +740,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 		}
 
 		/* After creating a pbuffer, you may use this functions to determine the dimensions of the pbuffer actually created. */
-		if ( !wglQueryPbufferARB( _PBuffer, WGL_PBUFFER_WIDTH_ARB, (int*)&width ) )
+		if ( !nwglQueryPbufferARB( _PBuffer, WGL_PBUFFER_WIDTH_ARB, (int*)&width ) )
 		{
 			DWORD error = GetLastError ();
 			nlwarning ("CDriverGL::setDisplay: wglQueryPbufferARB failed: 0x%x", error);
@@ -753,7 +753,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 			return false;
 		}
 
-		if ( !wglQueryPbufferARB( _PBuffer, WGL_PBUFFER_HEIGHT_ARB, (int*)&height ) )
+		if ( !nwglQueryPbufferARB( _PBuffer, WGL_PBUFFER_HEIGHT_ARB, (int*)&height ) )
 		{
 			DWORD error = GetLastError ();
 			nlwarning ("CDriverGL::setDisplay: wglQueryPbufferARB failed: 0x%x", error);
@@ -771,12 +771,12 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 
 		/* The next step is to create a device context for the newly created pbuffer. To do this,
 			call the the function: */
-		_hDC = wglGetPbufferDCARB( _PBuffer );
+		_hDC = nwglGetPbufferDCARB( _PBuffer );
 		if (_hDC == NULL)
 		{
 			DWORD error = GetLastError ();
 			nlwarning ("CDriverGL::setDisplay: wglGetPbufferDCARB failed: 0x%x", error);
-			wglDestroyPbufferARB( _PBuffer );
+			nwglDestroyPbufferARB( _PBuffer );
 
 			wglDeleteContext (tempGLRC);
 
@@ -796,8 +796,8 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 		{
 			DWORD error = GetLastError ();
 			nlwarning ("CDriverGL::setDisplay: wglCreateContext failed: 0x%x", error);
-			wglReleasePbufferDCARB( _PBuffer, _hDC );
-			wglDestroyPbufferARB( _PBuffer );
+			nwglReleasePbufferDCARB( _PBuffer, _hDC );
+			nwglDestroyPbufferARB( _PBuffer );
 			wglDeleteContext (tempGLRC);
 			DestroyWindow (tmpHWND);
 			_PBuffer = NULL;
@@ -829,8 +829,8 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 			DWORD error = GetLastError ();
 			nlwarning ("CDriverGL::setDisplay: wglMakeCurrent failed: 0x%x", error);
 			wglDeleteContext (_hRC);
-			wglReleasePbufferDCARB( _PBuffer, _hDC );
-			wglDestroyPbufferARB( _PBuffer );
+			nwglReleasePbufferDCARB( _PBuffer, _hDC );
+			nwglDestroyPbufferARB( _PBuffer );
 			DestroyWindow (tmpHWND);
 			_PBuffer = NULL;
 			_hWnd = NULL;
@@ -1003,7 +1003,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 	}
 	else
 	{
-		nldebug("XOpenDisplay on '%s' OK", getenv("DISPLAY"));
+		nldebug("3D: XOpenDisplay on '%s' OK", getenv("DISPLAY"));
 	}
 
 	int sAttribList16bpp[] =
@@ -1041,7 +1041,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 	}
 	else
 	{
-	    nldebug("glXChooseVisual OK");
+	    nldebug("3D: glXChooseVisual OK");
 	}
 
 	ctx = glXCreateContext (dpy, visual_info, None, GL_TRUE);
@@ -1051,7 +1051,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 	}
 	else
 	{
-	    nldebug("glXCreateContext() OK");
+	    nldebug("3D: glXCreateContext() OK");
 	}
 
 	Colormap cmap = XCreateColormap (dpy, RootWindow(dpy, DefaultScreen(dpy)), visual_info->visual, AllocNone);
@@ -1086,7 +1086,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 	}
 	else
 	{
-	    nldebug("XCreateWindow() OK");
+	    nldebug("3D: XCreateWindow() OK");
 	}
 
 	XSizeHints size_hints;
@@ -1148,7 +1148,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 				int mode_index = -1; // Gah, magic numbers all bad.
 				for (int i = 0; i < nmodes; i++)
 				{
-					nldebug("Available mode - %dx%d", modes[i]->hdisplay, modes[i]->vdisplay);
+					nldebug("3D: Available mode - %dx%d", modes[i]->hdisplay, modes[i]->vdisplay);
 					if(modes[i]->hdisplay == width && modes[i]->vdisplay == height)
 					{
 						mode_index = i;
@@ -1160,7 +1160,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 				{
 					if(XF86VidModeSwitchToMode(dpy, DefaultScreen(dpy), modes[mode_index]))
 					{
-						nlinfo("Switching to mode %dx%d", modes[mode_index]->hdisplay, modes[mode_index]->vdisplay);
+						nlinfo("3D: Switching to mode %dx%d", modes[mode_index]->hdisplay, modes[mode_index]->vdisplay);
 						XF86VidModeSetViewPort(dpy, DefaultScreen(dpy), 0, 0);
 						_FullScreen = true;
 					}
@@ -1188,7 +1188,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 	vector<string> lines;
 	explode(_Extensions.toString(), string("\n"), lines);
 	for(uint i = 0; i < lines.size(); i++)
-		nlinfo(lines[i].c_str());
+		nlinfo("3D: %s", lines[i].c_str());
 
 	//
 #ifdef NL_OS_WINDOWS
@@ -1605,14 +1605,14 @@ bool CDriverGL::getModes(std::vector<GfxMode> &modes)
 	int nmodes;
 	XF86VidModeModeInfo **ms;
 	XF86VidModeGetAllModeLines(dpy, 0, &nmodes, &ms);
-	//nldebug("Available modes %d", nmodes);
+	nldebug("3D: Available modes %d", nmodes);
 	for (int j = 0; j < nmodes; j++) {
 		// Add this mode
 		GfxMode mode;
 		mode.Width = (uint16)ms[j]->hdisplay;
 		mode.Height = (uint16)ms[j]->vdisplay;
 		mode.Frequency = 1000 * ms[j]->dotclock / (ms[j]->htotal * ms[j]->vtotal);
-		//nldebug("  Mode %d: width %d height %d freq %d", j, ms[j]->hdisplay,ms[j]->vdisplay, 1000 * ms[j]->dotclock / (ms[j]->htotal * ms[j]->vtotal));
+		nldebug("3D:   Mode %d: width %d height %d freq %d", j, ms[j]->hdisplay,ms[j]->vdisplay, 1000 * ms[j]->dotclock / (ms[j]->htotal * ms[j]->vtotal));
 		modes.push_back (mode);
 	}
   XFree(ms);
@@ -1994,10 +1994,8 @@ bool CDriverGL::release()
 		if (_PBuffer)
 		{
 			wglDeleteContext( _hRC );
-			wglReleasePbufferDCARB( _PBuffer, _hDC );
-			wglDestroyPbufferARB( _PBuffer );
-
-
+			nwglReleasePbufferDCARB( _PBuffer, _hDC );
+			nwglDestroyPbufferARB( _PBuffer );
 		}
 	}
 	else
@@ -2048,16 +2046,16 @@ bool CDriverGL::release()
 	if(_FullScreen)
 	{
 		XF86VidModeModeInfo info;
-		nlinfo("Switching back to original mode");
+		nlinfo("3D: Switching back to original mode");
 
 		// This is a bit ugly - a quick hack to copy the ModeLine structure
 		// into the modeInfo structure.
 		memcpy((XF86VidModeModeLine *)((char *)&info + sizeof(info.dotclock)),&_OldScreenMode, sizeof(XF86VidModeModeLine));
 		info.dotclock = _OldDotClock;
 
-		nlinfo("Switching back mode to %dx%d", info.hdisplay, info.vdisplay);
+		nlinfo("3D: Switching back mode to %dx%d", info.hdisplay, info.vdisplay);
 		XF86VidModeSwitchToMode(dpy, DefaultScreen(dpy), &info);
-		nlinfo("Switching back viewport to %d,%d",_OldX, _OldY);
+		nlinfo("3D: Switching back viewport to %d,%d",_OldX, _OldY);
 		XF86VidModeSetViewPort(dpy, DefaultScreen(dpy), _OldX, _OldY);
 		// Ungrab the keyboard (probably not necessary);
         XUnmapWindow(dpy, win);
@@ -2349,10 +2347,8 @@ void CDriverGL::getWindowSize(uint32 &width, uint32 &height)
 	{
 		if (_PBuffer)
 		{
-			wglQueryPbufferARB( _PBuffer, WGL_PBUFFER_WIDTH_ARB, (int*)&width );
-			wglQueryPbufferARB( _PBuffer, WGL_PBUFFER_HEIGHT_ARB, (int*)&height );
-
-
+			nwglQueryPbufferARB( _PBuffer, WGL_PBUFFER_WIDTH_ARB, (int*)&width );
+			nwglQueryPbufferARB( _PBuffer, WGL_PBUFFER_HEIGHT_ARB, (int*)&height );
 		}
 	}
 	else
@@ -2750,7 +2746,7 @@ void			CDriverGL::enableUsedTextureMemorySum (bool enable)
 	H_AUTO_OGL(CDriverGL_enableUsedTextureMemorySum )
 
 	if (enable)
-		nlinfo ("PERFORMANCE INFO: enableUsedTextureMemorySum has been set to true in CDriverGL");
+		nlinfo ("3D: PERFORMANCE INFO: enableUsedTextureMemorySum has been set to true in CDriverGL");
 	_SumTextureMemoryUsed=enable;
 }
 
@@ -3610,7 +3606,7 @@ void	CDriverGL::setSwapVBLInterval(uint interval)
 	_Interval = interval;
 	if(_Extensions.WGLEXTSwapControl && _Initialized)
 	{
-		wglSwapIntervalEXT(_Interval);
+		nwglSwapIntervalEXT(_Interval);
 	}
 #endif
 }

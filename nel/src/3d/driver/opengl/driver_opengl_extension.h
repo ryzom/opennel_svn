@@ -30,34 +30,28 @@
 #include "nel/misc/types_nl.h"
 
 #ifdef NL_OS_WINDOWS
-
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
-
+#	define WIN32_LEAN_AND_MEAN
+#	define NOMINMAX
+#	include <windows.h>
 #else // NL_OS_UNIX
-
-#include <GL/glx.h>
-
+#	include <GL/glx.h>
 #endif // NL_OS_UNIX
-
 
 #include <GL/gl.h>
 #include <GL/glext.h>	// Please download it from http://www.opengl.org/registry/"
 
 #ifndef GL_GLEXT_VERSION
-#error "I need a newer <GL/glext.h>. Please download it from http://www.opengl.org/registry/"
-#endif // GL_GLEXT_VERSION
+#	error "I need a newer <GL/glext.h>. Please download it from http://www.opengl.org/registry/"
+#endif // GL_nGLEXT_VERSION
 
 #if GL_GLEXT_VERSION < 7
-#error "I need a newer <GL/glext.h>. Please download it from http://www.opengl.org/registry/"
-#endif // GL_GLEXT_VERSION < 7
+#	error "I need a newer <GL/glext.h>. Please download it from http://www.opengl.org/registry/"
+#endif // GL_nGLEXT_VERSION < 7
 
 #include "driver_opengl_extension_def.h"
 
 namespace	NL3D
 {
-
 
 // ***************************************************************************
 /// The extensions used by NL3D.
@@ -71,7 +65,7 @@ struct	CGlExtensions
 	uint	NbTextureStages;
 	bool	EXTTextureEnvCombine;
 
-	// Optionnal Extensions.	
+	// Optional Extensions.	
 	// NB: Fence extension is not here, because NVVertexArrayRange is false if GL_NV_fence is not here.
 	bool	NVVertexArrayRange;
 	uint	NVVertexArrayRangeMaxVertex;
@@ -120,7 +114,6 @@ struct	CGlExtensions
 	// hint : is it a GeForce FX or above ?
 	bool	IsGeforceFXOrAbove;
 
-
 public:
 
 	/// \name Disable Hardware feature. False by default. setuped by IDriver
@@ -129,7 +122,6 @@ public:
 	bool				DisableHardwareVertexArrayAGP;
 	bool				DisableHardwareTextureShader;
 	// @}
-
 
 public:
 	CGlExtensions()
@@ -175,14 +167,16 @@ public:
 		// misc
 		IsATI9500OrAbove = false;
 	};
-	
 
-	std::string toString() {
-		std::string result = "OpenGL ver ";
+	std::string toString()
+	{
+		std::string result = "OpenGL version ";
 		result += Version1_2 ? "1.2 or above(*)" : "1.1 or below";
 		result += IsATI9500OrAbove ? "; ATI9500 or better" : "";
 		result += IsGeforceFXOrAbove ? "; GeForce FX or better" : "";
-		result += "; Available extensions:\n  texturing: ";
+		result += "; Available extensions:";
+		
+		result += "\n  Texturing: ";
 		result += ARBMultiTexture ? "ARBMultiTexture " : "";
 		result += EXTTextureEnvCombine ? "EXTTextureEnvCombine(*) " : "";
 		result += ARBTextureCompression ? "ARBTextureCompression " : "";
@@ -196,7 +190,7 @@ public:
 		result += "texture stages(*) = ";
 		result += NLMISC::toString(NbTextureStages);
 		
-		result += "\n  programs:  ";
+		result += "\n  Programs:  ";
 		result += NVTextureShader ? "NVTextureShader " : "";
 		result += ATIFragmentShader ? "ATIFragmentShader " : "";
 		result += ARBFragmentProgram ? "ARBFragmentProgram " : "";
@@ -205,7 +199,7 @@ public:
 		result += EXTVertexShader ? "EXTVertexShader " : "";
 		result += NVVertexProgramEmulated ? "NVVertexProgramEmulated " : "";
 
-		result += "\n  misc:      ";
+		result += "\n  Misc:      ";
 		result += EXTVertexWeighting ? "EXTVertexWeighting " : "";
 		result += EXTSeparateSpecularColor ? "EXTSeparateSpecularColor " : "";
 		result += EXTSecondaryColor ? "EXTSecondaryColor " : "";
@@ -221,18 +215,17 @@ public:
 #endif
 
 		result += "\n  Array/VBO: ";
-		result += NVVertexArrayRange ? ("NVVertexArrayRange (MaxVertex = " +
-					NLMISC::toString(NVVertexArrayRangeMaxVertex) + ") ") : "";
+		result += NVVertexArrayRange ? ("NVVertexArrayRange (MaxVertex = " + NLMISC::toString(NVVertexArrayRangeMaxVertex) + ") ") : "";
 		result += NVVertexArrayRange2 ? "NVVertexArrayRange2 " : "";
 		result += ATIVertexArrayObject ? "ATIVertexArrayObject " : "";
 		result += ATIVertexAttribArrayObject ? "ATIVertexAttribArrayObject " : "";
 		result += ARBVertexBufferObject ? "ARBVertexBufferObject " : "";
 		result += ATIMapObjectBuffer ? "ATIMapObjectBuffer " : "";
-		
+
 		result += "\n  FBO:       ";
 		result += FrameBufferObject ? "FramebufferObject " : "";
 		result += PackedDepthStencil ? "PackedDepthStencil " : "";
-	
+
 		return result;
 	}
 
@@ -242,31 +235,27 @@ public:
 
 #ifdef NL_OS_WINDOWS
 /// This function will test and register WGL functions before than the gl context is created
-void	registerWGlExtensions(CGlExtensions &ext, HDC hDC);
+bool registerWGlExtensions(CGlExtensions &ext, HDC hDC);
 #endif // NL_OS_WINDOWS
 
 /// This function test and register the extensions for the current GL context.
-void	registerGlExtensions(CGlExtensions &ext);
-
+void registerGlExtensions(CGlExtensions &ext);
 
 }
 
-
-
 // ***************************************************************************
 // The exported function names
-/* NB: We named all like nglActiveTextureARB (n for NEL :) )
+/* NB: We named all like nglActiveTextureARB (n for NEL :) 
 	to avoid compilation conflict with future version of gl.h
 	eg: gl.h Version 1.2 define glActiveTextureARB so we can't use it.
 
 	NB: we do it for all (EXT, NV, ARB extension) even it should be usefull only for ARB ones.
 */
 
-
 // ARB_multitexture
 //=================
-extern NEL_PFNGLACTIVETEXTUREARBPROC nglActiveTextureARB;
-extern NEL_PFNGLCLIENTACTIVETEXTUREARBPROC nglClientActiveTextureARB;
+extern NEL_PFNGLACTIVETEXTUREARBPROC		nglActiveTextureARB;
+extern NEL_PFNGLCLIENTACTIVETEXTUREARBPROC	nglClientActiveTextureARB;
 
 extern NEL_PFNGLMULTITEXCOORD1SARBPROC nglMultiTexCoord1sARB;
 extern NEL_PFNGLMULTITEXCOORD1IARBPROC nglMultiTexCoord1iARB;
@@ -320,8 +309,8 @@ extern NEL_PFNGLGETCOMPRESSEDTEXIMAGEARBPROC	nglGetCompressedTexImageARB;
 extern NEL_PFNGLFLUSHVERTEXARRAYRANGENVPROC		nglFlushVertexArrayRangeNV;
 extern NEL_PFNGLVERTEXARRAYRANGENVPROC			nglVertexArrayRangeNV;
 #ifdef NL_OS_WINDOWS
-extern PFNWGLALLOCATEMEMORYNVPROC			wglAllocateMemoryNV;
-extern PFNWGLFREEMEMORYNVPROC				wglFreeMemoryNV;
+extern PFNWGLALLOCATEMEMORYNVPROC				nwglAllocateMemoryNV;
+extern PFNWGLFREEMEMORYNVPROC					nwglFreeMemoryNV;
 #endif
 
 
@@ -432,7 +421,7 @@ extern NEL_PFNGLDISABLEVARIANTCLIENTSTATEEXTPROC nglDisableVariantClientStateEXT
 extern NEL_PFNGLBINDLIGHTPARAMETEREXTPROC		 nglBindLightParameterEXT;
 extern NEL_PFNGLBINDMATERIALPARAMETEREXTPROC	 nglBindMaterialParameterEXT;
 extern NEL_PFNGLBINDTEXGENPARAMETEREXTPROC		 nglBindTexGenParameterEXT;
-extern NEL_PFNGLBINDTEXTUREUNITPARAMETEREXTPROC  nglBindTextureUnitParameterEXT;
+extern NEL_PFNGLBINDTEXTUREUNITPARAMETEREXTPROC	 nglBindTextureUnitParameterEXT;
 extern NEL_PFNGLBINDPARAMETEREXTPROC			 nglBindParameterEXT;
 extern NEL_PFNGLISVARIANTENABLEDEXTPROC			 nglIsVariantEnabledEXT;
 extern NEL_PFNGLGETVARIANTBOOLEANVEXTPROC		 nglGetVariantBooleanvEXT;
@@ -649,28 +638,28 @@ extern NEL_PFNGLGETOCCLUSIONQUERYUIVNVPROC nglGetOcclusionQueryuivNV;
 
 // Pbuffer extension
 //==================
-extern PFNWGLCREATEPBUFFERARBPROC			wglCreatePbufferARB;
-extern PFNWGLGETPUFFERDCARBPROC				wglGetPbufferDCARB;
-extern PFNWGLRELEASEPUFFERDCARBPROC			wglReleasePbufferDCARB;
-extern PFNWGLDESTROYPUFFERARBPROC			wglDestroyPbufferARB;
-extern PFNWGLQUERYPBUFFERARBPROC			wglQueryPbufferARB;
+extern PFNWGLCREATEPBUFFERARBPROC			nwglCreatePbufferARB;
+extern PFNWGLGETPUFFERDCARBPROC				nwglGetPbufferDCARB;
+extern PFNWGLRELEASEPUFFERDCARBPROC			nwglReleasePbufferDCARB;
+extern PFNWGLDESTROYPUFFERARBPROC			nwglDestroyPbufferARB;
+extern PFNWGLQUERYPBUFFERARBPROC			nwglQueryPbufferARB;
 
 
 // Get Pixel format extension
 //===========================
-extern PFNWGLGETPIXELFORMATATTRIBIVARBPROC	wglGetPixelFormatAttribivARB;
-extern PFNWGLGETPIXELFORMATATTRIBFVARBPROC	wglGetPixelFormatAttribfvARB;
-extern PFNWGLCHOOSEPIXELFORMATARBPROC		wglChoosePixelFormatARB;
+extern PFNWGLGETPIXELFORMATATTRIBIVARBPROC	nwglGetPixelFormatAttribivARB;
+extern PFNWGLGETPIXELFORMATATTRIBFVARBPROC	nwglGetPixelFormatAttribfvARB;
+extern PFNWGLCHOOSEPIXELFORMATARBPROC		nwglChoosePixelFormatARB;
 
 
 // Swap control extension
 //===========================
-extern PFNWGLSWAPINTERVALEXTPROC	wglSwapIntervalEXT;
-extern PFNWGLGETSWAPINTERVALEXTPROC	wglGetSwapIntervalEXT;
+extern PFNWGLSWAPINTERVALEXTPROC			nwglSwapIntervalEXT;
+extern PFNWGLGETSWAPINTERVALEXTPROC			nwglGetSwapIntervalEXT;
 
 
 // WGL_ARB_extensions_string
-extern PFNWGFGETEXTENSIONSSTRINGARB			wglGetExtensionsStringARB;
+extern PFNWGFGETEXTENSIONSSTRINGARB			nwglGetExtensionsStringARB;
 
 #endif
 

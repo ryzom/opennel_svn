@@ -44,7 +44,7 @@ using	namespace std;
 #ifdef NEL_DUMP_UPLOAD_TIME
 	#define NEL_MEASURE_UPLOAD_TIME_START NLMISC::TTicks startTick = CTime::getPerformanceTime();
 	#define NEL_MEASURE_UPLOAD_TIME_END NLMISC::TTicks endTick = CTime::getPerformanceTime(); \
-										nlinfo("upload time = %.2f ms", (float) (1000 * (CTime::ticksToSecond(endTick) - CTime::ticksToSecond(startTick))));
+		nlinfo("3D: upload time = %.2f ms", (float) (1000 * (CTime::ticksToSecond(endTick) - CTime::ticksToSecond(startTick))));
 #else
 	#define NEL_MEASURE_UPLOAD_TIME_START
 	#define NEL_MEASURE_UPLOAD_TIME_END
@@ -58,7 +58,7 @@ namespace NL3D
 CTextureDrvInfosGL::CTextureDrvInfosGL(IDriver *drv, ItTexDrvInfoPtrMap it, CDriverGL *drvGl, bool isRectangleTexture) : ITextureDrvInfos(drv, it)
 {
 	H_AUTO_OGL(CTextureDrvInfosGL_CTextureDrvInfosGL)
-	//nldebug("CTextureDrvInfosGL::ctor()");
+	//nldebug("3D: CTextureDrvInfosGL::ctor()");
 	// The id is auto created here.
 	glGenTextures(1,&ID);
 
@@ -120,7 +120,7 @@ bool CTextureDrvInfosGL::initFrameBufferObject(ITexture * tex)
 				nglGenRenderbuffersEXT(1, &StencilFBOId);
 		}
 
-		//nldebug("using depth %d and stencil %d", DepthFBOId, StencilFBOId);
+		//nldebug("3D: using depth %d and stencil %d", DepthFBOId, StencilFBOId);
 
 		// initialize FBO
 		nglBindFramebufferEXT(GL_FRAMEBUFFER_EXT, FBOId);
@@ -137,7 +137,7 @@ bool CTextureDrvInfosGL::initFrameBufferObject(ITexture * tex)
 		{
 			if(UsePackedDepthStencil)
 			{
-				//nldebug("using packed depth stencil");
+				//nldebug("3D: using packed depth stencil");
 				nglBindRenderbufferEXT(GL_RENDERBUFFER_EXT, StencilFBOId);
 				nglRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH24_STENCIL8_EXT, tex->getWidth(), tex->getHeight());
 			}
@@ -152,10 +152,10 @@ bool CTextureDrvInfosGL::initFrameBufferObject(ITexture * tex)
 			}
 			nglFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
 										 GL_RENDERBUFFER_EXT, DepthFBOId);
-			//nldebug("glFramebufferRenderbufferExt(depth:24) = %X", nglCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT));
+			//nldebug("3D: glFramebufferRenderbufferExt(depth:24) = %X", nglCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT));
 			//nglFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT,
 			//							 GL_RENDERBUFFER_EXT, StencilFBOId);
-			//nldebug("glFramebufferRenderbufferExt(stencil:8) = %X", nglCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT));
+			//nldebug("3D: glFramebufferRenderbufferExt(stencil:8) = %X", nglCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT));
 		}
 
 		// check status
@@ -591,7 +591,7 @@ void CDriverGL::setupTextureBasicParameters(ITexture &tex)
 bool CDriverGL::setupTextureEx (ITexture& tex, bool bUpload, bool &bAllUploaded, bool bMustRecreateSharedTexture)
 {
 	H_AUTO_OGL(setupTextureEx)
-	//nldebug("CDriverGL::setupTextureEx(%016p, %d, %d, %d)", &tex, bUpload, bAllUploaded, bMustRecreateSharedTexture);
+	//nldebug("3D: CDriverGL::setupTextureEx(%016p, %d, %d, %d)", &tex, bUpload, bAllUploaded, bMustRecreateSharedTexture);
 	bAllUploaded = false;
 
 	if(tex.isTextureCube() && (!_Extensions.ARBTextureCubeMap))
@@ -602,7 +602,7 @@ bool CDriverGL::setupTextureEx (ITexture& tex, bool bUpload, bool &bAllUploaded,
 	bool mustCreate = false;
 	if ( !tex.TextureDrvShare )
 	{
-		//nldebug("  creating CTextureDrvShare()");
+		//nldebug("3D:   creating CTextureDrvShare()");
 		// insert into driver list. (so it is deleted when driver is deleted).
 		ItTexDrvSharePtrList	it= _TexDrvShares.insert(_TexDrvShares.end(), NULL);
 		// create and set iterator, for future deletion.

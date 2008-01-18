@@ -117,13 +117,13 @@ bool			CVertexArrayRangeNVidia::allocate(uint32 size, CVertexBuffer::TPreferredM
 	switch(vbType)
 	{
 	case CVertexBuffer::AGPPreferred: 
-		_VertexArrayPtr= wglAllocateMemoryNV(size, 0, 0, 0.5f);
+		_VertexArrayPtr= nwglAllocateMemoryNV(size, 0, 0, 0.5f);
 		break;
 	case CVertexBuffer::StaticPreferred:
 		if (_Driver->getStaticMemoryToVRAM())
-			_VertexArrayPtr= wglAllocateMemoryNV(size, 0, 0, 1.0f);
+			_VertexArrayPtr= nwglAllocateMemoryNV(size, 0, 0, 1.0f);
 		else
-			_VertexArrayPtr= wglAllocateMemoryNV(size, 0, 0, 0.5f);
+			_VertexArrayPtr= nwglAllocateMemoryNV(size, 0, 0, 0.5f);
 		break;
 	};
 #endif	// NL_OS_WINDOWS
@@ -164,12 +164,10 @@ void			CVertexArrayRangeNVidia::free()
 		// reset the allocator.
 		_HeapMemory.reset();
 
-
-		// Free special memory.
 #ifdef	NL_OS_WINDOWS
-		wglFreeMemoryNV(_VertexArrayPtr);
+		// Free special memory.
+		nwglFreeMemoryNV(_VertexArrayPtr);
 #endif	// NL_OS_WINDOWS
-
 
 		_VertexArrayPtr= NULL;
 		_VertexArraySize= 0;
@@ -1446,7 +1444,7 @@ void CVertexBufferHardARB::unlock()
 		invalidate();
 	}
 	/* double end = CTime::ticksToSecond(CTime::getPerformanceTime());
-	nlinfo("Unlock = %f ms", (float) ((end - start) * 1000)); */	
+	nlinfo("3D: Unlock = %f ms", (float) ((end - start) * 1000)); */	
 }
 
 // ***************************************************************************

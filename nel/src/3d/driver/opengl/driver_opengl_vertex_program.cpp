@@ -164,7 +164,7 @@ bool CDriverGL::activeNVVertexProgram (CVertexProgram *program)
 				}
 
 				// Show the error
-				nlinfo ("Vertex program syntax error line %d character %d\n", line, charC);
+				nlwarning("3D: Vertex program syntax error line %d character %d\n", line, charC);
 
 				// Disable vertex program
 				glDisable (GL_VERTEX_PROGRAM_NV);
@@ -372,7 +372,7 @@ static void doWriteMask(GLuint res, GLuint in, GLenum outX, GLenum outY, GLenum 
 	H_AUTO_OGL(doWriteMask)
 	nglWriteMaskEXT(res, in, outX, outY, outZ, outW);
 	#ifdef DEBUG_SETUP_EXT_VERTEX_SHADER
-	nlinfo("Write Mask : %c%c%c%c",
+	nlinfo("3D: Write Mask : %c%c%c%c",
 		   outX ? 'x' : '-',
 		   outY ? 'y' : '-',
 		   outZ ? 'z' : '-',
@@ -396,9 +396,9 @@ bool CDriverGL::setupEXTVertexShader(const CVPParser::TProgram &program, GLuint 
 	uint numWM = 0; // write maks
 
 	
-	#ifdef DEBUG_SETUP_EXT_VERTEX_SHADER
-		nlinfo("**********************************************************");
-	#endif	
+#ifdef DEBUG_SETUP_EXT_VERTEX_SHADER
+	nlinfo("3D: **********************************************************");
+#endif	
 
 	// clear last error
 	GLenum glError = glGetError();
@@ -1149,13 +1149,13 @@ bool CDriverGL::setupEXTVertexShader(const CVPParser::TProgram &program, GLuint 
 	}
 
 #ifdef DEBUG_SETUP_EXT_VERTEX_SHADER
-	nlinfo("========================");
-	nlinfo("num Opcode  = %d", numOp);
-	nlinfo("num Indexing = %d", numOpIndex);
-	nlinfo("num Swizzle = %d", numSwizzle);
-	nlinfo("num extract component = %d", numEC);
-	nlinfo("num insert component = %d", numIC);	
-	nlinfo("num write mask = %d", numWM);
+	nlinfo("3D: ========================");
+	nlinfo("3D: num Opcode  = %d", numOp);
+	nlinfo("3D: num Indexing = %d", numOpIndex);
+	nlinfo("3D: num Swizzle = %d", numSwizzle);
+	nlinfo("3D: num extract component = %d", numEC);
+	nlinfo("3D: num insert component = %d", numIC);	
+	nlinfo("3D: num write mask = %d", numWM);
 #endif
 
 	return true;
