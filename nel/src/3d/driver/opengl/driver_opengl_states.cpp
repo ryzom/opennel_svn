@@ -157,7 +157,7 @@ void			CDriverGLStates::forceDefaults(uint nbStages)
 	for(stage=0;stage<nbStages; stage++)
 	{
 		// disable texturing.
-		glActiveTextureARB(GL_TEXTURE0_ARB+stage);
+		nglActiveTextureARB(GL_TEXTURE0_ARB+stage);
 		glDisable(GL_TEXTURE_2D);
 		if(_TextureCubeMapSupported)
 			glDisable(GL_TEXTURE_CUBE_MAP_ARB);
@@ -174,9 +174,9 @@ void			CDriverGLStates::forceDefaults(uint nbStages)
 	}
 
 	// ActiveTexture current texture to 0.
-	glActiveTextureARB(GL_TEXTURE0_ARB);
+	nglActiveTextureARB(GL_TEXTURE0_ARB);
 	_CurrentActiveTextureARB= 0;
-	glClientActiveTextureARB(GL_TEXTURE0_ARB);
+	nglClientActiveTextureARB(GL_TEXTURE0_ARB);
 	_CurrentClientActiveTextureARB= 0;
 
 	// Depth range
@@ -729,7 +729,7 @@ void			CDriverGLStates::activeTextureARB(uint stage)
 	H_AUTO_OGL(CDriverGLStates_activeTextureARB)
 	if( _CurrentActiveTextureARB != stage )
 	{
-		glActiveTextureARB(GL_TEXTURE0_ARB+stage);
+		nglActiveTextureARB(GL_TEXTURE0_ARB+stage);
 
 
 		_CurrentActiveTextureARB= stage;
@@ -740,7 +740,7 @@ void			CDriverGLStates::activeTextureARB(uint stage)
 void			CDriverGLStates::forceActiveTextureARB(uint stage)
 {
 	H_AUTO_OGL(CDriverGLStates_forceActiveTextureARB)
-	glActiveTextureARB(GL_TEXTURE0_ARB+stage);
+	nglActiveTextureARB(GL_TEXTURE0_ARB+stage);
 
 	_CurrentActiveTextureARB= stage;
 }
@@ -825,9 +825,7 @@ void			CDriverGLStates::enableSecondaryColorArray(bool enable)
 		if(!enable)
 		{
 			// GeForceFx Bug: Must reset Secondary color to 0 (if comes from a VP), else bugs
-			glSecondaryColor3ubEXT(0,0,0);
-
-
+			nglSecondaryColor3ubEXT(0,0,0);
 		}
 	}
 }
@@ -838,7 +836,7 @@ void			CDriverGLStates::clientActiveTextureARB(uint stage)
 	H_AUTO_OGL(CDriverGLStates_clientActiveTextureARB)
 	if( _CurrentClientActiveTextureARB != stage )
 	{
-		glClientActiveTextureARB(GL_TEXTURE0_ARB+stage);
+		nglClientActiveTextureARB(GL_TEXTURE0_ARB+stage);
 		_CurrentClientActiveTextureARB= stage;
 	}
 }
@@ -884,9 +882,9 @@ void CDriverGLStates::enableVertexAttribArrayARB(uint glIndex,bool enable)
 	#endif
 	{
 		if(enable)
-			glEnableVertexAttribArrayARB(glIndex);
+			nglEnableVertexAttribArrayARB(glIndex);
 		else
-			glDisableVertexAttribArrayARB(glIndex);
+			nglDisableVertexAttribArrayARB(glIndex);
 
 		_VertexAttribArrayEnabled[glIndex]= enable;
 	}
@@ -985,7 +983,7 @@ void			CDriverGLStates::enableFog(uint enable)
 void CDriverGLStates::forceBindARBVertexBuffer(uint objectID)
 {
 	H_AUTO_OGL(CDriverGLStates_forceBindARBVertexBuffer)
-	glBindBufferARB(GL_ARRAY_BUFFER_ARB, objectID);
+	nglBindBufferARB(GL_ARRAY_BUFFER_ARB, objectID);
 	_CurrARBVertexBuffer = objectID;
 }
 

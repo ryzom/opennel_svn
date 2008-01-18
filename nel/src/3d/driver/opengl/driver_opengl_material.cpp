@@ -2194,7 +2194,7 @@ void CDriverGL::setupWaterPassARB(const CMaterial &mat)
 	{
 		activateTexture(k, NULL);
 	}
-	glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, ARBWaterShader[(_FogEnabled ? 1 : 0) | (mat.getTexture(3) != NULL ? 2 : 0)]);
+	nglBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, ARBWaterShader[(_FogEnabled ? 1 : 0) | (mat.getTexture(3) != NULL ? 2 : 0)]);
 	glEnable(GL_FRAGMENT_PROGRAM_ARB);
 
 
@@ -2202,29 +2202,29 @@ void CDriverGL::setupWaterPassARB(const CMaterial &mat)
 	if (mat.getTexture(0) && mat.getTexture(0)->isBumpMap())
 	{
 		float factor = 0.25f * NLMISC::safe_cast<CTextureBump *>(mat.getTexture(0))->getNormalizationFactor();
-		glProgramEnvParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 0, 2.f * factor, -1.f * factor, 0.f, 0.f); // scale_bias from [0, 1] to [-1, 1] and factor applied
+		nglProgramEnvParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 0, 2.f * factor, -1.f * factor, 0.f, 0.f); // scale_bias from [0, 1] to [-1, 1] and factor applied
 	}
 	else
 	{
-		glProgramEnvParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 0, 2.f, -1.f, 0.f, 0.f); // scale_bias from [0, 1] to [-1, 1] and factor applied
+		nglProgramEnvParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 0, 2.f, -1.f, 0.f, 0.f); // scale_bias from [0, 1] to [-1, 1] and factor applied
 	}
 
 	// setup the constant
 	if (mat.getTexture(1) && mat.getTexture(1)->isBumpMap())
 	{
 		float factor = NLMISC::safe_cast<CTextureBump *>(mat.getTexture(1))->getNormalizationFactor();
-		glProgramEnvParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 1, 2.f * factor, -1.f * factor, 0.f, 0.f); // scale_bias from [0, 1] to [-1, 1] and factor applied
+		nglProgramEnvParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 1, 2.f * factor, -1.f * factor, 0.f, 0.f); // scale_bias from [0, 1] to [-1, 1] and factor applied
 	}
 	else
 	{
-		glProgramEnvParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 1, 2.f, -1.f, 0.f, 0.f); // scale_bias from [0, 1] to [-1, 1] and factor applied
+		nglProgramEnvParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 1, 2.f, -1.f, 0.f, 0.f); // scale_bias from [0, 1] to [-1, 1] and factor applied
 	}
 
 	if (_FogEnabled)
 	{
 		if (_FogStart == _FogEnd)
 		{
-			glProgramEnvParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 2, 0.f, 0.f, 0.f, 0.f);
+			nglProgramEnvParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 2, 0.f, 0.f, 0.f, 0.f);
 		}
 		else
 		{
@@ -2234,11 +2234,11 @@ void CDriverGL::setupWaterPassARB(const CMaterial &mat)
 			  */
 			if (_Extensions.EXTVertexShader && !_ATIFogRangeFixed)
 			{
-				glProgramEnvParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 2, 1.f, 0.f, 0.f, 0.f);
+				nglProgramEnvParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 2, 1.f, 0.f, 0.f, 0.f);
 			}
 			else
 			{
-				glProgramEnvParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 2, - 1.f/  (_FogEnd - _FogStart), _FogEnd / (_FogEnd - _FogStart), 0.f, 0.f);
+				nglProgramEnvParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 2, - 1.f/  (_FogEnd - _FogStart), _FogEnd / (_FogEnd - _FogStart), 0.f, 0.f);
 			}
 		}
 	}

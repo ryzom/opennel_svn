@@ -11,7 +11,6 @@
 #include <map>
 #include <set>
 #include <algorithm>
-//#include <sstream>
 #include <exception>
 #include <utility>
 #include <deque>
@@ -23,5 +22,3 @@
 #include "nel/misc/mem_stream.h"
 #include "nel/misc/time_nl.h"
 #include "nel/misc/command.h"
-
-#define GL_GLEXT_PROTOTYPES 1

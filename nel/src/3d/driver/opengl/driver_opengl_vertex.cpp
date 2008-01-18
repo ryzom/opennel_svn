@@ -1324,7 +1324,7 @@ void		CDriverGL::setupGlArraysForARBVertexProgram(CVertexBufferInfo &vb)
 					{
 						mustNormalize = ARBVertexProgramMustNormalizeAttrib[value];
 					}
-					glVertexAttribPointerARB(glIndex, NumCoordinatesType[type], GLType[type], mustNormalize, vb.VertexSize, vb.ValuePtr[value]);
+					nglVertexAttribPointerARB(glIndex, NumCoordinatesType[type], GLType[type], mustNormalize, vb.VertexSize, vb.ValuePtr[value]);
 				}
 				else
 				{

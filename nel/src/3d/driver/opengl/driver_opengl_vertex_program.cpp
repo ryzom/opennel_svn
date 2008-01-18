@@ -60,7 +60,7 @@ CVertexProgamDrvInfosGL::CVertexProgamDrvInfosGL (CDriverGL *drv, ItVtxPrgDrvInf
 	}
 	else if (drv->_Extensions.ARBVertexProgram) // ARB implementation
 	{
-		glGenProgramsARB(1, &ID);
+		nglGenProgramsARB(1, &ID);
 	}
 	else
 	{
@@ -1400,9 +1400,9 @@ bool CDriverGL::setupARBVertexProgram (const CVPParser::TProgram &inParsedProgra
 	output.serial(code);
 	*/
 	//
-	glBindProgramARB( GL_VERTEX_PROGRAM_ARB, id);
+	nglBindProgramARB( GL_VERTEX_PROGRAM_ARB, id);
 	glGetError();
-	glProgramStringARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_FORMAT_ASCII_ARB, code.size(), code.c_str() );
+	nglProgramStringARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_FORMAT_ASCII_ARB, code.size(), code.c_str() );
 	GLenum err = glGetError();
 	if (err != GL_NO_ERROR)
 	{
@@ -1496,7 +1496,7 @@ bool CDriverGL::activeARBVertexProgram (CVertexProgram *program)
 		}
 		glEnable( GL_VERTEX_PROGRAM_ARB );
 		_VertexProgramEnabled = true;
-		glBindProgramARB( GL_VERTEX_PROGRAM_ARB, drvInfo->ID );
+		nglBindProgramARB( GL_VERTEX_PROGRAM_ARB, drvInfo->ID );
 		if (drvInfo->SpecularWritten)
 		{
 			glEnable( GL_COLOR_SUM_ARB );
@@ -1626,7 +1626,7 @@ void CDriverGL::setConstant (uint index, float f0, float f1, float f2, float f3)
 	}
 	else if (_Extensions.ARBVertexProgram)
 	{
-		glProgramEnvParameter4fARB(GL_VERTEX_PROGRAM_ARB, index, f0, f1, f2, f3);
+		nglProgramEnvParameter4fARB(GL_VERTEX_PROGRAM_ARB, index, f0, f1, f2, f3);
 	}
 	else if (_Extensions.EXTVertexShader)
 	{
@@ -1649,7 +1649,7 @@ void CDriverGL::setConstant (uint index, double d0, double d1, double d2, double
 	}
 	else if (_Extensions.ARBVertexProgram)
 	{
-		glProgramEnvParameter4dARB(GL_VERTEX_PROGRAM_ARB, index, d0, d1, d2, d3);
+		nglProgramEnvParameter4dARB(GL_VERTEX_PROGRAM_ARB, index, d0, d1, d2, d3);
 	}
 	else if (_Extensions.EXTVertexShader)
 	{
@@ -1672,7 +1672,7 @@ void CDriverGL::setConstant (uint index, const NLMISC::CVector& value)
 	}
 	else if (_Extensions.ARBVertexProgram)
 	{
-		glProgramEnvParameter4fARB(GL_VERTEX_PROGRAM_ARB, index, value.x, value.y, value.z, 0);
+		nglProgramEnvParameter4fARB(GL_VERTEX_PROGRAM_ARB, index, value.x, value.y, value.z, 0);
 	}
 	else if (_Extensions.EXTVertexShader)
 	{
@@ -1695,7 +1695,7 @@ void CDriverGL::setConstant (uint index, const NLMISC::CVectorD& value)
 	}
 	else if (_Extensions.ARBVertexProgram)
 	{
-		glProgramEnvParameter4dARB(GL_VERTEX_PROGRAM_ARB, index, value.x, value.y, value.z, 0);
+		nglProgramEnvParameter4dARB(GL_VERTEX_PROGRAM_ARB, index, value.x, value.y, value.z, 0);
 	}
 	else if (_Extensions.EXTVertexShader)
 	{
@@ -1718,7 +1718,7 @@ void	CDriverGL::setConstant (uint index, uint num, const float *src)
 	{
 		for(uint k = 0; k < num; ++k)
 		{
-			glProgramEnvParameter4fvARB(GL_VERTEX_PROGRAM_ARB, index + k, src + 4 * k);
+			nglProgramEnvParameter4fvARB(GL_VERTEX_PROGRAM_ARB, index + k, src + 4 * k);
 		}
 	}
 	else if (_Extensions.EXTVertexShader)
@@ -1743,7 +1743,7 @@ void	CDriverGL::setConstant (uint index, uint num, const double *src)
 	{
 		for(uint k = 0; k < num; ++k)
 		{
-			glProgramEnvParameter4dvARB(GL_VERTEX_PROGRAM_ARB, index + k, src + 4 * k);
+			nglProgramEnvParameter4dvARB(GL_VERTEX_PROGRAM_ARB, index + k, src + 4 * k);
 		}
 	}
 	else if (_Extensions.EXTVertexShader)
@@ -1837,10 +1837,10 @@ void CDriverGL::setConstantMatrix (uint index, IDriver::TMatrix matrix, IDriver:
 		mat.get(matDatas);
 		if (_Extensions.ARBVertexProgram)
 		{
-			glProgramEnvParameter4fvARB(GL_VERTEX_PROGRAM_ARB, index, matDatas);
-			glProgramEnvParameter4fvARB(GL_VERTEX_PROGRAM_ARB, index + 1, matDatas + 4);
-			glProgramEnvParameter4fvARB(GL_VERTEX_PROGRAM_ARB, index + 2, matDatas + 8);
-			glProgramEnvParameter4fvARB(GL_VERTEX_PROGRAM_ARB, index + 3, matDatas + 12);
+			nglProgramEnvParameter4fvARB(GL_VERTEX_PROGRAM_ARB, index, matDatas);
+			nglProgramEnvParameter4fvARB(GL_VERTEX_PROGRAM_ARB, index + 1, matDatas + 4);
+			nglProgramEnvParameter4fvARB(GL_VERTEX_PROGRAM_ARB, index + 2, matDatas + 8);
+			nglProgramEnvParameter4fvARB(GL_VERTEX_PROGRAM_ARB, index + 3, matDatas + 12);
 		}
 		else
 		{

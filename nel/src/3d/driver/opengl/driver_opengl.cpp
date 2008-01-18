@@ -1196,7 +1196,7 @@ bool CDriverGL::setDisplay(void *wnd, const GfxMode &mode, bool show, bool resiz
 #endif // ifdef NL_OS_WINDOWS
 
 	// Check required extensions!!
-	// ARBMultiTexture is a opengl 1.2 required extension.
+	// ARBMultiTexture is a OpenGL 1.2 required extension.
 	if(!_Extensions.ARBMultiTexture)
 	{
 		nlwarning("Missing Required GL extension: GL_ARB_multitexture. Update your driver");
@@ -2793,10 +2793,10 @@ bool CDriverGL::isWaterShaderSupported() const
 {
 	H_AUTO_OGL(CDriverGL_isWaterShaderSupported);
 
-// This case can happen if the extension exists but fragment cannot be handled in native form
+	// This case can happen if the extension exists but fragment cannot be handled in native form
 	if(_Extensions.ARBFragmentProgram && ARBWaterShader[0] == 0) return false;
 
-	if (!_Extensions.EXTVertexShader && !_Extensions.NVVertexProgram && !_Extensions.ARBVertexProgram) return false; // should support vertex programms
+	if (!_Extensions.EXTVertexShader && !_Extensions.NVVertexProgram && !_Extensions.ARBVertexProgram) return false; // should support vertex programs
 	if (!_Extensions.NVTextureShader && !_Extensions.ATIFragmentShader && !_Extensions.ARBFragmentProgram) return false;
 	return true;
 }
@@ -3358,18 +3358,18 @@ uint loadARBFragmentProgramStringNative(const char *prog)
 		return 0;
 	}
 	GLuint progID;
-	glGenProgramsARB(1, &progID);
+	nglGenProgramsARB(1, &progID);
 	if (!progID)
 	{
 		nlwarning("glGenProgramsARB returns a progID NULL");
 		return 0;
 	}
-	glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, progID);
+	nglBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, progID);
 	GLint errorPos, isNative;
-	glProgramStringARB(GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_FORMAT_ASCII_ARB, strlen(prog), prog);
-	glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, 0);
+	nglProgramStringARB(GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_FORMAT_ASCII_ARB, strlen(prog), prog);
+	nglBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, 0);
 	glGetIntegerv(GL_PROGRAM_ERROR_POSITION_ARB, &errorPos);
-	glGetProgramivARB(GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB, &isNative);
+	nglGetProgramivARB(GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB, &isNative);
 	if ((errorPos == -1) && (isNative == 1))
 	{
 		return progID;
@@ -3380,7 +3380,7 @@ uint loadARBFragmentProgramStringNative(const char *prog)
 		if (errorPos == -1)
 		{
 			nlwarning("There's no error in the fragment but the hardware doesn't support the fragment in native");
-			glDeleteProgramsARB(1, &progID);
+			nglDeleteProgramsARB(1, &progID);
 		}
 		return 0;
 	}
@@ -3537,11 +3537,10 @@ void CDriverGL::deleteARBFragmentPrograms()
 		if (ARBWaterShader[k])
 		{
 			GLuint progId = (GLuint) ARBWaterShader[k];
-			glDeleteProgramsARB(1, &progId);
+			nglDeleteProgramsARB(1, &progId);
 			ARBWaterShader[k] = 0;
 		}
 	}
-
 }
 
 // ***************************************************************************
@@ -3573,10 +3572,7 @@ void CDriverGL::deleteFragmentShaders()
 void CDriverGL::finish()
 {
 	H_AUTO_OGL(CDriverGL_finish)
-
 	glFinish();
-
-
 }
 
 // ***************************************************************************
@@ -3585,7 +3581,6 @@ void CDriverGL::flush()
 	H_AUTO_OGL(CDriverGL_flush)
 	glFlush();
 }
-
 
 // ***************************************************************************
 void	CDriverGL::setSwapVBLInterval(uint interval)
@@ -3637,8 +3632,6 @@ bool	CDriverGL::isPolygonSmoothingEnabled() const
 
 	return _PolygonSmooth;
 }
-
-
 
 // ***************************************************************************
 void	CDriverGL::startProfileVBHardLock()
