@@ -2793,8 +2793,7 @@ bool CDriverGL::isWaterShaderSupported() const
 {
 	H_AUTO_OGL(CDriverGL_isWaterShaderSupported);
 
-	// This case can happen if the extension exists but fragment cannot be handled in native form
-	if(_Extensions.ARBFragmentProgram && ARBWaterShader[0] == 0) return false;
+	if(_Extensions.ARBFragmentProgram && ARBWaterShader[0] != NULL) return true;
 
 	if (!_Extensions.EXTVertexShader && !_Extensions.NVVertexProgram && !_Extensions.ARBVertexProgram) return false; // should support vertex programs
 	if (!_Extensions.NVTextureShader && !_Extensions.ATIFragmentShader && !_Extensions.ARBFragmentProgram) return false;

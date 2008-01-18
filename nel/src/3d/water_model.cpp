@@ -71,7 +71,7 @@ void CWaterModel::setupVertexBuffer(CVertexBuffer &vb, uint numWantedVertices, I
 		vb.setName("Water");
 		vb.setPreferredMemory(CVertexBuffer::AGPPreferred, false);
 		if (drv->isWaterShaderSupported())
-		{		
+		{
 			vb.setVertexFormat(CVertexBuffer::PositionFlag);
 		}
 		else
