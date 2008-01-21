@@ -54,7 +54,7 @@ void *nglGetProcAddress(const char *name)
     return symbol ? NSAddressOfSymbol (symbol) : NULL;
 }
 #else	// NL_OS_WINDOWS
-void *nglGetProcAddress(const char *procName)()
+void (*nglGetProcAddress(const char *procName))()
 {
 	return glXGetProcAddressARB((const GLubyte *)procName);
 }
