@@ -14,7 +14,7 @@
 
 		// 1. create views tree
 		buildVariableEnv($uid, $gid, $tid, $vardisp, $bounds, $privilege, $tree, $condensed, $autoDisplay);
-		
+
 		if ($autoDisplay || $display_view)
 		{
 			// 2. select branches
@@ -35,10 +35,10 @@
 					}
 				}
 			}
-	
+
 			// 3. remove unselected branches
 			clearupNode($tree);
-	
+
 			// 4. build and factorize query
 			$query = factorizeQuery(buildQuery($tree));
 
@@ -47,7 +47,7 @@
 				echo "Unsupported entity request now<br>\n";
 				return;
 			}
-	
+
 			$bef = microtime();
 			$qstate = nel_query($query, $result);
 			$aft = microtime();
@@ -92,7 +92,7 @@
 			$vardisp[$varName] = $arr["user_name"];
 			$bounds[$varName] = array($arr["warning_bound"], $arr["error_bound"], $arr["alarm_order"]);
 			$privilege[$varName] = getVariableRight($vid);
-				
+
 			$address = explode(".", $path);
 			//echo "add to tree address $path<br>\n";
 			if (!isset($numsteps))

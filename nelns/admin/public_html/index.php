@@ -338,7 +338,7 @@
 	if (!isset($use_filter_entity)  || $use_filter_entity == "")		$use_filter_entity = "*";
 	
 	$view_filter = $use_filter_shard.".".$use_filter_server.".".$use_filter_service.".".$use_filter_entity;
-	
+
 	$selAllShards = false;
 	for ($i=0; $i<count($sel); ++$i)
 	{
@@ -478,7 +478,7 @@
 			list($usec, $sec) = explode(" ", $aft);
 			$aft = ((float)$sec + (float)$usec);
 			$tm = (int)(($aft-$bef)*1000.0);
-	
+
 			$queryResult = "Executed $executeQuery<br>$tm milliseconds computation time<br>\n";
 		}
 	}

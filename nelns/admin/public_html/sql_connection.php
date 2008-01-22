@@ -22,8 +22,9 @@
 	{
 		// here log queries
 		global	$sqlQueries;
-		$sqlQueries[] = $query;
-		return mysql_query($query);
+		$res = mysql_query($query);
+		$sqlQueries[] = $query.(($res)?"":" ***FAILED***: ".mysql_error());
+		return $res;
 	}
 
 	function sqlfetch(&$result)
