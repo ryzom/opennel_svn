@@ -42,6 +42,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nel_launcher", "login_syste
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nel", "nel", "{4B56C921-EFA5-459C-A2B9-B8F9ECBA481E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "admin", "admin\admin.vcproj", "{245ADFF4-CD91-4CAA-9B23-9EB6CD3D5EFA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -148,12 +150,24 @@ Global
 		{AADAF637-5C55-4A4B-B3C5-26DC6477FD55}.ReleaseDebug|Win32.Build.0 = ReleaseDebug|Win32
 		{AADAF637-5C55-4A4B-B3C5-26DC6477FD55}.ReleaseDebugStatic|Win32.ActiveCfg = ReleaseDebug|Win32
 		{AADAF637-5C55-4A4B-B3C5-26DC6477FD55}.ReleaseDebugStatic|Win32.Build.0 = ReleaseDebug|Win32
+		{245ADFF4-CD91-4CAA-9B23-9EB6CD3D5EFA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{245ADFF4-CD91-4CAA-9B23-9EB6CD3D5EFA}.Debug|Win32.Build.0 = Debug|Win32
+		{245ADFF4-CD91-4CAA-9B23-9EB6CD3D5EFA}.DebugFast|Win32.ActiveCfg = Debug|Win32
+		{245ADFF4-CD91-4CAA-9B23-9EB6CD3D5EFA}.DebugFast|Win32.Build.0 = Debug|Win32
+		{245ADFF4-CD91-4CAA-9B23-9EB6CD3D5EFA}.DebugStatic|Win32.ActiveCfg = Debug|Win32
+		{245ADFF4-CD91-4CAA-9B23-9EB6CD3D5EFA}.DebugStatic|Win32.Build.0 = Debug|Win32
+		{245ADFF4-CD91-4CAA-9B23-9EB6CD3D5EFA}.Release|Win32.ActiveCfg = Release|Win32
+		{245ADFF4-CD91-4CAA-9B23-9EB6CD3D5EFA}.Release|Win32.Build.0 = Release|Win32
+		{245ADFF4-CD91-4CAA-9B23-9EB6CD3D5EFA}.ReleaseDebug|Win32.ActiveCfg = Debug|Win32
+		{245ADFF4-CD91-4CAA-9B23-9EB6CD3D5EFA}.ReleaseDebug|Win32.Build.0 = Debug|Win32
+		{245ADFF4-CD91-4CAA-9B23-9EB6CD3D5EFA}.ReleaseDebugStatic|Win32.ActiveCfg = Release|Win32
+		{245ADFF4-CD91-4CAA-9B23-9EB6CD3D5EFA}.ReleaseDebugStatic|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{940F1501-1D77-4C54-A467-9698D68E91E4} = {4B56C921-EFA5-459C-A2B9-B8F9ECBA481E}
 		{42DFBB2C-0815-4499-AFCC-D1F196D047A1} = {4B56C921-EFA5-459C-A2B9-B8F9ECBA481E}
+		{940F1501-1D77-4C54-A467-9698D68E91E4} = {4B56C921-EFA5-459C-A2B9-B8F9ECBA481E}
 	EndGlobalSection
 EndGlobal
