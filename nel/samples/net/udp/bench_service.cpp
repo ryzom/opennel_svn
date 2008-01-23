@@ -99,6 +99,11 @@ struct TInetAddressHash
 	static const size_t bucket_size = 4;
 	static const size_t min_buckets = 8;
 
+	inline bool operator() (const NLNET::CInetAddress &x1, const NLNET::CInetAddress &x2) const
+	{
+		return x1 == x2;
+	}
+
 	/// Hash function
 	inline size_t operator() ( const NLNET::CInetAddress& x ) const
 	{
