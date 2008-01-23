@@ -21,7 +21,7 @@ CHECK_OUT_OF_SOURCE()
 
 IF(WIN32)
   SET(CMAKE_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/../3rdParty/include;${CMAKE_INCLUDE_PATH}")
-  SET(CMAKE_LIBRARY_PATH "${CMAKE_SOURCE_DIR}/../3rdParty/lib;${CMAKE_INCLUDE_PATH}")
+  SET(CMAKE_LIBRARY_PATH "${CMAKE_SOURCE_DIR}/../3rdParty/lib;${CMAKE_LIBRARY_PATH}")
 ENDIF(WIN32)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
@@ -40,38 +40,6 @@ SET(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
 # Set default config options
 #
 NL_SETUP_DEFAULT_OPTIONS()
-
-#-----------------------------------------------------------------------------
-# Override default options
-###
-# Features
-###
-SET(WITH_COVERAGE	ON )
-
-###
-# Core libraries
-###
-SET(WITH_NET                 ON )
-SET(WITH_3D                  ON )
-SET(WITH_PACS                ON )
-SET(WITH_GEORGES             ON )
-SET(WITH_LIGO                ON )
-SET(WITH_SOUND               ON )
-
-###
-# Drivers Support
-###
-SET(WITH_DRIVER_OPENAL       ON )
-SET(WITH_DRIVER_OPENGL       ON )
-
-###
-# Optional support
-###
-SET(WITH_CEGUI		ON )
-SET(WITH_TOOLS		ON )
-SET(WITH_SAMPLES	ON )
-SET(WITH_TESTS		ON )
-SET(WITH_GTK		OFF)
 
 #-----------------------------------------------------------------------------
 #Platform specifics
