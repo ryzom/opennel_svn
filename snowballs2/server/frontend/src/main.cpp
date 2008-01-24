@@ -63,9 +63,15 @@ CCallbackServer *Clients = 0;
 
 struct CPlayer
 {
-	CPlayer(uint32 Id, TSockId Con) : id(Id), con(Con) { }
+	enum PlayerState
+	{
+		IDENTIFYING,
+		ONLINE
+	};
+	CPlayer(uint32 Id, TSockId Con) : id(Id), con(Con), State(IDENTIFYING) { }
 	uint32   id;
 	TSockId  con;
+	PlayerState State;
 };
 
 typedef map<uint32, CPlayer> _pmap;
@@ -225,6 +231,14 @@ void cbAddClient ( CMessage& msgin, TSockId from, CCallbackNetBase& clientcb )
 	msgin.serial(id);
 	msgin.serial(name);
 	msgin.serial(race);
+
+
+        if(from->appId() != 0)
+	{
+        	CPlayer *p = (CPlayer *)(uint)from->appId();
+		if(id == p->id)
+			p->State = CPlayer::ONLINE;
+	}
 
 	// Prepare the message to send to the Position service
 	CMessage msgout("ADD_ENTITY");
@@ -598,14 +612,18 @@ void onDisconnectClient ( TSockId from, void *arg )
 	// remove the player from the local player list
 	localPlayers.erase( id );
 
-	// Output: send the REMOVE_ENTITY to the position manager.
-	CMessage msgout( "REMOVE_ENTITY" );
-	msgout.serial( id );
+	// don't send remove messages for entities that haven't been created.
+	if(p->State == CPlayer::ONLINE)
+	{
+		// Output: send the REMOVE_ENTITY to the position manager.
+		CMessage msgout( "REMOVE_ENTITY" );
+		msgout.serial( id );
 
-	// Send the message to the position manager
-	CUnifiedNetwork::getInstance ()->send( "POS", msgout);
+		// Send the message to the position manager
+		CUnifiedNetwork::getInstance ()->send( "POS", msgout);
+		nldebug( "SB: Sent REMOVE_ENTITY message to the position manager.");
+	}
 
-	nldebug( "SB: Sent REMOVE_ENTITY message to the position manager.");
 }
 
 
