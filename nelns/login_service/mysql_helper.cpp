@@ -143,6 +143,15 @@ static void cbDatabaseVar(CConfigFile::CVar &var)
 		return;
 	}
 
+	my_bool opt = true;
+	if (mysql_options (DatabaseConnection, MYSQL_OPT_RECONNECT, &opt))
+	{
+		mysql_close(db);
+		DatabaseConnection = 0;
+		nlerror("mysql_options() failed for database connection to '%s'", DatabaseHost.c_str());
+		return;
+	}
+
 	sqlQuery("set names utf8");
 }
 
