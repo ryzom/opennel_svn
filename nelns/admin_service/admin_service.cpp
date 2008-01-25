@@ -361,10 +361,13 @@ void updateSendAdminAlert ()
 					subject = "Multiple problems";
 				}
 				
+				std::string from("");
+				if(IService::getInstance()->ConfigFile.exists("AdminEmailFrom"))
+					from = IService::getInstance()->ConfigFile.getVar("AdminEmailFrom").asString();
 				CConfigFile::CVar &var = IService::getInstance()->ConfigFile.getVar("AdminEmail");
 				for (uint i = 0; i < var.size(); i++)
 				{
-					if (!sendEmail ("", CInetAddress::localHost().hostName()+"@admin.org", var.asString(i), subject, Email))
+					if (!sendEmail ("", from, var.asString(i), subject, Email))
 					{
 						nlwarning ("Can't send email to '%s'", var.asString(i).c_str());
 					}
@@ -642,6 +645,15 @@ void sqlInit ()
 			IService::getInstance()->ConfigFile.getVar("DatabaseName").asString().c_str(),
 			(IService::getInstance()->ConfigFile.getVar("DatabasePassword").asString().empty()?"empty password":"password")
 			);
+	}
+
+	my_bool opt = true;
+	if (mysql_options (DatabaseConnection, MYSQL_OPT_RECONNECT, &opt))
+	{
+		mysql_close(db);
+		DatabaseConnection = 0;
+		nlerror("mysql_options() failed for database connection to '%s'", IService::getInstance()->ConfigFile.getVar("DatabaseHost").asString().c_str());
+ 		return;
 	}
 }
 
@@ -1136,7 +1148,7 @@ public:
 	/// Init the service, load the universal time.
 	void init ()
 	{
-		setDefaultEmailParams (ConfigFile.getVar ("SMTPServer").asString (), "", "");
+		setDefaultEmailParams (ConfigFile.getVar ("SMTPServer").asString (), ConfigFile.getVar("DefaultEmailFrom").asString(), "");
 
 		sqlInit ();
 
