@@ -647,7 +647,12 @@ static bool	setupATIEnvMapBumpMap(const char	*glext)
 	CHECK_ADDRESS(PFNGLGETTEXBUMPPARAMETERIVATIPROC, glGetTexBumpParameterivATI);
 	CHECK_ADDRESS(PFNGLGETTEXBUMPPARAMETERFVATIPROC, glGetTexBumpParameterfvATI);
 
-	return true;
+	// Check for broken ATI drivers and disable EMBM if we caught one.
+	// Reminder: This code crashes with Catalyst 7.11 fglrx drivers!
+	GLint num = -1;
+	nglGetTexBumpParameterivATI(GL_BUMP_NUM_TEX_UNITS_ATI, &num);
+
+	return num > 0;
 }
 
 // *********************************
