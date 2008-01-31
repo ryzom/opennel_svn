@@ -1,4 +1,4 @@
-FILE(GLOB SRC *.cpp)
+FILE(GLOB SRC *.cpp ../../include/nel/cegui/*.h)
 
 DECORATE_NEL_LIB("nelceguirenderer")
 SET(NLCEGUIRENDERER_LIB ${LIBNAME})

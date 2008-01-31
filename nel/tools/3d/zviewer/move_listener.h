@@ -31,9 +31,9 @@
 #include "nel/misc/event_listener.h"
 #include "nel/misc/matrix.h"
 #include "nel/3d/viewport.h"
-#include "nel/../../src/3d/scene.h"
-#include "nel/../../src/3d/camera.h"
-#include "nel/../../src/3d/driver.h"
+#include "nel/3d/scene.h"
+#include "nel/3d/camera.h"
+#include "nel/3d/driver.h"
 
 
 

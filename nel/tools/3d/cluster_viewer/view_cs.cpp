@@ -38,12 +38,12 @@
 #include "nel/misc/events.h"
 #include "nel/misc/path.h"
 #include "nel/misc/time_nl.h"
-#include "nel/../../src/3d/driver.h"
-#include "nel/../../src/3d/nelu.h"
-#include "nel/../../src/3d/scene_group.h"
-#include "nel/../../src/3d/transform_shape.h"
-#include "nel/../../src/3d/event_mouse_listener.h"
-#include "nel/../../src/3d/text_context.h"
+#include "nel/3d/driver.h"
+#include "nel/3d/nelu.h"
+#include "nel/3d/scene_group.h"
+#include "nel/3d/transform_shape.h"
+#include "nel/3d/event_mouse_listener.h"
+#include "nel/3d/text_context.h"
 
 #ifdef NL_OS_WINDOWS
 #	define NOMINMAX

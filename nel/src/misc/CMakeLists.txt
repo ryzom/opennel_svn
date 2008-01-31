@@ -25,7 +25,9 @@ IF(WIN32)
     IF("${FILENAME}" MATCHES "stdmisc.cpp")
       SET_SOURCE_FILES_PROPERTIES(stdmisc.cpp PROPERTIES COMPILE_FLAGS "/Ycstdmisc.h")
     ELSEIF("${FILENAME}" MATCHES "config_file")
-      MESSAGE("Note: Not adding pre-compiled headers to: ${FILENAME}.")
+#      I don't really want to do anything here but you can uncomment this if you need to test.
+#      MESSAGE("Note: Not adding pre-compiled headers to: ${FILENAME}.")
+#
     ELSE("${FILENAME}" MATCHES "stdmisc.cpp")
       SET_SOURCE_FILES_PROPERTIES(${FILENAME} PROPERTIES COMPILE_FLAGS "/Yustdmisc.h")
     ENDIF("${FILENAME}" MATCHES "stdmisc.cpp")

@@ -67,7 +67,7 @@
 #include <nel/3d/u_instance.h>
 #include <nel/3d/u_text_context.h>
 #include <nel/3d/u_particle_system_instance.h>
-#include <3d/texture_mem.h>
+#include <nel/3d/texture_mem.h>
 
 namespace CEGUI
 {

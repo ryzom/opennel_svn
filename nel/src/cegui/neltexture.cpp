@@ -48,8 +48,8 @@
 //nel includes
 #include <nel/misc/file.h>
 #include <nel/misc/bitmap.h>
-#include <3d/texture_mem.h> 
-#include <3d/material.h>
+#include <nel/3d/texture_mem.h> 
+#include <nel/3d/material.h>
 
 namespace CEGUI
 {

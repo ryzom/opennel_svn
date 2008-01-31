@@ -25,8 +25,8 @@
 
 #include "move_listener.h"
 #include "nel/misc/event_server.h"
-#include "nel/../../src/3d/driver.h"
-#include "nel/../../src/3d/nelu.h"
+#include "nel/3d/driver.h"
+#include "nel/3d/nelu.h"
 
 
 using namespace NLMISC;

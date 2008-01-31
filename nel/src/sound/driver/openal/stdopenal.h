@@ -20,6 +20,6 @@
 #include "nel/misc/debug.h"
 
 #include "nel/misc/vector.h"
-#include "AL/alut.h"
 #include "AL/al.h"
+#include "AL/alut.h"
 #include "sound_driver_al.h"
