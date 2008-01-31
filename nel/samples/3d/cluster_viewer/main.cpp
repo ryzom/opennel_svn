@@ -46,12 +46,12 @@
 #include "nel/misc/event_server.h"
 #include "nel/misc/event_listener.h"
 
-#include "3d/nelu.h"
-#include "3d/driver.h"
-#include "3d/scene_group.h"
-#include "3d/text_context.h"
-#include "3d/transform_shape.h"
-#include "3d/event_mouse_listener.h"
+#include "nel/3d/nelu.h"
+#include "nel/3d/driver.h"
+#include "nel/3d/scene_group.h"
+#include "nel/3d/text_context.h"
+#include "nel/3d/transform_shape.h"
+#include "nel/3d/event_mouse_listener.h"
 
 #ifndef CV_DIR
 #	define CV_DIR "."
