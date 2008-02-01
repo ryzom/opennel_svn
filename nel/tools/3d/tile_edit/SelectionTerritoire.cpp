@@ -9,7 +9,7 @@
 #include "GetVal.h"
 #include "Browse.h"
 #include "choose_veget_set.h"
-#include "nel/../../src/3d/tile_bank.h"
+#include "nel/3d/tile_bank.h"
 #include "nel/misc/stream.h"
 #include "nel/misc/file.h"
 #include <shlobj.h>

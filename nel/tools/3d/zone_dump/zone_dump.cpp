@@ -27,8 +27,8 @@
 #include "nel/misc/file.h"
 #include "nel/misc/vector.h"
 #include "nel/misc/time_nl.h"
-#include "3d/zone.h"
-#include "3d/landscape.h"
+#include "nel/3d/zone.h"
+#include "nel/3d/landscape.h"
 #include "nel/misc/triangle.h"
 #include "../zone_lib/zone_utility.h"	// load a header file from zone_welder project
 

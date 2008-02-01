@@ -26,14 +26,14 @@
 
 #include "nel/misc/file.h"
 #include "nel/misc/path.h"
-#include "nel/../../src/3d/scene_group.h"
-#include "nel/../../src/3d/zone.h"
-#include "nel/../../src/3d/skeleton_shape.h"
-#include "nel/../../src/3d/register_3d.h"
-#include "nel/../../src/3d/mesh.h"
-#include "nel/../../src/3d/mesh_mrm.h"
-#include "nel/../../src/3d/mesh_mrm_skinned.h"
-#include "nel/../../src/3d/mesh_multi_lod.h"
+#include "nel/3d/scene_group.h"
+#include "nel/3d/zone.h"
+#include "nel/3d/skeleton_shape.h"
+#include "nel/3d/register_3d.h"
+#include "nel/3d/mesh.h"
+#include "nel/3d/mesh_mrm.h"
+#include "nel/3d/mesh_mrm_skinned.h"
+#include "nel/3d/mesh_multi_lod.h"
 
 #ifdef NL_OS_WINDOWS
 #include <conio.h>

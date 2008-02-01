@@ -33,11 +33,11 @@
 #include "nel/misc/polygon.h"
 #include "nel/misc/smart_ptr.h"
 
-#include "nel/../../src/3d/scene_group.h"
-#include "nel/../../src/3d/transform_shape.h"
-#include "nel/../../src/3d/water_model.h"
-#include "nel/../../src/3d/water_shape.h"
-#include "nel/../../src/3d/quad_grid.h"
+#include "nel/3d/scene_group.h"
+#include "nel/3d/transform_shape.h"
+#include "nel/3d/water_model.h"
+#include "nel/3d/water_shape.h"
+#include "nel/3d/quad_grid.h"
 
 #include "build_rbank.h"
 #include "build_surf.h"
@@ -1106,4 +1106,5 @@ void	updateRetrieverBank()
 	retrieverBank.serial(outputBank);
 	outputBank.close();
 }
+
 

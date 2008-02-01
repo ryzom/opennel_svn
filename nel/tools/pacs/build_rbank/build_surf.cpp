@@ -35,10 +35,10 @@
 #include "nel/misc/triangle.h"
 #include "nel/misc/polygon.h"
 
-#include "nel/../../src/3d/landscape.h"
-#include "nel/../../src/3d/zone.h"
-#include "nel/../../src/3d/mesh.h"
-#include "nel/../../src/3d/quad_grid.h"
+#include "nel/3d/landscape.h"
+#include "nel/3d/zone.h"
+#include "nel/3d/mesh.h"
+#include "nel/3d/quad_grid.h"
 
 #include "nel/../../src/pacs/vector_2s.h"
 

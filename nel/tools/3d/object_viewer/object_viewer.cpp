@@ -43,21 +43,21 @@
 
 #include "object_viewer.h"
 
-#include "nel/../../src/3d/nelu.h"
-#include "nel/../../src/3d/mesh.h"
-#include "nel/../../src/3d/mesh_mrm.h"
-#include "nel/../../src/3d/mesh_mrm_skinned.h"
-#include "nel/../../src/3d/transform_shape.h"
-#include "nel/../../src/3d/mesh_instance.h"
-#include "nel/../../src/3d/text_context.h"
-#include "nel/../../src/3d/skeleton_model.h"
-#include "nel/../../src/3d/init_3d.h"
-#include "nel/../../src/3d/scene_group.h"
-#include "nel/../../src/3d/animation_playlist.h"
-#include "nel/../../src/3d/track_keyframer.h"
-#include "nel/../../src/3d/font_generator.h"
-#include "nel/../../src/3d/register_3d.h"
-#include "nel/../../src/3d/seg_remanence.h"
+#include "nel/3d/nelu.h"
+#include "nel/3d/mesh.h"
+#include "nel/3d/mesh_mrm.h"
+#include "nel/3d/mesh_mrm_skinned.h"
+#include "nel/3d/transform_shape.h"
+#include "nel/3d/mesh_instance.h"
+#include "nel/3d/text_context.h"
+#include "nel/3d/skeleton_model.h"
+#include "nel/3d/init_3d.h"
+#include "nel/3d/scene_group.h"
+#include "nel/3d/animation_playlist.h"
+#include "nel/3d/track_keyframer.h"
+#include "nel/3d/font_generator.h"
+#include "nel/3d/register_3d.h"
+#include "nel/3d/seg_remanence.h"
 
 #include "nel/misc/common.h"
 #include "nel/misc/file.h"
@@ -66,11 +66,11 @@
 #include "nel/misc/config_file.h"
 
 #include "nel/sound/u_audio_mixer.h"
-#include "nel/../../src/3d/water_pool_manager.h"
-#include "nel/../../src/3d/landscape_model.h"
-#include "nel/../../src/3d/visual_collision_manager.h"
-#include "nel/../../src/3d/visual_collision_entity.h"
-#include "nel/../../src/3d/ps_util.h"
+#include "nel/3d/water_pool_manager.h"
+#include "nel/3d/landscape_model.h"
+#include "nel/3d/visual_collision_manager.h"
+#include "nel/3d/visual_collision_entity.h"
+#include "nel/3d/ps_util.h"
 
 
 #include "nel/../../src/pacs/global_retriever.h"
@@ -325,13 +325,13 @@ void CObjectViewer::loadDriverName()
 // ***************************************************************************
 void CObjectViewer::loadConfigFile()
 {
-	// Charge l'object_viewer.ini
+	// Load object_viewer.ini
 	try
 	{
 		// Load the config file
 		CConfigFile cf;
 		cf.load (getModulePath());
-		//
+		
 		try
 		{
 			// Add search pathes
@@ -752,18 +752,15 @@ bool CObjectViewer::initUI (HWND parent)
 	_WaterPoolDlg->Create (IDD_WATER_POOL);
 	getRegisterWindowState (_WaterPoolDlg, REGKEY_OBJ_WATERPOOL_DLG, false);
 
-
 	// Create day night dialog
 	_DayNightDlg = new CDayNightDlg (this, _MainFrame);
 	_DayNightDlg->Create (IDD_DAYNIGHT);
 	getRegisterWindowState (_DayNightDlg, REGKEY_OBJ_DAYNIGHT_DLG, false);
 
-
 	// Create vegetable dialog
 	_VegetableDlg=new CVegetableDlg (this, _MainFrame);
 	_VegetableDlg->Create (IDD_VEGETABLE_DLG);
 	getRegisterWindowState (_VegetableDlg, REGKEY_OBJ_VIEW_VEGETABLE_DLG, false);
-
 
 	// Create global wind dialog
 	_GlobalWindDlg= new CGlobalWindDlg (this, _MainFrame);
@@ -784,7 +781,6 @@ bool CObjectViewer::initUI (HWND parent)
 	_ChooseFrameDelayDlg = new CChooseFrameDelay(this, _MainFrame);
 	_ChooseFrameDelayDlg->Create(IDD_CHOOSE_FRAME_DELAY, _MainFrame);
 	getRegisterWindowState (_ChooseFrameDelayDlg, REGKEY_CHOOSE_FRAME_DELAY_DLG, false);
-
 
 	// Set backgroupnd color
 	setBackGroundColor(_MainFrame->BgColor);
@@ -1281,7 +1277,9 @@ void CObjectViewer::go ()
 			if (CNELU::AsyncListener.isKeyPushed(Key8))
 				_MainFrame->OnWindowGlobalwind(), keyWndOk= true;
 			if (CNELU::AsyncListener.isKeyPushed(Key9))
-				_MainFrame->OnWindowSoundAnim(), keyWndOk= true;														
+				_MainFrame->OnWindowSoundAnim(), keyWndOk= true;
+			if (CNELU::AsyncListener.isKeyPushed(KeyO))
+				_MainFrame->OnFileOpen(), keyWndOk= true;
 
 			// Reload texture ?
 			if (CNELU::AsyncListener.isKeyPushed(KeyR))
@@ -3936,4 +3934,5 @@ bool browseFolder(const CString &caption, CString &destFolder, HWND parent)
 	}
 	return false;
 }
+
 

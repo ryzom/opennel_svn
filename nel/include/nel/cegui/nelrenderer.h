@@ -51,7 +51,7 @@
 #include <list>
 
 // CEGUI includes
-#include "CEGUIBase.h"
+#include <CEGUIBase.h>
 #include "CEGUIRenderer.h"
 #include "CEGUITexture.h"
 #include "CEGUISystem.h"

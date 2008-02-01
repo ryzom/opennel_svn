@@ -115,7 +115,7 @@ LOG_ANALYSER_PLUGIN_API bool doAnalyse( const std::vector<const char *>& vec, st
 	reportLog.addDisplayer( &disp );
 	MainLogReport.report( &reportLog, true );
 	disp.write( res, true );
-	disp.write( log, false );
+	disp.write( log, false );	
 
 	// ---
 	// Optional: Demo of how to get all NeL logs (2/2)
@@ -124,5 +124,6 @@ LOG_ANALYSER_PLUGIN_API bool doAnalyse( const std::vector<const char *>& vec, st
 
 	return true;
 }
+
 
 
