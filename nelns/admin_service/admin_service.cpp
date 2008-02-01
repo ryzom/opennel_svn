@@ -332,6 +332,7 @@ void updateSendAdminAlert ()
 	{
 		vector<string> lines;
 		explode (Email, string("\n"), lines, true);
+
 		if (!lines.empty())
 		{
 

@@ -64,7 +64,7 @@ string sqlQuery(const string &query)
 string sqlQuery(const string &query, sint32 &nbRow, MYSQL_ROW &firstRow, CMysqlResult &result)
 {
 	nlassert(DatabaseConnection);
-	nlinfo("sqlQuery: '%s'", query.c_str());
+	//nlinfo("sqlQuery: '%s'", query.c_str());
 	sint ret = mysql_query(DatabaseConnection, query.c_str());
 	if(ret != 0)
 	{

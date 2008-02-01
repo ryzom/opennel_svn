@@ -355,6 +355,7 @@ void	CLogReport::pushLine( const std::string& line, NLMISC::CLog::TLogType onlyT
 	// Decode standard log line
 	vector<string> lineTokens;
 	explode( line, string(" "), lineTokens );
+
 	if ( lineTokens.size() < LH_NB_FIELDS )
 		return;
 
