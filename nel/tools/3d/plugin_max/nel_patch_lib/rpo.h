@@ -32,7 +32,7 @@
 #include <vector>
 #include <set>
 #include <string>
-#include "nel/../../src/3d/tile_bank.h"
+#include "nel/3d/tile_bank.h"
 #include "nel/misc/file.h"
 #include "nel_patch_mesh.h"
 

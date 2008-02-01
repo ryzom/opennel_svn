@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "nel_patch_paint.h"
-#include "nel/../../src/3d/zone_symmetrisation.h"
+#include "nel/3d/zone_symmetrisation.h"
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------
 

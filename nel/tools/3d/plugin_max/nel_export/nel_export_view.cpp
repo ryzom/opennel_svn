@@ -25,14 +25,14 @@
 
 #include "std_afx.h"
 
-#include "nel/../../src/3d/scene.h"
-#include "nel/../../src/3d/register_3d.h"
-#include "nel/../../src/3d/skeleton_shape.h"
-#include "nel/../../src/3d/skeleton_model.h"
-#include "nel/../../src/3d/mesh_instance.h"
-#include "nel/../../src/3d/light.h"
-#include "nel/../../src/3d/water_pool_manager.h"
-#include "nel/../../src/3d/instance_lighter.h"
+#include "nel/3d/scene.h"
+#include "nel/3d/register_3d.h"
+#include "nel/3d/skeleton_shape.h"
+#include "nel/3d/skeleton_model.h"
+#include "nel/3d/mesh_instance.h"
+#include "nel/3d/light.h"
+#include "nel/3d/water_pool_manager.h"
+#include "nel/3d/instance_lighter.h"
 
 #include "nel/../../src/pacs/retriever_bank.h"
 #include "nel/../../src/pacs/global_retriever.h"
@@ -723,4 +723,5 @@ void CNelExport::viewMesh (TimeValue time)
 		delete slInfo.GlobalRetriever;
 	}
 }
+
 

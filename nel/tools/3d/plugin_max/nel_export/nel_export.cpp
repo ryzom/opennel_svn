@@ -25,8 +25,8 @@
 
 #include "std_afx.h"
 #include "nel_export.h"
-#include "nel/../../src/3d/register_3d.h"
-#include "nel/../../src/3d/skeleton_shape.h"
+#include "nel/3d/register_3d.h"
+#include "nel/3d/skeleton_shape.h"
 #include "nel/misc/debug.h"
 #include "nel/misc/file.h"
 #include "../nel_mesh_lib/export_nel.h"

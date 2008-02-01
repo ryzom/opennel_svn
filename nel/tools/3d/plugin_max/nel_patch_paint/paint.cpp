@@ -2,18 +2,18 @@
 #include "nel_patch_paint.h"
 #include "resource.h"
 
-#include "nel/../../src/3d/scene.h"
-#include "nel/../../src/3d/camera.h"
-#include "nel/../../src/3d/nelu.h"
-#include "nel/../../src/3d/light.h"
-#include "nel/../../src/3d/landscape_model.h"
-#include "nel/../../src/3d/landscape.h"
-#include "nel/../../src/3d/event_mouse_listener.h"
-#include "nel/../../src/3d/dru.h"
-#include "nel/../../src/3d/texture_mem.h"
-#include "nel/../../src/3d/transform_shape.h"
-#include "nel/../../src/3d/zone_corner_smoother.h"
-#include "nel/../../src/3d/zone_symmetrisation.h"
+#include "nel/3d/scene.h"
+#include "nel/3d/camera.h"
+#include "nel/3d/nelu.h"
+#include "nel/3d/light.h"
+#include "nel/3d/landscape_model.h"
+#include "nel/3d/landscape.h"
+#include "nel/3d/event_mouse_listener.h"
+#include "nel/3d/dru.h"
+#include "nel/3d/texture_mem.h"
+#include "nel/3d/transform_shape.h"
+#include "nel/3d/zone_corner_smoother.h"
+#include "nel/3d/zone_symmetrisation.h"
 
 #include "nel/misc/vector.h"
 #include "nel/misc/event_server.h"
@@ -235,7 +235,7 @@ void drawInterface (TModeMouse select, TModePaint mode, PaintPatchMod *pobj, IDr
 	{
 		// Mode paint, draw the GUI
 
-		// Automatique lighting ?
+		// Automatic lighting ?
 		if (pobj->automaticLighting)
 		{
 			// Get pointer
@@ -1027,7 +1027,7 @@ bool EPM_PaintMouseProc::PutATile ( EPM_PaintTile* pTile, int tileSet, int curRo
 	if (_256)
 	{
 
-		// Visit neigborhood in a random order
+		// Visit neighbourhood in a random order
 		for (int n=0; n<4; n++)
 		{
 			int nRot;
@@ -4030,7 +4030,6 @@ bool loadLigoConfigFile (CLigoConfig& config, Interface& it)
 		// Get the path
 		char sModulePath[256];
 		int res=GetModuleFileName(hModule, sModulePath, 256);
-
 		// Success ?
 		if (res)
 		{
@@ -4039,12 +4038,10 @@ bool loadLigoConfigFile (CLigoConfig& config, Interface& it)
 			char sDir[256];
 			_splitpath (sModulePath, sDrive, sDir, NULL, NULL);
 			_makepath (sModulePath, sDrive, sDir, "ligoscape", ".cfg");
-
 			try
 			{
 				// Load the config file
 				config.readConfigFile (sModulePath, false);
-
 				// ok
 				return true;
 			}
@@ -4057,7 +4054,6 @@ bool loadLigoConfigFile (CLigoConfig& config, Interface& it)
 			}
 		}
 	}
-
 	// Can't found the module
 	return false;
 }

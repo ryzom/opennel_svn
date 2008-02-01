@@ -28,7 +28,7 @@
 #include "nel/misc/time_nl.h"
 #include "vertex_neighborhood.h"
 #include "../nel_3dsmax_shared/nel_3dsmax_shared.h"
-#include "nel/../../src/3d/zone_symmetrisation.h"
+#include "nel/3d/zone_symmetrisation.h"
 
 // For MAX_RELEASE
 #include <plugapi.h>
