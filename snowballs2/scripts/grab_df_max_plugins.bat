@@ -1,0 +1,85 @@
+echo --- Directory structure ---
+mkdir max_plugins_df
+cd max_plugins_df
+mkdir scripts
+cd scripts
+mkdir startup
+cd ..
+mkdir plugins
+cd ..
+echo --- Copy generic library files ---
+copy "..\..\nel\lib\nel_drv_direct3d_win_df.dll" "max_plugins_df\nel_drv_direct3d_win_df.dll"
+copy "..\..\nel\lib\nel_drv_dsound_win_df.dll" "max_plugins_df\nel_drv_dsound_win_df.dll"
+copy "..\..\nel\lib\nel_drv_opengl_win_df.dll" "max_plugins_df\nel_drv_opengl_win_df.dll"
+copy "..\..\nel\lib\nel_drv_fmod_win_df.dll" "max_plugins_df\nel_drv_fmod_win_df.dll"
+copy "..\..\nel\lib\nel_drv_openal_win_df.dll" "max_plugins_df\nel_drv_openal_win_df.dll"
+copy "..\..\..\..\external_vs90\bin\alut.dll" "max_plugins_df\alut.dll"
+copy "..\..\..\..\external_vs90\bin\eax.dll" "max_plugins_df\eax.dll"
+copy "..\..\..\..\external_vs90\bin\fmod.dll" "max_plugins_df\fmod.dll"
+copy "..\..\..\..\external_vs90\bin\OpenAL32.dll" "max_plugins_df\OpenAL32.dll"
+echo --- Copy 3d scripts ---
+copy "..\..\nel\tools\3d\plugin_max\scripts\db_cleaner.ms" "max_plugins_df\scripts\db_cleaner.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\db_erase_mesh.ms" "max_plugins_df\scripts\db_erase_mesh.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\db_shooter.ms" "max_plugins_df\scripts\db_shooter.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\extrude_water.ms" "max_plugins_df\scripts\extrude_water.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\nel_add_name_ref_scale.ms" "max_plugins_df\scripts\nel_add_name_ref_scale.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\nel_batched_script.ms" "max_plugins_df\scripts\nel_batched_script.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\nel_copy_biped_figure_mode.ms" "max_plugins_df\scripts\nel_copy_biped_figure_mode.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\nel_create_matrix.ms" "max_plugins_df\scripts\nel_create_matrix.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\nel_mat_converter.ms" "max_plugins_df\scripts\nel_mat_converter.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\nel_mirror_weights.ms" "max_plugins_df\scripts\nel_mirror_weights.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\nel_move_animation.ms" "max_plugins_df\scripts\nel_move_animation.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\nel_node_properties.ms" "max_plugins_df\scripts\nel_node_properties.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\nel_old_zone_to_ligo.ms" "max_plugins_df\scripts\nel_old_zone_to_ligo.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\nel_rename.ms" "max_plugins_df\scripts\nel_rename.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\nel_repair_xref.ms" "max_plugins_df\scripts\nel_repair_xref.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\nel_select.ms" "max_plugins_df\scripts\nel_select.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\nel_select_ig.ms" "max_plugins_df\scripts\nel_select_ig.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\nel_utility.ms" "max_plugins_df\scripts\nel_utility.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\nel_xref_building.ms" "max_plugins_df\scripts\nel_xref_building.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\reload_textures.ms" "max_plugins_df\scripts\reload_textures.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\startup\nel_flare.ms" "max_plugins_df\scripts\startup\nel_flare.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\startup\nel_light.ms" "max_plugins_df\scripts\startup\nel_light.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\startup\nel_material.ms" "max_plugins_df\scripts\startup\nel_material.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\startup\nel_material.ms.v1" "max_plugins_df\scripts\startup\nel_material.ms.v1"
+copy "..\..\nel\tools\3d\plugin_max\scripts\startup\nel_material.ms.v2" "max_plugins_df\scripts\startup\nel_material.ms.v2"
+copy "..\..\nel\tools\3d\plugin_max\scripts\startup\nel_material.ms.v3" "max_plugins_df\scripts\startup\nel_material.ms.v3"
+copy "..\..\nel\tools\3d\plugin_max\scripts\startup\nel_material.ms.v5" "max_plugins_df\scripts\startup\nel_material.ms.v5"
+copy "..\..\nel\tools\3d\plugin_max\scripts\startup\nel_multi_set.ms" "max_plugins_df\scripts\startup\nel_multi_set.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\startup\nel_pacs_box.ms" "max_plugins_df\scripts\startup\nel_pacs_box.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\startup\nel_pacs_cylinder.ms" "max_plugins_df\scripts\startup\nel_pacs_cylinder.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\startup\nel_ps.ms" "max_plugins_df\scripts\startup\nel_ps.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\startup\nel_swt.ms" "max_plugins_df\scripts\startup\nel_swt.ms"
+copy "..\..\nel\tools\3d\plugin_max\scripts\startup\nel_wave_maker.ms" "max_plugins_df\scripts\startup\nel_wave_maker.ms"
+copy "..\..\nel\tools\3d\plugin_max\macroscripts\nel_mirror_weights.mcr" "max_plugins_df\scripts\nel_mirror_weights.mcr"
+copy "..\..\nel\tools\3d\plugin_max\macroscripts\nel_node_properties.mcr" "max_plugins_df\scripts\nel_node_properties.mcr"
+copy "..\..\nel\tools\3d\plugin_max\macroscripts\nel_xref_building.mcr" "max_plugins_df\scripts\nel_xref_building.mcr"
+echo --- Copy ligo scripts ---
+copy "..\..\nel\tools\3d\ligo\plugin_max\scripts\nel_ligoscape.ms" "max_plugins_df\scripts\nel_ligoscape.ms"
+copy "..\..\nel\tools\3d\ligo\plugin_max\macroscripts\nel_ligoscape.mcr" "max_plugins_df\scripts\nel_ligoscape.mcr"
+echo --- Copy build_gamedata scripts ---
+copy "..\..\nel\tools\3d\build_gamedata\processes\anim\maxscript\anim_export.ms" "max_plugins_df\scripts\anim_export.ms"
+copy "..\..\nel\tools\3d\build_gamedata\processes\clodbank\maxscript\clod_export.ms" "max_plugins_df\scripts\clod_export.ms"
+copy "..\..\nel\tools\3d\build_gamedata\processes\ig\maxscript\ig_export.ms" "max_plugins_df\scripts\ig_export.ms"
+copy "..\..\nel\tools\3d\build_gamedata\processes\ligo\maxscript\nel_ligo_export.ms" "max_plugins_df\scripts\nel_ligo_export.ms"
+copy "..\..\nel\tools\3d\build_gamedata\processes\pacs_prim\maxscript\pacs_prim_export.ms" "max_plugins_df\scripts\pacs_prim_export.ms"
+copy "..\..\nel\tools\3d\build_gamedata\processes\rbank\maxscript\rbank_export.ms" "max_plugins_df\scripts\rbank_export.ms"
+copy "..\..\nel\tools\3d\build_gamedata\processes\shape\maxscript\shape_export.ms" "max_plugins_df\scripts\shape_export.ms"
+copy "..\..\nel\tools\3d\build_gamedata\processes\skel\maxscript\skel_export.ms" "max_plugins_df\scripts\skel_export.ms"
+copy "..\..\nel\tools\3d\build_gamedata\processes\swt\maxscript\swt_export.ms" "max_plugins_df\scripts\swt_export.ms"
+copy "..\..\nel\tools\3d\build_gamedata\processes\veget\maxscript\veget_export.ms" "max_plugins_df\scripts\veget_export.ms"
+copy "..\..\nel\tools\3d\build_gamedata\processes\zone\maxscript\zone_export.ms" "max_plugins_df\scripts\zone_export.ms"
+echo --- Copy plugins ---
+copy "..\..\nel\tools\3d\plugin_max\lib\nel_export_df.dlu" "max_plugins_df\plugins\nel_export_df.dlu"
+copy "..\..\nel\tools\3d\plugin_max\lib\nel_convert_patch_df.dlm" "max_plugins_df\plugins\nel_convert_patch_df.dlm"
+copy "..\..\nel\tools\3d\plugin_max\lib\nel_paint_patch_df.dlm" "max_plugins_df\plugins\nel_paint_patch_df.dlm"
+copy "..\..\nel\tools\3d\plugin_max\lib\nel_tile_utility_df.dlu" "max_plugins_df\plugins\nel_tile_utility_df.dlu"
+copy "..\..\nel\tools\3d\plugin_max\lib\nel_ligoscape_utility_df.dlx" "max_plugins_df\plugins\nel_ligoscape_utility_df.dlx"
+copy "..\..\nel\tools\3d\plugin_max\lib\nel_patch_edit_df.dlm" "max_plugins_rd\plugins\nel_patch_edit_df.dlm"
+echo --- Copy other libraries ---
+copy "..\..\nel\tools\3d\plugin_max\lib\nel_3dsmax_shared_df.dll" "max_plugins_df\nel_3dsmax_shared_df.dll"
+copy "..\..\nel\lib\object_viewer_df.dll" "max_plugins_df\object_viewer_df.dll"
+echo --- Copy configuration ---
+copy "..\..\nel\tools\3d\ligo\ligoscape.cfg" "max_plugins_df\plugins\ligoscape.cfg"
+copy "..\..\nel\tools\3d\object_viewer\object_viewer.cfg" "max_plugins_df\object_viewer.cfg"
+copy "..\..\nel\tools\3d\plugin_max\nel_patch_paint\keys.cfg" "max_plugins_df\plugins\keys.cfg"

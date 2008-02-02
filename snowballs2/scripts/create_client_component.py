@@ -2,19 +2,19 @@
 # 
 # Copyright (C) 2008  Jan Boon (Kaetemi)
 # 
-# This file is part of NEVRAX SNOWBALLS.
-# NEVRAX SNOWBALLS is free software; you can redistribute it and/or modify 
+# This file is part of OpenNeL Snowballs.
+# OpenNeL Snowballs is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by the 
 # Free Software Foundation; either version 2 of the License, or (at your 
 # option) any later version.
 # 
-# NEVRAX SNOWBALLS is distributed in the hope that it will be useful, but 
+# OpenNeL Snowballs is distributed in the hope that it will be useful, but 
 # WITHOUT ANY WARRANTY; without even the implied warranty of 
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General 
 # Public License for more details.
 # 
 # You should have received a copy of the GNU General Public License along 
-# with NEVRAX SNOWBALLS; if not, write to the Free Software Foundation, 
+# with OpenNeL Snowballs; if not, write to the Free Software Foundation, 
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 # 
 # $Id$
@@ -53,7 +53,7 @@ author = askVar("Author", "Jan Boon")
 username = askVar("Username", "Kaetemi")
 snowballs2 = askVar("Snowballs2", "True")
 namespace = askVar("Namespace", "SBCLIENT")
-product = askVar("Product", "NEVRAX SNOWBALLS")
+product = askVar("Product", "OpenNeL Snowballs")
 dir = askVar("Directory", "../client/src/")
 year = askVar("Year", time.strftime("%Y", gmtime))
 date = askVar("Date", time.strftime("%Y-%m-%d %H:%MGMT", gmtime))
@@ -73,7 +73,7 @@ filedoc += [ "$I" + "d$" ]
 copyright = [ ]
 copyright += [ "Copyright (C) {YEAR}  {AUTHOR} ({USERNAME})" ]
 if snowballs2 != "False":
-	copyright += [ "Based on NEVRAX SNOWBALLS 0.2, Copyright (C) 2001  Nevrax Ltd." ]
+	copyright += [ "Based on NEVRAX SNOWBALLS, Copyright (C) 2001  Nevrax Ltd." ]
 copyright += [ "" ]
 copyright += [ "This file is part of {PRODUCT}." ]
 copyright += [ "{PRODUCT} is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any later version." ]

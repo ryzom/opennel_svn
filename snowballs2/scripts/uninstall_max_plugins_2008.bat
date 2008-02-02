@@ -1,0 +1,36 @@
+echo --- Erase generic library files ---
+erase "C:\Program Files\Autodesk\3ds Max 2008\nel_drv_direct3d_win_rd.dll"
+erase "C:\Program Files\Autodesk\3ds Max 2008\nel_drv_dsound_win_rd.dll"
+erase "C:\Program Files\Autodesk\3ds Max 2008\nel_drv_opengl_win_rd.dll"
+erase "C:\Program Files\Autodesk\3ds Max 2008\nel_drv_fmod_win_rd.dll"
+erase "C:\Program Files\Autodesk\3ds Max 2008\nel_drv_openal_win_rd.dll"
+erase "C:\Program Files\Autodesk\3ds Max 2008\alut.dll"
+erase "C:\Program Files\Autodesk\3ds Max 2008\eax.dll"
+erase "C:\Program Files\Autodesk\3ds Max 2008\fmod.dll"
+erase "C:\Program Files\Autodesk\3ds Max 2008\OpenAL32.dll"
+echo --- Erase plugins ---
+erase "C:\Program Files\Autodesk\3ds Max 2008\plugins\nel_export_rd.dlu"
+erase "C:\Program Files\Autodesk\3ds Max 2008\plugins\nel_convert_patch_rd.dlm"
+erase "C:\Program Files\Autodesk\3ds Max 2008\plugins\nel_paint_patch_rd.dlm"
+erase "C:\Program Files\Autodesk\3ds Max 2008\plugins\nel_tile_utility_rd.dlu"
+erase "C:\Program Files\Autodesk\3ds Max 2008\plugins\nel_ligoscape_utility_rd.dlx"
+erase "C:\Program Files\Autodesk\3ds Max 2008\plugins\nel_patch_edit_rd.dlm"
+echo --- Erase other libraries ---
+erase "C:\Program Files\Autodesk\3ds Max 2008\nel_3dsmax_shared_rd.dll"
+erase "C:\Program Files\Autodesk\3ds Max 2008\object_viewer_rd.dll"
+echo --- Erase generic library files ---
+erase "C:\Program Files\Autodesk\3ds Max 2008\nel_drv_direct3d_win_df.dll"
+erase "C:\Program Files\Autodesk\3ds Max 2008\nel_drv_dsound_win_df.dll"
+erase "C:\Program Files\Autodesk\3ds Max 2008\nel_drv_opengl_win_df.dll"
+erase "C:\Program Files\Autodesk\3ds Max 2008\nel_drv_fmod_win_df.dll"
+erase "C:\Program Files\Autodesk\3ds Max 2008\nel_drv_openal_win_df.dll"
+echo --- Erase plugins ---
+erase "C:\Program Files\Autodesk\3ds Max 2008\plugins\nel_export_df.dlu"
+erase "C:\Program Files\Autodesk\3ds Max 2008\plugins\nel_convert_patch_df.dlm"
+erase "C:\Program Files\Autodesk\3ds Max 2008\plugins\nel_paint_patch_df.dlm"
+erase "C:\Program Files\Autodesk\3ds Max 2008\plugins\nel_tile_utility_df.dlu"
+erase "C:\Program Files\Autodesk\3ds Max 2008\plugins\nel_ligoscape_utility_df.dlx"
+erase "C:\Program Files\Autodesk\3ds Max 2008\plugins\nel_patch_edit_df.dlm"
+echo --- Erase other libraries ---
+erase "C:\Program Files\Autodesk\3ds Max 2008\nel_3dsmax_shared_df.dll"
+erase "C:\Program Files\Autodesk\3ds Max 2008\object_viewer_df.dll"

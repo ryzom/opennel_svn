@@ -247,7 +247,7 @@ void addEntity (uint32 eid, std::string name, CEntity::TType type, const CVector
 
 		// -- -- riiiiight
 #ifdef NL_OS_WINDOWS
-		playSound (entity, SoundId);
+		//playSound (entity, SoundId);
 #endif
 		entity.setState (CEntity::Normal);
 		break;
@@ -304,7 +304,7 @@ void deleteEntity (CEntity &entity)
 	}
 
 #ifdef NL_OS_WINDOWS
-	deleteSound (entity);
+	//deleteSound (entity);
 #endif
 
 //	nlinfo ("Remove the entity %u from the Entities list", entity.Id);

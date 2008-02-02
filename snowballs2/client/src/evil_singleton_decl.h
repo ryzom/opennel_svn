@@ -1,9 +1,9 @@
 /**
- * \file loading_screen.cpp
- * \brief CLoadingScreen
- * \date 2008-01-09 15:30GMT
+ * \file evil_singleton_decl.h
+ * \brief SBCLIENT_EVIL_SINGLETON_DECL
+ * \date 2008-02-02 13:25GMT
  * \author Jan Boon (Kaetemi)
- * CLoadingScreen
+ * SBCLIENT_EVIL_SINGLETON_DECL
  * 
  * $Id$
  */
@@ -28,26 +28,20 @@
  * 02110-1301 USA.
  */
 
+#ifndef SBCLIENT_EVIL_SINGLETON_DECL_H
+#define SBCLIENT_EVIL_SINGLETON_DECL_H
 #include <nel/misc/types_nl.h>
-#include "loading_screen.h"
 
-// #include <nel/misc/debug.h>
+/** Singleton that must be manually initialized, 
+ * because you shouldn't be lazy. */
+#define SBCLIENT_EVIL_SINGLETON_DECL(className) \
+	private: \
+		static className *_Instance; \
+	public: \
+		static className *getInstancePtr(); \
+		static className &getInstance(); \
+	private:
 
-using namespace std;
-// using namespace NLMISC;
-
-namespace SBCLIENT {
-
-CLoadingScreen::CLoadingScreen()
-{
-	
-}
-
-CLoadingScreen::~CLoadingScreen()
-{
-	
-}
-
-} /* namespace SBCLIENT */
+#endif /* #ifndef SBCLIENT_EVIL_SINGLETON_DECL_H */
 
 /* end of file */

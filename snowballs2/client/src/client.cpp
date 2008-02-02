@@ -84,10 +84,10 @@
 #endif
 
 
-#include "component_manager.h"
-#include "landscape_component.h"
-using namespace SBCLIENT;
-extern SBCLIENT::CLandscapeComponent *LandscapeComponent;
+//#include "component_manager.h"
+//#include "landscape_component.h"
+//using namespace SBCLIENT;
+//extern SBCLIENT::CLandscapeComponent *LandscapeComponent;
 
 //
 // Namespaces
@@ -108,9 +108,9 @@ GameStateLogin = 4, GameStateOnline = 5, GameStateOffline = 6;
 
 // Temp
 ULandscape *Landscape;
-
-// Component temp test
-CComponentManager *ComponentManager;
+//
+//// Component temp test
+//CComponentManager *ComponentManager;
 
 //
 // Globals
@@ -494,7 +494,7 @@ void updateLoadingState(ucstring state, bool network, bool information)
 	NewTime = CTime::getLocalTime();
 	DiffTime = NewTime - LastTime;
 #ifdef NL_OS_WINDOWS
-	updateSound();
+	//updateSound();
 #endif
 	renderLoadingState(state, true);
 	if (information) renderInformation();

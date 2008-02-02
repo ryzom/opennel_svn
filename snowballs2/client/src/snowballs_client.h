@@ -1,20 +1,21 @@
 /** \file snowballs_client.h
  * CSnowballsClient
  * 
- * This file is part of NEVRAX SNOWBALLS.
- * NEVRAX SNOWBALLS is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * This file is part of OpenNeL Snowballs.
+ * OpenNeL Snowballs is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 2 of the
+ * License, or (at your option) any later version.
  * 
- * NEVRAX SNOWBALLS is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * OpenNeL Snowballs is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License
- * along with NEVRAX SNOWBALLS; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * along with OpenNeL Snowballs; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301 USA.
  * 
  * $Id$
  */
@@ -25,6 +26,7 @@
 #include "snowballs_config.h"
 
 #include "loading_screen.h"
+#include "function_caller.h"
 
 namespace NLMISC {
 	class CFileDisplayer;
@@ -36,10 +38,14 @@ namespace NL3D {
 }
 
 namespace SBCLIENT {
+	class CConfigManager;
+	class CConfigProxy;
 	class CComponentManager;
+	class CI18NHelper;
 	class CDriverComponent; // temp
 	class CLoadingComponent; // temp
 	class CHelloWorldComponent; // temp
+	class CGraphics;
 
 /**
  * Snowballs client 0.3.
@@ -52,25 +58,32 @@ private:
 	static const uint8 Invalid = 0, Load = 1, Reset = 2, Exit = 3;
 	static const uint8 Login = 10, Game = 11;
 
+	// server protocol handler versions
+	static const uint8 Offline = 0, Snowballs2 = 2, Snowballs5 = 5;
+
 	// pointers
 #if SBCLIENT_USE_LOG
 	NLMISC::CFileDisplayer *_FileDisplayer; // deleted here
 #endif
-	CComponentManager *_ComponentManager; // deleted here
-	NLMISC::CConfigFile *_ConfigFile; // deleted here
+	// the configuration
+	CConfigProxy *_Config; // deleted here
+	CConfigManager *_ConfigManager; // deleted here
+	// internationalization
+	CI18NHelper *_I18NHelper; // deleted here
 
-	CDriverComponent *_DriverComponent; // temp, deleted here
-	CLoadingComponent *_LoadingComponent; // temp, deleted here
-	CHelloWorldComponent *_HelloWorldComponent;
-	NL3D::UDriver *_Driver; // not deleted here, get from component on reg
+	// components (all deleted here)
+	CGraphics *_Graphics;
 	
 	// instances
+	// the function callers
+	CFunctionCaller _UpdateFunctions;
+	CFunctionCaller _RenderFunctions;
 	// the loading screen that always works
 	CLoadingScreen _LoadingScreen;
 	// to know which data has been loaded
-	bool _HasCore, _HasLogin, _HasIngame, _HasOnline, _HasOffline;
+	bool _HasUtils, _HasBase, _HasLogin, _HasIngame, _HasConnection;
 	// true if the online component needs to be initialized
-	bool _PlayOnline;
+	uint8 _ServerVersion;
 	// set _NextState to switch the current game state
 	uint8 _CurrentState, _NextState;
 public:
@@ -78,17 +91,16 @@ public:
 	~CSnowballsClient();
 	int run();
 private:
-	// temp
-	void enableCore();
-	void disableCore();
+	void enableUtils();
+	void disableUtils();
+	void enableBase();
+	void disableBase();
 	void enableLogin();
 	void disableLogin();
 	void enableIngame();
 	void disableIngame();
-	void enableOnline();
-	void disableOnline();
-	void enableOffline();
-	void disableOffline();
+	void enableConnection();
+	void disableConnection();
 	void disableAll();
 };
 
