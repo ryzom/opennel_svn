@@ -20,21 +20,25 @@
  * $Id$
  */
 
-//1. Update Time
-//2. Update Driver
-//3. Update Network
-//4. Update Weather
-//5. Update Landscape
-//6. Update Entities
-//7. Update Animations
+// Priority Distribution
+// 
+// 1. [9000000] Update Utilities (configuration etc)
+// 2. [8000000] Update Time (deltas)
+// 3. [7000000] Update Driver (keyboard controls, etc)
+// 4. [6000000] Update Incoming (network, receive messages)
+// 5. [5000000] Update Weather (sky, snow, wind, fog, sun)
+// 6. [4000000] Update Landscape (async zone loading near entity)
+// 7. [3000000] Update Entities (collisions and actions)
+// 8. [2000000] Update Animations (playlists)
+// 9. [1000000] Update Outgoing (network, send new position etc)
 //
-//1. Render Driver
-//2. Render Sky
-//3. Render Landscape
-//4. Render Scene
-//5. Render Effects
-//6. Render 3D Interface
-//7. Render 2D Interface
+// 1. [8000000] Render Driver (background black, done here)
+// 2. [7000000] Render Sky (sky scene)
+// 3. [6000000] Render Landscape (landscape zones)
+// 4. [5000000] Render Scene (entity scene)
+// 5. [4000000] Render Effects (flare)
+// 6. [3000000] Render 3D Interface (player names)
+// 7. [2000000] Render 2D Interface (chatboxes etc)
 
 #include <nel/misc/types_nl.h>
 #include "snowballs_client.h"
@@ -133,12 +137,17 @@ CSnowballsClient::CSnowballsClient()
 #if SBCLIENT_USE_LOG
   _FileDisplayer(NULL), 
 #endif
-  // components
-  _Graphics(NULL), 
+  // special function ids
+  _UpdateUtilitiesId(0), 
+  // components and their function ids
+  _Graphics(NULL), _UpdateGraphicsDriverId(0), 
   // states
   _CurrentState(Invalid), _NextState(Load),
-  _HasUtils(false), _HasBase(false), _HasLogin(false), _HasIngame(false),
-  _HasConnection(false), _ServerVersion(Offline) // do not change these
+  _LoadedUtils(false), _LoadedBase(false), _LoadedLogin(false), 
+  _LoadedIngame(false), _LoadedConnection(false), 
+  _EnabledUtils(false), _EnabledBase(false), _EnabledLogin(false), 
+  _EnabledIngame(false), _EnabledConnection(false), 
+  _ServerVersion(Offline) // do not change these
 {
 	// use log.log if NEL_LOG_IN_FILE and SBCLIENT_USE_LOG_LOG defined as 1
 	createDebug(NULL, SBCLIENT_USE_LOG_LOG, false);
@@ -164,7 +173,8 @@ CSnowballsClient::CSnowballsClient()
 
 CSnowballsClient::~CSnowballsClient()
 {
-	disableAll(); // just to be sure :(
+	disableAll();
+	unloadAll(); // just to be sure :(
 	
 	// begin of debug/log destruction
 	nlinfo("See you later!");
@@ -195,32 +205,47 @@ SwitchState:
 		{
 		case Game:
 			disableConnection();
+			unloadConnection();
 			break;
 		}
 		switch(_NextState)
 		{
 		case Load:
+			loadUtils();
 			enableUtils();
+			loadBase();
 			enableBase();
 			break;
 		case Reset:
 			// displayLoadingState("Reset");
 			disableAll();
+			unloadAll();
 			break;
 		case Exit:
 			// displayLoadingState("See you later!");
 			disableAll();
+			unloadAll();
 			break;
 		case Login:
-			enableUtils(); // core is required
+			loadUtils(); // core is required
+			enableUtils();
+			loadBase();
 			enableBase();
-			enableLogin(); // login is required
+			disableIngame(); // ingame not needed to render and update
+			// unloadIngame(); // don't uncomment this, we keep the data :)
+			loadLogin(); // login is required
+			enableLogin();
 			break;
 		case Game:
-			enableUtils(); // core is required
+			loadUtils(); // core is required
+			enableUtils();
+			loadBase();
 			enableBase();
-			disableLogin(); //login can be released
-			enableIngame(); // ingame is required
+			disableLogin();
+			unloadLogin(); //login can be released
+			loadIngame(); // ingame is required
+			enableIngame();
+			loadConnection();
 			enableConnection();
 			break;
 		}
@@ -239,8 +264,6 @@ SwitchState:
 	default:
 		do { if (!_Graphics->Driver->isActive()) 
 				{ _NextState = Exit; break; }
-			// check all config files for updates
-			CConfigFile::checkConfigFiles();
 			// call all update functions
 			_UpdateFunctions.execute();
 			// if driver is lost (d3d) do nothing for a while
@@ -262,11 +285,11 @@ SwitchState:
 	goto SwitchState;
 }
 
-void CSnowballsClient::enableUtils()
+void CSnowballsClient::loadUtils()
 {
-	if (!_HasUtils)
+	if (!_LoadedUtils)
 	{
-		_HasUtils = true;
+		_LoadedUtils = true;
 		// init configuration file
 		_ConfigManager = new CConfigManager(SBCLIENT_CONFIG_FILE);
 		_Config = new CConfigProxy(SBCLIENT_NAME);
@@ -288,9 +311,9 @@ void CSnowballsClient::enableUtils()
 	}
 }
 
-void CSnowballsClient::disableUtils()
+void CSnowballsClient::unloadUtils()
 {
-	if (_HasUtils)
+	if (_LoadedUtils)
 	{
 		// if they're null, something must've seriously went wrong at some point
 		// release of the language data is done when loading new file
@@ -303,38 +326,77 @@ void CSnowballsClient::disableUtils()
 		// release the search paths etc
 		CPath::releaseInstance();
 
-		_HasUtils = false;
+		_LoadedUtils = false;
+	}
+}
+
+void CSnowballsClient::enableUtils()
+{
+	if (!_EnabledUtils)
+	{
+		_EnabledUtils = true;
+		
+		nlassert(!_UpdateUtilitiesId);
+		_UpdateUtilitiesId = _UpdateFunctions.add(
+			updateUtilities, this, NULL, 9500000);
+	}
+}
+
+void CSnowballsClient::disableUtils()
+{
+	if (_EnabledUtils)
+	{
+		nlassert(_UpdateUtilitiesId);
+		_UpdateFunctions.remove(_UpdateUtilitiesId);
+		_UpdateUtilitiesId = 0;
+
+		_EnabledUtils = false;
+	}
+}
+
+void CSnowballsClient::loadBase()
+{
+	if (!_LoadedBase)
+	{		
+		_LoadedBase = true;
+
+		// _LoadingScreen.setblah("Initialize Graphics");
+		_Graphics = new CGraphics(_LoadingScreen, "Graphics", _I18NHelper);
+		nlassert(_Graphics);
+	}
+}
+
+void CSnowballsClient::unloadBase()
+{
+	if (_LoadedBase)
+	{
+		nlassert(_Graphics); delete _Graphics;
+		
+		_LoadedBase = false;
 	}
 }
 
 void CSnowballsClient::enableBase()
 {
-	if (!_HasBase)
+	if (!_EnabledBase)
 	{		
-		_HasBase = true;
+		_EnabledBase = true;
 
-		// _LoadingScreen.setblah("Initialize Graphics");
-		_Graphics = new CGraphics(_LoadingScreen, "Graphics", _I18NHelper);
-		nlassert(_Graphics);
-
-		// TODO: 
-		// - put this somewhere else
-		// - get the uint and store it, and assert it isn't used set yet
-		// - remove by uint
-		_UpdateFunctions.add(CGraphics::updateDriver, _Graphics, NULL, 0);
+		nlassert(!_UpdateGraphicsDriverId);
+		_UpdateGraphicsDriverId = _UpdateFunctions.add(
+			CGraphics::updateDriver, _Graphics, NULL, 7500000);
 	}
 }
 
 void CSnowballsClient::disableBase()
 {
-	if (_HasBase)
+	if (_EnabledBase)
 	{
-		//temp..
-		_UpdateFunctions.removeC(_Graphics, true);
-
-		nlassert(_Graphics); delete _Graphics;
+		nlassert(_UpdateGraphicsDriverId);
+		_UpdateFunctions.remove(_UpdateGraphicsDriverId);
+		_UpdateGraphicsDriverId = 0;
 		
-		_HasBase = false;
+		_EnabledBase = false;
 	}
 }
 
@@ -426,11 +488,31 @@ void CSnowballsClient::disableBase()
 //	}
 //}
 
+void CSnowballsClient::loadLogin()
+{
+	if (!_LoadedLogin)
+	{		
+		_LoadedLogin = true;
+
+		// ...
+	}
+}
+
+void CSnowballsClient::unloadLogin()
+{
+	if (_LoadedLogin)
+	{
+		// ...
+		
+		_LoadedLogin = false;
+	}
+}
+
 void CSnowballsClient::enableLogin()
 {
-	if (!_HasLogin)
+	if (!_EnabledLogin)
 	{		
-		_HasLogin = true;
+		_EnabledLogin = true;
 
 		// ...
 	}
@@ -438,19 +520,19 @@ void CSnowballsClient::enableLogin()
 
 void CSnowballsClient::disableLogin()
 {
-	if (_HasLogin)
+	if (_EnabledLogin)
 	{
 		// ...
 		
-		_HasLogin = false;
+		_EnabledLogin = false;
 	}
 }
 
-void CSnowballsClient::enableIngame()
+void CSnowballsClient::loadIngame()
 {
-	if (!_HasIngame)
+	if (!_LoadedIngame)
 	{		
-		_HasIngame = true;
+		_LoadedIngame = true;
 
 //		// just temp things
 //#if SBCLIENT_WITH_SOUND
@@ -540,9 +622,9 @@ void CSnowballsClient::enableIngame()
 	}
 }
 
-void CSnowballsClient::disableIngame()
+void CSnowballsClient::unloadIngame()
 {
-	if (_HasIngame)
+	if (_LoadedIngame)
 	{
 		//// more temp
 		//CFunctionCaller &updates = _ComponentManager->getUpdateCaller();		
@@ -576,15 +658,56 @@ void CSnowballsClient::disableIngame()
 		//delete MouseListener;
 		//Driver->deleteScene(Scene);
 		//
-		//_HasIngame = false;
+
+		_LoadedIngame = false;
+	}
+}
+
+void CSnowballsClient::enableIngame()
+{
+	if (!_EnabledIngame)
+	{		
+		_EnabledIngame = true;
+
+		// ...
+	}
+}
+
+void CSnowballsClient::disableIngame()
+{
+	if (_EnabledIngame)
+	{
+		// ...
+
+		_EnabledIngame = false;
+	}
+}
+
+void CSnowballsClient::loadConnection()
+{
+	if (!_LoadedConnection)
+	{		
+		_LoadedConnection = true;
+
+		// ...
+	}
+}
+
+void CSnowballsClient::unloadConnection()
+{
+	if (_LoadedConnection)
+	{
+		// ...
+		
+		_LoadedConnection = false;
 	}
 }
 
 void CSnowballsClient::enableConnection()
 {
-	if (!_HasConnection)
+	if (!_EnabledConnection)
 	{		
-		_HasConnection = true;
+		_EnabledConnection = true;
 
 		// ...
 	}
@@ -592,11 +715,11 @@ void CSnowballsClient::enableConnection()
 
 void CSnowballsClient::disableConnection()
 {
-	if (_HasConnection)
+	if (_EnabledConnection)
 	{
 		// ...
 		
-		_HasConnection = false;
+		_EnabledConnection = false;
 	}
 }
 
@@ -652,6 +775,15 @@ void CSnowballsClient::disableConnection()
 //	}
 //}
 
+void CSnowballsClient::unloadAll()
+{
+	unloadConnection();
+	unloadIngame();
+	unloadLogin();
+	unloadBase();
+	unloadUtils();
+}
+
 void CSnowballsClient::disableAll()
 {
 	disableConnection();
@@ -659,6 +791,13 @@ void CSnowballsClient::disableAll()
 	disableLogin();
 	disableBase();
 	disableUtils();
+}
+
+void CSnowballsClient::updateUtilities(void *context, void *tag)
+{
+	CSnowballsClient *me = (CSnowballsClient *)context;
+	// check all config files for updates
+	CConfigFile::checkConfigFiles();
 }
 
 }

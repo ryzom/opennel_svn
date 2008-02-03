@@ -71,8 +71,11 @@ private:
 	// internationalization
 	CI18NHelper *_I18NHelper; // deleted here
 
-	// components (all deleted here)
+	// special function ids
+	uint _UpdateUtilitiesId;
+	// components and their function ids (all deleted here)
 	CGraphics *_Graphics;
+	uint _UpdateGraphicsDriverId;
 	
 	// instances
 	// the function callers
@@ -81,7 +84,8 @@ private:
 	// the loading screen that always works
 	CLoadingScreen _LoadingScreen;
 	// to know which data has been loaded
-	bool _HasUtils, _HasBase, _HasLogin, _HasIngame, _HasConnection;
+	bool _LoadedUtils, _LoadedBase, _LoadedLogin, _LoadedIngame, _LoadedConnection;
+	bool _EnabledUtils, _EnabledBase, _EnabledLogin, _EnabledIngame, _EnabledConnection;
 	// true if the online component needs to be initialized
 	uint8 _ServerVersion;
 	// set _NextState to switch the current game state
@@ -91,6 +95,18 @@ public:
 	~CSnowballsClient();
 	int run();
 private:
+	void loadUtils();
+	void unloadUtils();
+	void loadBase();
+	void unloadBase();
+	void loadLogin();
+	void unloadLogin();
+	void loadIngame();
+	void unloadIngame();
+	void loadConnection();
+	void unloadConnection();
+	void unloadAll();
+
 	void enableUtils();
 	void disableUtils();
 	void enableBase();
@@ -102,6 +118,8 @@ private:
 	void enableConnection();
 	void disableConnection();
 	void disableAll();
+
+	static void updateUtilities(void *context, void *tag);
 };
 
 }
