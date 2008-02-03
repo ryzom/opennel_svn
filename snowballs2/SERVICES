@@ -1,0 +1,18 @@
+﻿Snowballs 0.5:
+frontend        FES     frontend_service        Front-End Service, snowballs-specific service that takes care of players, more than one can run
+backend         BES     backend_service         Back-End Service, snowballs-specific one-per-shard service, takes care of time and connecting other services
+entint          EIS     ei_service              Entity Interaction Service, connects entity ids to scriptable interactions
+scenery         SCS     scenery_service         Scenery Service, allows dynamic cacheable scenery spawning, scenery also usable by ei service
+position        POS     position_service        Position Service, takes care of synchronizing movable entity positions between services
+artint          AIS     ai_service              AI Service, adds moving entities to the shard, more than one can run
+text            TES     text_service            Text Service, handles cacheable text messages going from various services to clients
+collision       COS     collision_service       Collision Service, optional service that has authority over collisions
+
+Snowballs 0.2 to 0.4:
+frontend        FS      frontend_service        Front-End Service, does some connection stuff
+position        POS     position_service        Position Service, takes care of snowballs
+chat            CHAT    chat_service            Chat Service, useless chat service
+collision       CLS     collision_service       Collision Service, optional service that has authority over collisions
+
+Other:
+empty           EMPTY   empty_service           Empty Service, sample
