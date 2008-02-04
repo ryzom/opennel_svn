@@ -34,6 +34,8 @@
 // #include <nel/misc/debug.h>
 #include <nel/3d/u_driver.h>
 #include <nel/3d/u_texture.h>
+#include <nel/3d/driver_user.h>
+#include <nel/3d/driver.h>
 
 using namespace std;
 using namespace NLMISC;
@@ -99,6 +101,7 @@ void CLoadingScreen::progress(float progressValue)
 			}
 		}
 		_Driver->swapBuffers();
+		_EventServer.pump();
 	}
 }
 
@@ -204,6 +207,7 @@ void CLoadingScreen::setDriver(NL3D::UDriver *driver)
 {
 	if (_Driver)
 	{
+		_EventServer.removeEmitter(((CDriverUser *)_Driver)->getDriver()->getEventEmitter());
 		_Driver->deleteMaterial(_EmptyMaterial);
 		_Driver->deleteMaterial(_FullMaterial);
 		if (_EmptyTexture) 
@@ -221,6 +225,7 @@ void CLoadingScreen::setDriver(NL3D::UDriver *driver)
 	_Driver = driver;
 	if (_Driver)
 	{
+		_EventServer.addEmitter(((CDriverUser *)_Driver)->getDriver()->getEventEmitter());
 		_EmptyMaterial = _Driver->createMaterial();
 		_FullMaterial = _Driver->createMaterial();
 		if (_Background)

@@ -36,6 +36,7 @@
 #include <nel/misc/geom_ext.h>
 #include <nel/3d/u_text_context.h>
 #include <nel/3d/u_material.h>
+#include <nel/misc/event_server.h>
 
 #include <map>
 
@@ -84,6 +85,7 @@ protected:
 	NL3D::UMaterial _FullMaterial; // deleted here
 	
 	// instances
+	NLMISC::CEventServer _EventServer;
 	std::map<uint, _CLoadingBackground> _Backgrounds;
 	std::map<uint, _CLoadingMessage> _Messages;
 	NLMISC::CQuadUV _EmptyQuad;
