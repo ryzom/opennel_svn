@@ -99,7 +99,7 @@ MLoading::MLoading(CLoadingScreen &loadingScreen, const std::string &id, CI18NHe
 			_Config.getVar(msgprefix + "Size").asInt(0),
 			hot_spot);
 		loadingScreen.setMessage(CStringIdentifier::get(messages.asString(i)),
-			_Config.getVar(msgprefix + "Message").asString());
+			_I18N->get(_Config.getVar(msgprefix + "Message").asString()));
 	}
 }
 

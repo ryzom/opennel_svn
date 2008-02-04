@@ -498,58 +498,156 @@
 				<File
 					RelativePath=".\src\_animation.cpp"
 					>
+					<FileConfiguration
+						Name="DebugFast|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_animation.h"
 					>
+					<FileConfiguration
+						Name="DebugFast|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_camera.cpp"
 					>
+					<FileConfiguration
+						Name="DebugFast|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_camera.h"
 					>
+					<FileConfiguration
+						Name="DebugFast|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_entities.cpp"
 					>
+					<FileConfiguration
+						Name="DebugFast|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_entities.h"
 					>
+					<FileConfiguration
+						Name="DebugFast|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_mouse_listener.cpp"
 					>
+					<FileConfiguration
+						Name="DebugFast|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_mouse_listener.h"
 					>
+					<FileConfiguration
+						Name="DebugFast|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_network.cpp"
 					>
+					<FileConfiguration
+						Name="DebugFast|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_network.h"
 					>
+					<FileConfiguration
+						Name="DebugFast|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_pacs.cpp"
 					>
+					<FileConfiguration
+						Name="DebugFast|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_pacs.h"
 					>
+					<FileConfiguration
+						Name="DebugFast|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_physics.cpp"
 					>
+					<FileConfiguration
+						Name="DebugFast|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_physics.h"
 					>
+					<FileConfiguration
+						Name="DebugFast|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<Filter
 					Name="interface"
@@ -557,42 +655,112 @@
 					<File
 						RelativePath=".\src\_commands.cpp"
 						>
+						<FileConfiguration
+							Name="DebugFast|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath=".\src\_commands.h"
 						>
+						<FileConfiguration
+							Name="DebugFast|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+							/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath=".\src\_compass.cpp"
 						>
+						<FileConfiguration
+							Name="DebugFast|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath=".\src\_compass.h"
 						>
+						<FileConfiguration
+							Name="DebugFast|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+							/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath=".\src\_graph.cpp"
 						>
+						<FileConfiguration
+							Name="DebugFast|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath=".\src\_graph.h"
 						>
+						<FileConfiguration
+							Name="DebugFast|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+							/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath=".\src\_interface.cpp"
 						>
+						<FileConfiguration
+							Name="DebugFast|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath=".\src\_interface.h"
 						>
+						<FileConfiguration
+							Name="DebugFast|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+							/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath=".\src\_radar.cpp"
 						>
+						<FileConfiguration
+							Name="DebugFast|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath=".\src\_radar.h"
 						>
+						<FileConfiguration
+							Name="DebugFast|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+							/>
+						</FileConfiguration>
 					</File>
 				</Filter>
 			</Filter>
@@ -602,18 +770,46 @@
 				<File
 					RelativePath=".\src\_client.cpp"
 					>
+					<FileConfiguration
+						Name="DebugFast|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_client.h"
 					>
+					<FileConfiguration
+						Name="DebugFast|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_landscape.cpp"
 					>
+					<FileConfiguration
+						Name="DebugFast|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_landscape.h"
 					>
+					<FileConfiguration
+						Name="DebugFast|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_sound.cpp"
@@ -889,6 +1085,14 @@
 				</File>
 				<File
 					RelativePath=".\src\loading.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\login.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\login.h"
 					>
 				</File>
 				<File

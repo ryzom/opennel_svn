@@ -22,23 +22,26 @@
 
 // Priority Distribution
 // 
-// 1. [9000000] Update Utilities (configuration etc)
-// 2. [8000000] Update Time (deltas)
-// 3. [7000000] Update Driver (keyboard controls, etc)
-// 4. [6000000] Update Incoming (network, receive messages)
-// 5. [5000000] Update Weather (sky, snow, wind, fog, sun)
-// 6. [4000000] Update Landscape (async zone loading near entity)
-// 7. [3000000] Update Entities (collisions and actions)
-// 8. [2000000] Update Animations (playlists)
-// 9. [1000000] Update Outgoing (network, send new position etc)
+// 01. [+9000000 - +9099999] Update Utilities (configuration etc)
+// 02. [+8000000 - +8099999] Update Time (deltas)
+// 03. [+7000000 - +7099999] Update Driver (keyboard controls, etc)
+// 04. [+6000000 - +6099999] Update Incoming (network, receive messages)
+// 05. [+5000000 - +5099999] Update Weather (sky, snow, wind, fog, sun)
+// 06. [+4000000 - +4099999] Update Landscape (async zone loading near entity)
+// 07. [+3000000 - +3099999] Update Entities (collisions and actions)
+// 08. [+2000000 - +2099999] Update Animations (playlists)
+// 09. [+2500000 - +2599999] Update Interface (login, ui, etc)
+// 10. [+1000000 - +1099999] Update Outgoing (network, send new position etc)
+// 11. [-1000000 - +0999999] Update Debug (stuff for dev)
 //
-// 1. [8000000] Render Driver (background black, done here)
-// 2. [7000000] Render Sky (sky scene)
-// 3. [6000000] Render Landscape (landscape zones)
-// 4. [5000000] Render Scene (entity scene)
-// 5. [4000000] Render Effects (flare)
-// 6. [3000000] Render 3D Interface (player names)
-// 7. [2000000] Render 2D Interface (chatboxes etc)
+// 01. [+8000000 - +8099999] Render Driver (background black, done here)
+// 02. [+7000000 - +7099999] Render Sky (sky scene)
+// 03. [+6000000 - +6099999] Render Landscape (landscape zones)
+// 04. [+5000000 - +5099999] Render Scene (entity scene)
+// 05. [+4000000 - +4099999] Render Effects (flare)
+// 06. [+3000000 - +3099999] Render 3D Interface (player names)
+// 07. [+2000000 - +2099999] Render 2D Interface (chatboxes etc, optionally does have 3d)
+// 08. [-1000000 - +0999999] Render Debug (stuff for dev)
 
 #include <nel/misc/types_nl.h>
 #include "snowballs_client.h"
@@ -148,14 +151,15 @@ CSnowballsClient::CSnowballsClient()
   // special function ids
   _UpdateUtilitiesId(0), _UpdateDebugId(0), _RenderDebugId(0), 
   // components and their function ids
-  _Loading(NULL), _Graphics(NULL), _UpdateGraphicsDriverId(0), 
+  _Loading(NULL), 
+  _Graphics(NULL), _GraphicsUpdateDriverId(0), 
+  _Login(NULL), _LoginUpdateInterfaceId(0), _LoginRenderInterfaceId(0), 
   // states
   _CurrentState(Invalid), _NextState(Load),
   _LoadedUtils(false), _LoadedBase(false), _LoadedLogin(false), 
   _LoadedIngame(false), _LoadedConnection(false), 
   _EnabledUtils(false), _EnabledBase(false), _EnabledLogin(false), 
-  _EnabledIngame(false), _EnabledConnection(false), 
-  _ServerVersion(Offline) // do not change these
+  _EnabledIngame(false), _EnabledConnection(false) // do not change these
 {
 	// use log.log if NEL_LOG_IN_FILE and SBCLIENT_USE_LOG_LOG defined as 1
 	createDebug(NULL, SBCLIENT_USE_LOG_LOG, false);
@@ -317,6 +321,9 @@ void CSnowballsClient::loadUtils()
 		// set the language code
 		CI18N::load(_Config->getVar("LanguageCode").asString());
 		_I18NHelper = new CI18NHelper("i18n", false);
+		_I18NHelper->set("ClientVersion", ucstring(
+			SBCLIENT_NAME " - " SBCLIENT_VERSION " - " 
+			SBCLIENT_COMPILE_ID " - " __DATE__ " " __TIME__));
 
 		// load the loading screen manager
 		nlassert(!_Loading);
@@ -363,7 +370,7 @@ void CSnowballsClient::enableUtils()
 		
 		nlassert(!_UpdateUtilitiesId);
 		_UpdateUtilitiesId = _UpdateFunctions.add(
-			updateUtilities, this, NULL, 9500000);
+			updateUtilities, this, NULL, 9050000);
 	}
 }
 
@@ -408,11 +415,8 @@ void CSnowballsClient::loadBase()
 		//nlassert(!_Sound);
 		//_Sound = new MSound(_LoadingScreen, "Sound");
 		//nlassert(_Sound);
-		for (float f = 0.0f; f < 1.0f; f += 0.1f)
-		{
-			_LoadingScreen.progress(f);
-			nlSleep(500);
-		}
+
+		_LoadingScreen.progress(1.0f);
 	}
 }
 
@@ -435,9 +439,9 @@ void CSnowballsClient::enableBase()
 	{		
 		_EnabledBase = true;
 
-		nlassert(!_UpdateGraphicsDriverId);
-		_UpdateGraphicsDriverId = _UpdateFunctions.add(
-			MGraphics::updateDriver, _Graphics, NULL, 7500000);
+		nlassert(!_GraphicsUpdateDriverId);
+		_GraphicsUpdateDriverId = _UpdateFunctions.add(
+			MGraphics::updateDriver, _Graphics, NULL, 7050000);
 	}
 }
 
@@ -445,9 +449,9 @@ void CSnowballsClient::disableBase()
 {
 	if (_EnabledBase)
 	{
-		nlassert(_UpdateGraphicsDriverId);
-		_UpdateFunctions.remove(_UpdateGraphicsDriverId);
-		_UpdateGraphicsDriverId = 0;
+		nlassert(_GraphicsUpdateDriverId);
+		_UpdateFunctions.remove(_GraphicsUpdateDriverId);
+		_GraphicsUpdateDriverId = 0;
 		
 		_EnabledBase = false;
 	}
@@ -498,8 +502,17 @@ void CSnowballsClient::loadLogin()
 	if (!_LoadedLogin)
 	{		
 		_LoadedLogin = true;
+		_Loading->setBackgroundNeL();
+		_Loading->setMessageState("");
 
-		// ...
+		_LoadingScreen.setRange(0.0f, 1.0f);
+		/* _Loading->setMessageState("i18nInitializeLogin"); */
+		nlassert(!_Login);
+		_Login = new MLogin("Login", _Graphics->Driver, 
+			_Graphics->TextContext, _I18NHelper, &_LoginData);
+		nlassert(_Login);
+
+		_LoadingScreen.progress(1.0f);
 	}
 }
 
@@ -507,7 +520,7 @@ void CSnowballsClient::unloadLogin()
 {
 	if (_LoadedLogin)
 	{
-		// ...
+		nlassert(_Login); delete _Login; _Login = NULL;
 		
 		_LoadedLogin = false;
 	}
@@ -519,7 +532,15 @@ void CSnowballsClient::enableLogin()
 	{		
 		_EnabledLogin = true;
 
-		// ...
+		nlassert(!_LoginUpdateInterfaceId);
+		_LoginUpdateInterfaceId = _UpdateFunctions.add(
+			MLogin::updateInterface, _Login, NULL, 2550000);
+
+		nlassert(!_LoginRenderInterfaceId);
+		_LoginRenderInterfaceId = _RenderFunctions.add(
+			MLogin::renderInterface, _Login, NULL, 2050000);
+
+		_Login->enable();
 	}
 }
 
@@ -527,7 +548,15 @@ void CSnowballsClient::disableLogin()
 {
 	if (_EnabledLogin)
 	{
-		// ...
+		_Login->disable();
+
+		nlassert(_LoginUpdateInterfaceId);
+		_UpdateFunctions.remove(_LoginUpdateInterfaceId);
+		_LoginUpdateInterfaceId = 0;
+
+		nlassert(_LoginRenderInterfaceId);
+		_RenderFunctions.remove(_LoginRenderInterfaceId);
+		_LoginRenderInterfaceId = 0;
 		
 		_EnabledLogin = false;
 	}
@@ -870,9 +899,10 @@ void CSnowballsClient::renderVersion()
 		tc->setColor(CRGBA(255, 255, 255, 255));
 		tc->setHotSpot(UTextContext::BottomRight);
 		tc->setFontSize(16);
-		tc->printAt(0.99f, 0.01f, ucstring(
-			SBCLIENT_NAME " - " SBCLIENT_VERSION " - " 
-			SBCLIENT_COMPILE_ID " - " __DATE__ " " __TIME__));
+		tc->printAt(0.99f, 0.01f, _I18NHelper->get("i18nClientVersion"));
+
+		tc->setHotSpot(UTextContext::BottomLeft);
+		tc->printAt(0.01f, 0.01f, _I18NHelper->get("i18nWindowTitle"));
 	}
 }
 

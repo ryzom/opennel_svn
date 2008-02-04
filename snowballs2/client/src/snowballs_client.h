@@ -29,6 +29,8 @@
 #include "function_caller.h"
 #include "string_identifier.h"
 
+#include "login.h"
+
 namespace NLMISC {
 	class CFileDisplayer;
 	class CConfigFile;
@@ -43,8 +45,8 @@ namespace SBCLIENT {
 	class CConfigProxy;
 	class CComponentManager;
 	class CI18NHelper;
-	class MGraphics;
 	class MLoading;
+	class MGraphics;
 
 /**
  * Snowballs client 0.3.
@@ -56,9 +58,6 @@ private:
 	// constants
 	static const uint8 Invalid = 0, Load = 1, Reset = 2, Exit = 3;
 	static const uint8 Login = 10, Game = 11;
-
-	// server protocol handler versions
-	static const uint8 Offline = 0, Snowballs2 = 2, Snowballs5 = 5;
 
 	// pointers
 #if SBCLIENT_USE_LOG
@@ -75,9 +74,12 @@ private:
 	uint _UpdateDebugId;
 	uint _RenderDebugId;
 	// components and their function ids (all deleted here)
-	MLoading *_Loading;
-	MGraphics *_Graphics;
-	uint _UpdateGraphicsDriverId;
+	MLoading *_Loading; // loading screen
+	MGraphics *_Graphics; // graphics driver
+	uint _GraphicsUpdateDriverId;
+	MLogin *_Login; // login screen
+	uint _LoginUpdateInterfaceId;
+	uint _LoginRenderInterfaceId;
 	
 	// instances
 	// the function callers
@@ -90,8 +92,8 @@ private:
 	// to know which data has been loaded
 	bool _LoadedUtils, _LoadedBase, _LoadedLogin, _LoadedIngame, _LoadedConnection;
 	bool _EnabledUtils, _EnabledBase, _EnabledLogin, _EnabledIngame, _EnabledConnection;
-	// true if the online component needs to be initialized
-	uint8 _ServerVersion;
+	// contains information about what frontend to connect to
+	MLogin::CLoginData _LoginData;
 	// set _NextState to switch the current game state
 	uint8 _CurrentState, _NextState;
 public:
