@@ -44,9 +44,9 @@
 #include <nel/3d/u_material.h>
 #include <nel/3d/u_landscape.h>
 
-#include "network.h"
-#include "client.h"
-#include "interface.h"
+#include "_network.h"
+#include "_client.h"
+#include "_interface.h"
 
 //
 // Namespaces

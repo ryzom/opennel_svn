@@ -1,79 +1,61 @@
-/** \file landscape.h
- * Landscape interface between the game and NeL
- *
+/**
+ * \file landscape.h
+ * \brief MLandscape
+ * \date 2008-02-03 20:52GMT
+ * \author Jan Boon (Kaetemi)
+ * MLandscape
+ * 
  * $Id$
  */
 
-/* Copyright, 2001 Nevrax Ltd.
- *
- * This file is part of NEVRAX SNOWBALLS.
- * NEVRAX SNOWBALLS is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
-
- * NEVRAX SNOWBALLS is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
-
+/* 
+ * Copyright (C) 2008  Jan Boon (Kaetemi)
+ * Based on NEVRAX SNOWBALLS, Copyright (C) 2001  Nevrax Ltd.
+ * 
+ * This file is part of OpenNeL Snowballs.
+ * OpenNeL Snowballs is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 2 of the
+ * License, or (at your option) any later version.
+ * 
+ * OpenNeL Snowballs is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
  * You should have received a copy of the GNU General Public License
- * along with NEVRAX SNOWBALLS; see the file COPYING. If not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
- * MA 02111-1307, USA.
+ * along with OpenNeL Snowballs; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301 USA.
  */
 
-#ifndef LANDSCAPE_H
-#define LANDSCAPE_H
+#ifndef SBCLIENT_LANDSCAPE_H
+#define SBCLIENT_LANDSCAPE_H
+#include <nel/misc/types_nl.h>
 
-//
-// Includes
-//
+namespace SBCLIENT {
 
-#include <vector>
-
-#include <nel/3d/u_landscape.h>
-#include <nel/misc/time_nl.h>
-#include <nel/misc/vector.h>
-
-//
-// External definitions
-//
-
-namespace NL3D
+/**
+ * \brief MLandscape
+ * \date 2008-02-03 20:52GMT
+ * \author Jan Boon (Kaetemi)
+ * MLandscape
+ */
+class MLandscape
 {
-	class UInstanceGroup;
-}
+protected:
+	// pointers
+	// ...
+	
+	// instances
+	// ...
+public:
+	MLandscape();
+	virtual ~MLandscape();
+}; /* class MLandscape */
 
-class CTrajectory;
+} /* namespace SBCLIENT */
 
+#endif /* #ifndef SBCLIENT_LANDSCAPE_H */
 
-//
-// External variables
-//
-
-extern std::vector<NL3D::UInstanceGroup*>	 InstanceGroups;
-extern NLMISC::CVector						 SunDirection;
-
-
-//
-// External functions
-//
-
-void initLight();
-void releaseLight();
-
-void initLandscape();
-void releaseLandscape();
-
-void initAiming();
-void releaseAiming();
-
-// Compute the collision with the landscape from the start position, using the given step,
-// at maximum numSteps steps from the start. It uses full (!) physics computation, and should be
-// identical on the server
-NLMISC::CVector	getTarget(const NLMISC::CVector &start, const NLMISC::CVector &step, uint numSteps);
-
-#endif // LANDSCAPE_H
-
-/* End of landscape.h */
+/* end of file */

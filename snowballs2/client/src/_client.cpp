@@ -64,23 +64,23 @@
 #include <nel/3d/u_material.h>
 #include <nel/3d/u_text_context.h>
 
-#include "pacs.h"
-#include "radar.h"
-#include "graph.h"
-#include "camera.h"
-#include "compass.h"
-#include "commands.h"
-#include "entities.h"
-#include "network.h"
-#include "landscape.h"
-#include "animation.h"
-#include "interface.h"
+#include "_pacs.h"
+#include "_radar.h"
+#include "_graph.h"
+#include "_camera.h"
+#include "_compass.h"
+#include "_commands.h"
+#include "_entities.h"
+#include "_network.h"
+#include "_landscape.h"
+#include "_animation.h"
+#include "_interface.h"
 #include "lens_flare.h"
-#include "mouse_listener.h"
+#include "_mouse_listener.h"
 
 #ifdef NL_OS_WINDOWS
 // Sound currently disabled under Linux
-#	include "sound.h"
+#	include "_sound.h"
 #endif
 
 

@@ -48,9 +48,9 @@
 #include <nel/3d/u_instance.h>
 #include <nel/3d/u_text_context.h>
 
-#include "animation.h"
-#include "entities.h"
-#include "client.h"
+#include "_animation.h"
+#include "_entities.h"
+#include "_client.h"
 
 //
 // Namespaces

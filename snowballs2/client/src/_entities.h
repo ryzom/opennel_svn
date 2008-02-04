@@ -41,8 +41,8 @@
 #include <nel/3d/u_instance.h>
 #include <nel/3d/u_skeleton.h>
 
-#include "physics.h"
-#include "animation.h"
+#include "_physics.h"
+#include "_animation.h"
 
 //
 // External definitions

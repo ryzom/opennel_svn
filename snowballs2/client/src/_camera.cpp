@@ -39,10 +39,10 @@
 #include <nel/3d/u_cloud_scape.h>
 #include <nel/3d/viewport.h>
 
-#include "client.h"
-#include "entities.h"
-#include "mouse_listener.h"
-#include "pacs.h"
+#include "_client.h"
+#include "_entities.h"
+#include "_mouse_listener.h"
+#include "_pacs.h"
 
 //
 // Namespaces

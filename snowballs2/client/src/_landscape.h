@@ -1,5 +1,5 @@
-/** \file network.h
- * Network interface between the game and NeL
+/** \file landscape.h
+ * Landscape interface between the game and NeL
  *
  * $Id$
  */
@@ -23,63 +23,57 @@
  * MA 02111-1307, USA.
  */
 
-#ifndef NETWORK_H
-#define NETWORK_H
+#ifndef LANDSCAPE_H
+#define LANDSCAPE_H
 
 //
 // Includes
 //
 
-#include <string>
+#include <vector>
 
+#include <nel/3d/u_landscape.h>
 #include <nel/misc/time_nl.h>
-
-#include "entities.h"
+#include <nel/misc/vector.h>
 
 //
 // External definitions
 //
 
-namespace NLMISC
+namespace NL3D
 {
-	class CVector;
+	class UInstanceGroup;
 }
 
-namespace NLNET
-{
-	class CCallbackClient;
-}
+class CTrajectory;
+
 
 //
 // External variables
 //
 
-// Pointer to the connection to the server
-extern NLNET::CCallbackClient	*Connection;
+extern std::vector<NL3D::UInstanceGroup*>	 InstanceGroups;
+extern NLMISC::CVector						 SunDirection;
+
 
 //
 // External functions
 //
 
-// Return true if the client is online
-bool	isOnline ();
+void initLight();
+void releaseLight();
 
-// Send the new entity (the player)
-void	sendAddEntity (uint32 id, std::string &name, uint8 race);
+void initLandscape();
+void releaseLandscape();
 
-// Send a chat line to the server
-void	sendChatLine (std::string Line);
+void initAiming();
+void releaseAiming();
 
-// Send the user entity position to the server
-void	sendEntityPos (CEntity &entity);
+// Compute the collision with the landscape from the start position, using the given step,
+// at maximum numSteps steps from the start. It uses full (!) physics computation, and should be
+// identical on the server
+NLMISC::CVector	getTarget(const NLMISC::CVector &start, const NLMISC::CVector &step, uint numSteps);
 
-// Send a new snowball to the server
-void	sendSnowBall (uint32 eid, const NLMISC::CVector &position, const NLMISC::CVector &target, float speed, float deflagRadius);
+#endif // LANDSCAPE_H
 
-void	initNetwork (const std::string &lc, const std::string &addr);
-void	updateNetwork ();
-void	releaseNetwork ();
-
-#endif // NETWORK_H
-
-/* End of network.h */
+/* End of landscape.h */

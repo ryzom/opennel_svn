@@ -48,6 +48,7 @@
 #include "config_manager.h"
 #include "config_proxy.h"
 
+#include "loading.h"
 #include "graphics.h"
 
 #include <nel/misc/config_file.h>
@@ -58,9 +59,16 @@
 #include <nel/misc/app_context.h>
 
 #include <nel/3d/u_driver.h>
+#include <nel/3d/u_text_context.h>
+
+// temp
+#include <nel/3d/u_texture.h>
+#include <nel/misc/geom_ext.h>
+#include <nel/3d/u_material.h>
 
 using namespace std;
 using namespace NLMISC;
+using namespace NL3D;
 
 //// temp
 //#define SBCLIENT_MUSIC_WAIT (0), (0)
@@ -138,9 +146,9 @@ CSnowballsClient::CSnowballsClient()
   _FileDisplayer(NULL), 
 #endif
   // special function ids
-  _UpdateUtilitiesId(0), 
+  _UpdateUtilitiesId(0), _UpdateDebugId(0), _RenderDebugId(0), 
   // components and their function ids
-  _Graphics(NULL), _UpdateGraphicsDriverId(0), 
+  _Loading(NULL), _Graphics(NULL), _UpdateGraphicsDriverId(0), 
   // states
   _CurrentState(Invalid), _NextState(Load),
   _LoadedUtils(false), _LoadedBase(false), _LoadedLogin(false), 
@@ -250,6 +258,7 @@ SwitchState:
 			break;
 		}
 	}
+	_LoadingScreen.setBackground(0);
 	_CurrentState = _NextState;
 	switch(_CurrentState)
 	{
@@ -308,6 +317,11 @@ void CSnowballsClient::loadUtils()
 		// set the language code
 		CI18N::load(_Config->getVar("LanguageCode").asString());
 		_I18NHelper = new CI18NHelper("i18n", false);
+
+		// load the loading screen manager
+		nlassert(!_Loading);
+		_Loading = new MLoading(_LoadingScreen, "Loading", _I18NHelper);
+		nlassert(_Loading);
 	}
 }
 
@@ -315,6 +329,9 @@ void CSnowballsClient::unloadUtils()
 {
 	if (_LoadedUtils)
 	{
+		// unload the loading screen manager
+		nlassert(_Loading); delete _Loading; _Loading = NULL;
+
 		// if they're null, something must've seriously went wrong at some point
 		// release of the language data is done when loading new file
 		nlassert(_I18NHelper); delete _I18NHelper;
@@ -336,6 +353,14 @@ void CSnowballsClient::enableUtils()
 	{
 		_EnabledUtils = true;
 		
+		nlassert(!_UpdateDebugId);
+		_UpdateDebugId = _UpdateFunctions.add(
+			updateDebug, this, NULL, 0);
+		
+		nlassert(!_RenderDebugId);
+		_RenderDebugId = _RenderFunctions.add(
+			renderDebug, this, NULL, 0);
+		
 		nlassert(!_UpdateUtilitiesId);
 		_UpdateUtilitiesId = _UpdateFunctions.add(
 			updateUtilities, this, NULL, 9500000);
@@ -350,6 +375,14 @@ void CSnowballsClient::disableUtils()
 		_UpdateFunctions.remove(_UpdateUtilitiesId);
 		_UpdateUtilitiesId = 0;
 
+		nlassert(_RenderDebugId);
+		_RenderFunctions.remove(_RenderDebugId);
+		_RenderDebugId = 0;
+
+		nlassert(_UpdateDebugId);
+		_UpdateFunctions.remove(_UpdateDebugId);
+		_UpdateDebugId = 0;
+
 		_EnabledUtils = false;
 	}
 }
@@ -359,10 +392,27 @@ void CSnowballsClient::loadBase()
 	if (!_LoadedBase)
 	{		
 		_LoadedBase = true;
+		_Loading->setBackgroundNeL();
+		_Loading->setMessageState("");
 
-		// _LoadingScreen.setblah("Initialize Graphics");
-		_Graphics = new CGraphics(_LoadingScreen, "Graphics", _I18NHelper);
+		_LoadingScreen.setRange(0.0f, 0.5f);
+		/* _Loading->setMessageState("i18nInitializeGraphics"); */
+		nlassert(!_Graphics);
+		_Graphics = new MGraphics(_LoadingScreen, "Graphics", _I18NHelper);
 		nlassert(_Graphics);
+		_LoadingScreen.setDriver(_Graphics->Driver);
+		_LoadingScreen.setTextContext(_Graphics->TextContext);
+
+		_LoadingScreen.setRange(0.5f, 1.0f);
+		/* _Loading->setMessageState("i18nInitializeSound"); */
+		//nlassert(!_Sound);
+		//_Sound = new MSound(_LoadingScreen, "Sound");
+		//nlassert(_Sound);
+		for (float f = 0.0f; f < 1.0f; f += 0.1f)
+		{
+			_LoadingScreen.progress(f);
+			nlSleep(500);
+		}
 	}
 }
 
@@ -370,7 +420,10 @@ void CSnowballsClient::unloadBase()
 {
 	if (_LoadedBase)
 	{
-		nlassert(_Graphics); delete _Graphics;
+		// nlassert(_Sound); delete _Sound; _Sound = NULL;
+		_LoadingScreen.setTextContext(NULL);
+		_LoadingScreen.setDriver(NULL);
+		nlassert(_Graphics); delete _Graphics; _Graphics = NULL;
 		
 		_LoadedBase = false;
 	}
@@ -384,7 +437,7 @@ void CSnowballsClient::enableBase()
 
 		nlassert(!_UpdateGraphicsDriverId);
 		_UpdateGraphicsDriverId = _UpdateFunctions.add(
-			CGraphics::updateDriver, _Graphics, NULL, 7500000);
+			MGraphics::updateDriver, _Graphics, NULL, 7500000);
 	}
 }
 
@@ -405,44 +458,14 @@ void CSnowballsClient::disableBase()
 //{
 //	if (!_HasCore)
 //	{
-//
-//
-//		
-//
-//		
-//
-//
-//
-//		// dynamic core, temp
-//		_LoadingComponent = new CLoadingComponent(
-//			_ComponentManager, "LoadingScreen", _LoadingScreen);
-//		_ComponentManager->registerComponent(_LoadingComponent);
-//
-//		_DriverComponent = new CDriverComponent(
-//			_ComponentManager, "Graphics", _LoadingScreen);
-//		_ComponentManager->registerComponent(_DriverComponent);
-//		_ComponentManager->registerUpdate(_DriverComponent, 100);
-//		_Driver = _DriverComponent->getDriver();
-//
-//		_HelloWorldComponent = new CHelloWorldComponent(
-//			_ComponentManager, "HelloWorld", _LoadingScreen);
-//		_ComponentManager->registerComponent(_HelloWorldComponent);
-//		_ComponentManager->registerRender(_HelloWorldComponent, -2000);
-//
 //		TimeComponent = new CTimeComponent(
 //			_ComponentManager, "Time", _LoadingScreen);
 //		_ComponentManager->registerComponent(TimeComponent);
 //		_ComponentManager->registerUpdate(TimeComponent, 1000000);
 //
 //
-//		// and some more compatibility code
-//		Driver = _DriverComponent->getDriver();
-//		TextContext = _DriverComponent->getTextContext();
-//		ConfigFile = _ConfigFile;
-//
-//		/// even more temp!
-//		CFunctionCaller &updates = _ComponentManager->getUpdateCaller();
 //		updates.add(updateTime, NULL, NULL, 1000000);
+//
 //		displayLoadingState("Initialize Loading");
 //		initLoadingState();
 //		// Initialize sound for loading screens etc
@@ -466,24 +489,6 @@ void CSnowballsClient::disableBase()
 //#if SBCLIENT_WITH_SOUND
 //		releaseSound();
 //#endif
-//
-//		// dynamic core, temp
-//		_ComponentManager->unregisterComponent(_HelloWorldComponent);
-//		delete _HelloWorldComponent;
-//
-//		_ComponentManager->unregisterComponent(_DriverComponent);
-//		delete _DriverComponent;
-//
-//		_ComponentManager->unregisterComponent(_LoadingComponent);
-//		delete _LoadingComponent;
-//
-//
-//
-//
-//
-//
-
-//
 //		_HasCore = false;
 //	}
 //}
@@ -798,6 +803,77 @@ void CSnowballsClient::updateUtilities(void *context, void *tag)
 	CSnowballsClient *me = (CSnowballsClient *)context;
 	// check all config files for updates
 	CConfigFile::checkConfigFiles();
+}
+
+//UTextureFile *testtexture = NULL;
+//UMaterial testmaterial;
+
+/// Used during development only.
+void CSnowballsClient::updateDebug(void *context, void *tag)
+{
+	CSnowballsClient *me = (CSnowballsClient *)context;
+	//if (me->_Graphics && !testtexture)
+	//{
+	//	testtexture = me->_Graphics->Driver->createTextureFile("snowballs_login.tga");
+	//	testmaterial = me->_Graphics->Driver->createMaterial();
+	//	testmaterial.setTexture(testtexture);
+	//}
+}
+
+float progress = 0.0f;
+
+void CSnowballsClient::renderDebug(void *context, void *tag)
+{
+	CSnowballsClient *me = (CSnowballsClient *)context;
+	//if (me->_Graphics)
+	//{
+	//	nlassert(testtexture);
+	//	me->_Graphics->Driver->setMatrixMode2D11();
+	//	CQuadUV quad;
+	//	quad.V0.set(0.0f, 0.0f, 0.0f);
+	//	quad.V1.set(1.0f, 0.0f, 0.0f);
+	//	quad.V2.set(1.0f, 1.0f, 0.0f);
+	//	quad.V3.set(0.0f, 1.0f, 0.0f);
+
+	//	float height = 768.0f / 1024.0f;
+	//	float width = 1024.0f / 1024.0f;
+	//	quad.Uv0.set(0.0f, height);
+	//	quad.Uv1.set(width, height);
+	//	quad.Uv2.set(width, 0.0f);
+	//	quad.Uv3.set(0.0f, 0.0f);
+
+	//	float final = 0.5f;
+	//	quad.V1.x = final;
+	//	quad.V2.x = final;
+	//	quad.Uv1.U = width * final;
+	//	quad.Uv2.U = width * final;
+	//	me->_Graphics->Driver->drawQuad(quad, testmaterial);
+	//}
+
+	//if (me->_Loading)
+	//{
+	//	progress += 0.001f;
+	//	me->_Loading->setBackgroundSnowballs();
+	//	me->_Loading->setMessageState("Test");
+	//	me->_LoadingScreen.progress(progress);
+	//}
+
+	me->renderVersion();
+}
+
+void CSnowballsClient::renderVersion()
+{
+	if (_Graphics)
+	{
+		UTextContext *tc = _Graphics->TextContext; nlassert(tc);
+
+		tc->setColor(CRGBA(255, 255, 255, 255));
+		tc->setHotSpot(UTextContext::BottomRight);
+		tc->setFontSize(16);
+		tc->printAt(0.99f, 0.01f, ucstring(
+			SBCLIENT_NAME " - " SBCLIENT_VERSION " - " 
+			SBCLIENT_COMPILE_ID " - " __DATE__ " " __TIME__));
+	}
 }
 
 }

@@ -496,102 +496,102 @@
 				Name="waiting"
 				>
 				<File
-					RelativePath="src\animation.cpp"
+					RelativePath=".\src\_animation.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\animation.h"
+					RelativePath=".\src\_animation.h"
 					>
 				</File>
 				<File
-					RelativePath="src\camera.cpp"
+					RelativePath=".\src\_camera.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\camera.h"
+					RelativePath=".\src\_camera.h"
 					>
 				</File>
 				<File
-					RelativePath="src\entities.cpp"
+					RelativePath=".\src\_entities.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\entities.h"
+					RelativePath=".\src\_entities.h"
 					>
 				</File>
 				<File
-					RelativePath="src\mouse_listener.cpp"
+					RelativePath=".\src\_mouse_listener.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\mouse_listener.h"
+					RelativePath=".\src\_mouse_listener.h"
 					>
 				</File>
 				<File
-					RelativePath="src\network.cpp"
+					RelativePath=".\src\_network.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\network.h"
+					RelativePath=".\src\_network.h"
 					>
 				</File>
 				<File
-					RelativePath="src\pacs.cpp"
+					RelativePath=".\src\_pacs.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\pacs.h"
+					RelativePath=".\src\_pacs.h"
 					>
 				</File>
 				<File
-					RelativePath="src\physics.cpp"
+					RelativePath=".\src\_physics.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\physics.h"
+					RelativePath=".\src\_physics.h"
 					>
 				</File>
 				<Filter
 					Name="interface"
 					>
 					<File
-						RelativePath="src\commands.cpp"
+						RelativePath=".\src\_commands.cpp"
 						>
 					</File>
 					<File
-						RelativePath="src\commands.h"
+						RelativePath=".\src\_commands.h"
 						>
 					</File>
 					<File
-						RelativePath="src\compass.cpp"
+						RelativePath=".\src\_compass.cpp"
 						>
 					</File>
 					<File
-						RelativePath="src\compass.h"
+						RelativePath=".\src\_compass.h"
 						>
 					</File>
 					<File
-						RelativePath="src\graph.cpp"
+						RelativePath=".\src\_graph.cpp"
 						>
 					</File>
 					<File
-						RelativePath="src\graph.h"
+						RelativePath=".\src\_graph.h"
 						>
 					</File>
 					<File
-						RelativePath="src\interface.cpp"
+						RelativePath=".\src\_interface.cpp"
 						>
 					</File>
 					<File
-						RelativePath="src\interface.h"
+						RelativePath=".\src\_interface.h"
 						>
 					</File>
 					<File
-						RelativePath="src\radar.cpp"
+						RelativePath=".\src\_radar.cpp"
 						>
 					</File>
 					<File
-						RelativePath="src\radar.h"
+						RelativePath=".\src\_radar.h"
 						>
 					</File>
 				</Filter>
@@ -600,23 +600,23 @@
 				Name="in_progress"
 				>
 				<File
-					RelativePath="src\client.cpp"
+					RelativePath=".\src\_client.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\client.h"
+					RelativePath=".\src\_client.h"
 					>
 				</File>
 				<File
-					RelativePath="src\landscape.cpp"
+					RelativePath=".\src\_landscape.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\landscape.h"
+					RelativePath=".\src\_landscape.h"
 					>
 				</File>
 				<File
-					RelativePath="src\sound.cpp"
+					RelativePath=".\src\_sound.cpp"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -628,7 +628,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="src\sound.h"
+					RelativePath=".\src\_sound.h"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -648,7 +648,7 @@
 				Name="trash_components"
 				>
 				<File
-					RelativePath=".\src\landscape_component.cpp"
+					RelativePath=".\src\_landscape_component.cpp"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -660,7 +660,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\src\landscape_component.h"
+					RelativePath=".\src\_landscape_component.h"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -672,7 +672,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\src\lens_flare_component.cpp"
+					RelativePath=".\src\_lens_flare_component.cpp"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -684,7 +684,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\src\lens_flare_component.h"
+					RelativePath=".\src\_lens_flare_component.h"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -696,7 +696,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\src\scene_component.cpp"
+					RelativePath=".\src\_scene_component.cpp"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -708,7 +708,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\src\scene_component.h"
+					RelativePath=".\src\_scene_component.h"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -720,7 +720,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\src\time_component.cpp"
+					RelativePath=".\src\_time_component.cpp"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -732,7 +732,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\src\time_component.h"
+					RelativePath=".\src\_time_component.h"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -744,7 +744,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\src\weather_component.cpp"
+					RelativePath=".\src\_weather_component.cpp"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -756,7 +756,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\src\weather_component.h"
+					RelativePath=".\src\_weather_component.h"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -809,6 +809,14 @@
 				</File>
 				<File
 					RelativePath=".\src\i18n_helper.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\string_identifier.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\string_identifier.h"
 					>
 				</File>
 			</Filter>
@@ -867,6 +875,30 @@
 					RelativePath=".\src\graphics.h"
 					>
 				</File>
+				<File
+					RelativePath=".\src\landscape.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\landscape.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\loading.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\loading.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\sound.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\sound.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="3_core"
@@ -888,7 +920,7 @@
 				Name="trash_component"
 				>
 				<File
-					RelativePath=".\src\component.cpp"
+					RelativePath=".\src\_component.cpp"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -900,7 +932,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\src\component.h"
+					RelativePath=".\src\_component.h"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -912,7 +944,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\src\component_manager.cpp"
+					RelativePath=".\src\_component_manager.cpp"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -924,7 +956,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\src\component_manager.h"
+					RelativePath=".\src\_component_manager.h"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -936,7 +968,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\src\configurable_component.cpp"
+					RelativePath=".\src\_configurable_component.cpp"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -948,7 +980,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\src\configurable_component.h"
+					RelativePath=".\src\_configurable_component.h"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -959,6 +991,10 @@
 						/>
 					</FileConfiguration>
 				</File>
+			</Filter>
+			<Filter
+				Name="3_connection"
+				>
 			</Filter>
 		</Filter>
 	</Files>

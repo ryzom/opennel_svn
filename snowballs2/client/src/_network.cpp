@@ -41,13 +41,13 @@
 
 #include <nel/pacs/u_move_primitive.h>
 
-#include "client.h"
-#include "commands.h"
-#include "network.h"
-#include "entities.h"
-#include "interface.h"
-#include "graph.h"
-#include "mouse_listener.h"
+#include "_client.h"
+#include "_commands.h"
+#include "_network.h"
+#include "_entities.h"
+#include "_interface.h"
+#include "_graph.h"
+#include "_mouse_listener.h"
 
 //
 // Namespaces

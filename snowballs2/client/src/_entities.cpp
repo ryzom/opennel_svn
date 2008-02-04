@@ -58,16 +58,16 @@
 #include <nel/pacs/u_global_retriever.h>
 #include <nel/pacs/u_global_position.h>
 
-#include "client.h"
-#include "entities.h"
-#include "pacs.h"
-#include "animation.h"
-#include "camera.h"
+#include "_client.h"
+#include "_entities.h"
+#include "_pacs.h"
+#include "_animation.h"
+#include "_camera.h"
 #ifdef NL_OS_WINDOWS
-#include "sound.h"
+#include "_sound.h"
 #endif
-#include "mouse_listener.h"
-#include "landscape.h"
+#include "_mouse_listener.h"
+#include "_landscape.h"
 
 //
 // Namespaces

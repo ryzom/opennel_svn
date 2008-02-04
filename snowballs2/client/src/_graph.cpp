@@ -40,8 +40,8 @@
 #include <nel/3d/u_text_context.h>
 #include <nel/3d/u_texture.h>
 
-#include "graph.h"
-#include "client.h"
+#include "_graph.h"
+#include "_client.h"
 
 //
 // Namespaces

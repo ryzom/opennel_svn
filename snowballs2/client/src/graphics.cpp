@@ -1,15 +1,16 @@
 /**
  * \file graphics.cpp
- * \brief CGraphics
+ * \brief MGraphics
  * \date 2008-01-21 23:40GMT
  * \author Jan Boon (Kaetemi)
- * CGraphics
+ * MGraphics
  * 
  * $Id$
  */
 
 /* 
  * Copyright (C) 2008  Jan Boon (Kaetemi)
+ * Based on NEVRAX SNOWBALLS, Copyright (C) 2001  Nevrax Ltd.
  * 
  * This file is part of OpenNeL Snowballs.
  * OpenNeL Snowballs is free software: you can redistribute it and/or
@@ -47,9 +48,9 @@ using namespace NL3D;
 
 namespace SBCLIENT {
 
-void (*CGraphics::DriverExit)() = NULL;
+void (*MGraphics::DriverExit)() = NULL;
 
-CGraphics::CGraphics(NLMISC::IProgressCallback &progressCallback, const std::string &id, CI18NHelper *i18n) 
+MGraphics::MGraphics(NLMISC::IProgressCallback &progressCallback, const std::string &id, CI18NHelper *i18n) 
 	: _Config(id), _I18N(i18n)
 {
 	// create the driver
@@ -75,7 +76,7 @@ CGraphics::CGraphics(NLMISC::IProgressCallback &progressCallback, const std::str
 	progressCallback.progress(1.0f);
 }
 
-CGraphics::~CGraphics()
+MGraphics::~MGraphics()
 {
 	_Config.dropCallback("WindowTitle");
 	Driver->deleteTextContext(TextContext);
@@ -83,19 +84,19 @@ CGraphics::~CGraphics()
 	delete Driver;
 }
 
-void CGraphics::updateDriver(void *context, void *tag)
+void MGraphics::updateDriver(void *context, void *tag)
 {	
-	CGraphics *me = (CGraphics *)context;
+	MGraphics *me = (MGraphics *)context;
 	me->Driver->EventServer.pump();	
 }
 
-void CGraphics::setWindowTitle(const std::string &title)
+void MGraphics::setWindowTitle(const std::string &title)
 {
 	// get the window title from a label
 	setWindowTitle(_I18N->get(title));
 }
 
-void CGraphics::setWindowTitle(const ucstring &title)
+void MGraphics::setWindowTitle(const ucstring &title)
 {
 	// set the window title, ucstring is prefered
 	// replace this code once the UDriver supports ucstring too ;)
@@ -106,7 +107,7 @@ void CGraphics::setWindowTitle(const ucstring &title)
 #endif
 }
 
-void CGraphics::saveScreenshot(const string &name, bool jpg)
+void MGraphics::saveScreenshot(const string &name, bool jpg)
 {
 	// empty bitmap
 	CBitmap bitmap;
@@ -125,9 +126,9 @@ void CGraphics::saveScreenshot(const string &name, bool jpg)
 	nlinfo("Screenshot '%s' saved", filename.c_str());
 }
 
-void CGraphics::configWindowTitle(void *context, const std::string &varName, NLMISC::CConfigFile::CVar &var, void *tag)
+void MGraphics::configWindowTitle(void *context, const std::string &varName, NLMISC::CConfigFile::CVar &var, void *tag)
 {
-	CGraphics *me = (CGraphics *)context;
+	MGraphics *me = (MGraphics *)context;
 	me->setWindowTitle(var.asString());
 }
 

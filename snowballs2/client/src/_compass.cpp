@@ -38,10 +38,10 @@
 #include <nel/3d/u_text_context.h>
 #include <nel/3d/u_texture.h>
 
-#include "mouse_listener.h"
-#include "camera.h"
-#include "client.h"
-#include "entities.h"
+#include "_mouse_listener.h"
+#include "_camera.h"
+#include "_client.h"
+#include "_entities.h"
 
 //
 // Namespaces

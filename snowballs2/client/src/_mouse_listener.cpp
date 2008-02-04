@@ -38,12 +38,12 @@
 #include <nel/misc/quat.h>
 #include <nel/misc/plane.h>
 
-#include "client.h"
-#include "mouse_listener.h"
-#include "entities.h"
-#include "camera.h"
-#include "landscape.h"
-#include "network.h"
+#include "_client.h"
+#include "_mouse_listener.h"
+#include "_entities.h"
+#include "_camera.h"
+#include "_landscape.h"
+#include "_network.h"
 
 //
 // Namespaces

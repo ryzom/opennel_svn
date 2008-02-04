@@ -40,8 +40,8 @@
 #include <nel/3d/u_material.h>
 #include <nel/3d/u_landscape.h>
 
-#include "client.h"
-#include "interface.h"
+#include "_client.h"
+#include "_interface.h"
 
 //
 // Namespaces

@@ -27,6 +27,7 @@
 
 #include "loading_screen.h"
 #include "function_caller.h"
+#include "string_identifier.h"
 
 namespace NLMISC {
 	class CFileDisplayer;
@@ -42,10 +43,8 @@ namespace SBCLIENT {
 	class CConfigProxy;
 	class CComponentManager;
 	class CI18NHelper;
-	class CDriverComponent; // temp
-	class CLoadingComponent; // temp
-	class CHelloWorldComponent; // temp
-	class CGraphics;
+	class MGraphics;
+	class MLoading;
 
 /**
  * Snowballs client 0.3.
@@ -73,8 +72,11 @@ private:
 
 	// special function ids
 	uint _UpdateUtilitiesId;
+	uint _UpdateDebugId;
+	uint _RenderDebugId;
 	// components and their function ids (all deleted here)
-	CGraphics *_Graphics;
+	MLoading *_Loading;
+	MGraphics *_Graphics;
 	uint _UpdateGraphicsDriverId;
 	
 	// instances
@@ -83,6 +85,8 @@ private:
 	CFunctionCaller _RenderFunctions;
 	// the loading screen that always works
 	CLoadingScreen _LoadingScreen;
+	// string identifier
+	CStringIdentifier _StringIdentifier;
 	// to know which data has been loaded
 	bool _LoadedUtils, _LoadedBase, _LoadedLogin, _LoadedIngame, _LoadedConnection;
 	bool _EnabledUtils, _EnabledBase, _EnabledLogin, _EnabledIngame, _EnabledConnection;
@@ -119,7 +123,13 @@ private:
 	void disableConnection();
 	void disableAll();
 
+	// update and render functions
 	static void updateUtilities(void *context, void *tag);
+	static void updateDebug(void *context, void *tag);
+	static void renderDebug(void *context, void *tag);
+
+	// various debug utilities, place in updateDebug and renderDebug
+	void renderVersion();
 };
 
 }

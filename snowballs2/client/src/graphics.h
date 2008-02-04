@@ -1,15 +1,16 @@
 /**
  * \file graphics.h
- * \brief CGraphics
+ * \brief MGraphics
  * \date 2008-01-21 23:40GMT
  * \author Jan Boon (Kaetemi)
- * CGraphics
+ * MGraphics
  * 
  * $Id$
  */
 
 /* 
  * Copyright (C) 2008  Jan Boon (Kaetemi)
+ * Based on NEVRAX SNOWBALLS, Copyright (C) 2001  Nevrax Ltd.
  * 
  * This file is part of OpenNeL Snowballs.
  * OpenNeL Snowballs is free software: you can redistribute it and/or
@@ -49,12 +50,12 @@ namespace SBCLIENT {
 	class CI18NHelper;
 
 /**
- * \brief CGraphics
+ * \brief MGraphics
  * \date 2008-01-21 23:40GMT
  * \author Jan Boon (Kaetemi)
- * CGraphics
+ * MGraphics
  */
-class CGraphics
+class MGraphics
 {
 protected:
 	// instances
@@ -67,8 +68,8 @@ public:
 	NL3D::UDriver *Driver; // deleted here
 	NL3D::UTextContext *TextContext; // deleted here, might be moved
 public:
-	CGraphics(NLMISC::IProgressCallback &progressCallback, const std::string &id, CI18NHelper *i18n);
-	virtual ~CGraphics();
+	MGraphics(NLMISC::IProgressCallback &progressCallback, const std::string &id, CI18NHelper *i18n);
+	virtual ~MGraphics();
 
 	static void updateDriver(void *context, void *tag);
 
@@ -87,7 +88,7 @@ public:
 
 private:
 	static void configWindowTitle(void *context, const std::string &varName, NLMISC::CConfigFile::CVar &var, void *tag);
-}; /* class CGraphics */
+}; /* class MGraphics */
 
 } /* namespace SBCLIENT */
 

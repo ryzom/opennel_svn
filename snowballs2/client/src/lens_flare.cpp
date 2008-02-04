@@ -39,7 +39,7 @@ using namespace std;
 using namespace NLMISC;
 using namespace NL3D;
 
-#include "mouse_listener.h"
+#include "_mouse_listener.h"
 #include <nel/misc/vectord.h> // temp!
 extern C3dMouseListener *MouseListener;
 
