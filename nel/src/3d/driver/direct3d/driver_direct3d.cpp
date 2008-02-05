@@ -232,7 +232,7 @@ CDriverD3D::CDriverD3D()
 
 	}
 	_DepthRangeNear = 0.f;
-	_DepthRangeNear = 1.f;
+	_DepthRangeFar = 1.f;
 	// default for lightmap
 	_LightMapDynamicLightDirty= false;
 	_LightMapDynamicLightEnabled= false;
