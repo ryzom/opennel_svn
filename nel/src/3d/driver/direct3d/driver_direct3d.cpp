@@ -1211,6 +1211,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 bool CDriverD3D::init (uint windowIcon, emptyProc exitFunc)
 {
 	H_AUTO_D3D(CDriver3D_init );
+
+	ExitFunc = exitFunc;
+
 	// Register a window class
 	WNDCLASSW		wc;
 
@@ -1227,10 +1230,12 @@ bool CDriverD3D::init (uint windowIcon, emptyProc exitFunc)
 	ucstring us = _WindowClass;
 	wc.lpszClassName	= (LPCWSTR)us.c_str();
 	wc.lpszMenuName		= NULL;
-	if ( !RegisterClassW(&wc) )
-		nlwarning ("CDriverD3D::init: Can't register windows class %s", wc.lpszClassName);
-
-	ExitFunc = exitFunc;
+	if (!RegisterClassW(&wc))
+	{
+		nlwarning("CDriverD3D::init: Can't register windows class %s", _WindowClass.c_str());
+		_WindowClass = "";
+		return false;
+	}
 
 	return true;
 }
