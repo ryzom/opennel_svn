@@ -1,9 +1,9 @@
 /**
  * \file graphics.h
- * \brief MGraphics
+ * \brief CGraphics
  * \date 2008-01-21 23:40GMT
  * \author Jan Boon (Kaetemi)
- * MGraphics
+ * CGraphics
  * 
  * $Id$
  */
@@ -34,6 +34,7 @@
 #include <nel/misc/types_nl.h>
 
 #include "config_proxy.h"
+#include "member_callback_decl.h"
 
 #include <nel/misc/ucstring.h>
 
@@ -50,12 +51,12 @@ namespace SBCLIENT {
 	class CI18NHelper;
 
 /**
- * \brief MGraphics
+ * \brief CGraphics
  * \date 2008-01-21 23:40GMT
  * \author Jan Boon (Kaetemi)
- * MGraphics
+ * CGraphics
  */
-class MGraphics
+class CGraphics
 {
 protected:
 	// instances
@@ -68,10 +69,10 @@ public:
 	NL3D::UDriver *Driver; // deleted here
 	NL3D::UTextContext *TextContext; // deleted here, might be moved
 public:
-	MGraphics(NLMISC::IProgressCallback &progressCallback, const std::string &id, CI18NHelper *i18n);
-	virtual ~MGraphics();
+	CGraphics(NLMISC::IProgressCallback &progressCallback, const std::string &id, CI18NHelper *i18n);
+	virtual ~CGraphics();
 
-	static void updateDriver(void *context, void *tag);
+	SBCLIENT_CALLBACK_DECL(updateDriver);
 
 	/// Set the window title, accepts an i18n label.
 	void setWindowTitle(const std::string &title);
@@ -87,8 +88,10 @@ public:
 	static void (*DriverExit)();
 
 private:
-	static void configWindowTitle(void *context, const std::string &varName, NLMISC::CConfigFile::CVar &var, void *tag);
-}; /* class MGraphics */
+	SBCLIENT_CALLBACK_CONFIG_DECL(configWindowTitle);
+	SBCLIENT_CALLBACK_CONFIG_DECL(configDisplayMode);
+	SBCLIENT_CALLBACK_CONFIG_DECL(configFontShadow);
+}; /* class CGraphics */
 
 } /* namespace SBCLIENT */
 

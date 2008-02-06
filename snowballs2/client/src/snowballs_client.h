@@ -28,6 +28,7 @@
 #include "loading_screen.h"
 #include "function_caller.h"
 #include "string_identifier.h"
+#include "member_callback_decl.h"
 
 #include "login.h"
 
@@ -41,28 +42,27 @@ namespace NL3D {
 }
 
 namespace SBCLIENT {
+	struct CCommandWrapper;
 	class CConfigManager;
 	class CConfigProxy;
 	class CComponentManager;
 	class CI18NHelper;
-	class MLoading;
-	class MGraphics;
+	class CLoading;
+	class CGraphics;
+	class CSound;
 
 /**
- * Snowballs client 0.3.
+ * Snowballs client 0.4.0
  * \date 2007-2008
  */
 class CSnowballsClient
 {
 private:
-	// constants
-	static const uint8 Invalid = 0, Load = 1, Reset = 2, Exit = 3;
-	static const uint8 Login = 10, Game = 11;
+	// identifiers
+	uint Invalid, Load, Reset, Exit;
+	uint Login, Game;
 
 	// pointers
-#if SBCLIENT_USE_LOG
-	NLMISC::CFileDisplayer *_FileDisplayer; // deleted here
-#endif
 	// the configuration
 	CConfigProxy *_Config; // deleted here
 	CConfigManager *_ConfigManager; // deleted here
@@ -74,12 +74,17 @@ private:
 	uint _UpdateDebugId;
 	uint _RenderDebugId;
 	// components and their function ids (all deleted here)
-	MLoading *_Loading; // loading screen
-	MGraphics *_Graphics; // graphics driver
+	SBCLIENT::CLoading *_Loading; // loading screen
+	SBCLIENT::CGraphics *_Graphics; // graphics driver
 	uint _GraphicsUpdateDriverId;
-	MLogin *_Login; // login screen
+	SBCLIENT::CSound *_Sound; // sound driver
+	uint _SoundUpdateSoundId;
+	SBCLIENT::CLogin *_Login; // login screen
 	uint _LoginUpdateInterfaceId;
 	uint _LoginRenderInterfaceId;
+
+	// commands, must be deleted
+	CCommandWrapper *_SetStateCommand;
 	
 	// instances
 	// the function callers
@@ -93,7 +98,7 @@ private:
 	bool _LoadedUtils, _LoadedBase, _LoadedLogin, _LoadedIngame, _LoadedConnection;
 	bool _EnabledUtils, _EnabledBase, _EnabledLogin, _EnabledIngame, _EnabledConnection;
 	// contains information about what frontend to connect to
-	MLogin::CLoginData _LoginData;
+	CLogin::CLoginData _LoginData;
 	// set _NextState to switch the current game state
 	uint8 _CurrentState, _NextState;
 public:
@@ -125,13 +130,16 @@ private:
 	void disableConnection();
 	void disableAll();
 
+	// commands
+	SBCLIENT_CALLBACK_COMMAND_DECL(commandSetState);
+
 	// update and render functions
-	static void updateUtilities(void *context, void *tag);
-	static void updateDebug(void *context, void *tag);
-	static void renderDebug(void *context, void *tag);
+	SBCLIENT_CALLBACK_DECL(updateUtilities);
+	SBCLIENT_CALLBACK_DECL(updateDebug);
+	SBCLIENT_CALLBACK_DECL(renderDebug);
 
 	// various debug utilities, place in updateDebug and renderDebug
-	void renderVersion();
+	SBCLIENT_CALLBACK_DECL(renderVersion);
 };
 
 }

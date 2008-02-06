@@ -30,9 +30,10 @@
 // 06. [+4000000 - +4099999] Update Landscape (async zone loading near entity)
 // 07. [+3000000 - +3099999] Update Entities (collisions and actions)
 // 08. [+2000000 - +2099999] Update Animations (playlists)
-// 09. [+2500000 - +2599999] Update Interface (login, ui, etc)
-// 10. [+1000000 - +1099999] Update Outgoing (network, send new position etc)
-// 11. [-1000000 - +0999999] Update Debug (stuff for dev)
+// 09. [+1500000 - +1599999] Update Interface (login, ui, etc)
+// 10. [+1200000 - +1299999] Update Sound (sound driver)
+// 11. [+1000000 - +1099999] Update Outgoing (network, send new position etc)
+// 12. [-1000000 - +0999999] Update Debug (stuff for dev)
 //
 // 01. [+8000000 - +8099999] Render Driver (background black, done here)
 // 02. [+7000000 - +7099999] Render Sky (sky scene)
@@ -50,9 +51,12 @@
 #include "i18n_helper.h"
 #include "config_manager.h"
 #include "config_proxy.h"
+#include "member_callback_impl.h"
+#include "command_wrapper.h"
 
 #include "loading.h"
 #include "graphics.h"
+#include "sound.h"
 
 #include <nel/misc/config_file.h>
 #include <nel/misc/path.h>
@@ -143,62 +147,88 @@ using namespace NL3D;
 
 namespace SBCLIENT {
 
+struct CSnowballsDebug
+{
+protected:
+#if SBCLIENT_USE_LOG
+	NLMISC::CFileDisplayer *_FileDisplayer; // deleted here
+#endif
+public:
+	CSnowballsDebug::CSnowballsDebug()		
+#if SBCLIENT_USE_LOG
+	: _FileDisplayer(NULL)
+#endif
+	{
+		// use log.log if NEL_LOG_IN_FILE and SBCLIENT_USE_LOG_LOG defined as 1
+		createDebug(NULL, SBCLIENT_USE_LOG_LOG, false);
+		srand((uint)CTime::getLocalTime());
+
+#if SBCLIENT_USE_LOG
+		// create snowballs_client.log
+		// filedisplayer only deletes the 001 etc
+		if (CFile::isExists(SBCLIENT_LOG_FILE))
+			CFile::deleteFile(SBCLIENT_LOG_FILE);
+		// initialize the log file
+		_FileDisplayer = new CFileDisplayer();
+		_FileDisplayer->setParam(SBCLIENT_LOG_FILE, SBCLIENT_ERASE_LOG);
+		DebugLog->addDisplayer(_FileDisplayer);
+		InfoLog->addDisplayer(_FileDisplayer);
+		WarningLog->addDisplayer(_FileDisplayer);
+		AssertLog->addDisplayer(_FileDisplayer);
+		ErrorLog->addDisplayer(_FileDisplayer);
+#endif
+		nlinfo("Starting Snowballs!");
+		// end of debug/log initialization
+	}
+
+	CSnowballsDebug::~CSnowballsDebug()
+	{	
+		// begin of debug/log destruction
+		nlinfo("See you later!");
+#if SBCLIENT_USE_LOG
+		nlassert(_FileDisplayer);
+		DebugLog->removeDisplayer(_FileDisplayer);
+		InfoLog->removeDisplayer(_FileDisplayer);
+		WarningLog->removeDisplayer(_FileDisplayer);
+		AssertLog->removeDisplayer(_FileDisplayer);
+		ErrorLog->removeDisplayer(_FileDisplayer);
+		delete _FileDisplayer;
+#endif		
+	}
+};
+
 CSnowballsClient::CSnowballsClient() 
 : _I18NHelper(NULL), _Config(NULL), _ConfigManager(NULL), // utils
-#if SBCLIENT_USE_LOG
-  _FileDisplayer(NULL), 
-#endif
   // special function ids
   _UpdateUtilitiesId(0), _UpdateDebugId(0), _RenderDebugId(0), 
   // components and their function ids
   _Loading(NULL), 
   _Graphics(NULL), _GraphicsUpdateDriverId(0), 
+  _Sound(NULL), _SoundUpdateSoundId(0), 
   _Login(NULL), _LoginUpdateInterfaceId(0), _LoginRenderInterfaceId(0), 
+  // commands
+  _SetStateCommand(NULL), 
   // states
-  _CurrentState(Invalid), _NextState(Load),
   _LoadedUtils(false), _LoadedBase(false), _LoadedLogin(false), 
   _LoadedIngame(false), _LoadedConnection(false), 
   _EnabledUtils(false), _EnabledBase(false), _EnabledLogin(false), 
   _EnabledIngame(false), _EnabledConnection(false) // do not change these
 {
-	// use log.log if NEL_LOG_IN_FILE and SBCLIENT_USE_LOG_LOG defined as 1
-	createDebug(NULL, SBCLIENT_USE_LOG_LOG, false);
-	srand((uint)CTime::getLocalTime());
-
-#if SBCLIENT_USE_LOG
-	// create snowballs_client.log
-	// filedisplayer only deletes the 001 etc
-	if (CFile::isExists(SBCLIENT_LOG_FILE))
-		CFile::deleteFile(SBCLIENT_LOG_FILE);
-	// initialize the log file
-	_FileDisplayer = new CFileDisplayer();
-	_FileDisplayer->setParam(SBCLIENT_LOG_FILE, SBCLIENT_ERASE_LOG);
-	DebugLog->addDisplayer(_FileDisplayer);
-	InfoLog->addDisplayer(_FileDisplayer);
-	WarningLog->addDisplayer(_FileDisplayer);
-	AssertLog->addDisplayer(_FileDisplayer);
-	ErrorLog->addDisplayer(_FileDisplayer);
-#endif
-	nlinfo("Starting Snowballs!");
-	// end of debug/log initialization
+	Invalid = CStringIdentifier::get("Invalid");
+	Load = CStringIdentifier::get("Load");
+	Reset = CStringIdentifier::get("Reset");
+	Exit = CStringIdentifier::get("Exit");
+	Login = CStringIdentifier::get("Login");
+	Game = CStringIdentifier::get("Game");
+	_CurrentState = Invalid;
+	_NextState = Load;
 }
 
 CSnowballsClient::~CSnowballsClient()
 {
+	// just to be sure ;)
 	disableAll();
-	unloadAll(); // just to be sure :(
-	
-	// begin of debug/log destruction
-	nlinfo("See you later!");
-#if SBCLIENT_USE_LOG
-	nlassert(_FileDisplayer);
-	DebugLog->removeDisplayer(_FileDisplayer);
-	InfoLog->removeDisplayer(_FileDisplayer);
-	WarningLog->removeDisplayer(_FileDisplayer);
-	AssertLog->removeDisplayer(_FileDisplayer);
-	ErrorLog->removeDisplayer(_FileDisplayer);
-	delete _FileDisplayer;
-#endif
+	unloadAll();
 }
 
 int CSnowballsClient::run()
@@ -213,32 +243,35 @@ SwitchState:
 	}
 	else
 	{
-		switch(_CurrentState)
+		// force unloads for current state
+		if (_CurrentState == Game)
 		{
-		case Game:
 			disableConnection();
 			unloadConnection();
-			break;
 		}
-		switch(_NextState)
+
+		// load and unload for next state
+		if (_NextState == Load)
 		{
-		case Load:
 			loadUtils();
 			enableUtils();
 			loadBase();
 			enableBase();
-			break;
-		case Reset:
+		}
+		else if (_NextState == Reset)
+		{
 			// displayLoadingState("Reset");
 			disableAll();
 			unloadAll();
-			break;
-		case Exit:
+		}
+		else if (_NextState == Exit)
+		{
 			// displayLoadingState("See you later!");
 			disableAll();
 			unloadAll();
-			break;
-		case Login:
+		}
+		else if (_NextState == Login)
+		{
 			loadUtils(); // core is required
 			enableUtils();
 			loadBase();
@@ -247,8 +280,9 @@ SwitchState:
 			// unloadIngame(); // don't uncomment this, we keep the data :)
 			loadLogin(); // login is required
 			enableLogin();
-			break;
-		case Game:
+		}
+		else if (_NextState == Game)
+		{
 			loadUtils(); // core is required
 			enableUtils();
 			loadBase();
@@ -259,24 +293,28 @@ SwitchState:
 			enableIngame();
 			loadConnection();
 			enableConnection();
-			break;
 		}
 	}
 	_LoadingScreen.setBackground(0);
 	_CurrentState = _NextState;
-	switch(_CurrentState)
+
+	// handle special states
+	if (_CurrentState == Load) // switch to the default state
 	{
-	case Load: // switch to the default state
 		_NextState = Login;
-		break;
-	case Reset: // used to reset everything
+	}
+	else if (_CurrentState == Reset) // used to reset everything
+	{
 		_NextState = Load;
-		break;
-	case Exit: // exit the loop
+	}
+	else if (_CurrentState ==  Exit) // exit the loop
+	{
 		return EXIT_SUCCESS;
-	default:
+	}
+	else
+	{
 		do { if (!_Graphics->Driver->isActive()) 
-				{ _NextState = Exit; break; }
+				{ _NextState = Exit; goto SkipLoop; }
 			// call all update functions
 			_UpdateFunctions.execute();
 			// if driver is lost (d3d) do nothing for a while
@@ -291,9 +329,9 @@ SwitchState:
 			
 				// swap 3d buffers
 				_Graphics->Driver->swapBuffers();
-			}	
+			}
+SkipLoop:;
 		} while (_CurrentState == _NextState);
-		break;
 	}
 	goto SwitchState;
 }
@@ -304,7 +342,7 @@ void CSnowballsClient::loadUtils()
 	{
 		_LoadedUtils = true;
 		// init configuration file
-		_ConfigManager = new CConfigManager(SBCLIENT_CONFIG_FILE);
+		_ConfigManager = new CConfigManager(SBCLIENT_CONFIG_FILE, SBCLIENT_CONFIG_DEFAULT_FILE);
 		_Config = new CConfigProxy(SBCLIENT_NAME);
 
 		// set the search paths (kinda important)
@@ -327,8 +365,17 @@ void CSnowballsClient::loadUtils()
 
 		// load the loading screen manager
 		nlassert(!_Loading);
-		_Loading = new MLoading(_LoadingScreen, "Loading", _I18NHelper);
+		_Loading = new CLoading(_LoadingScreen, "Loading", _I18NHelper);
 		nlassert(_Loading);
+
+		// register commands
+		nlassert(!_SetStateCommand);
+		_SetStateCommand = new CCommandWrapper(SBCLIENT_NAME,
+			_Config->getValue("SetStateCommand", string("set_state")).c_str(),
+			_I18NHelper->get("i18nSetStateCommandHelp").toString().c_str(),
+			_I18NHelper->get("i18nSetStateCommandVariables").toString().c_str(),
+			CSnowballsClient::commandSetState, this, NULL);
+		nlassert(_SetStateCommand);
 	}
 }
 
@@ -336,6 +383,9 @@ void CSnowballsClient::unloadUtils()
 {
 	if (_LoadedUtils)
 	{
+		// unregister commands
+		nlassert(_SetStateCommand); delete _SetStateCommand; _SetStateCommand = NULL;
+
 		// unload the loading screen manager
 		nlassert(_Loading); delete _Loading; _Loading = NULL;
 
@@ -405,16 +455,16 @@ void CSnowballsClient::loadBase()
 		_LoadingScreen.setRange(0.0f, 0.5f);
 		/* _Loading->setMessageState("i18nInitializeGraphics"); */
 		nlassert(!_Graphics);
-		_Graphics = new MGraphics(_LoadingScreen, "Graphics", _I18NHelper);
+		_Graphics = new CGraphics(_LoadingScreen, "Graphics", _I18NHelper);
 		nlassert(_Graphics);
 		_LoadingScreen.setDriver(_Graphics->Driver);
 		_LoadingScreen.setTextContext(_Graphics->TextContext);
 
 		_LoadingScreen.setRange(0.5f, 1.0f);
 		/* _Loading->setMessageState("i18nInitializeSound"); */
-		//nlassert(!_Sound);
-		//_Sound = new MSound(_LoadingScreen, "Sound");
-		//nlassert(_Sound);
+		nlassert(!_Sound);
+		_Sound = new CSound(_LoadingScreen, "Sound");
+		nlassert(_Sound);
 
 		_LoadingScreen.progress(1.0f);
 	}
@@ -424,7 +474,7 @@ void CSnowballsClient::unloadBase()
 {
 	if (_LoadedBase)
 	{
-		// nlassert(_Sound); delete _Sound; _Sound = NULL;
+		nlassert(_Sound); delete _Sound; _Sound = NULL;
 		_LoadingScreen.setTextContext(NULL);
 		_LoadingScreen.setDriver(NULL);
 		nlassert(_Graphics); delete _Graphics; _Graphics = NULL;
@@ -441,7 +491,11 @@ void CSnowballsClient::enableBase()
 
 		nlassert(!_GraphicsUpdateDriverId);
 		_GraphicsUpdateDriverId = _UpdateFunctions.add(
-			MGraphics::updateDriver, _Graphics, NULL, 7050000);
+			SBCLIENT::CGraphics::updateDriver, _Graphics, NULL, 7050000);
+
+		nlassert(!_SoundUpdateSoundId);
+		_SoundUpdateSoundId = _UpdateFunctions.add(
+			SBCLIENT::CSound::updateSound, _Sound, NULL, 1250000);
 	}
 }
 
@@ -449,6 +503,10 @@ void CSnowballsClient::disableBase()
 {
 	if (_EnabledBase)
 	{
+		nlassert(_SoundUpdateSoundId);
+		_UpdateFunctions.remove(_SoundUpdateSoundId);
+		_SoundUpdateSoundId = 0;
+
 		nlassert(_GraphicsUpdateDriverId);
 		_UpdateFunctions.remove(_GraphicsUpdateDriverId);
 		_GraphicsUpdateDriverId = 0;
@@ -508,7 +566,7 @@ void CSnowballsClient::loadLogin()
 		_LoadingScreen.setRange(0.0f, 1.0f);
 		/* _Loading->setMessageState("i18nInitializeLogin"); */
 		nlassert(!_Login);
-		_Login = new MLogin("Login", _Graphics->Driver, 
+		_Login = new CLogin("Login", _Graphics->Driver, 
 			_Graphics->TextContext, _I18NHelper, &_LoginData);
 		nlassert(_Login);
 
@@ -534,11 +592,11 @@ void CSnowballsClient::enableLogin()
 
 		nlassert(!_LoginUpdateInterfaceId);
 		_LoginUpdateInterfaceId = _UpdateFunctions.add(
-			MLogin::updateInterface, _Login, NULL, 2550000);
+			CLogin::updateInterface, _Login, NULL, 1550000);
 
 		nlassert(!_LoginRenderInterfaceId);
 		_LoginRenderInterfaceId = _RenderFunctions.add(
-			MLogin::renderInterface, _Login, NULL, 2050000);
+			CLogin::renderInterface, _Login, NULL, 2050000);
 
 		_Login->enable();
 	}
@@ -827,6 +885,13 @@ void CSnowballsClient::disableAll()
 	disableUtils();
 }
 
+SBCLIENT_CALLBACK_COMMAND_IMPL(CSnowballsClient, commandSetState)
+{
+	if (args.size() != 1) return false;
+	_NextState = CStringIdentifier::get(args[0]);
+	return true;
+}
+
 void CSnowballsClient::updateUtilities(void *context, void *tag)
 {
 	CSnowballsClient *me = (CSnowballsClient *)context;
@@ -835,29 +900,28 @@ void CSnowballsClient::updateUtilities(void *context, void *tag)
 }
 
 //UTextureFile *testtexture = NULL;
-//UMaterial testmaterial;
+UMaterial testmaterial;
 
 /// Used during development only.
-void CSnowballsClient::updateDebug(void *context, void *tag)
+SBCLIENT_CALLBACK_IMPL(CSnowballsClient, updateDebug)
 {
-	CSnowballsClient *me = (CSnowballsClient *)context;
-	//if (me->_Graphics && !testtexture)
+	//if (_Graphics && !testtexture)
 	//{
-	//	testtexture = me->_Graphics->Driver->createTextureFile("snowballs_login.tga");
-	//	testmaterial = me->_Graphics->Driver->createMaterial();
+	//	testtexture = _Graphics->Driver->createTextureFile("snowballs_login.tga");
+	//	testmaterial = _Graphics->Driver->createMaterial();
 	//	testmaterial.setTexture(testtexture);
 	//}
+	//testmaterial.
 }
 
 float progress = 0.0f;
 
-void CSnowballsClient::renderDebug(void *context, void *tag)
+SBCLIENT_CALLBACK_IMPL(CSnowballsClient, renderDebug)
 {
-	CSnowballsClient *me = (CSnowballsClient *)context;
-	//if (me->_Graphics)
+	//if (_Graphics)
 	//{
 	//	nlassert(testtexture);
-	//	me->_Graphics->Driver->setMatrixMode2D11();
+	//	_Graphics->Driver->setMatrixMode2D11();
 	//	CQuadUV quad;
 	//	quad.V0.set(0.0f, 0.0f, 0.0f);
 	//	quad.V1.set(1.0f, 0.0f, 0.0f);
@@ -876,21 +940,21 @@ void CSnowballsClient::renderDebug(void *context, void *tag)
 	//	quad.V2.x = final;
 	//	quad.Uv1.U = width * final;
 	//	quad.Uv2.U = width * final;
-	//	me->_Graphics->Driver->drawQuad(quad, testmaterial);
+	//	_Graphics->Driver->drawQuad(quad, testmaterial);
 	//}
 
-	//if (me->_Loading)
+	//if (_Loading)
 	//{
 	//	progress += 0.001f;
-	//	me->_Loading->setBackgroundSnowballs();
-	//	me->_Loading->setMessageState("Test");
-	//	me->_LoadingScreen.progress(progress);
+	//	_Loading->setBackgroundSnowballs();
+	//	_Loading->setMessageState("Test");
+	//	_LoadingScreen.progress(progress);
 	//}
 
-	me->renderVersion();
+	renderVersion(tag);
 }
 
-void CSnowballsClient::renderVersion()
+SBCLIENT_CALLBACK_IMPL(CSnowballsClient, renderVersion)
 {
 	if (_Graphics)
 	{
@@ -911,18 +975,22 @@ void CSnowballsClient::renderVersion()
 
 void end();
 SBCLIENT::CSnowballsClient *client = NULL;
+SBCLIENT::CSnowballsDebug *debug = NULL;
 #ifdef NL_OS_WINDOWS
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdline, int nCmdShow)
 #else
 int main(int argc, char **argv)
 #endif
 {	
-	client = new SBCLIENT::CSnowballsClient();
+	if (debug || client) return EXIT_FAILURE;
+	debug = new SBCLIENT::CSnowballsDebug(); nlassert(debug);
+	client = new SBCLIENT::CSnowballsClient(); nlassert(client);
 	atexit(end); exit(client->run());
 	return EXIT_FAILURE;
 }
 
 void end()
 {
-	delete client;
+	nlassert(client); delete client; client = NULL;
+	nlassert(debug); delete debug; debug = NULL;
 }

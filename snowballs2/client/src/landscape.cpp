@@ -1,9 +1,9 @@
 /**
  * \file landscape.cpp
- * \brief MLandscape
+ * \brief CLandscape
  * \date 2008-02-03 20:52GMT
  * \author Jan Boon (Kaetemi)
- * MLandscape
+ * CLandscape
  * 
  * $Id$
  */
@@ -39,12 +39,12 @@ using namespace std;
 
 namespace SBCLIENT {
 
-MLandscape::MLandscape()
+CLandscape::CLandscape()
 {
 	
 }
 
-MLandscape::~MLandscape()
+CLandscape::~CLandscape()
 {
 	
 }

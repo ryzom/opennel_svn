@@ -1,9 +1,9 @@
 /**
  * \file landscape.h
- * \brief MLandscape
+ * \brief CLandscape
  * \date 2008-02-03 20:52GMT
  * \author Jan Boon (Kaetemi)
- * MLandscape
+ * CLandscape
  * 
  * $Id$
  */
@@ -36,12 +36,12 @@
 namespace SBCLIENT {
 
 /**
- * \brief MLandscape
+ * \brief CLandscape
  * \date 2008-02-03 20:52GMT
  * \author Jan Boon (Kaetemi)
- * MLandscape
+ * CLandscape
  */
-class MLandscape
+class CLandscape
 {
 protected:
 	// pointers
@@ -50,9 +50,9 @@ protected:
 	// instances
 	// ...
 public:
-	MLandscape();
-	virtual ~MLandscape();
-}; /* class MLandscape */
+	CLandscape();
+	virtual ~CLandscape();
+}; /* class CLandscape */
 
 } /* namespace SBCLIENT */
 

@@ -1,9 +1,9 @@
 /**
  * \file loading.cpp
- * \brief MLoading
+ * \brief CLoading
  * \date 2008-02-03 21:24GMT
  * \author Jan Boon (Kaetemi)
- * MLoading
+ * CLoading
  * 
  * $Id$
  */
@@ -43,7 +43,7 @@ using namespace NLMISC;
 
 namespace SBCLIENT {
 
-MLoading::MLoading(CLoadingScreen &loadingScreen, const std::string &id, CI18NHelper *i18n)
+CLoading::CLoading(CLoadingScreen &loadingScreen, const std::string &id, CI18NHelper *i18n)
 : _LoadingScreen(&loadingScreen), _I18N(i18n), _Config(id)
 {
 	// message ids
@@ -103,22 +103,22 @@ MLoading::MLoading(CLoadingScreen &loadingScreen, const std::string &id, CI18NHe
 	}
 }
 
-MLoading::~MLoading()
+CLoading::~CLoading()
 {
 	
 }
 
-void MLoading::setMessageState(const std::string &label)
+void CLoading::setMessageState(const std::string &label)
 {
 	_LoadingScreen->setMessage(_State, _I18N->get(label));
 }
 
-void MLoading::setBackgroundNeL()
+void CLoading::setBackgroundNeL()
 {
 	_LoadingScreen->setBackground(_NeL);
 }
 
-void MLoading::setBackgroundSnowballs()
+void CLoading::setBackgroundSnowballs()
 {
 	_LoadingScreen->setBackground(_Snowballs);
 }

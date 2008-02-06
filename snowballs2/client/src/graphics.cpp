@@ -1,9 +1,9 @@
 /**
  * \file graphics.cpp
- * \brief MGraphics
+ * \brief CGraphics
  * \date 2008-01-21 23:40GMT
  * \author Jan Boon (Kaetemi)
- * MGraphics
+ * CGraphics
  * 
  * $Id$
  */
@@ -33,6 +33,7 @@
 #include "graphics.h"
 
 #include "i18n_helper.h"
+#include "member_callback_impl.h"
 
 // #include <nel/misc/debug.h>
 #include <nel/3d/u_driver.h>
@@ -48,12 +49,16 @@ using namespace NL3D;
 
 namespace SBCLIENT {
 
-void (*MGraphics::DriverExit)() = NULL;
+void (*CGraphics::DriverExit)() = NULL;
 
-MGraphics::MGraphics(NLMISC::IProgressCallback &progressCallback, const std::string &id, CI18NHelper *i18n) 
-	: _Config(id), _I18N(i18n)
+CGraphics::CGraphics(NLMISC::IProgressCallback &progressCallback, const std::string &id, CI18NHelper *i18n) 
+	: _Config(id), _I18N(i18n), Driver(NULL), TextContext(NULL)
 {
+	// todo: move to init function
+	progressCallback.progress(0.0f);
+
 	// create the driver
+	nlassert(!Driver);
 	Driver = UDriver::createDriver(0, _Config.getValue(
 		"Driver", string("OpenGL")) == string("Direct3D"), DriverExit);
 	// initialize the window with config file values
@@ -62,6 +67,10 @@ MGraphics::MGraphics(NLMISC::IProgressCallback &progressCallback, const std::str
 		_Config.getValue("ScreenHeight", 600),
 		_Config.getValue("ScreenDepth", 32),
 		!_Config.getValue("ScreenFull", false)));
+	_Config.setCallback("ScreenWidth", configDisplayMode, this, NULL);
+	_Config.setCallback("ScreenHeight", configDisplayMode, this, NULL);
+	_Config.setCallback("ScreenDepth", configDisplayMode, this, NULL);
+	_Config.setCallback("ScreenFull", configDisplayMode, this, NULL);
 	// set the cache size for the font manager(in bytes)
 	Driver->setFontManagerMaxMemory(2097152);
 	// register config callbacks
@@ -69,37 +78,47 @@ MGraphics::MGraphics(NLMISC::IProgressCallback &progressCallback, const std::str
 	progressCallback.progress(0.5f);
 
 	// create the text context
+	nlassert(!TextContext);
 	TextContext = Driver->createTextContext(CPath::lookup(
 		_Config.getValue("FontName", string("n019003l.pfb"))));
-	TextContext->setKeep800x600Ratio(false); 
-	TextContext->setShaded(_Config.getValue("FontShadow", true));
+	TextContext->setKeep800x600Ratio(false);
+	_Config.setCallbackAndCall("FontShadow", configFontShadow, this, NULL);
 	progressCallback.progress(1.0f);
 }
 
-MGraphics::~MGraphics()
+CGraphics::~CGraphics()
 {
-	_Config.dropCallback("WindowTitle");
+	nlassert(TextContext);
+	_Config.dropCallback("FontShadow");
 	Driver->deleteTextContext(TextContext);
+	TextContext = NULL;
+
+	nlassert(Driver);
+	_Config.dropCallback("WindowTitle");
+	_Config.dropCallback("ScreenFull");
+	_Config.dropCallback("ScreenDepth");
+	_Config.dropCallback("ScreenHeight");
+	_Config.dropCallback("ScreenWidth");
 	Driver->release();
 	delete Driver;
+	Driver = NULL;
 }
 
-void MGraphics::updateDriver(void *context, void *tag)
+SBCLIENT_CALLBACK_IMPL(CGraphics, updateDriver)
 {	
-	MGraphics *me = (MGraphics *)context;
-	me->Driver->EventServer.pump();	
+	Driver->EventServer.pump();	
 }
 
-void MGraphics::setWindowTitle(const std::string &title)
+void CGraphics::setWindowTitle(const std::string &title)
 {
 	// get the window title from a label
 	setWindowTitle(_I18N->get(title));
 }
 
-void MGraphics::setWindowTitle(const ucstring &title)
+void CGraphics::setWindowTitle(const ucstring &title)
 {
 	// set the window title, ucstring is prefered
-	// replace this code once the UDriver supports ucstring too ;)
+	// replace this code once the UDriver etc supports ucstring too ;)
 #ifdef NL_OS_WINDOWS
 	SetWindowTextW((HWND)Driver->getDisplay(), (LPCWSTR)title.c_str());
 #else
@@ -107,7 +126,7 @@ void MGraphics::setWindowTitle(const ucstring &title)
 #endif
 }
 
-void MGraphics::saveScreenshot(const string &name, bool jpg)
+void CGraphics::saveScreenshot(const string &name, bool jpg)
 {
 	// empty bitmap
 	CBitmap bitmap;
@@ -126,11 +145,31 @@ void MGraphics::saveScreenshot(const string &name, bool jpg)
 	nlinfo("Screenshot '%s' saved", filename.c_str());
 }
 
-void MGraphics::configWindowTitle(void *context, const std::string &varName, NLMISC::CConfigFile::CVar &var, void *tag)
+SBCLIENT_CALLBACK_CONFIG_IMPL(CGraphics, configWindowTitle)
 {
-	MGraphics *me = (MGraphics *)context;
-	me->setWindowTitle(var.asString());
+	setWindowTitle(var.asString());
 }
+
+SBCLIENT_CALLBACK_CONFIG_IMPL(CGraphics, configDisplayMode)
+{
+	// need to check which var changed in this case, 
+	// because the config will return the previous value.
+	Driver->setMode(UDriver::CMode(
+		varName == "ScreenWidth" ? var.asInt() :
+		_Config.getValue("ScreenWidth", 800), 
+		varName == "ScreenHeight" ? var.asInt() :
+		_Config.getValue("ScreenHeight", 600),
+		varName == "ScreenDepth" ? var.asInt() :
+		_Config.getValue("ScreenDepth", 32),
+		varName == "ScreenFull" ? !var.asBool() :
+		!_Config.getValue("ScreenFull", false)));
+}
+
+SBCLIENT_CALLBACK_CONFIG_IMPL(CGraphics, configFontShadow)
+{
+	TextContext->setShaded(var.asBool());
+}
+
 
 } /* namespace SBCLIENT */
 

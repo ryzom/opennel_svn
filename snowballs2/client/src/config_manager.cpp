@@ -34,15 +34,18 @@
 #include "evil_singleton_impl.h"
 
 #include <nel/misc/debug.h>
+#include <nel/misc/path.h>
 
 using namespace std;
 using namespace NLMISC;
 
 namespace SBCLIENT {
 
-CConfigManager::CConfigManager(const std::string &configFile)
+CConfigManager::CConfigManager(const std::string &configFile, const std::string &rootConfigFile) 
+: _RootConfigFilename(rootConfigFile)
 {
 	SBCLIENT_EVIL_SINGLETON_CONSTRUCTOR(SBCLIENT::CConfigManager);
+	nlassert(CFile::fileExists(rootConfigFile));
 	_ConfigFile = getConfigFile(configFile);
 }
 
@@ -74,6 +77,12 @@ CConfigFile *CConfigManager::getConfigFile(const std::string &configFile)
 	if (!config)
 	{
 		config = new CConfigFile();
+		if (CPath::lookup(configFile, false, true).empty() && !CFile::fileExists(configFile))
+		{
+			FILE *f = fopen(configFile.c_str(), "wt"); nlassert(f);
+			fprintf(f, "RootConfigFilename = \"%s\";\n", _RootConfigFilename.c_str());
+			fclose(f);
+		}
 		config->load(configFile);
 		_ConfigFiles[configFile] = config;
 		_ConfigNames[config] = configFile;
@@ -119,7 +128,7 @@ CConfigFile *CConfigManager::getConfigSub(const std::string &id)
 	return _ConfigFile;
 }
 
-void CConfigManager::setCallback(NLMISC::CConfigFile *configFile, void (*cb)(void *, const std::string &, NLMISC::CConfigFile::CVar &, void *), const std::string &var, void *context, const std::string &name, void *tag)
+void CConfigManager::setCallback(NLMISC::CConfigFile *configFile, SBCLIENT_CALLBACK_CONFIG cb, const std::string &var, void *context, const std::string &name, void *tag)
 {
 	if (_ConfigCallbacks.find(var) != _ConfigCallbacks.end())
 		nlwarning("Config callback for '%s' already exists, overriding", var.c_str());

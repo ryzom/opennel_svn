@@ -33,6 +33,7 @@
 #include <nel/misc/types_nl.h>
 
 #include "evil_singleton_decl.h"
+#include "member_callback_type.h"
 
 #include <nel/misc/config_file.h>
 
@@ -52,9 +53,9 @@ class CConfigManager
 	struct CConfigCallback
 	{
 		CConfigCallback() { }
-		CConfigCallback(void (*cb)(void *, const std::string &, NLMISC::CConfigFile::CVar &, void *), void *context, const std::string &name, void *tag)
+		CConfigCallback(SBCLIENT_CALLBACK_CONFIG cb, void *context, const std::string &name, void *tag)
 			: Callback(cb), Context(context), Name(name), Tag(tag) { }
-		void (*Callback)(void *, const std::string &, NLMISC::CConfigFile::CVar &, void *);
+		SBCLIENT_CALLBACK_CONFIG Callback;
 		void *Context;
 		std::string Name;
 		void *Tag;
@@ -69,15 +70,16 @@ protected:
 	std::map<std::string, NLMISC::CConfigFile *> _ConfigFiles;
 	std::map<NLMISC::CConfigFile *, std::string> _ConfigNames;
 	std::map<std::string, CConfigCallback> _ConfigCallbacks;
+	std::string _RootConfigFilename;
 public:
-	CConfigManager(const std::string &configFile);
+	CConfigManager(const std::string &configFile, const std::string &rootConfigFile);
 	virtual ~CConfigManager();
 
 	NLMISC::CConfigFile *getConfigFile(const std::string &configFile);
 	void dropConfigFile(NLMISC::CConfigFile *configFile);
 	NLMISC::CConfigFile *getConfigSub(const std::string &id);
 
-	void setCallback(NLMISC::CConfigFile *configFile, void (*cb)(void *, const std::string &, NLMISC::CConfigFile::CVar &, void *), const std::string &var, void *context, const std::string &name, void *tag);
+	void setCallback(NLMISC::CConfigFile *configFile, SBCLIENT_CALLBACK_CONFIG cb, const std::string &var, void *context, const std::string &name, void *tag);
 	void dropCallback(NLMISC::CConfigFile *configFile, const std::string &varName);
 
 private:

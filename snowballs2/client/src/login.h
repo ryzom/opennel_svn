@@ -1,10 +1,10 @@
 /**
  * \file login.h
- * \brief MLogin
+ * \brief CLogin
  * \date 2008-02-04 01:10GMT
  * \author Mark Troutt (Mankar)
  * \author Jan Boon (Kaetemi)
- * MLogin, has some code taken from SNB-24
+ * CLogin, has some code taken from SNB-24
  * 
  * $Id$
  */
@@ -37,6 +37,7 @@
 #include <nel/misc/ucstring.h>
 
 #include "config_proxy.h"
+#include "member_callback_decl.h"
 
 #include <nel/misc/quad.h>
 #include <nel/misc/geom_ext.h>
@@ -57,13 +58,13 @@ namespace SBCLIENT {
 	class _CLoginMouse;
 
 /**
- * \brief MLogin
+ * \brief CLogin
  * \date 2008-02-04 01:10GMT
  * \author Mark Troutt (Mankar)
  * \author Jan Boon (Kaetemi)
- * MLogin, has some code taken from SNB-24
+ * CLogin, has some code taken from SNB-24
  */
-class MLogin : public NLMISC::IEventListener
+class CLogin : public NLMISC::IEventListener
 {
 public:
 	// server protocol handler versions
@@ -107,8 +108,8 @@ protected:
 	bool _Enabled;
 	uint8 _Selection;
 public:
-	MLogin(const std::string &id, NL3D::UDriver *driver, NL3D::UTextContext *textContext, CI18NHelper *i18n, CLoginData *loginData);
-	virtual ~MLogin();
+	CLogin(const std::string &id, NL3D::UDriver *driver, NL3D::UTextContext *textContext, CI18NHelper *i18n, CLoginData *loginData);
+	virtual ~CLogin();
 
 	void setSelectQuad(float x, float y);
 	void updateSelection(float x, float y);
@@ -118,9 +119,9 @@ public:
 	void enable();
 	void disable();
 
-	static void updateInterface(void *context, void *tag);
-	static void renderInterface(void *context, void *tag);
-}; /* class MLogin */
+	SBCLIENT_CALLBACK_DECL(updateInterface);
+	SBCLIENT_CALLBACK_DECL(renderInterface);
+}; /* class CLogin */
 
 } /* namespace SBCLIENT */
 

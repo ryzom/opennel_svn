@@ -1,9 +1,9 @@
 /**
- * \file loading.h
- * \brief CLoading
- * \date 2008-02-03 21:24GMT
+ * \file member_callback_type.h
+ * \brief member_callback_type
+ * \date 2008-02-06 14:22GMT
  * \author Jan Boon (Kaetemi)
- * CLoading
+ * member_callback_type
  * 
  * $Id$
  */
@@ -28,48 +28,19 @@
  * 02110-1301 USA.
  */
 
-#ifndef SBCLIENT_LOADING_H
-#define SBCLIENT_LOADING_H
+#ifndef SBCLIENT_MEMBER_CALLBACK_TYPE_H
+#define SBCLIENT_MEMBER_CALLBACK_TYPE_H
 #include <nel/misc/types_nl.h>
 
-#include "config_proxy.h"
+#include <nel/misc/config_file.h>
+namespace NLMISC {
+	class ICommand;
+}
 
-namespace SBCLIENT {
-	class CLoadingScreen;
-	class CI18NHelper;
+typedef void (*SBCLIENT_CALLBACK)(void *context, void *tag);
+typedef void (*SBCLIENT_CALLBACK_CONFIG)(void *context, const std::string &varName, NLMISC::CConfigFile::CVar &var, void *tag);
+typedef bool (*SBCLIENT_CALLBACK_COMMAND)(void *context, NLMISC::ICommand &command, const std::string &rawCommandString, const std::vector<std::string> &args, NLMISC::CLog &log, bool quiet, bool human, void *tag);
 
-/**
- * \brief CLoading
- * \date 2008-02-03 21:24GMT
- * \author Jan Boon (Kaetemi)
- * CLoading
- */
-class CLoading
-{
-protected:
-	// pointers
-	CLoadingScreen *_LoadingScreen; // not deleted here
-	CI18NHelper *_I18N; // not deleted here
-	
-	// instances
-	CConfigProxy _Config;
-	// message ids
-	uint _State;
-	// background ids
-	uint _NeL;
-	uint _Snowballs;
-public:
-	CLoading(CLoadingScreen &loadingScreen, const std::string &id, CI18NHelper *i18n);
-	virtual ~CLoading();
-
-	void setMessageState(const std::string &label);
-
-	void setBackgroundNeL();
-	void setBackgroundSnowballs();
-}; /* class CLoading */
-
-} /* namespace SBCLIENT */
-
-#endif /* #ifndef SBCLIENT_LOADING_H */
+#endif /* #ifndef SBCLIENT_MEMBER_CALLBACK_TYPE_H */
 
 /* end of file */

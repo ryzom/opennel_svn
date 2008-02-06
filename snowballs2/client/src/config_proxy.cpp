@@ -106,12 +106,36 @@ bool CConfigProxy::getValue(const string &varName, bool defaultValue)
 	return defaultValue;
 }
 
-void CConfigProxy::setCallback(const std::string &varName, void (*cb)(void *, const std::string &, NLMISC::CConfigFile::CVar &, void *), void *context, void *tag)
+CRGBA CConfigProxy::getValue(const string &varName, CRGBA &defaultValue)
+{
+	if (exists(varName)) 
+	{
+		CConfigFile::CVar &var = getVar(varName);
+		if (var.size() >= 3)
+		{
+			return CRGBA(var.asInt(0), var.asInt(1), var.asInt(2), var.size() >= 4 ? var.asInt(3) : 255);
+		}
+		nlwarning("Invalid RGBA value in config value '%s_%s', reverting to default { %i, %i, %i, %i }", _Id.c_str(), varName.c_str(), (sint)defaultValue.R, (sint)defaultValue.G, (sint)defaultValue.B, (sint)defaultValue.A);	
+	}
+	else
+	{
+		// create a new value only if one doesn't exist
+		CConfigFile::CVar varToCopy;
+		varToCopy.forceAsInt(defaultValue.R);
+		varToCopy.setAsInt(defaultValue.G, 1);
+		varToCopy.setAsInt(defaultValue.B, 2);
+		varToCopy.setAsInt(defaultValue.A, 3);
+		_ConfigFile->insertVar(_IdU + varName, varToCopy);
+	}
+	return defaultValue;
+}
+
+void CConfigProxy::setCallback(const std::string &varName, SBCLIENT_CALLBACK_CONFIG cb, void *context, void *tag)
 {
 	CConfigManager::getInstance().setCallback(_ConfigFile, cb, _IdU + varName, context, varName, tag);
 }
 
-void CConfigProxy::setCallbackAndCall(const std::string &varName, void (*cb)(void *, const std::string &, NLMISC::CConfigFile::CVar &, void *), void *context, void *tag)
+void CConfigProxy::setCallbackAndCall(const std::string &varName, SBCLIENT_CALLBACK_CONFIG cb, void *context, void *tag)
 {
 	std::string fullName = _IdU + varName;
 	CConfigManager::getInstance().setCallback(_ConfigFile, cb, fullName, context, varName, tag);

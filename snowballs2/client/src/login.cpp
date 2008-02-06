@@ -1,10 +1,10 @@
 /**
  * \file login.cpp
- * \brief MLogin
+ * \brief CLogin
  * \date 2008-02-04 01:10GMT
  * \author Mark Troutt (Mankar)
  * \author Jan Boon (Kaetemi)
- * MLogin, has some code taken from SNB-24
+ * CLogin, has some code taken from SNB-24
  * 
  * $Id$
  */
@@ -34,6 +34,8 @@
 #include <nel/misc/types_nl.h>
 #include "login.h"
 
+#include "member_callback_impl.h"
+
 // #include <nel/misc/debug.h>
 #include <nel/3d/u_driver.h>
 #include <nel/3d/u_scene.h>
@@ -41,6 +43,7 @@
 #include <nel/3d/u_text_context.h>
 #include <nel/3d/u_camera.h>
 #include <nel/3d/viewport.h>
+#include <nel/misc/command.h>
 
 using namespace std;
 using namespace NLMISC;
@@ -48,7 +51,7 @@ using namespace NL3D;
 
 namespace SBCLIENT {
 
-MLogin::MLogin(const std::string &id, NL3D::UDriver *driver, NL3D::UTextContext *textContext, CI18NHelper *i18n, CLoginData *loginData)
+CLogin::CLogin(const std::string &id, NL3D::UDriver *driver, NL3D::UTextContext *textContext, CI18NHelper *i18n, CLoginData *loginData)
 : _Driver(driver), _TextContext(textContext), _I18N(i18n), 
 _LoginData(loginData), _Config(id), _LogoAngle(0.0f), 
 _TypingPassword(false), _Enabled(false), _Selection(0)
@@ -109,7 +112,7 @@ _TypingPassword(false), _Enabled(false), _Selection(0)
 	_Logo.setTransformMode(UTransformable::RotEuler);
 }
 
-MLogin::~MLogin()
+CLogin::~CLogin()
 {
 	_LogoScene->deleteInstance(_Logo);
 	_Driver->deleteScene(_LogoScene);
@@ -122,7 +125,7 @@ MLogin::~MLogin()
 	_Driver->deleteMaterial(_BackgroundMaterial);
 }
 
-void MLogin::setSelectQuad(float x, float y)
+void CLogin::setSelectQuad(float x, float y)
 {
 	float half_width = 256.0f / 1024.0f / 2.0f;
 	float half_height = 256.0f / 768.0f / 2.0f;
@@ -132,7 +135,7 @@ void MLogin::setSelectQuad(float x, float y)
 	_SelectQuad.V3.set(x - half_width, y + half_height, 0.0f);
 }
 
-void MLogin::updateSelection(float x, float y)
+void CLogin::updateSelection(float x, float y)
 {
 	if (x > 0.850f && x < 0.985f && y > 0.892f && y < 0.985f)
 	{
@@ -162,7 +165,7 @@ void MLogin::updateSelection(float x, float y)
 	else _Selection = 0;
 }
 
-void MLogin::operator () (const CEvent &event)
+void CLogin::operator () (const CEvent &event)
 {
 	if (!_Message.empty()) return;
 
@@ -232,13 +235,17 @@ void MLogin::operator () (const CEvent &event)
 					_LoginData->Version = Offline;
 					_LoginData->Password = "";
 					_LoginData->FrontEnd = "";
-					// switch game state
+					ICommand::execute(_Config.getValue(
+						"OfflineCommand", string("set_state Game")), 
+						*INelContext::getInstance().getInfoLog());
 					break;
 				case ConnectButton:
 					// try connecting
 					break;
 				case ExitButton:
-					// switch exit state
+					ICommand::execute(_Config.getValue(
+						"ExitCommand", string("set_state Exit")), 
+						*INelContext::getInstance().getInfoLog());
 					break;
 				}
 			}
@@ -246,7 +253,7 @@ void MLogin::operator () (const CEvent &event)
 	}
 }
 
-void MLogin::enable()
+void CLogin::enable()
 {
 	nlassert(!_Enabled); _Enabled = true;
 	_Driver->EventServer.addListener(EventCharId, this);
@@ -254,7 +261,7 @@ void MLogin::enable()
 	_Driver->EventServer.addListener(EventMouseUpId, this);
 }
 
-void MLogin::disable()
+void CLogin::disable()
 {
 	nlassert(_Enabled); _Enabled = false;
 	_Driver->EventServer.removeListener(EventCharId, this);
@@ -262,57 +269,56 @@ void MLogin::disable()
 	_Driver->EventServer.removeListener(EventMouseUpId, this);
 }
 
-void MLogin::updateInterface(void *context, void *tag)
-{	
-	MLogin *me = (MLogin *)context;
+SBCLIENT_CALLBACK_IMPL(CLogin, updateInterface)
+{
 	float temptime = 1.0f / 60.0f;
 
 	// some silly code to add the | and do the stars
-	me->_UsernameText = me->_LoginData->Username;
-	me->_PasswordStarsText = "";
-	for (uint i = 0; i < me->_LoginData->Password.size(); ++i)
-		me->_PasswordStarsText += "*";
-	if (me->_TypingPassword) me->_PasswordStarsText += "|";
-	else me->_UsernameText += "|";
+	_UsernameText =_LoginData->Username;
+	_PasswordStarsText = "";
+	for (uint i = 0; i < _LoginData->Password.size(); ++i)
+		_PasswordStarsText += "*";
+	if (_Message.empty()) {
+	if (_TypingPassword) _PasswordStarsText += "|";
+	else _UsernameText += "|"; }
 	
-	//me->_SnowScene->animate(temptime);
+	//_SnowScene->animate(temptime);
 
 	//updateLoginInterface
-	if (!me->_Message.empty())
+	if (!_Message.empty())
 	{
-		me->_LogoAngle += 2.0f * temptime;
-		me->_Logo.setRotEuler(0.0f, 0.0f, me->_LogoAngle);
-		me->_LogoScene->animate(temptime);
+		_LogoAngle += 2.0f * temptime;
+		_Logo.setRotEuler(0.0f, 0.0f, _LogoAngle);
+		_LogoScene->animate(temptime);
 	}
 	
 	// exit if escape?
 }
 
-void MLogin::renderInterface(void *context, void *tag)
-{	
-	MLogin *me = (MLogin *)context;
-	me->_Driver->setMatrixMode2D11();
-	me->_Driver->drawQuad(me->_BackgroundQuad, me->_BackgroundMaterial);
-	me->_TextContext->setColor(CRGBA(255, 255, 255, 255));
-	me->_TextContext->setHotSpot(UTextContext::MiddleMiddle);
-	me->_TextContext->setFontSize(48);
-	me->_TextContext->printAt(0.675f, 0.4375f, me->_UsernameText);
-	me->_TextContext->printAt(0.675f, 0.2875f, me->_PasswordStarsText);
-	me->_Driver->clearZBuffer();
-	//me->_SnowScene->render();
-	if (!me->_Message.empty())
+SBCLIENT_CALLBACK_IMPL(CLogin, renderInterface)
+{
+	_Driver->setMatrixMode2D11();
+	_Driver->drawQuad(_BackgroundQuad, _BackgroundMaterial);
+	_TextContext->setColor(CRGBA(255, 255, 255, 255));
+	_TextContext->setHotSpot(UTextContext::MiddleMiddle);
+	_TextContext->setFontSize(48);
+	_TextContext->printAt(0.675f, 0.4375f, _UsernameText);
+	_TextContext->printAt(0.675f, 0.2875f, _PasswordStarsText);
+	_Driver->clearZBuffer();
+	//_SnowScene->render();
+	if (!_Message.empty())
 	{
-		me->_Driver->drawQuad(me->_OverlayQuad, me->_OverlayMaterial);
-		me->_Driver->clearZBuffer();
-		me->_LogoScene->render();
-		me->_TextContext->setColor(CRGBA(255, 255, 255, 255));
-		me->_TextContext->setHotSpot(UTextContext::MiddleMiddle);
-		me->_TextContext->setFontSize(32);
-		me->_TextContext->printAt(0.5f, 0.5f, me->_Message);
+		_Driver->drawQuad(_OverlayQuad, _OverlayMaterial);
+		_Driver->clearZBuffer();
+		_LogoScene->render();
+		_TextContext->setColor(CRGBA(255, 255, 255, 255));
+		_TextContext->setHotSpot(UTextContext::MiddleMiddle);
+		_TextContext->setFontSize(32);
+		_TextContext->printAt(0.5f, 0.5f, _Message);
 	}
-	else if (me->_Selection)
+	else if (_Selection)
 	{
-		me->_Driver->drawQuad(me->_SelectQuad, me->_SelectMaterial);
+		_Driver->drawQuad(_SelectQuad, _SelectMaterial);
 	}
 }
 

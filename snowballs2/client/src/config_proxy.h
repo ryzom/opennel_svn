@@ -32,7 +32,10 @@
 #define SBCLIENT_CONFIG_PROXY_H
 #include <nel/misc/types_nl.h>
 
+#include "member_callback_type.h"
+
 #include <nel/misc/config_file.h>
+#include <nel/misc/rgba.h>
 
 #include <map>
 
@@ -66,9 +69,10 @@ public:
 	int getValue(const std::string &varName, int defaultValue);
 	std::string getValue(const std::string &varName, const std::string &defaultValue);
 	bool getValue(const std::string &varName, bool defaultValue);
+	NLMISC::CRGBA getValue(const std::string &varName, NLMISC::CRGBA &defaultValue);
 
-	void setCallback(const std::string &varName, void (*cb)(void *, const std::string &, NLMISC::CConfigFile::CVar &, void *), void *context, void *tag);
-	void setCallbackAndCall(const std::string &varName, void (*cb)(void *, const std::string &, NLMISC::CConfigFile::CVar &, void *), void *context, void *tag);
+	void setCallback(const std::string &varName, SBCLIENT_CALLBACK_CONFIG cb, void *context, void *tag);
+	void setCallbackAndCall(const std::string &varName, SBCLIENT_CALLBACK_CONFIG cb, void *context, void *tag);
 	void dropCallback(const std::string &varName);
 }; /* class CConfigProxy */
 

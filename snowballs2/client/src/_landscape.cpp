@@ -139,44 +139,9 @@ void cbUpdateLandscape (CConfigFile::CVar &var)
 	////}
 	nlwarning ("Unknown variable update %s", var.Name.c_str());
 }
-//
-//void initLight()
-//{
-//	// -- -- sun or whatever light, simple use, doesn't need class yet
-//
-//	////Sun = ULight::createLight();
-//	////nlassert(Sun != NULL);
-//	////Sun->setMode(ULight::DirectionalLight);
-//	////Driver->enableLight(0);
-//
-//	////ConfigFile->setCallback("SunAmbientColor", cbUpdateLandscape);
-//	////ConfigFile->setCallback("SunDiffuseColor", cbUpdateLandscape);
-//	////ConfigFile->setCallback("SunSpecularColor", cbUpdateLandscape);
-//	////ConfigFile->setCallback("SunDirection", cbUpdateLandscape);
-//
-//	////cbUpdateLandscape(ConfigFile->getVar("SunAmbientColor"));
-//	////cbUpdateLandscape(ConfigFile->getVar("SunDiffuseColor"));
-//	////cbUpdateLandscape(ConfigFile->getVar("SunSpecularColor"));
-//	////cbUpdateLandscape(ConfigFile->getVar("SunDirection"));
-//}
-//
-//void releaseLight()
-//{
-//	// -- -- just data
-//
-//	////ConfigFile->setCallback("SunAmbientColor", NULL);
-//	////ConfigFile->setCallback("SunDiffuseColor", NULL);
-//	////ConfigFile->setCallback("SunSpecularColor", NULL);
-//	////ConfigFile->setCallback("SunDirection", NULL);
-//
-//	////delete Sun; Sun = NULL;
-//}
 
 void	initLandscape()
 {
-
-
-
 	////ConfigFile->setCallback ("FogStart", cbUpdateLandscape);
 	////ConfigFile->setCallback ("FogEnd", cbUpdateLandscape);
 	////ConfigFile->setCallback ("FogColor", cbUpdateLandscape);
@@ -186,10 +151,6 @@ void	initLandscape()
 	////cbUpdateLandscape (ConfigFile->getVar ("FogEnd"));
 	////cbUpdateLandscape (ConfigFile->getVar ("FogColor"));
 	////cbUpdateLandscape (ConfigFile->getVar ("FogEnable"));
-
-
-
-
 
 	// -- -- start of init for "instance groups loaded from config"
 

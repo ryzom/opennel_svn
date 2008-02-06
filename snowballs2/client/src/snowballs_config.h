@@ -33,6 +33,9 @@
 // the config file name
 #define SBCLIENT_CONFIG_FILE "snowballs_client.cfg"
 
+// the default config name
+#define SBCLIENT_CONFIG_DEFAULT_FILE "snowballs_client_default.cfg"
+
 
 
 // enable compiling sound related things

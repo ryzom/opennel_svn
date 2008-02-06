@@ -1,9 +1,9 @@
 /**
  * \file sound.h
- * \brief MSound
+ * \brief CSound
  * \date 2008-02-03 20:52GMT
  * \author Jan Boon (Kaetemi)
- * MSound
+ * CSound
  * 
  * $Id$
  */
@@ -32,26 +32,45 @@
 #define SBCLIENT_SOUND_H
 #include <nel/misc/types_nl.h>
 
+#include "config_proxy.h"
+#include "member_callback_decl.h"
+
+#include <nel/misc/progress_callback.h>
+
+namespace NLSOUND {
+	class UAudioMixer;
+}
+
 namespace SBCLIENT {
 
 /**
- * \brief MSound
+ * \brief CSound
  * \date 2008-02-03 20:52GMT
  * \author Jan Boon (Kaetemi)
- * MSound
+ * CSound
  */
-class MSound
+class CSound
 {
+public:
+	// pointers
+	NLSOUND::UAudioMixer *AudioMixer; // deleted here
+	
+	// instances
+	// ...
 protected:
 	// pointers
 	// ...
 	
 	// instances
-	// ...
+	CConfigProxy _Config;
 public:
-	MSound();
-	virtual ~MSound();
-}; /* class MSound */
+	CSound(NLMISC::IProgressCallback &progressCallback, const std::string &id);
+	virtual ~CSound();
+
+	SBCLIENT_CALLBACK_DECL(updateSound);
+private:
+	static void configMaxTracks(void *context, const std::string &varName, NLMISC::CConfigFile::CVar &var, void *tag);
+}; /* class CSound */
 
 } /* namespace SBCLIENT */
 

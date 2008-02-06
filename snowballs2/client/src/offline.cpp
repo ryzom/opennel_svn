@@ -1,15 +1,16 @@
 /**
- * \file loading.h
- * \brief CLoading
- * \date 2008-02-03 21:24GMT
+ * \file offline.cpp
+ * \brief COffline
+ * \date 2008-02-06 14:43GMT
  * \author Jan Boon (Kaetemi)
- * CLoading
+ * COffline
  * 
  * $Id$
  */
 
 /* 
  * Copyright (C) 2008  Jan Boon (Kaetemi)
+ * Based on NEVRAX SNOWBALLS, Copyright (C) 2001  Nevrax Ltd.
  * 
  * This file is part of OpenNeL Snowballs.
  * OpenNeL Snowballs is free software: you can redistribute it and/or
@@ -28,48 +29,31 @@
  * 02110-1301 USA.
  */
 
-#ifndef SBCLIENT_LOADING_H
-#define SBCLIENT_LOADING_H
 #include <nel/misc/types_nl.h>
+#include "offline.h"
 
-#include "config_proxy.h"
+// Project includes
+
+// NeL includes
+// #include <nel/misc/debug.h>
+
+// STL includes
+
+using namespace std;
+// using namespace NLMISC;
 
 namespace SBCLIENT {
-	class CLoadingScreen;
-	class CI18NHelper;
 
-/**
- * \brief CLoading
- * \date 2008-02-03 21:24GMT
- * \author Jan Boon (Kaetemi)
- * CLoading
- */
-class CLoading
+COffline::COffline()
 {
-protected:
-	// pointers
-	CLoadingScreen *_LoadingScreen; // not deleted here
-	CI18NHelper *_I18N; // not deleted here
 	
-	// instances
-	CConfigProxy _Config;
-	// message ids
-	uint _State;
-	// background ids
-	uint _NeL;
-	uint _Snowballs;
-public:
-	CLoading(CLoadingScreen &loadingScreen, const std::string &id, CI18NHelper *i18n);
-	virtual ~CLoading();
+}
 
-	void setMessageState(const std::string &label);
-
-	void setBackgroundNeL();
-	void setBackgroundSnowballs();
-}; /* class CLoading */
+COffline::~COffline()
+{
+	
+}
 
 } /* namespace SBCLIENT */
-
-#endif /* #ifndef SBCLIENT_LOADING_H */
 
 /* end of file */

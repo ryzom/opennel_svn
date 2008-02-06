@@ -48,7 +48,7 @@ CFunctionCaller::~CFunctionCaller()
 		nlwarning("Function with id '%u' was not properly removed", it->Id);
 }
 
-uint CFunctionCaller::add(void (*function)(void *context, void *tag), void *context, void *tag, sint priority)
+uint CFunctionCaller::add(SBCLIENT_CALLBACK function, void *context, void *tag, sint priority)
 {
 	// increase id and check if not 0 (would happen when going over limit)
 	++_LastId; nlassert(_LastId);
@@ -78,7 +78,7 @@ void CFunctionCaller::execute()
 		it->Function(it->Context, it->Tag);
 }
 
-void CFunctionCaller::removeF(void (*function)(void *context, void *tag), bool all)
+void CFunctionCaller::removeF(SBCLIENT_CALLBACK function, bool all)
 {
 	// find those with function and remove
 	for (CFunctionInfos::iterator it = _Functions.begin(); it != _Functions.end();)

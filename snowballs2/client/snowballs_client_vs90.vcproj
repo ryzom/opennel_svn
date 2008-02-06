@@ -498,13 +498,6 @@
 				<File
 					RelativePath=".\src\_animation.cpp"
 					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_animation.h"
@@ -520,13 +513,6 @@
 				<File
 					RelativePath=".\src\_camera.cpp"
 					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_camera.h"
@@ -542,13 +528,6 @@
 				<File
 					RelativePath=".\src\_entities.cpp"
 					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_entities.h"
@@ -564,13 +543,6 @@
 				<File
 					RelativePath=".\src\_mouse_listener.cpp"
 					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_mouse_listener.h"
@@ -586,13 +558,6 @@
 				<File
 					RelativePath=".\src\_network.cpp"
 					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_network.h"
@@ -608,13 +573,6 @@
 				<File
 					RelativePath=".\src\_pacs.cpp"
 					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_pacs.h"
@@ -630,13 +588,6 @@
 				<File
 					RelativePath=".\src\_physics.cpp"
 					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_physics.h"
@@ -655,13 +606,6 @@
 					<File
 						RelativePath=".\src\_commands.cpp"
 						>
-						<FileConfiguration
-							Name="DebugFast|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-							/>
-						</FileConfiguration>
 					</File>
 					<File
 						RelativePath=".\src\_commands.h"
@@ -677,13 +621,6 @@
 					<File
 						RelativePath=".\src\_compass.cpp"
 						>
-						<FileConfiguration
-							Name="DebugFast|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-							/>
-						</FileConfiguration>
 					</File>
 					<File
 						RelativePath=".\src\_compass.h"
@@ -699,13 +636,6 @@
 					<File
 						RelativePath=".\src\_graph.cpp"
 						>
-						<FileConfiguration
-							Name="DebugFast|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-							/>
-						</FileConfiguration>
 					</File>
 					<File
 						RelativePath=".\src\_graph.h"
@@ -721,13 +651,6 @@
 					<File
 						RelativePath=".\src\_interface.cpp"
 						>
-						<FileConfiguration
-							Name="DebugFast|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-							/>
-						</FileConfiguration>
 					</File>
 					<File
 						RelativePath=".\src\_interface.h"
@@ -743,13 +666,6 @@
 					<File
 						RelativePath=".\src\_radar.cpp"
 						>
-						<FileConfiguration
-							Name="DebugFast|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-							/>
-						</FileConfiguration>
 					</File>
 					<File
 						RelativePath=".\src\_radar.h"
@@ -770,13 +686,6 @@
 				<File
 					RelativePath=".\src\_client.cpp"
 					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_client.h"
@@ -792,43 +701,12 @@
 				<File
 					RelativePath=".\src\_landscape.cpp"
 					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\_landscape.h"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\src\_sound.cpp"
-					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\src\_sound.h"
-					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
 						>
 						<Tool
 							Name="VCCustomBuildTool"
@@ -968,6 +846,14 @@
 				Name="1_framework"
 				>
 				<File
+					RelativePath=".\src\command_wrapper.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\command_wrapper.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\config_manager.cpp"
 					>
 				</File>
@@ -981,14 +867,6 @@
 				</File>
 				<File
 					RelativePath=".\src\config_proxy.h"
-					>
-				</File>
-				<File
-					RelativePath=".\src\evil_singleton_decl.h"
-					>
-				</File>
-				<File
-					RelativePath=".\src\evil_singleton_impl.h"
 					>
 				</File>
 				<File
@@ -1035,29 +913,49 @@
 					RelativePath=".\src\loading_screen.h"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="1_macros"
+				>
 				<File
-					RelativePath=".\src\music_playlist_manager.cpp"
+					RelativePath=".\src\evil_singleton_decl.h"
 					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\src\music_playlist_manager.h"
+					RelativePath=".\src\evil_singleton_impl.h"
 					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\src\member_callback_decl.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\member_callback_impl.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\member_callback_type.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="3_connection"
+				>
+				<File
+					RelativePath=".\src\network3.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\network3.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\offline.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\offline.h"
+					>
 				</File>
 			</Filter>
 			<Filter
@@ -1119,86 +1017,6 @@
 					RelativePath=".\src\snowballs_config.h"
 					>
 				</File>
-			</Filter>
-			<Filter
-				Name="trash_component"
-				>
-				<File
-					RelativePath=".\src\_component.cpp"
-					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\src\_component.h"
-					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\src\_component_manager.cpp"
-					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\src\_component_manager.h"
-					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\src\_configurable_component.cpp"
-					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\src\_configurable_component.h"
-					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
-			</Filter>
-			<Filter
-				Name="3_connection"
-				>
 			</Filter>
 		</Filter>
 	</Files>

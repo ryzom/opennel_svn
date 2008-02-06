@@ -1,9 +1,9 @@
 /**
- * \file loading.h
- * \brief CLoading
- * \date 2008-02-03 21:24GMT
+ * \file command_wrapper.h
+ * \brief CCommandWrapper
+ * \date 2008-02-06 16:46GMT
  * \author Jan Boon (Kaetemi)
- * CLoading
+ * CCommandWrapper
  * 
  * $Id$
  */
@@ -28,48 +28,43 @@
  * 02110-1301 USA.
  */
 
-#ifndef SBCLIENT_LOADING_H
-#define SBCLIENT_LOADING_H
+#ifndef SBCLIENT_COMMAND_WRAPPER_H
+#define SBCLIENT_COMMAND_WRAPPER_H
 #include <nel/misc/types_nl.h>
 
-#include "config_proxy.h"
+// Project includes
+#include "member_callback_type.h"
+
+// NeL includes
+#include <nel/misc/command.h>
+
+// STL includes
 
 namespace SBCLIENT {
-	class CLoadingScreen;
-	class CI18NHelper;
 
 /**
- * \brief CLoading
- * \date 2008-02-03 21:24GMT
+ * \brief CCommandWrapper
+ * \date 2008-02-06 16:46GMT
  * \author Jan Boon (Kaetemi)
- * CLoading
+ * CCommandWrapper
  */
-class CLoading
+struct CCommandWrapper : public NLMISC::ICommand
 {
-protected:
-	// pointers
-	CLoadingScreen *_LoadingScreen; // not deleted here
-	CI18NHelper *_I18N; // not deleted here
+	CCommandWrapper(const char *categoryName, 
+		const char *commandName, const char *commandHelp, 
+		const char *commandArgs, SBCLIENT_CALLBACK_COMMAND callback, 
+		void *context, void *tag);
+	virtual ~CCommandWrapper();
 	
-	// instances
-	CConfigProxy _Config;
-	// message ids
-	uint _State;
-	// background ids
-	uint _NeL;
-	uint _Snowballs;
-public:
-	CLoading(CLoadingScreen &loadingScreen, const std::string &id, CI18NHelper *i18n);
-	virtual ~CLoading();
-
-	void setMessageState(const std::string &label);
-
-	void setBackgroundNeL();
-	void setBackgroundSnowballs();
-}; /* class CLoading */
+	virtual bool execute(const std::string &rawCommandString, const std::vector<std::string> &args, NLMISC::CLog &log, bool quiet, bool human);
+	
+	SBCLIENT_CALLBACK_COMMAND Callback;
+	void *Context;
+	void *Tag;
+}; /* struct CCommandWrapper */
 
 } /* namespace SBCLIENT */
 
-#endif /* #ifndef SBCLIENT_LOADING_H */
+#endif /* #ifndef SBCLIENT_COMMAND_WRAPPER_H */
 
 /* end of file */

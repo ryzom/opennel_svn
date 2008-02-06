@@ -1,9 +1,9 @@
 /**
- * \file loading.h
- * \brief CLoading
- * \date 2008-02-03 21:24GMT
+ * \file command_wrapper.cpp
+ * \brief CCommandWrapper
+ * \date 2008-02-06 16:46GMT
  * \author Jan Boon (Kaetemi)
- * CLoading
+ * CCommandWrapper
  * 
  * $Id$
  */
@@ -28,48 +28,40 @@
  * 02110-1301 USA.
  */
 
-#ifndef SBCLIENT_LOADING_H
-#define SBCLIENT_LOADING_H
 #include <nel/misc/types_nl.h>
+#include "command_wrapper.h"
 
-#include "config_proxy.h"
+// Project includes
+
+// NeL includes
+// #include <nel/misc/debug.h>
+
+// STL includes
+
+using namespace std;
+// using namespace NLMISC;
 
 namespace SBCLIENT {
-	class CLoadingScreen;
-	class CI18NHelper;
 
-/**
- * \brief CLoading
- * \date 2008-02-03 21:24GMT
- * \author Jan Boon (Kaetemi)
- * CLoading
- */
-class CLoading
+CCommandWrapper::CCommandWrapper(const char *categoryName, 
+const char *commandName, const char *commandHelp, const char *commandArgs, 
+SBCLIENT_CALLBACK_COMMAND callback, void *context, void *tag) 
+: ICommand(categoryName, commandName, commandHelp, commandArgs), 
+Callback(callback), Context(context), Tag(tag) 
 {
-protected:
-	// pointers
-	CLoadingScreen *_LoadingScreen; // not deleted here
-	CI18NHelper *_I18N; // not deleted here
 	
-	// instances
-	CConfigProxy _Config;
-	// message ids
-	uint _State;
-	// background ids
-	uint _NeL;
-	uint _Snowballs;
-public:
-	CLoading(CLoadingScreen &loadingScreen, const std::string &id, CI18NHelper *i18n);
-	virtual ~CLoading();
+}
 
-	void setMessageState(const std::string &label);
+CCommandWrapper::~CCommandWrapper()
+{
+	
+}
 
-	void setBackgroundNeL();
-	void setBackgroundSnowballs();
-}; /* class CLoading */
+bool CCommandWrapper::execute(const std::string &rawCommandString, const std::vector<std::string> &args, NLMISC::CLog &log, bool quiet, bool human)
+{
+	return Callback(Context, *(static_cast<NLMISC::ICommand *>(this)), rawCommandString, args, log, quiet, human, Tag);
+}
 
 } /* namespace SBCLIENT */
-
-#endif /* #ifndef SBCLIENT_LOADING_H */
 
 /* end of file */
