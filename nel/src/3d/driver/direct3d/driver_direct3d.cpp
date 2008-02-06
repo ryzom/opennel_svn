@@ -1232,9 +1232,13 @@ bool CDriverD3D::init (uint windowIcon, emptyProc exitFunc)
 	wc.lpszMenuName		= NULL;
 	if (!RegisterClassW(&wc))
 	{
-		nlwarning("CDriverD3D::init: Can't register windows class %s", _WindowClass.c_str());
-		_WindowClass = "";
-		return false;
+		DWORD error = GetLastError();
+		if (error != ERROR_CLASS_ALREADY_EXISTS)
+		{
+			nlwarning("CDriverD3D::init: Can't register window class %s (error code %i)", _WindowClass.c_str(), (sint)error);
+			_WindowClass = "";
+			return false;
+		}
 	}
 
 	return true;
