@@ -1,5 +1,16 @@
-/** \file snowballs_client.cpp
+/**
+ * \file snowballs_client.cpp
+ * \brief CSnowballsClient
+ * \date 2008-02-07 17:21GMT
+ * \author Jan Boon (Kaetemi)
  * CSnowballsClient
+ * 
+ * $Id$
+ */
+
+/* 
+ * Copyright (C) 2008  Jan Boon (Kaetemi)
+ * Based on NEVRAX SNOWBALLS, Copyright (C) 2001  Nevrax Ltd.
  * 
  * This file is part of OpenNeL Snowballs.
  * OpenNeL Snowballs is free software: you can redistribute it and/or
@@ -16,8 +27,6 @@
  * along with OpenNeL Snowballs; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA.
- * 
- * $Id$
  */
 
 // Priority Distribution
@@ -101,74 +110,6 @@
 using namespace std;
 using namespace NLMISC;
 using namespace NL3D;
-
-//// temp
-//#define SBCLIENT_MUSIC_WAIT (0), (0)
-//#define SBCLIENT_MUSIC_LOGIN (1), (0)
-//#define SBCLIENT_MUSIC_BACKGROUND (2), (0)
-//#define SBCLIENT_MUSIC_BACKGROUND_BEAT (2), (1)
-//extern NLMISC::CConfigFile *ConfigFile;
-//extern NL3D::UDriver *Driver;
-//extern NL3D::UTextContext *TextContext;
-//#include <nel/3d/u_scene.h>
-//extern NL3D::UScene *Scene;
-//#include "mouse_listener.h"
-//#include <nel/misc/vectord.h>
-//extern C3dMouseListener *MouseListener;
-//extern float PlayerSpeed;
-//extern bool CaptureState;
-//#include "landscape_component.h"
-//SBCLIENT::CLandscapeComponent *LandscapeComponent;
-//void initLoadingState();
-//void initSound();
-//void displayLoadingState(char *state);
-//void playMusic(sint32 playlist, sint32 track);
-//void initLight();
-//void releaseLight();
-//void releaseLoadingState();
-//void releaseSound();
-//void updateTime(void *context, void *tag);
-//void updateSound(void *context, void *tag);
-//void initLandscape();
-//void initPACS();
-//void initAiming();
-//void initCamera();
-//void initMouseListenerConfig();
-//void initInterface();
-//void initRadar();
-//void initCompass();
-//void initGraph();
-//void initCommands();
-//void initEntities();
-//void initAnimation();
-//void initLensFlare();
-//void initSky();
-//void releaseLensFlare();
-//void releaseRadar();
-//void releaseCommands();
-//void releaseEntities();
-//void releaseGraph();
-//void releaseCompass();
-//void releaseInterface();
-//void releaseNetwork();
-//void releaseAnimation();
-//void releaseAiming();
-//void releasePACS();
-//void releaseLandscape();
-//extern uint32 NextEID;
-//#include "entities.h"
-//void addLine(const std::string &line);
-//void deleteAllEntities();
-//void updateClient(void *context, void *tag);
-//void renderClient(void *context, void *tag);
-//#include "scene_component.h"
-//SBCLIENT::CSceneComponent *SceneComponent;
-//#include "time_component.h"
-//SBCLIENT::CTimeComponent *TimeComponent;
-//#include "weather_component.h"
-//SBCLIENT::CWeatherComponent *WeatherComponent;
-//#include "lens_flare_component.h"
-//SBCLIENT::CLensFlareComponent *LensFlareComponent;
 
 namespace SBCLIENT {
 
@@ -269,6 +210,7 @@ SwitchState:
 	}
 	else
 	{
+		uint ns = _NextState;
 		// force unloads for current state
 		if (_CurrentState == Game)
 		{
@@ -320,9 +262,14 @@ SwitchState:
 			loadConnection();
 			enableConnection();
 		}
+		_CurrentState = ns;
+		if (_NextState != ns) 
+		{
+			nlinfo("State changed while loading");
+			goto SwitchState;
+		}
+		_LoadingScreen.setBackground(0);
 	}
-	_LoadingScreen.setBackground(0);
-	_CurrentState = _NextState;
 
 	// handle special states
 	if (_CurrentState == Load) // switch to the default state
@@ -385,9 +332,7 @@ void CSnowballsClient::loadUtils()
 		// set the language code
 		CI18N::load(_Config->getVar("LanguageCode").asString());
 		_I18NHelper = new CI18NHelper("i18n", false);
-		_I18NHelper->set("ClientVersion", ucstring(
-			SBCLIENT_NAME " - " SBCLIENT_VERSION " - " 
-			SBCLIENT_COMPILE_ID " - " __DATE__ " " __TIME__));
+		_I18NHelper->set("VERSION", ucstring(SBCLIENT_VERSION_STRING));
 
 		// load the loading screen manager
 		nlassert(!_Loading);
@@ -810,7 +755,26 @@ void CSnowballsClient::enableConnection()
 	{		
 		_EnabledConnection = true;
 
-		// ...
+		switch (_LoginData.Version)
+		{
+		case CLogin::Offline:
+			_LoginData.Message = "Offline not implemented";
+			nlwarning(_LoginData.Message.toString().c_str());
+			_NextState = Login;
+			break;
+		case CLogin::Snowballs3:
+			_LoginData.Message = "Snowballs3 not implemented";
+			nlwarning(_LoginData.Message.toString().c_str());
+			_NextState = Login;
+			break;
+		case CLogin::Snowballs5:
+			_LoginData.Message = "Snowballs5 not implemented";
+			nlwarning(_LoginData.Message.toString().c_str());
+			_NextState = Login;
+			break;
+		default:
+			nlerror("_LoginData.Version invalid"); 
+		}
 	}
 }
 
@@ -818,63 +782,24 @@ void CSnowballsClient::disableConnection()
 {
 	if (_EnabledConnection)
 	{
-		// ...
+		switch (_LoginData.Version)
+		{
+		case CLogin::Offline:
+
+			break;
+		case CLogin::Snowballs3:
+
+			break;
+		case CLogin::Snowballs5:
+
+			break;
+		default:
+			nlerror("_LoginData.Version invalid");
+		}
 		
 		_EnabledConnection = false;
 	}
 }
-
-//void CSnowballsClient::enableOffline()
-//{
-//	if (!_HasOffline)
-//	{		
-//		_HasOffline = true;
-
-//		// another bunch of temp stuff
-//#if SBCLIENT_WITH_SOUND
-//		playMusic(SBCLIENT_MUSIC_WAIT);
-//#endif
-//
-//		uint32 id = ++NextEID;
-//		ucstring Login = ucstring("Entity" + toString(id));
-//
-//		// Creates the self entity
-//		displayLoadingState("Creating offline entity");
-//		addEntity(id, Login.toUtf8(), 
-//			CEntity::Self, CVector(
-//					ConfigFile->getVar("StartPoint").asFloat(0),
-//					ConfigFile->getVar("StartPoint").asFloat(1),
-//					ConfigFile->getVar("StartPoint").asFloat(2)),
-//				CVector(
-//					ConfigFile->getVar("StartPoint").asFloat(0),
-//					ConfigFile->getVar("StartPoint").asFloat(1),
-//					ConfigFile->getVar("StartPoint").asFloat(2)));
-//
-//		displayLoadingState("Load Landscape");
-//		LandscapeComponent->loadAllZonesAround();
-//
-//		// Display a local welcome message
-//		addLine(">>>>> Welcome to Snowballs!");
-//		addLine(">>>>> Press SHIFT-ESC to exit the game.");
-//
-//		displayLoadingState("Ready!");
-//	
-//#if SBCLIENT_WITH_SOUND
-//		playMusic(SBCLIENT_MUSIC_BACKGROUND);
-//#endif
-//	}
-//}
-
-//void CSnowballsClient::disableOffline()
-//{
-//	if (_HasOffline)
-//	{
-//		//// temp
-//		//deleteAllEntities();
-//		
-//		_HasOffline = false;
-//	}
-//}
 
 void CSnowballsClient::unloadAll()
 {
@@ -976,15 +901,14 @@ SBCLIENT_CALLBACK_IMPL(CSnowballsClient, renderVersion)
 		tc->setColor(CRGBA(255, 255, 255, 255));
 		tc->setHotSpot(UTextContext::BottomRight);
 		tc->setFontSize(16);
-		tc->printAt(0.99f, 0.01f, _I18NHelper->get("i18nClientVersion"));
+		tc->printAt(0.99f, 0.01f, ucstring(SBCLIENT_VERSION_STRING));
 
 		tc->setHotSpot(UTextContext::BottomLeft);
-		tc->printAt(0.01f, 0.01f, _I18NHelper->get("i18nWindowTitle"));
+		tc->printAt(0.01f, 0.01f, CI18N::get("WindowTitle"));
 	}
 }
 
-}
-
+} /* namespace SBCLIENT */
 
 void end();
 SBCLIENT::CSnowballsClient *client = NULL;
@@ -1001,9 +925,10 @@ int main(int argc, char **argv)
 	atexit(end); exit(client->run());
 	return EXIT_FAILURE;
 }
-
 void end()
 {
 	nlassert(client); delete client; client = NULL;
 	nlassert(debug); delete debug; debug = NULL;
 }
+
+/* end of file */

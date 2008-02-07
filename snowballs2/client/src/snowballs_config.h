@@ -1,6 +1,16 @@
-/** \file snowballs_config.h
+/**
+ * \file snowballs_config.h
+ * \brief snowballs_config.h
+ * \date 2008-02-07 17:21GMT
+ * \author Jan Boon (Kaetemi)
  * Snowballs build configuration. Used for debug features.
  * This file is only supposed to be used in snowballs_client.h/cpp.
+ * 
+ * $Id$
+ */
+
+/* 
+ * Copyright (C) 2008  Jan Boon (Kaetemi)
  * 
  * This file is part of OpenNeL Snowballs.
  * OpenNeL Snowballs is free software: you can redistribute it and/or
@@ -17,8 +27,6 @@
  * along with OpenNeL Snowballs; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA.
- * 
- * $Id$
  */
 
 #include <nel/misc/types_nl.h>
@@ -109,3 +117,7 @@
 #	define SBCLIENT_COMPILE_NAME "Unknown"
 #	define SBCLIENT_COMPILE_ID "UNKNOWN"
 #endif
+
+#define SBCLIENT_VERSION_STRING SBCLIENT_NAME " - " SBCLIENT_VERSION " - " SBCLIENT_COMPILE_ID " - " __DATE__ " " __TIME__
+
+/* end of file */

@@ -46,12 +46,51 @@ namespace SBCLIENT {
 
 COffline::COffline()
 {
-	
+	//		_HasOffline = true;
+
+//		// another bunch of temp stuff
+//#if SBCLIENT_WITH_SOUND
+//		playMusic(SBCLIENT_MUSIC_WAIT);
+//#endif
+//
+//		uint32 id = ++NextEID;
+//		ucstring Login = ucstring("Entity" + toString(id));
+//
+//		// Creates the self entity
+//		displayLoadingState("Creating offline entity");
+//		addEntity(id, Login.toUtf8(), 
+//			CEntity::Self, CVector(
+//					ConfigFile->getVar("StartPoint").asFloat(0),
+//					ConfigFile->getVar("StartPoint").asFloat(1),
+//					ConfigFile->getVar("StartPoint").asFloat(2)),
+//				CVector(
+//					ConfigFile->getVar("StartPoint").asFloat(0),
+//					ConfigFile->getVar("StartPoint").asFloat(1),
+//					ConfigFile->getVar("StartPoint").asFloat(2)));
+//
+//		displayLoadingState("Load Landscape");
+//		LandscapeComponent->loadAllZonesAround();
+//
+//		// Display a local welcome message
+//		addLine(">>>>> Welcome to Snowballs!");
+//		addLine(">>>>> Press SHIFT-ESC to exit the game.");
+//
+//		displayLoadingState("Ready!");
+//	
+//#if SBCLIENT_WITH_SOUND
+//		playMusic(SBCLIENT_MUSIC_BACKGROUND);
+//#endif
 }
 
 COffline::~COffline()
 {
-	
+	//	if (_HasOffline)
+//	{
+//		//// temp
+//		//deleteAllEntities();
+//		
+//		_HasOffline = false;
+//	}
 }
 
 } /* namespace SBCLIENT */

@@ -1,5 +1,16 @@
-/** \file snowballs_client.h
+/**
+ * \file snowballs_client.h
+ * \brief CSnowballsClient
+ * \date 2008-02-07 17:21GMT
+ * \author Jan Boon (Kaetemi)
  * CSnowballsClient
+ * 
+ * $Id$
+ */
+
+/* 
+ * Copyright (C) 2008  Jan Boon (Kaetemi)
+ * Based on NEVRAX SNOWBALLS, Copyright (C) 2001  Nevrax Ltd.
  * 
  * This file is part of OpenNeL Snowballs.
  * OpenNeL Snowballs is free software: you can redistribute it and/or
@@ -16,8 +27,6 @@
  * along with OpenNeL Snowballs; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA.
- * 
- * $Id$
  */
 
 #ifndef SBCLIENT_SNOWBALLS_CLIENT_H
@@ -103,7 +112,7 @@ private:
 	// contains information about what frontend to connect to
 	CLogin::CLoginData _LoginData;
 	// set _NextState to switch the current game state
-	uint8 _CurrentState, _NextState;
+	uint _CurrentState, _NextState;
 public:
 	CSnowballsClient();
 	~CSnowballsClient();
@@ -143,8 +152,10 @@ private:
 
 	// various debug utilities, place in updateDebug and renderDebug
 	SBCLIENT_CALLBACK_DECL(renderVersion);
-};
+}; /* class CSnowballsClient */
 
-}
+} /* namespace SBCLIENT */
 
 #endif /* #ifndef SBCLIENT_SNOWBALLS_CLIENT_H */
+
+/* end of file */

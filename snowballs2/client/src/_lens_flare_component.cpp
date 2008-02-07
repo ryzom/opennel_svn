@@ -10,7 +10,7 @@
 
 /* 
  * Copyright (C) 2008  Jan Boon (Kaetemi)
- * Based on NEVRAX SNOWBALLS 0.2, Copyright (C) 2001  Nevrax Ltd.
+ * Based on NEVRAX SNOWBALLS, Copyright (C) 2001  Nevrax Ltd.
  * 
  * This file is part of NEVRAX SNOWBALLS.
  * NEVRAX SNOWBALLS is free software: you can redistribute it and/or

@@ -76,6 +76,7 @@ public:
 		std::string FrontEnd;
 		NLNET::CLoginCookie LoginCookie;
 		uint8 Version;
+		ucstring Message;
 	};
 protected:
 	static const uint8 ExitButton = 1, ConnectButton = 2, OfflineButton = 3;
@@ -101,7 +102,6 @@ protected:
 	NLMISC::CQuadUV _SelectQuad;
 	NLMISC::CQuad _OverlayQuad;
 	CConfigProxy _Config;
-	ucstring _Message;
 	float _LogoAngle;
 	ucstring _UsernameText;
 	ucstring _PasswordStarsText;

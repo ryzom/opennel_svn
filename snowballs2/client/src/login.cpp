@@ -57,7 +57,7 @@ namespace SBCLIENT {
 
 CLogin::CLogin(const std::string &id, SBCLIENT::CTime *time, NL3D::UDriver *driver, NL3D::UTextContext *textContext, CI18NHelper *i18n, CLoginData *loginData)
 : _Time(time), _Driver(driver), _TextContext(textContext), _I18N(i18n), 
-_LoginData(loginData), _Config(id), _LogoAngle(0.0f), _TimeOut(-1.0), 
+_LoginData(loginData), _Config(id), _LogoAngle(0.0f), _TimeOut(5.0), 
 _TypingPassword(false), _Enabled(false), _Selection(0)
 {
 	nlassert(_Time);
@@ -181,12 +181,12 @@ void CLogin::updateSelection(float x, float y)
 
 void CLogin::operator () (const CEvent &event)
 {
-	if (!_Message.empty())
+	if (!_LoginData->Message.empty())
 	{
 		if (_TimeOut >= 0.0f && event != EventMouseMoveId)
 		{
 			_TimeOut = -1.0f;
-			_Message = "";
+			_LoginData->Message = "";
 		}
 		return;
 	}
@@ -304,8 +304,8 @@ void CLogin::connect()
 	if (_LSClient.LastError.empty())
 	{
 		_TimeOut = -1.0f;
-		_Message = _I18N->get("i18nAuthenticatingUser");
-		nlinfo(_Message.toUtf8().c_str());
+		_LoginData->Message = _I18N->get("i18nAuthenticatingUser");
+		nlinfo(_LoginData->Message.toUtf8().c_str());
 	}
 }
 
@@ -314,7 +314,7 @@ SBCLIENT_CALLBACK_IMPL(CLogin, cbAuthenticateUser)
 	if (!_LSClient.LastError.empty())
 	{
 		_TimeOut = 5.0f;
-		_Message = ucstring(_LSClient.LastError);
+		_LoginData->Message = ucstring(_LSClient.LastError);
 		return;
 	}
 
@@ -328,10 +328,10 @@ SBCLIENT_CALLBACK_IMPL(CLogin, cbAuthenticateUser)
 	if (_LSClient.LastError.empty())
 	{
 		_TimeOut = -1.0f;
-		_Message = ucstring::makeFromUtf8(toString(
+		_LoginData->Message = ucstring::makeFromUtf8(toString(
 			_I18N->get("i18nSelectingShard").toUtf8().c_str(),
 			shard->ShardId, shard->Name.c_str(), shard->NbPlayers));
-		nlinfo(_Message.toUtf8().c_str());
+		nlinfo(_LoginData->Message.toUtf8().c_str());
 	}
 }
 
@@ -340,12 +340,13 @@ SBCLIENT_CALLBACK_IMPL(CLogin, cbSelectShard)
 	if (!_LSClient.LastError.empty())
 	{
 		_TimeOut = 5.0f;
-		_Message = ucstring(_LSClient.LastError);
+		_LoginData->Message = ucstring(_LSClient.LastError);
 		return;
 	}
 	
 	_LoginData->FrontEnd = _LSClient.FrontEnd;
-	_LoginData->LoginCookie = _LSClient.LoginCookie;
+	_LoginData->LoginCookie = _LSClient.LoginCookie;	
+	_LoginData->Message = "";
 	
 	ICommand::execute(_Config.getValue(
 		"ConnectCommand", string("set_state Game")), 
@@ -366,13 +367,13 @@ SBCLIENT_CALLBACK_IMPL(CLogin, updateInterface)
 	_PasswordStarsText = "";
 	for (uint i = 0; i < _PasswordText.size(); ++i)
 		_PasswordStarsText += "*";
-	if (_Message.empty()) {
+	if (_LoginData->Message.empty()) {
 	if (_TypingPassword) _PasswordStarsText += "|";
 	else _UsernameText += "|"; }
 	
 	//_SnowScene->animate(temptime);
 
-	if (!_Message.empty())
+	if (!_LoginData->Message.empty())
 	{
 		if (_TimeOut >= 0.0f) 
 		{
@@ -380,12 +381,12 @@ SBCLIENT_CALLBACK_IMPL(CLogin, updateInterface)
 			if (_TimeOut <= 0.0f)
 			{
 				_TimeOut = -1.0f;
-				_Message = "";
+				_LoginData->Message = "";
 			}
 		}
 	}
 
-	if (!_Message.empty())
+	if (!_LoginData->Message.empty())
 	{
 		_LogoAngle += 2.0f * (float)timeDelta;
 		_Logo.setRotEuler(0.0f, 0.0f, _LogoAngle);
@@ -405,17 +406,17 @@ SBCLIENT_CALLBACK_IMPL(CLogin, renderInterface)
 	_TextContext->printAt(0.675f, 0.2875f, _PasswordStarsText);
 	_Driver->clearZBuffer();
 	//_SnowScene->render();
-	if (!_Message.empty())
+	if (!_LoginData->Message.empty())
 	{
 		_Driver->drawQuad(_OverlayQuad, _OverlayMaterial);
 		_Driver->clearZBuffer();
 		_LogoScene->render();
 		_TextContext->setColor(CRGBA(255, 255, 255, 255));
 		_TextContext->setHotSpot(UTextContext::MiddleMiddle);
-		if (_Message.size() > 96) _TextContext->setFontSize(16);
-		else if (_Message.size() > 64) _TextContext->setFontSize(24);
+		if (_LoginData->Message.size() > 96) _TextContext->setFontSize(16);
+		else if (_LoginData->Message.size() > 64) _TextContext->setFontSize(24);
 		else _TextContext->setFontSize(32);
-		_TextContext->printAt(0.5f, 0.5f, _Message);
+		_TextContext->printAt(0.5f, 0.5f, _LoginData->Message);
 	}
 	else if (_Selection)
 	{
