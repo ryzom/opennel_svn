@@ -834,7 +834,7 @@ void CSnowballsClient::disableConnection()
 //		playMusic(SBCLIENT_MUSIC_WAIT);
 //#endif
 //
-//		uint32 id = NextEID++;
+//		uint32 id = ++NextEID;
 //		ucstring Login = ucstring("Entity" + toString(id));
 //
 //		// Creates the self entity

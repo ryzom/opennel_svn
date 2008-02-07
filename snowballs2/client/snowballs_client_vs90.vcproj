@@ -591,30 +591,6 @@
 						/>
 					</FileConfiguration>
 				</File>
-				<File
-					RelativePath=".\src\_pacs.cpp"
-					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\src\_pacs.h"
-					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
 				<Filter
 					Name="interface"
 					>
@@ -1073,6 +1049,14 @@
 				</File>
 				<File
 					RelativePath=".\src\animation_old.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\collisions_old.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\collisions_old.h"
 					>
 				</File>
 				<File

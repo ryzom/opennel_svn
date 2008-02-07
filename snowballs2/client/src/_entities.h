@@ -30,72 +30,7 @@
 // Includes
 //
 
-#include <string>
-#include <map>
-#include <queue>
-
-#include <nel/misc/vector.h>
-#include <nel/misc/time_nl.h>
-
-#include <nel/3d/animation_time.h>
-#include <nel/3d/u_instance.h>
-#include <nel/3d/u_skeleton.h>
-
-#include "_physics.h"
-#include "_animation.h"
-
-//
-// External definitions
-//
-
-//
-// Enums
-//
-
-// The collision bits used by pacs (dynamic collisions)
-
-//
-// External variables
-//
-
-// The entity representing the player avatar
-extern CEntity								*Self;
-
-// The speed of the player
-extern float								PlayerSpeed;
-// The speed of the snowball
-extern float								SnowballSpeed;
-
-// The entities storage
-extern std::map<uint32, CEntity>			Entities;
-typedef std::map<uint32, CEntity>::iterator	EIT;
-
-extern uint32 NextEID;
-
-//
-// External functions
-//
-
-EIT findEntity (uint32 eid, bool needAssert = true);
-
-void	addEntity (uint32 eid, std::string name, CEntity::TType type, const NLMISC::CVector &startPosition, const NLMISC::CVector &serverPosition);
-void	removeEntity (uint32 eid);
-
-// when we turn online, we need to clear all offline entities
-void	removeAllEntitiesExceptUs ();
-void deleteAllEntities();
-
-void initEntities();
-void updateEntities();
-void releaseEntities();
-
-// Reset the pacs position of an entity (in case pacs went wrong)
-void	resetEntityPosition(uint32 eid);
-// Process the event when an entity shoots a snowball
-void	shotSnowball(uint32 sid, uint32 eid, const NLMISC::CVector &start, const NLMISC::CVector &target, float speed, float deflagRadius);
-
-void	renderEntitiesNames ();
-
+void renderEntitiesNames ();
 
 #endif // ENTITIES_H
 

@@ -33,6 +33,7 @@
 #include <nel/misc/types_nl.h>
 
 // Project includes
+#include "member_callback_decl.h"
 #include "entity_old.h"
 
 // NeL includes
@@ -40,12 +41,16 @@
 // STL includes
 #include <map>
 
+namespace NL3D {
+	class UScene;
+}
+
 namespace SBCLIENT {
+	class CAnimationOld;
 
 /**
  * \brief CEntitiesOld
  * \date 2008-02-07 10:55GMT
- * \author Jan Boon (Kaetemi)
  * \author Nevrax Ltd.
  * CEntitiesOld
  */
@@ -80,9 +85,48 @@ public:
 	//////CRGBA EntityNameColor;
 
 	bool _TestCLS;
+protected:
+	// pointers
+	NL3D::UScene *_Scene; // p
+	CAnimationOld *_Animation; // c
 public:
 	CEntitiesOld();
 	virtual ~CEntitiesOld();
+
+	CEntityOld &getEntity(uint32 eid);
+	CEntityOld *getEntityPtr(uint32 eid);
+
+	// -- -- things like Creature, Effect, Scenery seem more flexible than Self, Other, Snowball
+	// -- -- entitybehavior (animations), entityinteraction (targetable, menu, )
+	/// Creates an entity, given its id, its type (Self, Other, Snowball), its start and server positions.
+	void addEntity(uint32 eid, std::string name, CEntityOld::TType type, const NLMISC::CVector &startPosition, const NLMISC::CVector &serverPosition);
+	
+	/// Remove an entity specified by its id
+	/// The entity passes into the Disappear state
+	void removeEntity(uint32 eid);
+
+	void removeAll();
+
+	///////// Reset the pacs position of an entity (in case pacs went wrong) :O
+	//////void resetEntityPosition(uint32 eid);
+
+	/// Process the event when an entity shoots a snowball, creates a temporary snowball entity with sid
+	void shotSnowball(uint32 sid, uint32 eid, const NLMISC::CVector &start, const NLMISC::CVector &target, float speed, float deflagRadius);
+
+	SBCLIENT_CALLBACK_DECL(updateEntities);
+
+protected:
+	/// Effectively remove the entity (don't play animation)
+	void deleteEntity(CEntityOld &entity);
+
+	/// What to do when the entity appears
+	void stateAppear(CEntityOld &entity);
+
+	/// What to do when the entity disappears
+	void stateDisappear(CEntityOld &entity);
+
+	/// Update an entity
+	void stateNormal(CEntityOld &entity);
 }; /* class CEntitiesOld */
 
 } /* namespace SBCLIENT */
