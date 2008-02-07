@@ -40,6 +40,33 @@ using namespace NLMISC;
 
 namespace SBCLIENT {
 
+//ucstring toUcString(const ucchar *format, ...)
+//{
+//	wchar_t buffer[NLMISC::MaxCStringSize];
+//
+//	va_list args;
+//	va_start(args, format);
+//	
+//	sint r = vswprintf(buffer, sizeof(buffer) / sizeof(buffer[0]), 
+//		(wchar_t *)format, args);
+//		
+//	va_end(args);
+//
+//	ucstring result;
+//	if (r > 0)
+//	{
+//		result.resize(r);
+//		ucstring::iterator dest(result.begin());
+//		for (uint i = 0; i < r; ++i)
+//		{
+//			*dest = ucchar(buffer[i]);
+//			++dest;
+//		}
+//	}
+//
+//	return result;
+//}
+
 CI18NHelper::CI18NHelper(const string &prefix, bool keepPrefix)
 	: Prefix(prefix), KeepPrefix(keepPrefix)
 {

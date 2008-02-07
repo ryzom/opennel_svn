@@ -37,6 +37,7 @@
 
 // #include <nel/misc/debug.h>
 #include <nel/misc/config_file.h>
+#include <nel/misc/i18n.h>
 
 using namespace std;
 using namespace NLMISC;
@@ -110,7 +111,7 @@ CLoading::~CLoading()
 
 void CLoading::setMessageState(const std::string &label)
 {
-	_LoadingScreen->setMessage(_State, _I18N->get(label));
+	_LoadingScreen->setMessage(_State, CI18N::get(label));
 }
 
 void CLoading::setBackgroundNeL()

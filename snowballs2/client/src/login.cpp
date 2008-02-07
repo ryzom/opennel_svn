@@ -330,7 +330,9 @@ SBCLIENT_CALLBACK_IMPL(CLogin, cbAuthenticateUser)
 		_TimeOut = -1.0f;
 		_LoginData->Message = ucstring::makeFromUtf8(toString(
 			_I18N->get("i18nSelectingShard").toUtf8().c_str(),
-			shard->ShardId, shard->Name.c_str(), shard->NbPlayers));
+			shard->ShardId,
+			shard->Name.toUtf8().c_str(),
+			shard->NbPlayers));
 		nlinfo(_LoginData->Message.toUtf8().c_str());
 	}
 }

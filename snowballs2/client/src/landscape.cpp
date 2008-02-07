@@ -52,11 +52,12 @@ using namespace NL3D;
 namespace SBCLIENT {
 
 CLandscape::CLandscape(IProgressCallback &progressCallback, 
-const std::string &id, UDriver *driver, TAnimationTime *animationTime)
-: _Config(id), _Driver(driver), AnimationTime(animationTime)
+const std::string &id, UDriver *driver,
+TGlobalAnimationTime *globalAnimationTime) 
+: _Config(id), _Driver(driver), GlobalAnimationTime(globalAnimationTime)
 {
 	nlassert(_Driver);
-	nlassert(AnimationTime);
+	nlassert(GlobalAnimationTime);
 	progressCallback.progress(0.0f);
 
 	// create a scene
@@ -110,7 +111,7 @@ CLandscape::~CLandscape()
 
 SBCLIENT_CALLBACK_IMPL(CLandscape, updateAnimations)
 {
-	Scene->animate(*AnimationTime);
+	Scene->animate(*GlobalAnimationTime);
 }
 
 SBCLIENT_CALLBACK_IMPL(CLandscape, updateLandscape)

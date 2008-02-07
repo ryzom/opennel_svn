@@ -59,6 +59,10 @@ namespace SBCLIENT {
 	class CLoading;
 	class CGraphics;
 	class CSound;
+	class CLandscape;
+	class CCollisionsOld;
+	class CAnimationOld;
+	class CEntitiesOld;
 
 /**
  * Snowballs client 0.4.0
@@ -94,6 +98,15 @@ private:
 	uint _LoginUpdateInterfaceId;
 	uint _LoginRenderInterfaceId;
 	uint _LoginUpdateNetworkId;
+	SBCLIENT::CLandscape *_Landscape;
+	uint _LandscapeUpdateAnimationsId;
+	uint _LandscapeUpdateLandscapeId;
+	uint _LandscapeUpdateSceneId;
+	SBCLIENT::CCollisionsOld *_Collisions;
+	SBCLIENT::CAnimationOld *_Animation;
+	uint _AnimationUpdateAnimationsId;
+	SBCLIENT::CEntitiesOld *_Entities;
+	uint _EntitiesUpdateEntitiesId;
 
 	// commands, must be deleted
 	CCommandWrapper *_SetStateCommand;

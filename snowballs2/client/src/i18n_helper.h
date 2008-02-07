@@ -36,6 +36,8 @@
 
 namespace SBCLIENT {
 
+//ucstring toUcString(const ucchar *format, ...);
+
 /**
  * \brief CI18NHelper
  * \date 2008-01-21 22:56GMT

@@ -91,6 +91,10 @@
 #include "graphics.h"
 #include "sound.h"
 #include "time.h"
+#include "landscape.h"
+#include "collisions_old.h"
+#include "animation_old.h"
+#include "entities_old.h"
 
 #include <nel/misc/config_file.h>
 #include <nel/misc/path.h>
@@ -163,23 +167,30 @@ public:
 	}
 };
 
-CSnowballsClient::CSnowballsClient() 
-: _I18NHelper(NULL), _Config(NULL), _ConfigManager(NULL), // utils
-  // special function ids
-  _UpdateUtilitiesId(0), _UpdateDebugId(0), _RenderDebugId(0), 
-  // components and their function ids
-  _Loading(NULL), 
-  _Graphics(NULL), _GraphicsUpdateDriverId(0), 
-  _Sound(NULL), _SoundUpdateSoundId(0), 
-  _Time(NULL), _TimeUpdateTimeId(0), 
-  _Login(NULL), _LoginUpdateInterfaceId(0), _LoginRenderInterfaceId(0), _LoginUpdateNetworkId(0), 
-  // commands
-  _SetStateCommand(NULL), 
-  // states
-  _LoadedUtils(false), _LoadedBase(false), _LoadedLogin(false), 
-  _LoadedIngame(false), _LoadedConnection(false), 
-  _EnabledUtils(false), _EnabledBase(false), _EnabledLogin(false), 
-  _EnabledIngame(false), _EnabledConnection(false) // do not change these
+CSnowballsClient::CSnowballsClient() :
+// utilities
+_StringIdentifier(), _LoadingScreen(), _LoginData(), 
+_UpdateFunctions(), _RenderFunctions(), 
+_I18NHelper(NULL), _Config(NULL), _ConfigManager(NULL), 
+// special function ids
+_UpdateUtilitiesId(0), _UpdateDebugId(0), _RenderDebugId(0), 
+// components and their function ids
+_Loading(NULL), 
+_Graphics(NULL), _GraphicsUpdateDriverId(0), 
+_Sound(NULL), _SoundUpdateSoundId(0), 
+_Time(NULL), _TimeUpdateTimeId(0), 
+_Login(NULL), _LoginUpdateInterfaceId(0), _LoginRenderInterfaceId(0), _LoginUpdateNetworkId(0), 
+_Landscape(NULL), _LandscapeUpdateAnimationsId(0), _LandscapeUpdateLandscapeId(0), _LandscapeUpdateSceneId(0), 
+_Collisions(NULL), 
+_Animation(NULL), _AnimationUpdateAnimationsId(0), 
+_Entities(NULL), _EntitiesUpdateEntitiesId(0), 
+// commands
+_SetStateCommand(NULL), 
+// states
+_LoadedUtils(false), _LoadedBase(false), _LoadedLogin(false), 
+_LoadedIngame(false), _LoadedConnection(false), 
+_EnabledUtils(false), _EnabledBase(false), _EnabledLogin(false), 
+_EnabledIngame(false), _EnabledConnection(false) // do not change these
 {
 	Invalid = CStringIdentifier::get("Invalid");
 	Load = CStringIdentifier::get("Load");
@@ -424,7 +435,7 @@ void CSnowballsClient::loadBase()
 		_Loading->setMessageState("");
 
 		_LoadingScreen.setRange(0.00f, 0.45f);
-		/* _Loading->setMessageState("i18nInitializeGraphics"); */
+		/* _Loading->setMessageState("InitializeGraphics"); */
 		nlassert(!_Graphics);
 		_Graphics = new CGraphics(_LoadingScreen, "Graphics", _I18NHelper);
 		nlassert(_Graphics);
@@ -432,13 +443,13 @@ void CSnowballsClient::loadBase()
 		_LoadingScreen.setTextContext(_Graphics->TextContext);
 
 		_LoadingScreen.setRange(0.45f, 0.90f);
-		/* _Loading->setMessageState("i18nInitializeSound"); */
+		/* _Loading->setMessageState("InitializeSound"); */
 		nlassert(!_Sound);
 		_Sound = new CSound(_LoadingScreen, "Sound");
 		nlassert(_Sound);
 
 		_LoadingScreen.setRange(0.90f, 1.00f);
-		/* _Loading->setMessageState("i18nInitializeTime"); */
+		/* _Loading->setMessageState("InitializeTime"); */
 		nlassert(!_Time);
 		_Time = new SBCLIENT::CTime(_LoadingScreen);
 		nlassert(_Time);
@@ -506,11 +517,12 @@ void CSnowballsClient::loadLogin()
 	if (!_LoadedLogin)
 	{		
 		_LoadedLogin = true;
-		_Loading->setBackgroundNeL();
+		if (_CurrentState == Game) _Loading->setBackgroundSnowballs();
+		else _Loading->setBackgroundNeL();
 		_Loading->setMessageState("");
 
 		_LoadingScreen.setRange(0.0f, 1.0f);
-		/* _Loading->setMessageState("i18nInitializeLogin"); */
+		/* _Loading->setMessageState("InitializeLogin"); */
 		nlassert(!_Login);
 		_Login = new CLogin("Login", _Time, _Graphics->Driver, 
 			_Graphics->TextContext, _I18NHelper, &_LoginData);
@@ -579,35 +591,22 @@ void CSnowballsClient::loadIngame()
 	if (!_LoadedIngame)
 	{		
 		_LoadedIngame = true;
+		_Loading->setBackgroundSnowballs();
 
-//		// just temp things
-//#if SBCLIENT_WITH_SOUND
-//		playMusic(SBCLIENT_MUSIC_WAIT);
-//#endif
-//
-//		// Create a scene
-//		SceneComponent = new CSceneComponent(
-//			_ComponentManager, "Scene", _LoadingScreen);
-//		_ComponentManager->registerComponent(SceneComponent);
-//		_ComponentManager->registerUpdate(SceneComponent, -2000);
-//		_ComponentManager->registerRender(SceneComponent, -500);
-//		Scene = SceneComponent->getScene();
-//		// Init the landscape using the previously created UScene
-//		displayLoadingState("Initialize Landscape");
-//		LandscapeComponent = new CLandscapeComponent(
-//			_ComponentManager, "Landscape", _LoadingScreen);
-//		_ComponentManager->registerComponent(LandscapeComponent);
-//		_ComponentManager->registerUpdate(LandscapeComponent, -1100);
-//		initLandscape();
-//		// Init the pacs
-//		displayLoadingState("Initialize PACS ");
-//		initPACS();
-//		// Init the aiming system
-//		displayLoadingState("Initialize Aiming ");
-//		initAiming();
-//		// Init the user camera
-//		displayLoadingState("Initialize Camera ");
-//		initCamera();
+		_LoadingScreen.setRange(0.00f, 0.25f);
+		_Loading->setMessageState("InitializeLandscape");
+		nlassert(!_Landscape);
+		_Landscape = new CLandscape(_LoadingScreen, "Landscape", 
+			_Graphics->Driver, &_Time->AnimationTime);
+		nlassert(_Landscape);
+
+		_LoadingScreen.setRange(0.25f, 0.50f);
+		_Loading->setMessageState("InitializeCollisions");
+		nlassert(!_Collisions);
+		_Collisions = new CCollisionsOld(_LoadingScreen, "Collisions", 
+			_Landscape->Scene, _Landscape->Landscape);
+		nlassert(_Collisions);
+
 //		// init weather
 //		displayLoadingState("Initialize Weather");
 //		WeatherComponent = new CWeatherComponent(
@@ -615,7 +614,44 @@ void CSnowballsClient::loadIngame()
 //		_ComponentManager->registerComponent(WeatherComponent);
 //		_ComponentManager->registerRender(WeatherComponent, -250);
 //		_ComponentManager->registerUpdate(WeatherComponent, 5000);
+
+		_LoadingScreen.setRange(0.50f, 0.75f);
+		_Loading->setMessageState("InitializeAnimation");
+		nlassert(!_Animation);
+		_Animation = new CAnimationOld(_LoadingScreen,
+			_Graphics->Driver, _Landscape->Scene);
+		nlassert(_Animation);
+
+		_LoadingScreen.setRange(0.75f, 1.00f);
+		_Loading->setMessageState("InitializeEntities");
+		nlassert(!_Entities);
+		_Entities = new CEntitiesOld(_LoadingScreen, 
+			_Landscape->Scene, _Collisions->VisualCollisionManager, 
+			_Collisions->MoveContainer, _Collisions->GlobalRetriever,
+			_Animation); // yay
+		nlassert(_Entities);
+
+//		// Init the entities prefs
+//		displayLoadingState("Initialize Entities ");
+//		initEntities();
+//		// Init animation system
+//		displayLoadingState("Initialize Animation ");
+//		initAnimation();
+
+		_LoadingScreen.progress(1.0f);
+
+
+
+
+
 //		// Create a 3D mouse listener
+//		// Init the aiming system
+//		displayLoadingState("Initialize Aiming ");
+//		initAiming();
+//		// Init the user camera
+//		displayLoadingState("Initialize Camera ");
+//		initCamera();
+//		
 //		displayLoadingState("Initialize MouseListener ");
 //		MouseListener = new C3dMouseListener();
 //		MouseListener->addToServer(Driver->EventServer);
@@ -640,20 +676,8 @@ void CSnowballsClient::loadIngame()
 //		// Init the command control
 //		displayLoadingState("Initialize Commands ");
 //		initCommands();
-//		// Init the entities prefs
-//		displayLoadingState("Initialize Entities ");
-//		initEntities();
-//		// Init animation system
-//		displayLoadingState("Initialize Animation ");
-//		initAnimation();
-//		// Init the lens flare
-//		displayLoadingState("Initialize LensFlare ");
-//		LensFlareComponent = new CLensFlareComponent(
-//			_ComponentManager, "LensFlare", _LoadingScreen);
-//		_ComponentManager->registerComponent(LensFlareComponent);
-//		_ComponentManager->registerRender(LensFlareComponent, -900);
-//		
 //
+
 //		// Init the mouse so it's trapped by the main window.
 //		Driver->showCursor(false);
 //		Driver->setCapture(true);
@@ -672,11 +696,10 @@ void CSnowballsClient::unloadIngame()
 {
 	if (_LoadedIngame)
 	{
-		//// more temp
-		//CFunctionCaller &updates = _ComponentManager->getUpdateCaller();		
-		//updates.removeF(updateClient, true);
-		//CFunctionCaller &renderers = _ComponentManager->getRenderCaller();
-		//updates.removeF(renderClient, true);
+		nlassert(_Collisions); delete _Collisions; _Collisions = NULL;
+		nlassert(_Animation); delete _Animation; _Animation = NULL;
+		nlassert(_Entities); delete _Entities; _Entities = NULL;
+		nlassert(_Landscape); delete _Landscape; _Landscape = NULL;
 
 		//if (CaptureState)
 		//{
@@ -688,22 +711,16 @@ void CSnowballsClient::unloadIngame()
 
 		//releaseRadar();
 		//releaseCommands();
-		//releaseEntities();
 		//releaseGraph();
 		//releaseCompass();
 		//releaseInterface();
 		//releaseNetwork();
-		//releaseAnimation();
 		//releaseMouseListenerConfig();
 		//releaseCamera();
 		//releaseAiming();
-		//releasePACS();
-		//delete LandscapeComponent;
 		//// Release the mouse listener
 		//MouseListener->removeFromServer(Driver->EventServer);
 		//delete MouseListener;
-		//Driver->deleteScene(Scene);
-		//
 
 		_LoadedIngame = false;
 	}
@@ -735,7 +752,32 @@ void CSnowballsClient::loadConnection()
 	{		
 		_LoadedConnection = true;
 
-		// ...
+		switch (_LoginData.Version)
+		{
+		case CLogin::Offline:
+			_LoginData.Message = ucstring::makeFromUtf8(toString(
+			CI18N::get("SomethingNotImplemented").toUtf8().c_str(),
+				"Offline"));
+			nlwarning(_LoginData.Message.toString().c_str());
+			_NextState = Login;
+			break;
+		case CLogin::Snowballs3:
+			_LoginData.Message = ucstring::makeFromUtf8(toString(
+			CI18N::get("SomethingNotImplemented").toUtf8().c_str(),
+				"Snowballs3"));
+			nlwarning(_LoginData.Message.toString().c_str());
+			_NextState = Login;
+			break;
+		case CLogin::Snowballs5:
+			_LoginData.Message = ucstring::makeFromUtf8(toString(
+			CI18N::get("SomethingNotImplemented").toUtf8().c_str(),
+				"Snowballs5"));
+			nlwarning(_LoginData.Message.toString().c_str());
+			_NextState = Login;
+			break;
+		default:
+			nlerror("CSnowballsClient::loadConnection: _LoginData.Version invalid"); 
+		}
 	}
 }
 
@@ -743,7 +785,24 @@ void CSnowballsClient::unloadConnection()
 {
 	if (_LoadedConnection)
 	{
-		// ...
+		switch (_LoginData.Version)
+		{
+		case CLogin::Offline:
+			// nlassert(_Offline);
+			// remove
+			break;
+		case CLogin::Snowballs3:
+			// nlassert(_Snowballs3);
+			// remove
+			break;
+		case CLogin::Snowballs5:
+			// nlassert(_Snowballs5);
+			// remove
+			break;
+		default:
+			nlerror("CSnowballsClient::unloadConnection: _LoginData.Version invalid");
+		}
+		// nlassert(!_*);
 		
 		_LoadedConnection = false;
 	}
@@ -755,25 +814,23 @@ void CSnowballsClient::enableConnection()
 	{		
 		_EnabledConnection = true;
 
+		// nlassert(!_*Id);
 		switch (_LoginData.Version)
 		{
 		case CLogin::Offline:
-			_LoginData.Message = "Offline not implemented";
-			nlwarning(_LoginData.Message.toString().c_str());
-			_NextState = Login;
+			// add
+			// nlassert(_Offline*Id);
 			break;
 		case CLogin::Snowballs3:
-			_LoginData.Message = "Snowballs3 not implemented";
-			nlwarning(_LoginData.Message.toString().c_str());
-			_NextState = Login;
+			// add
+			// nlassert(_Snowballs3*Id);
 			break;
 		case CLogin::Snowballs5:
-			_LoginData.Message = "Snowballs5 not implemented";
-			nlwarning(_LoginData.Message.toString().c_str());
-			_NextState = Login;
+			// add
+			// nlassert(_Snowballs5*Id);			
 			break;
 		default:
-			nlerror("_LoginData.Version invalid"); 
+			nlerror("CSnowballsClient::enableConnection: _LoginData.Version invalid"); 
 		}
 	}
 }
@@ -785,17 +842,21 @@ void CSnowballsClient::disableConnection()
 		switch (_LoginData.Version)
 		{
 		case CLogin::Offline:
-
+			// nlassert(_Offline*Id);
+			// remove
 			break;
 		case CLogin::Snowballs3:
-
+			// nlassert(_Snowballs3*Id);
+			// remove
 			break;
 		case CLogin::Snowballs5:
-
+			// nlassert(_Snowballs5*Id);
+			// remove
 			break;
 		default:
-			nlerror("_LoginData.Version invalid");
+			nlerror("CSnowballsClient::disableConnection: _LoginData.Version invalid");
 		}
+		// nlassert(!_*Id);
 		
 		_EnabledConnection = false;
 	}

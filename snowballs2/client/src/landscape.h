@@ -77,7 +77,7 @@ public:
 	NLMISC::CVector *RefreshZonesAround; // p
 
 	/// Must always point to the animation time (NOT THE DELTA)
-	NL3D::TAnimationTime *AnimationTime;
+	NL3D::TGlobalAnimationTime *GlobalAnimationTime;
 
 	// instances
 	CConfigProxy _Config;
@@ -85,7 +85,7 @@ private:
 	float _Vision;
 	float _VisionInitial;
 public:
-	CLandscape(NLMISC::IProgressCallback &progressCallback, const std::string &id, NL3D::UDriver *driver, NL3D::TAnimationTime *animationTime);
+	CLandscape(NLMISC::IProgressCallback &progressCallback, const std::string &id, NL3D::UDriver *driver, NL3D::TGlobalAnimationTime *globalAnimationTime);
 	virtual ~CLandscape();
 
 	/// Update the scene animations
