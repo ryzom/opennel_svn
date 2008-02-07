@@ -77,12 +77,12 @@ public:
 	NLPACS::UMoveContainer *MoveContainer; // P
 	/// The collision manager for ground snapping
 	NL3D::UVisualCollisionManager *VisualCollisionManager; // P
-	/// The collision primitive for the instances in the landscape
-	std::vector<NLPACS::UMovePrimitive *> InstancesMovePrimitives; // P
 	
 protected:
 	// pointers
 	NL3D::UScene *_Scene;
+	/// The collision primitive for the instances in the landscape
+	std::vector<NLPACS::UMovePrimitive *> _InstancesMovePrimitives; // P
 
 	// instances
 	CConfigProxy _Config;

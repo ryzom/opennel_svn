@@ -33,6 +33,30 @@
 #define SBCLIENT_LANDSCAPE_H
 #include <nel/misc/types_nl.h>
 
+// Project includes
+#include "config_proxy.h"
+#include "member_callback_decl.h"
+
+// NeL includes
+#include <nel/3d/animation_time.h>
+
+// STL includes
+
+namespace NLPACS {
+	class UMovePrimitive;
+}
+
+namespace NLMISC {
+	class IProgressCallback;
+	class CVector;
+}
+
+namespace NL3D {
+	class UScene;
+	class ULandscape;
+	class UDriver;
+}
+
 namespace SBCLIENT {
 
 /**
@@ -43,15 +67,45 @@ namespace SBCLIENT {
  */
 class CLandscape
 {
-protected:
-	// pointers
-	// ...
-	
-	// instances
-	// ...
 public:
-	CLandscape();
+	// pointers
+	NL3D::UDriver *_Driver; // p
+	NL3D::UScene *Scene; // P
+	NL3D::ULandscape *Landscape; // P
+
+	/// The landscape is updated around this vector
+	NLMISC::CVector *RefreshZonesAround; // p
+
+	/// Must always point to the animation time (NOT THE DELTA)
+	NL3D::TAnimationTime *AnimationTime;
+
+	// instances
+	CConfigProxy _Config;
+private:
+	float _Vision;
+	float _VisionInitial;
+public:
+	CLandscape(NLMISC::IProgressCallback &progressCallback, const std::string &id, NL3D::UDriver *driver, NL3D::TAnimationTime *animationTime);
 	virtual ~CLandscape();
+
+	/// Update the scene animations
+	SBCLIENT_CALLBACK_DECL(updateAnimations);
+	
+	/// Refresh the zones around the entity
+	SBCLIENT_CALLBACK_DECL(updateLandscape);
+
+	/// Render the scene and landscape
+	SBCLIENT_CALLBACK_DECL(renderScene);
+
+	/// Force refresh for use within a loading/teleporting screen
+	void refresh(NLMISC::IProgressCallback &progressCallback);
+
+private:
+	SBCLIENT_CALLBACK_CONFIG_DECL(configReceiveShadowMap);
+	SBCLIENT_CALLBACK_CONFIG_DECL(configTileNear);
+	SBCLIENT_CALLBACK_CONFIG_DECL(configThreshold);
+	SBCLIENT_CALLBACK_CONFIG_DECL(configVision);
+	SBCLIENT_CALLBACK_CONFIG_DECL(configVisionInitial);
 }; /* class CLandscape */
 
 } /* namespace SBCLIENT */

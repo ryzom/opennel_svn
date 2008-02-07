@@ -44,12 +44,9 @@
 #include <nel/pacs/u_global_retriever.h> // for pacs in update..
 #include <nel/misc/vectord.h>
 #include <nel/3d/u_scene.h>
+#include <nel/misc/progress_callback.h>
 
 // STL includes
-
-extern NL3D::UVisualCollisionManager *VisualCollisionManager;
-extern NLPACS::UMoveContainer *MoveContainer;
-extern NLPACS::UGlobalRetriever *GlobalRetriever;
 
 #define SBCLIENT_WARNING(__text) message(__FILE__ " : warning SBCLIENT: " __text)
 
@@ -63,11 +60,21 @@ namespace SBCLIENT {
 const float CEntitiesOld::PlayerSpeed = 10.0f;	// 6.5 km/h
 const float CEntitiesOld::SnowballSpeed = 15.0f;	// 36 km/h
 
-#pragma SBCLIENT_WARNING("CEntitiesOld::CEntitiesOld")
-CEntitiesOld::CEntitiesOld() : _TestCLS(false), Self(NULL), 
-NextEID(1000000)
+CEntitiesOld::CEntitiesOld(NLMISC::IProgressCallback &progressCallback, 
+UScene *scene, NL3D::UVisualCollisionManager *visualCollisionManager, 
+UMoveContainer *moveContainer, UGlobalRetriever *globalRetriever, 
+CAnimationOld *animation) : _TestCLS(false), Self(NULL), _Scene(scene), 
+_VisualCollisionManager(visualCollisionManager), 
+_MoveContainer(moveContainer), _GlobalRetriever(globalRetriever), 
+_Animation(animation), NextEID(1000000)
 {
-	
+	nlassert(!Self);
+	nlassert(_Scene);
+	nlassert(_VisualCollisionManager);
+	nlassert(_MoveContainer);
+	nlassert(_GlobalRetriever);
+	nlassert(_Animation);
+	progressCallback.progress(1.0f);
 }
 
 CEntitiesOld::~CEntitiesOld()
@@ -78,10 +85,7 @@ CEntitiesOld::~CEntitiesOld()
 CEntityOld &CEntitiesOld::getEntity(uint32 eid)
 {
 	CEntityOld *entity = getEntityPtr(eid);
-	if (!entity)
-	{
-		nlerror("Entity %u not found", eid);
-	}
+	if (!entity) nlerror("Entity %u not found", eid);
 	return *entity;
 }
 
@@ -118,14 +122,14 @@ void CEntitiesOld::addEntity(uint32 eid, std::string name, CEntityOld::TType typ
 	entity.Position = startPosition;
 	entity.Angle = 0.0f;
 	entity.ServerPosition = serverPosition;
-	entity.VisualCollisionEntity = VisualCollisionManager->createEntity();
+	entity.VisualCollisionEntity = _VisualCollisionManager->createEntity();
 
 	// setup the move primitive and the mesh instance depending on the type of entity
 	switch (type)
 	{
 	case CEntityOld::Self:
 		// create a move primitive associated to the entity
-		entity.MovePrimitive = MoveContainer->addCollisionablePrimitive(0, 1);
+		entity.MovePrimitive = _MoveContainer->addCollisionablePrimitive(0, 1);
 		// it's a cylinder
 		entity.MovePrimitive->setPrimitiveType(UMovePrimitive::_2DOrientedCylinder);
 		// the entity should slide against obstacles
@@ -169,7 +173,7 @@ void CEntitiesOld::addEntity(uint32 eid, std::string name, CEntityOld::TType typ
 
 		break;
 	case CEntityOld::Other:
-		entity.MovePrimitive = MoveContainer->addCollisionablePrimitive(0, 1);
+		entity.MovePrimitive = _MoveContainer->addCollisionablePrimitive(0, 1);
 		entity.MovePrimitive->setPrimitiveType(UMovePrimitive::_2DOrientedCylinder);
 		entity.MovePrimitive->setReactionType(UMovePrimitive::Slide);
 		entity.MovePrimitive->setTriggerType(UMovePrimitive::NotATrigger);
@@ -274,13 +278,13 @@ void CEntitiesOld::deleteEntity(CEntityOld &entity)
 
 	if (entity.VisualCollisionEntity != NULL)
 	{
-		VisualCollisionManager->deleteEntity(entity.VisualCollisionEntity);
+		_VisualCollisionManager->deleteEntity(entity.VisualCollisionEntity);
 		entity.VisualCollisionEntity = NULL;
 	}
 
 	if (entity.MovePrimitive != NULL)
 	{
-		MoveContainer->removePrimitive(entity.MovePrimitive);
+		_MoveContainer->removePrimitive(entity.MovePrimitive);
 		entity.MovePrimitive = NULL;
 	}
 
@@ -304,6 +308,7 @@ void CEntitiesOld::removeAll()
 		eit = nexteit;
 	}
 	Self = NULL;
+	NextEID = 1000000;
 }
 
 void CEntitiesOld::stateAppear(CEntityOld &entity)
@@ -689,7 +694,7 @@ SBCLIENT_CALLBACK_IMPL(CEntitiesOld, updateEntities)
 
 	// WHAT ? WHAT ? WHAT ? :p
 	// evaluate collisions
-	MoveContainer->evalCollision(dt, 0);
+	_MoveContainer->evalCollision(dt, 0);
 	#pragma SBCLIENT_WARNING("SBCLIENT_PACS")
 	// we will only check collisions on self
 
@@ -704,10 +709,10 @@ SBCLIENT_CALLBACK_IMPL(CEntitiesOld, updateEntities)
 			// get the global position in pacs coordinates system
 			entity.MovePrimitive->getGlobalPosition(gPos, 0);
 			// convert it in a vector 3d
-			entity.Position = GlobalRetriever->getGlobalPosition(gPos);
+			entity.Position = _GlobalRetriever->getGlobalPosition(gPos);
 			// get the good z position
 			gPos.LocalPosition.Estimation.z = 0.0f;
-			entity.Position.z = GlobalRetriever->getMeanHeight(gPos);
+			entity.Position.z = _GlobalRetriever->getMeanHeight(gPos);
 
 			// check position retrieving
 /*
@@ -722,7 +727,7 @@ SBCLIENT_CALLBACK_IMPL(CEntitiesOld, updateEntities)
 			}
 */
 			// snap to the ground
-			if (!GlobalRetriever->isInterior(gPos))
+			if (!_GlobalRetriever->isInterior(gPos))
 				entity.VisualCollisionEntity->snapToGround(entity.Position);
 
 			if (entity.Type == CEntityOld::Other &&
@@ -731,7 +736,7 @@ SBCLIENT_CALLBACK_IMPL(CEntitiesOld, updateEntities)
 				//nlinfo("detected over entity %d", entity.Id);
 				entity.ServerPosition.z = entity.Position.z;
 				entity.Position = entity.ServerPosition;
-				if (!GlobalRetriever->isInterior(gPos))
+				if (!_GlobalRetriever->isInterior(gPos))
 					entity.VisualCollisionEntity->snapToGround(entity.Position);
 				entity.MovePrimitive->setGlobalPosition(CVectorD(entity.Position.x, entity.Position.y, entity.Position.z), 0);
 			}

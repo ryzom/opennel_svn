@@ -125,11 +125,9 @@ CCollisionsOld::CCollisionsOld(NLMISC::IProgressCallback &progressCallback, cons
 CCollisionsOld::~CCollisionsOld()
 {
 	// all move primitives
-	uint i;
-	for (i=0; i<InstancesMovePrimitives.size(); ++i)
-		MoveContainer->removePrimitive(InstancesMovePrimitives[i]);
-
-	InstancesMovePrimitives.clear();
+	for (uint i = 0; i < _InstancesMovePrimitives.size(); ++i)
+		MoveContainer->removePrimitive(_InstancesMovePrimitives[i]);
+	_InstancesMovePrimitives.clear();
 
 	// delete all allocated objects
 	UGlobalRetriever::deleteGlobalRetriever(GlobalRetriever);

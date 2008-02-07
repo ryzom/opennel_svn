@@ -23,26 +23,50 @@
 // Priority Distribution
 // 
 // 01. [+9000000 - +9099999] Update Utilities (configuration etc)
+#define SBCLIENT_UPDATE_UTILITIES 9050000
 // 02. [+8000000 - +8099999] Update Time (deltas)
+#define SBCLIENT_UPDATE_TIME 8050000
 // 03. [+7000000 - +7099999] Update Driver (keyboard controls, etc)
+#define SBCLIENT_UPDATE_DRIVER 7050000
 // 04. [+6000000 - +6099999] Update Incoming (network, receive messages)
+#define SBCLIENT_UPDATE_INCOMING 6050000
 // 05. [+5000000 - +5099999] Update Weather (sky, snow, wind, fog, sun)
+#define SBCLIENT_UPDATE_WEATHER 5050000
 // 06. [+4000000 - +4099999] Update Landscape (async zone loading near entity)
+#define SBCLIENT_UPDATE_LANDSCAPE 4050000
 // 07. [+3000000 - +3099999] Update Entities (collisions and actions)
+//                           - Move Other Entities (move//, animations, etc)
+//                           - Update Self Collision (move)
+#define SBCLIENT_UPDATE_ENTITIES 3050000
+//                           - Update Self Entity (animations//, etc)
 // 08. [+2000000 - +2099999] Update Animations (playlists)
+#define SBCLIENT_UPDATE_ANIMATIONS 2050000
 // 09. [+1500000 - +1599999] Update Interface (login, ui, etc)
+#define SBCLIENT_UPDATE_INTERFACE 1550000
 // 10. [+1200000 - +1299999] Update Sound (sound driver)
+#define SBCLIENT_UPDATE_SOUND 1250000
 // 11. [+1000000 - +1099999] Update Outgoing (network, send new position etc)
+#define SBCLIENT_UPDATE_OUTGOING 1050000
 // 12. [-1000000 - +0999999] Update Debug (stuff for dev)
+#define SBCLIENT_UPDATE_DEBUG 0
 //
 // 01. [+8000000 - +8099999] Render Driver (background black, done here)
+#define SBCLIENT_RENDER_DRIVER 8050000
 // 02. [+7000000 - +7099999] Render Sky (sky scene)
+#define SBCLIENT_RENDER_SKY 7050000
 // 03. [+6000000 - +6099999] Render Landscape (landscape zones)
+#define SBCLIENT_RENDER_LANDSCAPE 6050000
 // 04. [+5000000 - +5099999] Render Scene (entity scene)
+#define SBCLIENT_RENDER_SCENE 5050000
 // 05. [+4000000 - +4099999] Render Effects (flare)
-// 06. [+3000000 - +3099999] Render 3D Interface (player names)
-// 07. [+2000000 - +2099999] Render 2D Interface (chatboxes etc, optionally does have 3d)
+#define SBCLIENT_RENDER_EFFECTS 4050000
+// 06. [+3000000 - +3099999] Render Interface 3D (player names)
+#define SBCLIENT_RENDER_INTERFACE_3D 3050000
+//                           - Might need switch with Effects due to Z
+// 07. [+2000000 - +2099999] Render Interface 2D (chatboxes etc, optionally does have 3d)
+#define SBCLIENT_RENDER_INTERFACE_2D 2050000
 // 08. [-1000000 - +0999999] Render Debug (stuff for dev)
+#define SBCLIENT_RENDER_DEBUG 0
 
 #include <nel/misc/types_nl.h>
 #include "snowballs_client.h"

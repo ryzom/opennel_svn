@@ -43,6 +43,16 @@
 
 namespace NL3D {
 	class UScene;
+	class UVisualCollisionManager;
+}
+
+namespace NLMISC {
+	class IProgressCallback;
+}
+
+namespace NLPACS {
+	class UGlobalRetriever;
+	class UMoveContainer;
 }
 
 namespace SBCLIENT {
@@ -65,11 +75,7 @@ public:
 	
 	// instances
 	// A map of entities. All entities are later referred by their unique id
-	CEntityMap Entities;	
-
-	//////// The size of the world, in meter
-	//////float WorldWidth = 20 * 160;
-	//////float WorldHeight = 6 * 160;
+	CEntityMap Entities;
 
 	// Entity Id, only used offline
 	uint32 NextEID;
@@ -78,19 +84,16 @@ public:
 	static const float PlayerSpeed;
 	static const float SnowballSpeed;
 
-	// these variables are set with the config file
-
-	//////// Setup for the name up the character
-	//////float EntityNameSize;
-	//////CRGBA EntityNameColor;
-
 	bool _TestCLS;
 protected:
 	// pointers
 	NL3D::UScene *_Scene; // p
+	NL3D::UVisualCollisionManager *_VisualCollisionManager;
+	NLPACS::UMoveContainer *_MoveContainer;
+	NLPACS::UGlobalRetriever *_GlobalRetriever;
 	CAnimationOld *_Animation; // c
 public:
-	CEntitiesOld();
+	CEntitiesOld(NLMISC::IProgressCallback &progressCallback, NL3D::UScene *scene, NL3D::UVisualCollisionManager *visualCollisionManager, NLPACS::UMoveContainer *moveContainer, NLPACS::UGlobalRetriever *globalRetriever, CAnimationOld *animation);
 	virtual ~CEntitiesOld();
 
 	CEntityOld &getEntity(uint32 eid);

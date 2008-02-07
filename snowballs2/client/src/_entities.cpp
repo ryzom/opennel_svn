@@ -44,6 +44,17 @@ void removeAllEntitiesExceptUs ()
 	}
 }
 
+	//////// The size of the world, in meter
+	//////float WorldWidth = 20 * 160;
+	//////float WorldHeight = 6 * 160;
+
+
+	// these variables are set with the config file
+
+	//////// Setup for the name up the character
+	//////float EntityNameSize;
+	//////CRGBA EntityNameColor;
+
 // Draw entities names up the characters
 void renderEntitiesNames ()
 {

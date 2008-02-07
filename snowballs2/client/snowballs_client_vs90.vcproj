@@ -532,18 +532,6 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\src\_entities.h"
-					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath=".\src\_mouse_listener.cpp"
 					>
 					<FileConfiguration
@@ -813,30 +801,6 @@
 				</File>
 				<File
 					RelativePath=".\src\_lens_flare_component.h"
-					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\src\_scene_component.cpp"
-					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\src\_scene_component.h"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
