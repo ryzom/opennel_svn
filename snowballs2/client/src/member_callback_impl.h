@@ -42,6 +42,14 @@
 	} \
 	void __class::__name(void *tag)
 
+#define SBCLIENT_CALLBACK_ERROR_IMPL(__class, __name) \
+	void __class::__name(void *context, const std::string &error, void *tag) \
+	{ \
+		nlassert(context); \
+		((__class *)context)->__name(error, tag); \
+	} \
+	void __class::__name(const std::string &error, void *tag)
+
 #define SBCLIENT_CALLBACK_CONFIG_IMPL(__class, __name) \
 	void __class::__name(void *context, const std::string &varName, NLMISC::CConfigFile::CVar &var, void *tag) \
 	{ \

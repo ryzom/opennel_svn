@@ -35,19 +35,19 @@
 #include <nel/misc/app_context.h>
 
 /** Put this in the cpp. Include the namespace in className. */
-#define SBCLIENT_EVIL_SINGLETON_IMPL(className) \
-	className *className::_Instance = NULL; \
-	className *className::getInstancePtr() \
+#define SBCLIENT_EVIL_SINGLETON_IMPL(__class) \
+	__class *__class::_Instance = NULL; \
+	__class *__class::getInstancePtr() \
 	{ \
 		if (!_Instance) \
 		{ \
 			nlassertex(NLMISC::INelContext::isContextInitialised(), ("You are trying to access a safe singleton without having initialized a NeL context. The simplest correction is to add 'NLMISC::CApplicationContext myApplicationContext;' at the very begining of your application.")); \
-			void *ptr = NLMISC::INelContext::getInstance().getSingletonPointer(#className); \
-			_Instance = reinterpret_cast<className*>(ptr); \
+			void *ptr = NLMISC::INelContext::getInstance().getSingletonPointer(#__class); \
+			_Instance = (__class *)ptr; \
 		} \
 		return _Instance; \
 	} \
-	className &className::getInstance() \
+	__class &__class::getInstance() \
 	{ \
 		getInstancePtr(); \
 		nlassert(_Instance); \
@@ -55,14 +55,14 @@
 	}
 
 /** Put this inside the constructor. */
-#define SBCLIENT_EVIL_SINGLETON_CONSTRUCTOR(className) \
-	nlassert(!className::_Instance); \
-	className::_Instance = this;
+#define SBCLIENT_EVIL_SINGLETON_CONSTRUCTOR(__class) \
+	NLMISC::INelContext::getInstance().setSingletonPointer(#__class, this); \
+	__class::_Instance = this;
 
 /** Put this inside the destructor. */
-#define SBCLIENT_EVIL_SINGLETON_DESTRUCTOR(className) \
-	nlassert(className::_Instance == this); \
-	className::_Instance = NULL;
+#define SBCLIENT_EVIL_SINGLETON_DESTRUCTOR(__class) \
+	NLMISC::INelContext::getInstance().releaseSingletonPointer(#__class, this); \
+	__class::_Instance = NULL;
 
 #endif /* #ifndef SBCLIENT_EVIL_SINGLETON_IMPL_H */
 

@@ -3,7 +3,8 @@
  * \brief CI18NHelper
  * \date 2008-01-21 22:56GMT
  * \author Jan Boon (Kaetemi)
- * CI18NHelper
+ * CI18NHelper is intended for user-configured user interface texts.
+ * You shouldn't use prefixed language labels directly in code.
  * 
  * $Id$
  */

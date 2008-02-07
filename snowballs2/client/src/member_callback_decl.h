@@ -37,6 +37,10 @@
 	static void __name(void *context, void *tag); \
 	inline void __name(void *tag);
 
+#define SBCLIENT_CALLBACK_ERROR_DECL(__name) \
+	static void __name(void *context, const std::string &error, void *tag); \
+	inline void __name(const std::string &error, void *tag);
+
 #define SBCLIENT_CALLBACK_CONFIG_DECL(__name) \
 	static void __name(void *context, const std::string &varName, NLMISC::CConfigFile::CVar &var, void *tag); \
 	inline void __name(const std::string &varName, NLMISC::CConfigFile::CVar &var, void *tag);

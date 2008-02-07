@@ -82,6 +82,7 @@ private:
 	SBCLIENT::CLogin *_Login; // login screen
 	uint _LoginUpdateInterfaceId;
 	uint _LoginRenderInterfaceId;
+	uint _LoginUpdateNetworkId;
 
 	// commands, must be deleted
 	CCommandWrapper *_SetStateCommand;

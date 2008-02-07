@@ -32,8 +32,6 @@
 #define SBCLIENT_I18N_HELPER_H
 #include <nel/misc/types_nl.h>
 
-#include "evil_singleton_decl.h"
-
 #include <nel/misc/ucstring.h>
 
 namespace SBCLIENT {

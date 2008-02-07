@@ -913,6 +913,14 @@
 					RelativePath=".\src\loading_screen.h"
 					>
 				</File>
+				<File
+					RelativePath=".\src\ls_client.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\ls_client.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="1_macros"
@@ -941,6 +949,14 @@
 			<Filter
 				Name="3_connection"
 				>
+				<File
+					RelativePath=".\src\login.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\login.h"
+					>
+				</File>
 				<File
 					RelativePath=".\src\network3.cpp"
 					>
@@ -983,14 +999,6 @@
 				</File>
 				<File
 					RelativePath=".\src\loading.h"
-					>
-				</File>
-				<File
-					RelativePath=".\src\login.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\login.h"
 					>
 				</File>
 				<File

@@ -205,7 +205,7 @@ CSnowballsClient::CSnowballsClient()
   _Loading(NULL), 
   _Graphics(NULL), _GraphicsUpdateDriverId(0), 
   _Sound(NULL), _SoundUpdateSoundId(0), 
-  _Login(NULL), _LoginUpdateInterfaceId(0), _LoginRenderInterfaceId(0), 
+  _Login(NULL), _LoginUpdateInterfaceId(0), _LoginRenderInterfaceId(0), _LoginUpdateNetworkId(0), 
   // commands
   _SetStateCommand(NULL), 
   // states
@@ -598,6 +598,10 @@ void CSnowballsClient::enableLogin()
 		_LoginRenderInterfaceId = _RenderFunctions.add(
 			CLogin::renderInterface, _Login, NULL, 2050000);
 
+		nlassert(!_LoginUpdateNetworkId);
+		_LoginUpdateNetworkId = _UpdateFunctions.add(
+			CLogin::updateNetwork, _Login, NULL, 6050000);
+
 		_Login->enable();
 	}
 }
@@ -608,13 +612,17 @@ void CSnowballsClient::disableLogin()
 	{
 		_Login->disable();
 
-		nlassert(_LoginUpdateInterfaceId);
-		_UpdateFunctions.remove(_LoginUpdateInterfaceId);
-		_LoginUpdateInterfaceId = 0;
+		nlassert(_LoginUpdateNetworkId);
+		_UpdateFunctions.remove(_LoginUpdateNetworkId);
+		_LoginUpdateNetworkId = 0;
 
 		nlassert(_LoginRenderInterfaceId);
 		_RenderFunctions.remove(_LoginRenderInterfaceId);
 		_LoginRenderInterfaceId = 0;
+
+		nlassert(_LoginUpdateInterfaceId);
+		_UpdateFunctions.remove(_LoginUpdateInterfaceId);
+		_LoginUpdateInterfaceId = 0;
 		
 		_EnabledLogin = false;
 	}
@@ -887,14 +895,18 @@ void CSnowballsClient::disableAll()
 
 SBCLIENT_CALLBACK_COMMAND_IMPL(CSnowballsClient, commandSetState)
 {
+	// one argument required, fail
 	if (args.size() != 1) return false;
+
+	// set the next state
 	_NextState = CStringIdentifier::get(args[0]);
+
+	// everything ok
 	return true;
 }
 
-void CSnowballsClient::updateUtilities(void *context, void *tag)
+SBCLIENT_CALLBACK_IMPL(CSnowballsClient, updateUtilities)
 {
-	CSnowballsClient *me = (CSnowballsClient *)context;
 	// check all config files for updates
 	CConfigFile::checkConfigFiles();
 }
@@ -981,7 +993,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdline, 
 #else
 int main(int argc, char **argv)
 #endif
-{	
+{
 	if (debug || client) return EXIT_FAILURE;
 	debug = new SBCLIENT::CSnowballsDebug(); nlassert(debug);
 	client = new SBCLIENT::CSnowballsClient(); nlassert(client);

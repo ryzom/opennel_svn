@@ -38,6 +38,7 @@
 
 #include "config_proxy.h"
 #include "member_callback_decl.h"
+#include "ls_client.h"
 
 #include <nel/misc/quad.h>
 #include <nel/misc/geom_ext.h>
@@ -73,8 +74,8 @@ public:
 	{
 		CLoginData() : Version(Offline) { }
 		ucstring Username;
-		std::string Password;
 		std::string FrontEnd;
+		NLNET::CLoginCookie LoginCookie;
 		uint8 Version;
 	};
 protected:
@@ -107,6 +108,9 @@ protected:
 	bool _TypingPassword;
 	bool _Enabled;
 	uint8 _Selection;
+	ucstring _PasswordText;
+	float _TimeOut;
+	CLSClient _LSClient;
 public:
 	CLogin(const std::string &id, NL3D::UDriver *driver, NL3D::UTextContext *textContext, CI18NHelper *i18n, CLoginData *loginData);
 	virtual ~CLogin();
@@ -119,8 +123,14 @@ public:
 	void enable();
 	void disable();
 
+	SBCLIENT_CALLBACK_DECL(updateNetwork);
 	SBCLIENT_CALLBACK_DECL(updateInterface);
 	SBCLIENT_CALLBACK_DECL(renderInterface);
+
+protected:
+	void connect();
+	SBCLIENT_CALLBACK_DECL(cbAuthenticateUser);
+	SBCLIENT_CALLBACK_DECL(cbSelectShard);
 }; /* class CLogin */
 
 } /* namespace SBCLIENT */

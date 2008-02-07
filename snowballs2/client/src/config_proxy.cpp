@@ -88,11 +88,20 @@ int CConfigProxy::getValue(const string &varName, int defaultValue)
 	return defaultValue;
 }
 
-std::string CConfigProxy::getValue(const string &varName, const string &defaultValue)
+string CConfigProxy::getValue(const string &varName, const string &defaultValue)
 {
 	if (exists(varName)) return getVar(varName).asString();
 	CConfigFile::CVar varToCopy;
 	varToCopy.forceAsString(defaultValue);
+	_ConfigFile->insertVar(_IdU + varName, varToCopy);
+	return defaultValue;
+}
+
+ucstring CConfigProxy::getValue(const string &varName, const ucstring &defaultValue)
+{
+	if (exists(varName)) return ucstring::makeFromUtf8(getVar(varName).asString());
+	CConfigFile::CVar varToCopy;
+	varToCopy.forceAsString(defaultValue.toUtf8());
 	_ConfigFile->insertVar(_IdU + varName, varToCopy);
 	return defaultValue;
 }

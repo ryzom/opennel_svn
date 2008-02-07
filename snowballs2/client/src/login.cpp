@@ -35,6 +35,8 @@
 #include "login.h"
 
 #include "member_callback_impl.h"
+#include "ls_client.h"
+#include "i18n_helper.h"
 
 // #include <nel/misc/debug.h>
 #include <nel/3d/u_driver.h>
@@ -53,7 +55,7 @@ namespace SBCLIENT {
 
 CLogin::CLogin(const std::string &id, NL3D::UDriver *driver, NL3D::UTextContext *textContext, CI18NHelper *i18n, CLoginData *loginData)
 : _Driver(driver), _TextContext(textContext), _I18N(i18n), 
-_LoginData(loginData), _Config(id), _LogoAngle(0.0f), 
+_LoginData(loginData), _Config(id), _LogoAngle(0.0f), _TimeOut(-1.0f), 
 _TypingPassword(false), _Enabled(false), _Selection(0)
 {
 	// todo: get stuff from config
@@ -110,6 +112,9 @@ _TypingPassword(false), _Enabled(false), _Selection(0)
 	_Logo = _LogoScene->createInstance("nel_logo.shape");
 	_Logo.setPos(0.0f, 3.0f, 0.0f);
 	_Logo.setTransformMode(UTransformable::RotEuler);
+
+	_LoginData->Username = _Config.getValue("Username", ucstring());
+	_PasswordText = _Config.getValue("Password", ucstring());
 }
 
 CLogin::~CLogin()
@@ -137,6 +142,7 @@ void CLogin::setSelectQuad(float x, float y)
 
 void CLogin::updateSelection(float x, float y)
 {
+	// these numbers are the locations of the buttons ^^
 	if (x > 0.850f && x < 0.985f && y > 0.892f && y < 0.985f)
 	{
 		_Selection = ExitButton;
@@ -167,7 +173,15 @@ void CLogin::updateSelection(float x, float y)
 
 void CLogin::operator () (const CEvent &event)
 {
-	if (!_Message.empty()) return;
+	if (!_Message.empty())
+	{
+		if (_TimeOut >= 0.0f && event != EventMouseMoveId)
+		{
+			_TimeOut = -1.0f;
+			_Message = "";
+		}
+		return;
+	}
 
 	if (event == EventCharId)
 	{
@@ -176,14 +190,14 @@ void CLogin::operator () (const CEvent &event)
 		switch (ec.Char)
 		{
 		case KeyRETURN:
-			// todo: try to connect!
+			connect();
 			break;
 		case KeyBACK:
 			if(_TypingPassword)
 			{
-				if (_LoginData->Password.size() != 0 )
+				if (_PasswordText.size() != 0 )
 				{
-					_LoginData->Password.erase(_LoginData->Password.end() - 1);
+					_PasswordText.erase(_PasswordText.end() - 1);
 				}
 			}
 			else
@@ -195,7 +209,9 @@ void CLogin::operator () (const CEvent &event)
 			}
 			break;	
 		case KeyESCAPE:
-			// todo: exit!
+			ICommand::execute(_Config.getValue(
+				"ExitCommand", string("set_state Exit")), 
+				*INelContext::getInstance().getInfoLog());
 			break;
 		case KeyTAB:
 			_TypingPassword = !_TypingPassword;
@@ -203,7 +219,7 @@ void CLogin::operator () (const CEvent &event)
 		default:			
 			if(_TypingPassword)
 			{
-				_LoginData->Password += (char)ec.Char;
+				_PasswordText += (char)ec.Char;
 			}
 			else
 			{
@@ -233,14 +249,14 @@ void CLogin::operator () (const CEvent &event)
 					break;
 				case OfflineButton:
 					_LoginData->Version = Offline;
-					_LoginData->Password = "";
+					_LoginData->LoginCookie = NLNET::CLoginCookie(0, 0);
 					_LoginData->FrontEnd = "";
 					ICommand::execute(_Config.getValue(
 						"OfflineCommand", string("set_state Game")), 
 						*INelContext::getInstance().getInfoLog());
 					break;
 				case ConnectButton:
-					// try connecting
+					connect();
 					break;
 				case ExitButton:
 					ICommand::execute(_Config.getValue(
@@ -269,6 +285,70 @@ void CLogin::disable()
 	_Driver->EventServer.removeListener(EventMouseUpId, this);
 }
 
+void CLogin::connect()
+{
+	_LSClient.authenticateUser(cbAuthenticateUser, this, NULL, 
+		_Config.getValue("LSHost", string("localhost")), 
+		_LoginData->Username, CLSClient::encryptPassword(_PasswordText), 
+		_Config.getValue("ClientApplication", string("snowballs")));
+
+	// set message if no error, errors are handled by the callback
+	if (_LSClient.LastError.empty())
+	{
+		_TimeOut = -1.0f;
+		_Message = _I18N->get("i18nAuthenticatingUser");
+		nlinfo(_Message.toUtf8().c_str());
+	}
+}
+
+SBCLIENT_CALLBACK_IMPL(CLogin, cbAuthenticateUser)
+{
+	if (!_LSClient.LastError.empty())
+	{
+		_TimeOut = 5.0f;
+		_Message = ucstring(_LSClient.LastError);
+		return;
+	}
+
+	CLSClient::CShard *shard = _LSClient.getShard(
+		_Config.getValue("ShardId", 300));
+	if (!shard) shard = &_LSClient.ShardList[0];		
+	if (shard->Version == "SB5") _LoginData->Version = Snowballs5;
+	else _LoginData->Version = Snowballs3;
+	_LSClient.selectShard(cbSelectShard, this, NULL, shard->ShardId);
+
+	if (_LSClient.LastError.empty())
+	{
+		_TimeOut = -1.0f;
+		_Message = ucstring::makeFromUtf8(toString(
+			_I18N->get("i18nSelectingShard").toUtf8().c_str(),
+			shard->ShardId, shard->Name.c_str(), shard->NbPlayers));
+		nlinfo(_Message.toUtf8().c_str());
+	}
+}
+
+SBCLIENT_CALLBACK_IMPL(CLogin, cbSelectShard)
+{
+	if (!_LSClient.LastError.empty())
+	{
+		_TimeOut = 5.0f;
+		_Message = ucstring(_LSClient.LastError);
+		return;
+	}
+	
+	_LoginData->FrontEnd = _LSClient.FrontEnd;
+	_LoginData->LoginCookie = _LSClient.LoginCookie;
+	
+	ICommand::execute(_Config.getValue(
+		"ConnectCommand", string("set_state Game")), 
+		*INelContext::getInstance().getInfoLog());
+}
+
+SBCLIENT_CALLBACK_IMPL(CLogin, updateNetwork)
+{
+	_LSClient.update();
+}
+
 SBCLIENT_CALLBACK_IMPL(CLogin, updateInterface)
 {
 	float temptime = 1.0f / 60.0f;
@@ -276,7 +356,7 @@ SBCLIENT_CALLBACK_IMPL(CLogin, updateInterface)
 	// some silly code to add the | and do the stars
 	_UsernameText =_LoginData->Username;
 	_PasswordStarsText = "";
-	for (uint i = 0; i < _LoginData->Password.size(); ++i)
+	for (uint i = 0; i < _PasswordText.size(); ++i)
 		_PasswordStarsText += "*";
 	if (_Message.empty()) {
 	if (_TypingPassword) _PasswordStarsText += "|";
@@ -284,7 +364,19 @@ SBCLIENT_CALLBACK_IMPL(CLogin, updateInterface)
 	
 	//_SnowScene->animate(temptime);
 
-	//updateLoginInterface
+	if (!_Message.empty())
+	{
+		if (_TimeOut >= 0.0f) 
+		{
+			_TimeOut -= temptime;
+			if (_TimeOut <= 0.0f)
+			{
+				_TimeOut = -1.0f;
+				_Message = "";
+			}
+		}
+	}
+
 	if (!_Message.empty())
 	{
 		_LogoAngle += 2.0f * temptime;
@@ -292,7 +384,6 @@ SBCLIENT_CALLBACK_IMPL(CLogin, updateInterface)
 		_LogoScene->animate(temptime);
 	}
 	
-	// exit if escape?
 }
 
 SBCLIENT_CALLBACK_IMPL(CLogin, renderInterface)
@@ -313,7 +404,9 @@ SBCLIENT_CALLBACK_IMPL(CLogin, renderInterface)
 		_LogoScene->render();
 		_TextContext->setColor(CRGBA(255, 255, 255, 255));
 		_TextContext->setHotSpot(UTextContext::MiddleMiddle);
-		_TextContext->setFontSize(32);
+		if (_Message.size() > 96) _TextContext->setFontSize(16);
+		else if (_Message.size() > 64) _TextContext->setFontSize(24);
+		else _TextContext->setFontSize(32);
 		_TextContext->printAt(0.5f, 0.5f, _Message);
 	}
 	else if (_Selection)

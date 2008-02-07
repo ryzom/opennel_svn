@@ -374,8 +374,7 @@ void renderInformation()
 
 void cbGraphicsDriver(CConfigFile::CVar &var)
 {
-	// -- give ingame warning or something instead =)
-	/*NextGameState = GameStateReset;*/
+
 }
 
 //
@@ -391,168 +390,42 @@ static UInstance			Logo = NULL;
 
 void initLoadingState()
 {
-	NelLogo = Driver->createTextureFile("nel128.tga");
-	NevraxLogo = Driver->createTextureFile("nevrax.tga");
-	uint32 width, height;
-	Driver->getWindowSize(width, height);
-	ScreenWidth =(float)width;
-	ScreenHeight =(float)height;
 
-	//
-	// Setup the logo scene
-	//
-
-	LogoScene = Driver->createScene(false);
-
-	CViewport v;
-	v.init(0.0f, 0.80f, 0.2f, 0.2f);
-	LogoScene->setViewport(v);
-
-	Logo = LogoScene->createInstance("nel_logo.shape");
-	Logo.setPos(0.0f, 3.0f, 0.0f);
-	Logo.setTransformMode(UTransformable::RotEuler);
 }
 
 void releaseLoadingState()
 {
-	LogoScene->deleteInstance(Logo); Logo = NULL;
-	Driver->deleteScene(LogoScene); LogoScene = NULL;
-	Driver->deleteTextureFile(NelLogo); NelLogo = NULL;
-	Driver->deleteTextureFile(NevraxLogo); NevraxLogo = NULL;
+
 }
 
 void renderLoadingState(char *state, bool logo3d)
 {
-	renderLoadingState(ucstring(state), logo3d);
+
 }
 void renderLoadingState(ucstring state, bool logo3d)
 {
-	if (!Driver) return;
 
-	Driver->clearBuffers(CRGBA(0,0,0));
-
-	Driver->setMatrixMode2D(CFrustum(0.0f, ScreenWidth, 0.0f, ScreenHeight, 0.0f, 1.0f, false));
-	if (logo3d) update3dLogo();
-	else if (NelLogo != NULL) Driver->drawBitmap(10, ScreenHeight-128-10, 128, 128, *NelLogo);
-	if (NevraxLogo != NULL) Driver->drawBitmap(ScreenWidth-128-10, ScreenHeight-16-10, 128, 16, *NevraxLogo);
-
-	if (!TextContext) return;
-
-	TextContext->setColor(CRGBA(255, 255, 255));
-	TextContext->setHotSpot(UTextContext::MiddleMiddle);
-
-	TextContext->setFontSize(40);
-	TextContext->printAt(0.5f, 0.5f, ucstring("Welcome to Snowballs!"));
-	
-	TextContext->setFontSize(30);
-	TextContext->printAt(0.5f, 0.2f, state);
-	
-	TextContext->setHotSpot(UTextContext::BottomRight);
-	TextContext->setFontSize(15);
-#if (FINAL_VERSION == 1)
-	TextContext->printAt(0.99f, 0.01f, ucstring("Final Version"));
-#else
-	TextContext->printAt(0.99f, 0.01f, ucstring("(compiled " __DATE__ " " __TIME__ ")"));
-#endif
-
-	TextContext->setHotSpot(UTextContext::BottomLeft);
-	TextContext->setFontSize(15);
-#if defined(NL_DEBUG_FAST)
-	ucstring version = ucstring("DebugFast Version");
-#elif defined(NL_DEBUG)
-	ucstring version = ucstring("Debug Version");
-#elif defined(NL_RELEASE)
-	ucstring version = ucstring("Release Version");
-#elif defined(NL_RELEASE_DEBUG)
-	ucstring version = ucstring("ReleaseDebug Version");
-#else
-	ucstring version = ucstring("Unknown Version");
-#endif
 }
 
 void displayLoadingState(char *state)
 {
-	displayLoadingState(ucstring(state));
+
 }
 void displayLoadingState(ucstring state)
 {
-	LastTime = NewTime;
-	NewTime = CTime::getLocalTime();
-	DiffTime = NewTime - LastTime;
-	renderLoadingState(state, false);
-	Driver->swapBuffers();
-	//Driver->EventServer.pump();
+
 }
 
 void updateLoadingState(char *state, bool network, bool information)
 {
-	updateLoadingState(ucstring(state), network, information);
+
 }
 void updateLoadingState(ucstring state, bool network, bool information)
 {
-	LastTime = NewTime;
-	NewTime = CTime::getLocalTime();
-	DiffTime = NewTime - LastTime;
-#ifdef NL_OS_WINDOWS
-	//updateSound();
-#endif
-	renderLoadingState(state, true);
-	if (information) renderInformation();
-	if (network) updateNetwork();
-	Driver->swapBuffers();
-	Driver->EventServer.pump();
+
 }
 
 void update3dLogo()
 {
-	Driver->clearZBuffer();
-	static float angle=0.0;
-	angle+=0.002f * DiffTime;
-	Logo.setRotEuler(0.0f,0.0f,angle);
-	LogoScene->animate(float(NewTime)/1000);
-	LogoScene->render();
+
 }
-
-
-
-
-//// Command to quit the client
-//NLMISC_COMMAND(sb_quit,"quit the client","")
-//{
-//	// check args, if there s not the right number of parameter, return bad
-//	if (args.size() != 0) return false;
-//
-//	log.displayNL("Exit requested");
-//
-//	NextGameState = GameStateExit;
-//
-//	return true;
-//}
-//
-//NLMISC_COMMAND(sb_offline, "go offline", "")
-//{
-//	if (args.size() != 0) return false;
-//	NextGameState = GameStateOffline;
-//	return true;
-//}
-//
-//NLMISC_COMMAND(sb_unload, "unload game", "")
-//{
-//	if (args.size() != 0) return false;
-//	NextGameState = GameStateUnload;
-//	return true;
-//}
-//
-//NLMISC_COMMAND(sb_reset, "reset game", "")
-//{
-//	if (args.size() != 0) return false;
-//	NextGameState = GameStateReset;
-//	return true;
-//}
-//
-//NLMISC_COMMAND(sb_login, "go to the login screen", "")
-//{
-//	if (args.size() != 0) return false;
-//	NextGameState = GameStateLogin;
-//	return true;
-//}

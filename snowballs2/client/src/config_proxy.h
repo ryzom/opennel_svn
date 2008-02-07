@@ -36,6 +36,7 @@
 
 #include <nel/misc/config_file.h>
 #include <nel/misc/rgba.h>
+#include <nel/misc/ucstring.h>
 
 #include <map>
 
@@ -68,6 +69,7 @@ public:
 	double getValue(const std::string &varName, double defaultValue);
 	int getValue(const std::string &varName, int defaultValue);
 	std::string getValue(const std::string &varName, const std::string &defaultValue);
+	ucstring getValue(const std::string &varName, const ucstring &defaultValue);
 	bool getValue(const std::string &varName, bool defaultValue);
 	NLMISC::CRGBA getValue(const std::string &varName, NLMISC::CRGBA &defaultValue);
 

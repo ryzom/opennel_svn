@@ -38,6 +38,7 @@ namespace NLMISC {
 }
 
 typedef void (*SBCLIENT_CALLBACK)(void *context, void *tag);
+typedef void (*SBCLIENT_CALLBACK_ERROR)(void *context, const std::string &error, void *tag);
 typedef void (*SBCLIENT_CALLBACK_CONFIG)(void *context, const std::string &varName, NLMISC::CConfigFile::CVar &var, void *tag);
 typedef bool (*SBCLIENT_CALLBACK_COMMAND)(void *context, NLMISC::ICommand &command, const std::string &rawCommandString, const std::vector<std::string> &args, NLMISC::CLog &log, bool quiet, bool human, void *tag);
 
