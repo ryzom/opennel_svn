@@ -811,6 +811,14 @@
 						/>
 					</FileConfiguration>
 				</File>
+				<File
+					RelativePath=".\src\mouse.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\mouse.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="1_1_classes"
@@ -1047,6 +1055,14 @@
 			<Filter
 				Name="3_2_interface"
 				>
+				<File
+					RelativePath=".\src\keyboard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\keyboard.h"
+					>
+				</File>
 				<File
 					RelativePath=".\src\login.cpp"
 					>

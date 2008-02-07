@@ -65,6 +65,7 @@
 
 
 // some default defines
+// no logs in FINAL_VERSION
 #if FINAL_VERSION
 #	if !defined(SBCLIENT_USE_LOG_LOG)
 #		define SBCLIENT_USE_LOG_LOG false
@@ -77,23 +78,31 @@
 #	define SBCLIENT_VERSION "DEV " SBCLIENT_VERSION_NUMBER
 #endif
 
-#if !defined(SBCLIENT_USE_LOG_LOG)
-#	define SBCLIENT_USE_LOG_LOG true
+// both log files in NL_DEBUG_FAST and NL_DEBUG
+#if (defined (NL_DEBUG_FAST) || defined(NL_DEBUG))
+#	if !defined (SBCLIENT_USE_LOG_LOG)
+#		define SBCLIENT_USE_LOG_LOG true
+#	endif
+#endif
+
+// only snowballs_client.log in NL_RELEASE and NL_RELEASE_DEBUG
+#if !defined (SBCLIENT_USE_LOG_LOG)
+#	define SBCLIENT_USE_LOG_LOG false
 #endif
 #if !defined (SBCLIENT_USE_LOG)
 #	define SBCLIENT_USE_LOG 1
 #endif
 
-#if defined(NL_DEBUG_FAST)
+#if defined (NL_DEBUG_FAST)
 #	define SBCLIENT_COMPILE_NAME "DebugFast"
 #	define SBCLIENT_COMPILE_ID "NL_DEBUG_FAST"
-#elif defined(NL_DEBUG)
+#elif defined (NL_DEBUG)
 #	define SBCLIENT_COMPILE_NAME "Debug"
 #	define SBCLIENT_COMPILE_ID "NL_DEBUG"
-#elif defined(NL_RELEASE)
+#elif defined (NL_RELEASE)
 #	define SBCLIENT_COMPILE_NAME "Release"
 #	define SBCLIENT_COMPILE_ID "NL_RELEASE"
-#elif defined(NL_RELEASE_DEBUG)
+#elif defined (NL_RELEASE_DEBUG)
 #	define SBCLIENT_COMPILE_NAME "ReleaseDebug"
 #	define SBCLIENT_COMPILE_ID "NL_RELEASE_DEBUG"
 #else
