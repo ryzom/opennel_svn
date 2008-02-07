@@ -81,6 +81,7 @@
 #include "loading.h"
 #include "graphics.h"
 #include "sound.h"
+#include "time.h"
 
 #include <nel/misc/config_file.h>
 #include <nel/misc/path.h>
@@ -185,7 +186,7 @@ public:
 	{
 		// use log.log if NEL_LOG_IN_FILE and SBCLIENT_USE_LOG_LOG defined as 1
 		createDebug(NULL, SBCLIENT_USE_LOG_LOG, false);
-		srand((uint)CTime::getLocalTime());
+		srand((uint)NLMISC::CTime::getLocalTime());
 
 #if SBCLIENT_USE_LOG
 		// create snowballs_client.log
@@ -229,6 +230,7 @@ CSnowballsClient::CSnowballsClient()
   _Loading(NULL), 
   _Graphics(NULL), _GraphicsUpdateDriverId(0), 
   _Sound(NULL), _SoundUpdateSoundId(0), 
+  _Time(NULL), _TimeUpdateTimeId(0), 
   _Login(NULL), _LoginUpdateInterfaceId(0), _LoginRenderInterfaceId(0), _LoginUpdateNetworkId(0), 
   // commands
   _SetStateCommand(NULL), 
@@ -476,7 +478,7 @@ void CSnowballsClient::loadBase()
 		_Loading->setBackgroundNeL();
 		_Loading->setMessageState("");
 
-		_LoadingScreen.setRange(0.0f, 0.5f);
+		_LoadingScreen.setRange(0.00f, 0.45f);
 		/* _Loading->setMessageState("i18nInitializeGraphics"); */
 		nlassert(!_Graphics);
 		_Graphics = new CGraphics(_LoadingScreen, "Graphics", _I18NHelper);
@@ -484,11 +486,17 @@ void CSnowballsClient::loadBase()
 		_LoadingScreen.setDriver(_Graphics->Driver);
 		_LoadingScreen.setTextContext(_Graphics->TextContext);
 
-		_LoadingScreen.setRange(0.5f, 1.0f);
+		_LoadingScreen.setRange(0.45f, 0.90f);
 		/* _Loading->setMessageState("i18nInitializeSound"); */
 		nlassert(!_Sound);
 		_Sound = new CSound(_LoadingScreen, "Sound");
 		nlassert(_Sound);
+
+		_LoadingScreen.setRange(0.90f, 1.00f);
+		/* _Loading->setMessageState("i18nInitializeTime"); */
+		nlassert(!_Time);
+		_Time = new SBCLIENT::CTime(_LoadingScreen);
+		nlassert(_Time);
 
 		_LoadingScreen.progress(1.0f);
 	}
@@ -498,6 +506,7 @@ void CSnowballsClient::unloadBase()
 {
 	if (_LoadedBase)
 	{
+		nlassert(_Time); delete _Time; _Time = NULL;
 		nlassert(_Sound); delete _Sound; _Sound = NULL;
 		_LoadingScreen.setTextContext(NULL);
 		_LoadingScreen.setDriver(NULL);
@@ -515,11 +524,15 @@ void CSnowballsClient::enableBase()
 
 		nlassert(!_GraphicsUpdateDriverId);
 		_GraphicsUpdateDriverId = _UpdateFunctions.add(
-			SBCLIENT::CGraphics::updateDriver, _Graphics, NULL, 7050000);
+			SBCLIENT::CGraphics::updateDriver, _Graphics, NULL, 0 + SBCLIENT_UPDATE_DRIVER);
 
 		nlassert(!_SoundUpdateSoundId);
 		_SoundUpdateSoundId = _UpdateFunctions.add(
-			SBCLIENT::CSound::updateSound, _Sound, NULL, 1250000);
+			SBCLIENT::CSound::updateSound, _Sound, NULL, 0 + SBCLIENT_UPDATE_SOUND);
+
+		nlassert(!_TimeUpdateTimeId);
+		_TimeUpdateTimeId = _UpdateFunctions.add(
+			SBCLIENT::CTime::updateTime, _Time, NULL, 0 + SBCLIENT_UPDATE_TIME);
 	}
 }
 
@@ -527,6 +540,10 @@ void CSnowballsClient::disableBase()
 {
 	if (_EnabledBase)
 	{
+		nlassert(_TimeUpdateTimeId);
+		_UpdateFunctions.remove(_TimeUpdateTimeId);
+		_TimeUpdateTimeId = 0;
+
 		nlassert(_SoundUpdateSoundId);
 		_UpdateFunctions.remove(_SoundUpdateSoundId);
 		_SoundUpdateSoundId = 0;
@@ -539,46 +556,6 @@ void CSnowballsClient::disableBase()
 	}
 }
 
-
-//void CSnowballsClient::enableCore()
-//{
-//	if (!_HasCore)
-//	{
-//		TimeComponent = new CTimeComponent(
-//			_ComponentManager, "Time", _LoadingScreen);
-//		_ComponentManager->registerComponent(TimeComponent);
-//		_ComponentManager->registerUpdate(TimeComponent, 1000000);
-//
-//
-//		updates.add(updateTime, NULL, NULL, 1000000);
-//
-//		displayLoadingState("Initialize Loading");
-//		initLoadingState();
-//		// Initialize sound for loading screens etc
-//#if SBCLIENT_WITH_SOUND
-//		displayLoadingState("Initialize Sound");
-//		initSound();
-//		playMusic(SBCLIENT_MUSIC_WAIT);
-//		updates.add(updateSound, NULL, NULL, 0);
-//#endif
-//	}
-//}
-
-//void CSnowballsClient::disableCore()
-//{
-//	if (_HasCore)
-//	{
-//		/// EVEN MORE TEMP!
-//		// Release the loading state textures
-//		releaseLoadingState();
-//		// Release the sound
-//#if SBCLIENT_WITH_SOUND
-//		releaseSound();
-//#endif
-//		_HasCore = false;
-//	}
-//}
-
 void CSnowballsClient::loadLogin()
 {
 	if (!_LoadedLogin)
@@ -590,7 +567,7 @@ void CSnowballsClient::loadLogin()
 		_LoadingScreen.setRange(0.0f, 1.0f);
 		/* _Loading->setMessageState("i18nInitializeLogin"); */
 		nlassert(!_Login);
-		_Login = new CLogin("Login", _Graphics->Driver, 
+		_Login = new CLogin("Login", _Time, _Graphics->Driver, 
 			_Graphics->TextContext, _I18NHelper, &_LoginData);
 		nlassert(_Login);
 

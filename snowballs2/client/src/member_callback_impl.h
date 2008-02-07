@@ -62,7 +62,7 @@
 	bool __class::__name(void *context, NLMISC::ICommand &command, const std::string &rawCommandString, const std::vector<std::string> &args, NLMISC::CLog &log, bool quiet, bool human, void *tag) \
 	{ \
 		nlassert(context); \
-		((__class *)context)->__name(command, rawCommandString, args, log, quiet, human, tag); \
+		return ((__class *)context)->__name(command, rawCommandString, args, log, quiet, human, tag); \
 	} \
 	bool __class::__name(NLMISC::ICommand &command, const std::string &rawCommandString, const std::vector<std::string> &args, NLMISC::CLog &log, bool quiet, bool human, void *tag)
 

@@ -55,8 +55,7 @@ namespace NL3D {
 
 namespace SBCLIENT {
 	class CI18NHelper;
-	class _CLoginKeyboard;
-	class _CLoginMouse;
+	class CTime;
 
 /**
  * \brief CLogin
@@ -82,6 +81,7 @@ protected:
 	static const uint8 ExitButton = 1, ConnectButton = 2, OfflineButton = 3;
 	static const uint8 UsernameText = 4, PasswordText = 5;
 	// pointers
+	SBCLIENT::CTime *_Time; // p
 	NL3D::UDriver *_Driver; // not deleted here
 	NL3D::UTextContext *_TextContext; // not deleted here	
 	CI18NHelper *_I18N; // not deleted here
@@ -109,10 +109,10 @@ protected:
 	bool _Enabled;
 	uint8 _Selection;
 	ucstring _PasswordText;
-	float _TimeOut;
+	double _TimeOut;
 	CLSClient _LSClient;
 public:
-	CLogin(const std::string &id, NL3D::UDriver *driver, NL3D::UTextContext *textContext, CI18NHelper *i18n, CLoginData *loginData);
+	CLogin(const std::string &id, SBCLIENT::CTime *time, NL3D::UDriver *driver, NL3D::UTextContext *textContext, CI18NHelper *i18n, CLoginData *loginData);
 	virtual ~CLogin();
 
 	void setSelectQuad(float x, float y);

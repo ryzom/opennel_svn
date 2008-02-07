@@ -764,30 +764,6 @@
 				Name="trash_components"
 				>
 				<File
-					RelativePath=".\src\_landscape_component.cpp"
-					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\src\_landscape_component.h"
-					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath=".\src\_lens_flare_component.cpp"
 					>
 					<FileConfiguration
@@ -801,30 +777,6 @@
 				</File>
 				<File
 					RelativePath=".\src\_lens_flare_component.h"
-					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\src\_time_component.cpp"
-					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\src\_time_component.h"
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
@@ -1061,6 +1013,14 @@
 				</File>
 				<File
 					RelativePath=".\src\sound.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\time.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\time.h"
 					>
 				</File>
 			</Filter>

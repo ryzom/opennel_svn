@@ -38,6 +38,8 @@
 #include "ls_client.h"
 #include "i18n_helper.h"
 
+#include "time.h"
+
 // #include <nel/misc/debug.h>
 #include <nel/3d/u_driver.h>
 #include <nel/3d/u_scene.h>
@@ -53,11 +55,17 @@ using namespace NL3D;
 
 namespace SBCLIENT {
 
-CLogin::CLogin(const std::string &id, NL3D::UDriver *driver, NL3D::UTextContext *textContext, CI18NHelper *i18n, CLoginData *loginData)
-: _Driver(driver), _TextContext(textContext), _I18N(i18n), 
-_LoginData(loginData), _Config(id), _LogoAngle(0.0f), _TimeOut(-1.0f), 
+CLogin::CLogin(const std::string &id, SBCLIENT::CTime *time, NL3D::UDriver *driver, NL3D::UTextContext *textContext, CI18NHelper *i18n, CLoginData *loginData)
+: _Time(time), _Driver(driver), _TextContext(textContext), _I18N(i18n), 
+_LoginData(loginData), _Config(id), _LogoAngle(0.0f), _TimeOut(-1.0), 
 _TypingPassword(false), _Enabled(false), _Selection(0)
 {
+	nlassert(_Time);
+	nlassert(_Driver);
+	nlassert(_TextContext);
+	nlassert(_I18N);
+	nlassert(_LoginData);
+
 	// todo: get stuff from config
 	_BackgroundTexture = _Driver->createTextureFile("snowballs_login.tga");
 	_BackgroundMaterial = _Driver->createMaterial();
@@ -351,7 +359,7 @@ SBCLIENT_CALLBACK_IMPL(CLogin, updateNetwork)
 
 SBCLIENT_CALLBACK_IMPL(CLogin, updateInterface)
 {
-	float temptime = 1.0f / 60.0f;
+	double timeDelta = _Time->LocalTimeDelta;
 
 	// some silly code to add the | and do the stars
 	_UsernameText =_LoginData->Username;
@@ -368,7 +376,7 @@ SBCLIENT_CALLBACK_IMPL(CLogin, updateInterface)
 	{
 		if (_TimeOut >= 0.0f) 
 		{
-			_TimeOut -= temptime;
+			_TimeOut -= timeDelta;
 			if (_TimeOut <= 0.0f)
 			{
 				_TimeOut = -1.0f;
@@ -379,9 +387,9 @@ SBCLIENT_CALLBACK_IMPL(CLogin, updateInterface)
 
 	if (!_Message.empty())
 	{
-		_LogoAngle += 2.0f * temptime;
+		_LogoAngle += 2.0f * (float)timeDelta;
 		_Logo.setRotEuler(0.0f, 0.0f, _LogoAngle);
-		_LogoScene->animate(temptime);
+		_LogoScene->animate(timeDelta);
 	}
 	
 }

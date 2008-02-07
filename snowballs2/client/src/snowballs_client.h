@@ -78,8 +78,10 @@ private:
 	SBCLIENT::CGraphics *_Graphics; // graphics driver
 	uint _GraphicsUpdateDriverId;
 	SBCLIENT::CSound *_Sound; // sound driver
+	SBCLIENT::CTime *_Time; // time component
+	uint _TimeUpdateTimeId;
 	uint _SoundUpdateSoundId;
-	SBCLIENT::CLogin *_Login; // login screen
+	SBCLIENT::CLogin *_Login; // login interface
 	uint _LoginUpdateInterfaceId;
 	uint _LoginRenderInterfaceId;
 	uint _LoginUpdateNetworkId;
