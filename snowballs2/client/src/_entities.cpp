@@ -82,37 +82,8 @@ using namespace NLPACS;
 // Variables
 //
 
-// A map of entities. All entities are later referred by their unique id
-map<uint32, CEntity>	Entities;
-
-CEntity					*Self = NULL;
-
-// The size of the world, in meter
-float					WorldWidth = 20*160;
-float					WorldHeight = 6*160;
-
-// Entity Id, only used offline
-uint32					NextEID = 1000000;
-
-// The speed settings
-float					PlayerSpeed = 10.0f;	// 6.5 km/h
-float					SnowballSpeed = 15.0f;	// 36 km/h
-
-// these variables are set with the config file
-
-// Setup for the name up the character
-float					EntityNameSize;
-CRGBA					EntityNameColor;
-
-bool _TestCLS = false;
 
 
-// Set the state of the entity (Appear, Normal, Disappear)
-void CEntity::setState (TState state)
-{
-	State = state;
-	StateStartTime = CTime::getLocalTime ();
-}
 
 
 // Get an map iterator on a entity, specified by its id
