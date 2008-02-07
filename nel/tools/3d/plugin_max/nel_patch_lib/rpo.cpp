@@ -253,9 +253,17 @@ int RPO::Display(TimeValue t, INode* inode, ViewExp *vpt, int flags)
 		return ret;
 
 	}
-	else
+	else	
 	{
-		return rpatch->Display (t, inode, vpt, flags, patch);
+		try
+		{
+			return rpatch->Display (t, inode, vpt, flags, patch);
+		}
+		catch (std::exception e)
+		{
+			nlwarning("RPO::Display failed");
+			return 0;
+		}
 	}
 }
 
