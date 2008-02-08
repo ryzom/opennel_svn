@@ -37,6 +37,7 @@
 #include "entity_old.h"
 
 // NeL includes
+#include <nel/3d/animation_time.h>
 
 // STL includes
 #include <map>
@@ -88,12 +89,14 @@ public:
 protected:
 	// pointers
 	NL3D::UScene *_Scene; // p
-	NL3D::UVisualCollisionManager *_VisualCollisionManager;
-	NLPACS::UMoveContainer *_MoveContainer;
-	NLPACS::UGlobalRetriever *_GlobalRetriever;
+	NL3D::UVisualCollisionManager *_VisualCollisionManager; // p
+	NLPACS::UMoveContainer *_MoveContainer; // p
+	NLPACS::UGlobalRetriever *_GlobalRetriever; // p
 	CAnimationOld *_Animation; // c
+	NL3D::TGlobalAnimationTime *_GlobalAnimationTime; // p
+	NL3D::TGlobalAnimationTime *_GlobalAnimationTimeDelta; // p
 public:
-	CEntitiesOld(NLMISC::IProgressCallback &progressCallback, NL3D::UScene *scene, NL3D::UVisualCollisionManager *visualCollisionManager, NLPACS::UMoveContainer *moveContainer, NLPACS::UGlobalRetriever *globalRetriever, CAnimationOld *animation);
+	CEntitiesOld(NLMISC::IProgressCallback &progressCallback, NL3D::UScene *scene, NL3D::UVisualCollisionManager *visualCollisionManager, NLPACS::UMoveContainer *moveContainer, NLPACS::UGlobalRetriever *globalRetriever, CAnimationOld *animation, NL3D::TGlobalAnimationTime *globalAnimationTime, NL3D::TGlobalAnimationTime *globalAnimationTimeDelta);
 	virtual ~CEntitiesOld();
 
 	CEntityOld &getEntity(uint32 eid);

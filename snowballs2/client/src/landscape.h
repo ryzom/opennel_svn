@@ -76,8 +76,9 @@ public:
 	/// The landscape is updated around this vector
 	NLMISC::CVector *RefreshZonesAround; // p
 
+protected:
 	/// Must always point to the animation time (NOT THE DELTA)
-	NL3D::TGlobalAnimationTime *GlobalAnimationTime;
+	NL3D::TGlobalAnimationTime *_GlobalAnimationTime; // p
 
 	// instances
 	CConfigProxy _Config;

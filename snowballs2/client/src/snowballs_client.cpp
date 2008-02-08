@@ -114,6 +114,8 @@
 #include <nel/3d/u_material.h>
 #include <nel/3d/u_camera.h>
 #include <nel/3d/u_scene.h>
+#include <nel/pacs/u_move_primitive.h>
+#include <nel/misc/vectord.h>
 
 using namespace std;
 using namespace NLMISC;
@@ -645,7 +647,7 @@ void CSnowballsClient::loadIngame()
 		_Entities = new CEntitiesOld(_LoadingScreen, 
 			_Landscape->Scene, _Collisions->VisualCollisionManager, 
 			_Collisions->MoveContainer, _Collisions->GlobalRetriever,
-			_Animation); // yay
+			_Animation, &_Time->AnimationTime, &_Time->AnimationDelta); // yay
 		nlassert(_Entities);
 
 //		// Init the entities prefs
@@ -984,6 +986,7 @@ SBCLIENT_CALLBACK_IMPL(CSnowballsClient, updateDebug)
 	if (_Landscape && _Entities && _Entities->Self)
 	{
 		// temp
+		_Entities->Self->MovePrimitive->move(CVector(1,0,0), 0);
 		NL3D::UCamera camera = _Landscape->Scene->getCam();
 		camera.setPos(_Entities->Self->Position + CVector(0,-6,3));
 		_Landscape->Scene->setCam(camera);

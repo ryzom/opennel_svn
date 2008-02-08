@@ -54,10 +54,10 @@ namespace SBCLIENT {
 CLandscape::CLandscape(IProgressCallback &progressCallback, 
 const std::string &id, UDriver *driver,
 TGlobalAnimationTime *globalAnimationTime) 
-: _Config(id), _Driver(driver), GlobalAnimationTime(globalAnimationTime)
+: _Config(id), _Driver(driver), _GlobalAnimationTime(globalAnimationTime)
 {
 	nlassert(_Driver);
-	nlassert(GlobalAnimationTime);
+	nlassert(_GlobalAnimationTime);
 	progressCallback.progress(0.0f);
 
 	// create a scene
@@ -111,7 +111,7 @@ CLandscape::~CLandscape()
 
 SBCLIENT_CALLBACK_IMPL(CLandscape, updateAnimations)
 {
-	Scene->animate(*GlobalAnimationTime);
+	Scene->animate(*_GlobalAnimationTime);
 }
 
 SBCLIENT_CALLBACK_IMPL(CLandscape, updateLandscape)

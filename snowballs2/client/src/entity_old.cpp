@@ -59,10 +59,10 @@ CEntityOld::~CEntityOld()
 	
 }
 
-void CEntityOld::setState(TState state)
+void CEntityOld::setState(TState state, NL3D::TGlobalAnimationTime gt)
 {
 	State = state;
-	StateStartTime = CTime::getLocalTime();
+	StateStartTime = gt;
 }
 
 } /* namespace SBCLIENT */

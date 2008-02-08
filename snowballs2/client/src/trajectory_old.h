@@ -36,7 +36,7 @@
 
 // NeL includes
 #include <nel/misc/vector.h>
-#include <nel/misc/time_nl.h>
+#include <nel/3d/animation_time.h>
 
 // STL includes
 
@@ -50,30 +50,21 @@ namespace SBCLIENT {
  */
 class CTrajectoryOld
 {
-	NLMISC::CVector		_StartPosition;
-	NLMISC::CVector		_EndPosition;
-	float				_Speed;
-	NLMISC::TTime		_StartTime;
-	NLMISC::TTime		_StopTime;
-	float				_Distance;
+	NLMISC::CVector _StartPosition;
+	NLMISC::CVector _EndPosition;
+	float _Speed;
+	NL3D::TGlobalAnimationTime _StartTime;
+	NL3D::TGlobalAnimationTime _StopTime;
+	float _Distance;
 
 public:
-	void				init(const NLMISC::CVector &position, const NLMISC::CVector &target, float speed, NLMISC::TTime startTime)
-	{
-		_StartPosition = position;
-		_EndPosition = target;
-		_Speed = speed;
-		_StartTime = startTime;
-		_Distance = (_EndPosition-_StartPosition).norm();
-		_StopTime = (NLMISC::TTime)(_Distance/_Speed*1000.0+_StartTime);
-	}
+	void init(const NLMISC::CVector &position, const NLMISC::CVector &target, float speed, NL3D::TGlobalAnimationTime startTime);
+	NLMISC::CVector eval(NL3D::TGlobalAnimationTime t) const;
+	NLMISC::CVector evalSpeed(NL3D::TGlobalAnimationTime t) const;
 
-	NLMISC::CVector		eval(NLMISC::TTime t) const;
-	NLMISC::CVector		evalSpeed(NLMISC::TTime t) const;
-
-	NLMISC::TTime		getStartTime() const { return _StartTime; }
-	NLMISC::CVector		getStartPosition() const { return _StartPosition; }
-	NLMISC::TTime		getStopTime() const { return _StopTime; }
+	NL3D::TGlobalAnimationTime getStartTime() const { return _StartTime; }
+	NLMISC::CVector getStartPosition() const { return _StartPosition; }
+	NL3D::TGlobalAnimationTime getStopTime() const { return _StopTime; }
 }; /* class CTrajectoryOld */
 
 } /* namespace SBCLIENT */

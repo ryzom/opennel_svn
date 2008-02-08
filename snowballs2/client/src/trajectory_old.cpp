@@ -43,25 +43,35 @@ using namespace NLMISC;
 
 namespace SBCLIENT {
 
-CVector	CTrajectoryOld::eval(NLMISC::TTime t) const
+void CTrajectoryOld::init(const NLMISC::CVector &position, const NLMISC::CVector &target, float speed, NL3D::TGlobalAnimationTime startTime)
+{
+	_StartPosition = position;
+	_EndPosition = target;
+	_Speed = speed;
+	_StartTime = startTime;
+	_Distance = (_EndPosition - _StartPosition).norm();
+	_StopTime = (double)_Distance / (double)_Speed + (double)_StartTime;
+}
+
+CVector	CTrajectoryOld::eval(NL3D::TGlobalAnimationTime t) const
 {
 	if (t < _StartTime) return _StartPosition;
 
-	float	ft = (float)(t-_StartTime)/(float)(_StopTime-_StartTime);
+	float ft = (float)(t - _StartTime) / (float)(_StopTime - _StartTime);
 	ft = min(ft, 1.0f);
-	CVector	res = _EndPosition*ft + _StartPosition*(1.0f-ft);
-	res.z += 0.3f*_Distance*_Distance/90.0f*(float)sin(Pi*ft);
+	CVector	res = _EndPosition*ft + _StartPosition * (1.0f - ft);
+	res.z += 0.3f * _Distance * _Distance / 90.0f * (float)sin(Pi * ft);
 	return res;
 }
 
-CVector	CTrajectoryOld::evalSpeed(NLMISC::TTime t) const
+CVector	CTrajectoryOld::evalSpeed(NL3D::TGlobalAnimationTime t) const
 {
 	if (t < _StartTime) return _StartPosition;
 
-	float	ft = (float)(t-_StartTime)/(float)(_StopTime-_StartTime);
+	float ft = (float)(t - _StartTime) / (float)(_StopTime - _StartTime);
 	ft = min(ft, 1.0f);
-	CVector res = (_EndPosition-_StartPosition).normed()*_Speed;
-	res.z += 0.3f*_Distance*_Distance/90.0f*(float)Pi*(float)cos(Pi*ft);
+	CVector res = (_EndPosition - _StartPosition).normed() * _Speed;
+	res.z += 0.3f * _Distance * _Distance / 90.0f * (float)Pi * (float)cos(Pi * ft);
 	return res;
 }
 

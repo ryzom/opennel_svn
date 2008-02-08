@@ -63,10 +63,14 @@ const float CEntitiesOld::SnowballSpeed = 15.0f;	// 36 km/h
 CEntitiesOld::CEntitiesOld(NLMISC::IProgressCallback &progressCallback, 
 UScene *scene, NL3D::UVisualCollisionManager *visualCollisionManager, 
 UMoveContainer *moveContainer, UGlobalRetriever *globalRetriever, 
-CAnimationOld *animation) : _TestCLS(false), Self(NULL), _Scene(scene), 
+CAnimationOld *animation, TGlobalAnimationTime *globalAnimationTime,
+TGlobalAnimationTime *globalAnimationTimeDelta) : 
+_TestCLS(false), Self(NULL), _Scene(scene), 
 _VisualCollisionManager(visualCollisionManager), 
 _MoveContainer(moveContainer), _GlobalRetriever(globalRetriever), 
-_Animation(animation), LastEID(1000000)
+_Animation(animation), LastEID(1000000), 
+_GlobalAnimationTime(globalAnimationTime), 
+_GlobalAnimationTimeDelta(globalAnimationTimeDelta)
 {
 	progressCallback.progress(0.0f);
 	nlassert(!Self);
@@ -75,6 +79,8 @@ _Animation(animation), LastEID(1000000)
 	nlassert(_MoveContainer);
 	nlassert(_GlobalRetriever);
 	nlassert(_Animation);
+	nlassert(_GlobalAnimationTime);
+	nlassert(_GlobalAnimationTimeDelta);
 	_Animation->_Entities = this;
 	progressCallback.progress(1.0f);
 }
@@ -101,6 +107,7 @@ CEntityOld *CEntitiesOld::getEntityPtr(uint32 eid)
 void CEntitiesOld::addEntity(uint32 eid, const ucstring &name, CEntityOld::TType type, const CVector &startPosition, const CVector &serverPosition)
 {
 	//nlinfo("adding entity %u", eid);
+	TGlobalAnimationTime gt = *_GlobalAnimationTime;
 
 	// Check that the entity doesn't exist yet
 	if (getEntityPtr(eid))
@@ -170,7 +177,7 @@ void CEntitiesOld::addEntity(uint32 eid, const ucstring &name, CEntityOld::TType
 		// setup final parameters
 		entity.Speed = PlayerSpeed;
 		entity.Particule = _Scene->createInstance("appear.ps");
-		entity.setState(CEntityOld::Appear);
+		entity.setState(CEntityOld::Appear, gt);
 		_Animation->playAnimation(entity, CEntityOld::LogInAnim);
 		_Animation->playAnimation(entity, CEntityOld::IdleAnim);
 
@@ -196,7 +203,7 @@ void CEntitiesOld::addEntity(uint32 eid, const ucstring &name, CEntityOld::TType
 
 		entity.Speed = PlayerSpeed;
 		entity.Particule = _Scene->createInstance("appear.ps");
-		entity.setState(CEntityOld::Appear);
+		entity.setState(CEntityOld::Appear, gt);
 		_Animation->playAnimation(entity, CEntityOld::LogInAnim);
 		_Animation->playAnimation(entity, CEntityOld::IdleAnim);
 
@@ -213,7 +220,7 @@ void CEntitiesOld::addEntity(uint32 eid, const ucstring &name, CEntityOld::TType
 
 		#pragma SBCLIENT_WARNING("SBCLIENT_SOUND")
 		//playSound (entity, SoundId);
-		entity.setState(CEntityOld::Normal);
+		entity.setState(CEntityOld::Normal, gt);
 		break;
 	}
 
@@ -233,6 +240,7 @@ void CEntitiesOld::addEntity(uint32 eid, const ucstring &name, CEntityOld::TType
 void CEntitiesOld::removeEntity(uint32 eid)
 {
 	//nlinfo ("removing entity %u", eid);
+	TGlobalAnimationTime gt = *_GlobalAnimationTime;
 	
 	// look for the entity
 	CEntityOld *entity = getEntityPtr(eid);
@@ -253,7 +261,7 @@ void CEntitiesOld::removeEntity(uint32 eid)
 	entity->Particule.setPos(entity->Position);
 	
 	_Animation->playAnimation(*entity, CEntityOld::LogOffAnim, true);
-	entity->setState(CEntityOld::Disappear);
+	entity->setState(CEntityOld::Disappear, gt);
 }
 
 void CEntitiesOld::deleteEntity(CEntityOld &entity)
@@ -316,8 +324,10 @@ void CEntitiesOld::removeAll()
 
 void CEntitiesOld::stateAppear(CEntityOld &entity)
 {
+	TGlobalAnimationTime gt = *_GlobalAnimationTime;
+
 	// after 1 second, show the instance
-	if (CTime::getLocalTime() > entity.StateStartTime + 1000)
+	if (gt > entity.StateStartTime + 1.0)
 	{
 		if (entity.Instance.getVisibility() != UTransform::Show)
 			entity.Instance.show();
@@ -325,7 +335,7 @@ void CEntitiesOld::stateAppear(CEntityOld &entity)
 
 	// after 3 seconds, delete the particle system (if any)
 	// and pass the entity into the Normal state
-	if (CTime::getLocalTime () > entity.StateStartTime + 3000)
+	if (gt > entity.StateStartTime + 3.0)
 	{
 		if (!entity.Particule.empty())
 		{
@@ -333,7 +343,7 @@ void CEntitiesOld::stateAppear(CEntityOld &entity)
 			entity.Particule = NULL;
 		}
 		
-		entity.setState(CEntityOld::Normal);
+		entity.setState(CEntityOld::Normal, gt);
 	}
 
 	if (entity.MovePrimitive != NULL)
@@ -342,8 +352,10 @@ void CEntitiesOld::stateAppear(CEntityOld &entity)
 
 void CEntitiesOld::stateDisappear(CEntityOld &entity)
 {
+	TGlobalAnimationTime gt = *_GlobalAnimationTime;
+
 	// after 1 second, remove the mesh and all collision stuff
-	if (CTime::getLocalTime() > entity.StateStartTime + 1000)
+	if (gt > entity.StateStartTime + 1.0)
 	{
 		if (entity.Instance.getVisibility() != UTransform::Hide)
 		{
@@ -358,7 +370,7 @@ void CEntitiesOld::stateDisappear(CEntityOld &entity)
 	}
 
 	// after 5 seconds, remove the particle system and the entity entry
-	if (CTime::getLocalTime() > entity.StateStartTime + 3000)
+	if (gt > entity.StateStartTime + 3.0)
 	{
 		deleteEntity(entity);
 	}
@@ -372,8 +384,8 @@ void CEntitiesOld::stateDisappear(CEntityOld &entity)
 void CEntitiesOld::stateNormal(CEntityOld &entity)
 {
 	#pragma SBCLIENT_WARNING("SBCLIENT_TIME")
-	double dt = 1.0 / 60.0;
-	NLMISC::TTime NewTime = CTime::getLocalTime();
+	TGlobalAnimationTime dt = *_GlobalAnimationTimeDelta;
+	TGlobalAnimationTime gt = *_GlobalAnimationTime;
 	CVector	oldPos;
 	CVector	newPos;
 
@@ -398,7 +410,7 @@ void CEntitiesOld::stateNormal(CEntityOld &entity)
 			break;
 		case 1:
 			// walk
-			if (pDelta.norm() < 0.1f || NewTime - entity.BotStateStart > 3000)
+			if (pDelta.norm() < 0.1f || gt - entity.BotStateStart > 3.0)
 			{
 				// reached the point
 				entity.BotState = 0;
@@ -413,17 +425,17 @@ void CEntitiesOld::stateNormal(CEntityOld &entity)
 			// aim
 			entity.IsWalking = false;
 			entity.IsAiming = true;
-			entity.BotStateStart = NewTime;
+			entity.BotStateStart = gt;
 			entity.BotState = 3;
 			break;
 		case 3:
 			// wait to shoot
 			entity.IsWalking = false;
 			entity.IsAiming = true;
-			if (NewTime - entity.BotStateStart > 1000)
+			if (gt - entity.BotStateStart > 1.0)
 			{
 				entity.BotState = 4;
-				entity.BotStateStart = NewTime;
+				entity.BotStateStart = gt;
 				CVector	AimingPosition = entity.Position + CVector(0.0f, 0.0f, 2.0f);
 				CVector	direction = CVector((float)(cos(entity.Angle)), (float)(sin(entity.Angle)), 0.3f).normed();
 				#pragma SBCLIENT_WARNING("SBCLIENT_LANDSCAPE")
@@ -435,10 +447,10 @@ void CEntitiesOld::stateNormal(CEntityOld &entity)
 			// shoot
 			entity.IsWalking = false;
 			entity.IsAiming = false;
-			if (NewTime - entity.BotStateStart > 1000)
+			if (gt - entity.BotStateStart > 1.0)
 			{
 				entity.BotState = 5;
-				entity.BotStateStart = NewTime;
+				entity.BotStateStart = gt;
 			}
 			break;
 		case 5:
@@ -449,13 +461,13 @@ void CEntitiesOld::stateNormal(CEntityOld &entity)
 											 (float)sin(entity.AuxiliaryAngle),
 											 0.0f)*EntityMaxSpeed;
 			entity.BotState = 1;
-			entity.BotStateStart = NewTime;
+			entity.BotStateStart = gt;
 			break;
 		}
 	}
 
 
-	if (entity.Type == CEntityOld::Snowball && NewTime >= entity.Trajectory.getStopTime())
+	if (entity.Type == CEntityOld::Snowball && gt >= entity.Trajectory.getStopTime())
 	{
 /*
 		CVector	tp(1140,-833,30);
@@ -570,7 +582,7 @@ void CEntitiesOld::stateNormal(CEntityOld &entity)
 		// Interpolate orientation for smoother motions
 		// AuxiliaryAngle -> the server imposed angle
 		// InterpolatedAuxiliaryAngle -> the angle showed by the entity
-		float	sweepDistance = entity.AuxiliaryAngle-entity.InterpolatedAuxiliaryAngle;
+		float sweepDistance = entity.AuxiliaryAngle-entity.InterpolatedAuxiliaryAngle;
 		if (sweepDistance > (float)Pi)
 		{
 			sweepDistance -= (float)Pi*2.0f;
@@ -604,10 +616,10 @@ void CEntitiesOld::stateNormal(CEntityOld &entity)
 	else if (entity.Type == CEntityOld::Snowball)
 	{
 		// go to the server position using trajectory interpolation
-		CVector newPos = entity.Trajectory.eval(NewTime);
+		CVector newPos = entity.Trajectory.eval(gt);
 		if (newPos != entity.Position)
 		{
-			entity.Position = entity.Trajectory.eval(NewTime);
+			entity.Position = entity.Trajectory.eval(gt);
 			entity.Instance.show ();
 		}
 	}
@@ -644,15 +656,17 @@ void CEntitiesOld::stateNormal(CEntityOld &entity)
 
 void CEntitiesOld::shotSnowball(uint32 sid, uint32 eid, const CVector &start, const CVector &target, float speed, float deflagRadius)
 {
+	TGlobalAnimationTime gt = *_GlobalAnimationTime;
+
 	// get direction
-	CVector direction = (target-start).normed();
+	CVector direction = (target - start).normed();
 
 	// create a new snowball entity
 	addEntity(sid, ucstring(), CEntityOld::Snowball, start, target);
 	CEntityOld &snowball = getEntity(sid);
 
 	snowball.AutoMove = 1;
-	snowball.Trajectory.init(start, target, speed, CTime::getLocalTime ()+1000);
+	snowball.Trajectory.init(start, target, speed, gt + 1.0);
 	snowball.Instance.hide();
 
 	CEntityOld	&entity = getEntity(eid);
@@ -673,8 +687,8 @@ SBCLIENT_CALLBACK_IMPL(CEntitiesOld, updateEntities)
 {
 	// compute the delta t that has elapsed since the last update (in seconds)
 	#pragma SBCLIENT_WARNING("SBCLIENT_TIME")
-	double dt = 1.0 / 60.0;
-	NLMISC::TTime NewTime = CTime::getLocalTime();
+	TGlobalAnimationTime dt = *_GlobalAnimationTimeDelta;
+	TGlobalAnimationTime gt = *_GlobalAnimationTime;
 	CEntityMap::iterator eit;
 
 	// move entities
@@ -762,7 +776,7 @@ SBCLIENT_CALLBACK_IMPL(CEntitiesOld, updateEntities)
 				jdir = CVector(-(float)cos(entity.Angle), -(float)sin(entity.Angle), 0.0f);
 				break;
 			case CEntityOld::Snowball:
-				jdir = entity.Trajectory.evalSpeed(NewTime).normed();
+				jdir = entity.Trajectory.evalSpeed(gt).normed();
 				break;
 			}
 

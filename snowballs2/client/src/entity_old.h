@@ -39,6 +39,7 @@
 #include <nel/misc/vector.h>
 #include <nel/3d/u_instance.h>
 #include <nel/3d/u_skeleton.h>
+#include <nel/3d/animation_time.h>
 
 // STL includes
 #include <queue>
@@ -140,7 +141,7 @@ public:
 	/// The state of this entity
 	TState State;
 	/// The date of the beginning of this state
-	NLMISC::TTime StateStartTime;
+	NL3D::TGlobalAnimationTime StateStartTime;
 
 	/// The type of this entity
 	TType Type;
@@ -175,10 +176,10 @@ public:
 	NL3D::TGlobalAnimationTime StartAnimationTime;
 
 	uint BotState;
-	NLMISC::TTime BotStateStart;
+	NL3D::TGlobalAnimationTime BotStateStart;
 	
 	/// Set the state of the entity (Appear, Normal, Disappear)
-	void setState (TState state);
+	void setState(TState state, NL3D::TGlobalAnimationTime gt);
 }; /* class CEntityOld */
 
 } /* namespace SBCLIENT */
