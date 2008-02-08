@@ -60,6 +60,7 @@ namespace SBCLIENT {
 	class CGraphics;
 	class CSound;
 	class CLandscape;
+	class CLandscapeIGOld;
 	class CCollisionsOld;
 	class CAnimationOld;
 	class CEntitiesOld;
@@ -103,6 +104,7 @@ private:
 	uint _LandscapeUpdateAnimationsId;
 	uint _LandscapeUpdateLandscapeId;
 	uint _LandscapeRenderSceneId;
+	SBCLIENT::CLandscapeIGOld *_LandscapeIG;
 	SBCLIENT::CCollisionsOld *_Collisions;
 	SBCLIENT::CAnimationOld *_Animation;
 	uint _AnimationUpdateAnimationsId;

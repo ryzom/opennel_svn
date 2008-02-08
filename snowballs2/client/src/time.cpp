@@ -106,6 +106,8 @@ SBCLIENT_CALLBACK_IMPL(CTime, updateTime)
 	if (_AnimateServer) AnimationDelta = ServerTimeDelta;
 	else AnimationDelta = LocalTimeDelta;
 	AnimationTime += AnimationDelta;
+
+	nlinfo("CTime::updateTime: AnimationTime = %lf", AnimationTime);
 }
 
 void CTime::setGameCycle(TGameCycle gameCycle, TLocalTime secondsPerCycle, TGameTime gameTimePerSecond, TGameCycle cyclesPerUpdate)

@@ -163,8 +163,9 @@ void CEntitiesOld::addEntity(uint32 eid, const ucstring &name, CEntityOld::TType
 
 		entity.Instance.hide();
 
-		#pragma SBCLIENT_WARNING("SBCLIENT_MOUSE_LISTENER")
+		//#pragma SBCLIENT_WARNING("SBCLIENT_MOUSE_LISTENER")
 		//entity.Angle = MouseListener->getOrientation();
+		entity.Angle = 0.0f;
 
 		// setup final parameters
 		entity.Speed = PlayerSpeed;
@@ -322,17 +323,17 @@ void CEntitiesOld::stateAppear(CEntityOld &entity)
 			entity.Instance.show();
 	}
 
-	// after 5 seconds, delete the particle system (if any)
+	// after 3 seconds, delete the particle system (if any)
 	// and pass the entity into the Normal state
 	if (CTime::getLocalTime () > entity.StateStartTime + 3000)
 	{
 		if (!entity.Particule.empty())
 		{
-			_Scene->deleteInstance (entity.Particule);
+			_Scene->deleteInstance(entity.Particule);
 			entity.Particule = NULL;
 		}
-
-		entity.setState (CEntityOld::Normal);
+		
+		entity.setState(CEntityOld::Normal);
 	}
 
 	if (entity.MovePrimitive != NULL)
@@ -357,7 +358,7 @@ void CEntitiesOld::stateDisappear(CEntityOld &entity)
 	}
 
 	// after 5 seconds, remove the particle system and the entity entry
-	if (CTime::getLocalTime () > entity.StateStartTime + 3000)
+	if (CTime::getLocalTime() > entity.StateStartTime + 3000)
 	{
 		deleteEntity(entity);
 	}
@@ -522,7 +523,10 @@ void CEntitiesOld::stateNormal(CEntityOld &entity)
 	if (entity.Type == CEntityOld::Self)
 	{
 		// get new position
-		#pragma SBCLIENT_WARNING("SBCLIENT_MOUSE_LISTENER")
+		//#pragma SBCLIENT_WARNING("SBCLIENT_MOUSE_LISTENER")
+		UGlobalPosition	gPos;
+		entity.MovePrimitive->getGlobalPosition(gPos, 0);
+		newPos = _GlobalRetriever->getGlobalPosition(gPos);
 		//newPos = MouseListener->getPosition();
 		// get new orientation
 		#pragma SBCLIENT_WARNING("SBCLIENT_MOUSE_LISTENER")
@@ -530,30 +534,31 @@ void CEntitiesOld::stateNormal(CEntityOld &entity)
 
 		// Interpolate the character orientation towards the server angle
 		// for smoother movements
-		float	sweepDistance = entity.AuxiliaryAngle-entity.InterpolatedAuxiliaryAngle;
+		float sweepDistance = entity.AuxiliaryAngle - entity.InterpolatedAuxiliaryAngle;
 		if (sweepDistance > (float)Pi)
 		{
-			sweepDistance -= (float)Pi*2.0f;
-			entity.InterpolatedAuxiliaryAngle += (float)Pi*2.0f;
+			sweepDistance -= (float)Pi * 2.0f;
+			entity.InterpolatedAuxiliaryAngle += (float)Pi * 2.0f;
 		}
 		if (sweepDistance < -(float)Pi)
 		{
-			sweepDistance += (float)Pi*2.0f;
-			entity.InterpolatedAuxiliaryAngle -= (float)Pi*2.0f;
+			sweepDistance += (float)Pi * 2.0f;
+			entity.InterpolatedAuxiliaryAngle -= (float)Pi * 2.0f;
 		}
-		float	sweepAngle = 4.0f*sweepDistance;
-		entity.InterpolatedAuxiliaryAngle += (float)(sweepAngle*dt);
-		if ((entity.AuxiliaryAngle-entity.InterpolatedAuxiliaryAngle)*sweepAngle <= 0.0)
+		float sweepAngle = 4.0f * sweepDistance;
+		entity.InterpolatedAuxiliaryAngle += (float)(sweepAngle * dt);
+		if ((entity.AuxiliaryAngle - entity.InterpolatedAuxiliaryAngle) * sweepAngle <= 0.0)
 			entity.InterpolatedAuxiliaryAngle = entity.AuxiliaryAngle;
 		entity.Angle += entity.InterpolatedAuxiliaryAngle;
 
 		// tell the move container how much the entity should move
-		if (entity.IsWalking)
+		// move container tells us now
+	/*	if (entity.IsWalking)
 		{
 			entity.ImmediateSpeed = (newPos-oldPos)/(float)dt;
 			if (_TestCLS) entity.MovePrimitive->setGlobalPosition(newPos, 0);
 			else entity.MovePrimitive->move(entity.ImmediateSpeed, 0);
-		}
+		}*/
 	}
 	else if (entity.Type == CEntityOld::Other)
 	{

@@ -92,6 +92,7 @@
 #include "sound.h"
 #include "time.h"
 #include "landscape.h"
+#include "landscape_ig_old.h"
 #include "collisions_old.h"
 #include "animation_old.h"
 #include "entities_old.h"
@@ -184,6 +185,7 @@ _Sound(NULL), _SoundUpdateSoundId(0),
 _Time(NULL), _TimeUpdateTimeId(0), 
 _Login(NULL), _LoginUpdateInterfaceId(0), _LoginRenderInterfaceId(0), _LoginUpdateNetworkId(0), 
 _Landscape(NULL), _LandscapeUpdateAnimationsId(0), _LandscapeUpdateLandscapeId(0), _LandscapeRenderSceneId(0), 
+_LandscapeIG(NULL), 
 _Collisions(NULL), 
 _Animation(NULL), _AnimationUpdateAnimationsId(0), 
 _Entities(NULL), _EntitiesUpdateEntitiesId(0), 
@@ -599,7 +601,7 @@ void CSnowballsClient::loadIngame()
 	{		
 		_LoadedIngame = true;
 		_Loading->setBackgroundSnowballsLoading();
-		float max_progress = 4.f;
+		float max_progress = 5.f;
 
 		_LoadingScreen.setRange(0.f / max_progress, 1.f / max_progress);
 		_Loading->setMessageState("InitializeLandscape");
@@ -609,6 +611,13 @@ void CSnowballsClient::loadIngame()
 		nlassert(_Landscape);
 
 		_LoadingScreen.setRange(1.f / max_progress, 2.f / max_progress);
+		_Loading->setMessageState("InitializeLandscapeIG");
+		nlassert(!_LandscapeIG);
+		_LandscapeIG = new CLandscapeIGOld(_LoadingScreen, "LandscapeIG", 
+			_Landscape->Scene);
+		nlassert(_LandscapeIG);
+
+		_LoadingScreen.setRange(2.f / max_progress, 3.f / max_progress);
 		_Loading->setMessageState("InitializeCollisions");
 		nlassert(!_Collisions);
 		_Collisions = new CCollisionsOld(_LoadingScreen, "Collisions", 
@@ -623,14 +632,14 @@ void CSnowballsClient::loadIngame()
 //		_ComponentManager->registerRender(WeatherComponent, -250);
 //		_ComponentManager->registerUpdate(WeatherComponent, 5000);
 
-		_LoadingScreen.setRange(2.f / max_progress, 3.f / max_progress);
+		_LoadingScreen.setRange(3.f / max_progress, 4.f / max_progress);
 		_Loading->setMessageState("InitializeAnimation");
 		nlassert(!_Animation);
 		_Animation = new CAnimationOld(_LoadingScreen,
-			_Graphics->Driver, _Landscape->Scene);
+			_Graphics->Driver, _Landscape->Scene, &_Time->AnimationTime);
 		nlassert(_Animation);
 
-		_LoadingScreen.setRange(3.f / max_progress, 4.f / max_progress);
+		_LoadingScreen.setRange(4.f / max_progress, 5.f / max_progress);
 		_Loading->setMessageState("InitializeEntities");
 		nlassert(!_Entities);
 		_Entities = new CEntitiesOld(_LoadingScreen, 
@@ -706,7 +715,7 @@ void CSnowballsClient::unloadIngame()
 	{
 		_Loading->setBackgroundSnowballsUnloading();
 		_LoadingScreen.setRange(0.f, 1.f);
-		float max_progress = 4.f;
+		float max_progress = 5.f;
 
 		_LoadingScreen.progress(0.f / max_progress);
 		_Loading->setMessageState("ReleaseCollisions");
@@ -718,9 +727,12 @@ void CSnowballsClient::unloadIngame()
 		_Loading->setMessageState("ReleaseCollisions");
 		nlassert(_Collisions); delete _Collisions; _Collisions = NULL;
 		_LoadingScreen.progress(3.f / max_progress);
+		_Loading->setMessageState("ReleaseLandscapeIG");
+		nlassert(_LandscapeIG); delete _LandscapeIG; _LandscapeIG = NULL;
+		_LoadingScreen.progress(4.f / max_progress);
 		_Loading->setMessageState("ReleaseLandscape");
 		nlassert(_Landscape); delete _Landscape; _Landscape = NULL;
-		_LoadingScreen.progress(4.f / max_progress);
+		_LoadingScreen.progress(5.f / max_progress);
 
 		//if (CaptureState)
 		//{

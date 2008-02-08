@@ -78,7 +78,7 @@ using namespace NL3D;
 UVisualCollisionEntity	*AimingEntity = NULL;
 
 
-vector<UInstanceGroup*>	 InstanceGroups;
+
 
 
 //
@@ -153,21 +153,6 @@ void	initLandscape()
 	////cbUpdateLandscape (ConfigFile->getVar ("FogEnable"));
 
 	// -- -- start of init for "instance groups loaded from config"
-
-	CConfigFile::CVar igv = ConfigFile->getVar("InstanceGroups");
-	for (uint32 i = 0; i < igv.size (); i++)
-	{
-		UInstanceGroup *inst = UInstanceGroup::createInstanceGroup (igv.asString (i));
-		if (inst == NULL)
-		{
-			nlwarning ("Instance group '%s' not found", igv.asString (i).c_str ());
-		}
-		else
-		{
-			inst->addToScene (*Scene);
-			InstanceGroups.push_back (inst);
-		}
-	}
 }
 //
 //void	releaseLandscape()

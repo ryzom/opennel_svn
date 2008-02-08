@@ -172,7 +172,7 @@ public:
 	uint NextEmptySlot;
 	NL3D::UPlayList *PlayList;
 	std::queue<TAnim> AnimQueue;
-	NL3D::CAnimationTime StartAnimationTime;
+	NL3D::TGlobalAnimationTime StartAnimationTime;
 
 	uint BotState;
 	NLMISC::TTime BotStateStart;

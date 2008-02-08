@@ -75,7 +75,7 @@ class CAnimationOld
 protected:
 	// constants
 	// Amount of time for the transistion between 2 animations
-	static const NL3D::CAnimationTime TransitionTime;
+	static const NL3D::TGlobalAnimationTime TransitionTime;
 
 	// pointers
 	NL3D::UAnimationSet *_AnimationSet; // P
@@ -83,11 +83,12 @@ protected:
 	NL3D::UDriver *_Driver; // p
 	NL3D::UScene *_Scene; // p
 	CEntitiesOld *_Entities; // p
+	NL3D::TGlobalAnimationTime *_GlobalAnimationTime;
 	
 	// instances
 	_CAnim _AnimIdArray[9][2];
 public:
-	CAnimationOld(NLMISC::IProgressCallback &progressCallback, NL3D::UDriver *driver, NL3D::UScene *scene);
+	CAnimationOld(NLMISC::IProgressCallback &progressCallback, NL3D::UDriver *driver, NL3D::UScene *scene, NL3D::TGlobalAnimationTime *globalAnimationTime);
 	virtual ~CAnimationOld();
 
 	/// This function is automatically called by playAnimation() the first time

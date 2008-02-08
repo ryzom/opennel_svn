@@ -53,14 +53,17 @@ using namespace NL3D;
 
 namespace SBCLIENT {
 
-const NL3D::CAnimationTime CAnimationOld::TransitionTime = 0.25f;
+const NL3D::TGlobalAnimationTime CAnimationOld::TransitionTime = 0.25;
 
 CAnimationOld::CAnimationOld(NLMISC::IProgressCallback &progressCallback, 
-NL3D::UDriver *driver, NL3D::UScene *scene) : _AnimationSet(NULL), 
-_PlayListManager(NULL), _Driver(driver), _Scene(scene)
+NL3D::UDriver *driver, NL3D::UScene *scene, 
+TGlobalAnimationTime *globalAnimationTime) : _AnimationSet(NULL), 
+_PlayListManager(NULL), _Driver(driver), _Scene(scene),
+_GlobalAnimationTime(globalAnimationTime)
 {
 	nlassert(_Driver);
 	nlassert(_Scene);
+	nlassert(_GlobalAnimationTime);
 
 	progressCallback.progress(0.00f);
 	memset(_AnimIdArray, 0, sizeof(_AnimIdArray));
@@ -127,10 +130,10 @@ CAnimationOld::~CAnimationOld()
 void CAnimationOld::playAnimation(CEntityOld &entity, CEntityOld::TAnim anim, bool force)
 {
 	nlassert(anim > -2 && anim < 20);
-//	nlinfo ("playAnimation() %d", anim);
+	nlinfo ("playAnimation() %d", anim);
 
 	// Get the current time
-	CAnimationTime currentTime = CAnimationTime(CTime::getLocalTime()) / 1000.0f;
+	TGlobalAnimationTime currentTime = *_GlobalAnimationTime;
 
 	// Can't do animation without skeleton
 	if (entity.Skeleton.empty())
@@ -150,8 +153,8 @@ void CAnimationOld::playAnimation(CEntityOld &entity, CEntityOld::TAnim anim, bo
 			entity.AnimQueue.pop();
 	}
 
-//	nlinfo ("pushing animation %d", anim);
-//	nlinfo ("pushing animation %s", AnimIdArray[anim][0].Name);
+	nlinfo("pushing animation %d", anim);
+	nlinfo("pushing animation %s", _AnimIdArray[anim][0].Name);
 	entity.AnimQueue.push (anim);
 }
 
@@ -178,7 +181,7 @@ void CAnimationOld::deleteAnimation(SBCLIENT::CEntityOld &entity)
 SBCLIENT_CALLBACK_IMPL(CAnimationOld, updateAnimations)
 {
 	// Get the current time
-	CAnimationTime currentTime = CAnimationTime(CTime::getLocalTime()) / 1000.0f;
+	TGlobalAnimationTime currentTime = *_GlobalAnimationTime;
 
 	for (CEntitiesOld::CEntityMap::iterator eit = _Entities->Entities.begin(); eit != _Entities->Entities.end(); eit++)
 	{
@@ -186,7 +189,7 @@ SBCLIENT_CALLBACK_IMPL(CAnimationOld, updateAnimations)
 
 		if (entity.AnimQueue.empty())
 		{
-//			nlwarning ("empty queue update!!!");
+			nlwarning ("empty queue update!!!");
 			continue;
 		}
 
@@ -198,7 +201,7 @@ SBCLIENT_CALLBACK_IMPL(CAnimationOld, updateAnimations)
 
 			if (entity.AnimQueue.empty())
 			{
-//				nlwarning ("empty queue!!!!!!");
+				nlwarning ("empty queue!!!!!!");
 				continue;
 			}
 
@@ -224,16 +227,16 @@ SBCLIENT_CALLBACK_IMPL(CAnimationOld, updateAnimations)
 	}
 
 	// compute new animation position depending of the current time
-	_PlayListManager->animate(double(CTime::getLocalTime()) / 1000.0f);
+	_PlayListManager->animate(currentTime);
 }
 
 void CAnimationOld::computeAnimation(CEntityOld &entity, CEntityOld::TAnim anim)
 {
 	// Get the current time
-	double currentTime = double(CTime::getLocalTime()) / 1000.0f;
+	TGlobalAnimationTime currentTime = *_GlobalAnimationTime;
 
-//	nlinfo ("%d playing animation", anim);
-//	nlinfo ("%d playing animation %s ct%f st%f et%f", anim, AnimIdArray[anim][0].Name, currentTime, AnimIdArray[anim][0].Animation->getBeginTime (), AnimIdArray[anim][0].Animation->getEndTime ());
+	nlinfo("%d playing animation", anim);
+	nlinfo("%d playing animation %s ct%lf st%f et%f", anim, _AnimIdArray[anim][0].Name, currentTime, _AnimIdArray[anim][0].Animation->getBeginTime(), _AnimIdArray[anim][0].Animation->getEndTime());
 
 	// Find the new slot for the full animation (0 or 1)
 	uint newSlot = entity.NextEmptySlot;
@@ -276,7 +279,7 @@ void CAnimationOld::computeAnimation(CEntityOld &entity, CEntityOld::TAnim anim)
 	entity.PlayList->setEndWeight(newSlot, 1.0f, OldEndTime);
 
 	// Keep in mind what is the last animation id we set
-	entity.StartAnimationTime = (float)currentTime;
+	entity.StartAnimationTime = currentTime;
 }
 
 } /* namespace SBCLIENT */
