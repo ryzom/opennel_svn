@@ -87,8 +87,8 @@ protected:
 	NL3D::UTextContext *_TextContext; // not deleted here	
 	CI18NHelper *_I18N; // not deleted here
 	CLoginData *_LoginData; // not deleted here
-	//NL3D::UScene *_SnowScene; // deleted here
-	//NL3D::UInstance _Snow; // deleted here
+	NL3D::UScene *_SnowScene; // deleted here
+	NL3D::UInstance _Snow; // deleted here
 	NL3D::UScene *_LogoScene; // deleted here
 	NL3D::UInstance _Logo; // deleted here
 	NL3D::UMaterial _BackgroundMaterial; // deleted here

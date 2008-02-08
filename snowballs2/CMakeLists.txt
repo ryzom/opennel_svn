@@ -31,7 +31,7 @@ ENDIF(DEFINED NEL_PREFIX_PATH)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
 
 PROJECT(Snowballs CXX C)
-SET(NL_VERSION "0.3.0")
+SET(NL_VERSION "0.4.0")
 
 #-----------------------------------------------------------------------------
 # Redirect output files

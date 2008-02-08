@@ -100,15 +100,15 @@ _TypingPassword(false), _Enabled(false), _Selection(0)
 
 	CViewport viewport;
 
-	//_SnowScene = _Driver->createScene(false);
-	//_SnowScene->setAmbientGlobal(CRGBA(255, 255, 255, 255));
-	//_SnowScene->enableLightingSystem(true);
+	_SnowScene = _Driver->createScene(false);
+	_SnowScene->setAmbientGlobal(CRGBA(255, 255, 255, 255));
+	_SnowScene->enableLightingSystem(true);
 
-	//viewport.init(0.0f, 0.0f, 1.0f, 1.0f);
-	//_SnowScene->setViewport(viewport);
+	viewport.init(0.0f, 0.0f, 1.0f, 1.0f);
+	_SnowScene->setViewport(viewport);
 
-	//_Snow = _SnowScene->createInstance("snow.ps");
-	//_Snow.setPos(0.0f, 0.0f, 0.0f);
+	_Snow = _SnowScene->createInstance("snow.ps");
+	_Snow.setPos(0.0f, 0.0f, 0.0f);
 
 	_LogoScene = _Driver->createScene(false);
 	_LogoScene->setAmbientGlobal(CRGBA(255, 255, 255, 255));
@@ -129,8 +129,8 @@ CLogin::~CLogin()
 {
 	_LogoScene->deleteInstance(_Logo);
 	_Driver->deleteScene(_LogoScene);
-	//_SnowScene->deleteInstance(_Snow);
-	//_Driver->deleteScene(_SnowScene);
+	_SnowScene->deleteInstance(_Snow);
+	_Driver->deleteScene(_SnowScene);
 	_Driver->deleteMaterial(_OverlayMaterial);
 	_Driver->deleteTextureFile(_SelectTexture);
 	_Driver->deleteMaterial(_SelectMaterial);
@@ -363,6 +363,7 @@ SBCLIENT_CALLBACK_IMPL(CLogin, updateNetwork)
 SBCLIENT_CALLBACK_IMPL(CLogin, updateInterface)
 {
 	double timeDelta = _Time->LocalTimeDelta;
+	double animateTime = _Time->LocalTime;
 
 	// some silly code to add the | and do the stars
 	_UsernameText =_LoginData->Username;
@@ -373,7 +374,7 @@ SBCLIENT_CALLBACK_IMPL(CLogin, updateInterface)
 	if (_TypingPassword) _PasswordStarsText += "|";
 	else _UsernameText += "|"; }
 	
-	//_SnowScene->animate(temptime);
+	_SnowScene->animate(animateTime);
 
 	if (!_LoginData->Message.empty())
 	{
@@ -392,7 +393,7 @@ SBCLIENT_CALLBACK_IMPL(CLogin, updateInterface)
 	{
 		_LogoAngle += 2.0f * (float)timeDelta;
 		_Logo.setRotEuler(0.0f, 0.0f, _LogoAngle);
-		_LogoScene->animate(timeDelta);
+		_LogoScene->animate(animateTime);
 	}
 	
 }
@@ -408,7 +409,7 @@ SBCLIENT_CALLBACK_IMPL(CLogin, renderInterface)
 	_TextContext->printAt(0.675f, 0.4375f, _UsernameText);
 	_TextContext->printAt(0.675f, 0.2875f, _PasswordStarsText);
 	_Driver->clearZBuffer();
-	//_SnowScene->render();
+	_SnowScene->render();
 	if (!_LoginData->Message.empty())
 	{
 		_Driver->drawQuad(_OverlayQuad, _OverlayMaterial);
