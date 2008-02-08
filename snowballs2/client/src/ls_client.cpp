@@ -40,6 +40,7 @@
 // #include <nel/misc/debug.h>
 #include <nel/misc/md5.h>
 #include <nel/net/callback_client.h>
+#include <nel/misc/thread.h>
 
 // STL includes
 
@@ -49,7 +50,62 @@ using namespace NLNET;
 
 namespace SBCLIENT {
 
-CLSClient::CLSClient() : _Callback(NULL), _LSCallbackClient(NULL)
+class _CLSClientAuthenticateThread : NLMISC::IRunnable
+{
+	friend CLSClient;
+	CLSClient *_LSClient;
+	string _LS;
+	ucstring _Login;
+	string _CPassword;
+	string _Application;
+	_CLSClientAuthenticateThread(CLSClient *lsClient, const string &ls, 
+		const ucstring &login, const string &cpassword, 
+		const string &application) : _LSClient(lsClient), _LS(ls), 
+		_Login(login), _CPassword(cpassword), _Application(application) { }
+ 	virtual ~_CLSClientAuthenticateThread() { }
+	virtual void run()
+	{
+		CCallbackClient *lscc = NULL;
+		try
+		{
+			string addr = _LS;
+			if(addr.find(":") == string::npos)
+				addr += ":49997";
+			lscc = new CCallbackClient();
+			lscc->connect(CInetAddress(addr));
+			lscc->addCallbackArray(CLSClient::_LSCallbackArray, 
+				sizeof(CLSClient::_LSCallbackArray) / sizeof(CLSClient::_LSCallbackArray[0]));
+		}
+		catch (ESocket &e)
+		{
+			if (lscc)
+			{
+				if (lscc->connected())
+					lscc->disconnect();
+				delete lscc;
+			}
+			_LSClient->_Mutex.enter();
+			_LSClient->LastError = toString("Connection failed to LS (addr:%s): %s", _LS.c_str(), e.what());
+			_LSClient->_Mutex.leave();
+			return;
+		}		
+
+		// create and send the VLP message
+		CMessage msgout("VLP");
+		msgout.serial(const_cast<ucstring&>(_Login));
+		msgout.serial(const_cast<string&>(_CPassword));
+		msgout.serial(const_cast<string&>(_Application));
+		lscc->send(msgout);
+
+		_LSClient->_Mutex.enter();
+		_LSClient->_LSCallbackClient = lscc;
+		_LSClient->_Mutex.leave();
+	}
+	virtual void getName(std::string &result) const { result = "_CLSClientConnectThread"; }
+};
+
+CLSClient::CLSClient() : _Callback(NULL), _LSCallbackClient(NULL), 
+_Runnable(NULL), _Thread(NULL)
 {
 	SBCLIENT_EVIL_SINGLETON_CONSTRUCTOR(SBCLIENT::CLSClient);
 }
@@ -73,17 +129,33 @@ void CLSClient::update()
 		return;
 	}
 	
-	if (!_LSCallbackClient)
+	if (_Runnable)
 	{
-		LastError = "No connection created to LS";
-		callback(); return;
+		_Mutex.enter();
+		bool done = _LSCallbackClient || !LastError.empty();
+		_Mutex.leave();
+		if (done)
+		{
+			delete _Thread; _Thread = NULL;
+			delete _Runnable; _Runnable = NULL;
+			callback();
+		}
+		return;
 	}
-	
-	if (!_LSCallbackClient->connected())
+	else
 	{
-		_disconnect();
-		LastError = "Disconnected from LS";
-		callback(); return;
+		if (!_LSCallbackClient)
+		{
+			LastError = "No connection created to LS";
+			callback(); return;
+		}
+		
+		if (!_LSCallbackClient->connected())
+		{
+			_disconnect();
+			LastError = "Disconnected from LS";
+			callback(); return;
+		}
 	}
 	
 	_LSCallbackClient->update();
@@ -112,32 +184,15 @@ void CLSClient::authenticateUser(SBCLIENT_CALLBACK cb, void *context, void *tag,
 	nlassert(!_Callback); _Callback = cb; nlassert(_Callback);
 	_Context = context; _Tag = tag;
 
+	nlassert(!_Thread);
+	nlassert(!_Runnable);
+
 	LastError = "";
 
-	try
-	{
-		_disconnect();
-		string addr = ls;
-		if(addr.find(":") == string::npos)
-			addr += ":49997";
-		_LSCallbackClient = new CCallbackClient();
-		_LSCallbackClient->connect(CInetAddress(addr));
-		_LSCallbackClient->addCallbackArray(_LSCallbackArray, 
-			sizeof(_LSCallbackArray) / sizeof(_LSCallbackArray[0]));
-	}
-	catch (ESocket &e)
-	{
-		_disconnect();
-		LastError = toString("Connection failed to LS (addr:%s): %s", ls.c_str(), e.what());
-		callback(); return;
-	}
-	
-	// create and send the VLP message
-	CMessage msgout("VLP");
-	msgout.serial(const_cast<ucstring&>(login));
-	msgout.serial(const_cast<string&>(cpassword));
-	msgout.serial(const_cast<string&>(application));
-	_LSCallbackClient->send(msgout);
+	_disconnect();
+	_Runnable = new _CLSClientAuthenticateThread(this, ls, login, cpassword, application);
+	_Thread = IThread::create(_Runnable);
+	_Thread->start();
 
 	return;
 }

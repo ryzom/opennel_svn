@@ -295,18 +295,14 @@ void CLogin::disable()
 
 void CLogin::connect()
 {
+	_TimeOut = -1.0f;
+	_LoginData->Message = _I18N->get("i18nAuthenticatingUser");
+	nlinfo(_LoginData->Message.toUtf8().c_str());
+
 	_LSClient.authenticateUser(cbAuthenticateUser, this, NULL, 
 		_Config.getValue("LSHost", string("localhost")), 
 		_LoginData->Username, CLSClient::encryptPassword(_PasswordText), 
 		_Config.getValue("ClientApplication", string("snowballs")));
-
-	// set message if no error, errors are handled by the callback
-	if (_LSClient.LastError.empty())
-	{
-		_TimeOut = -1.0f;
-		_LoginData->Message = _I18N->get("i18nAuthenticatingUser");
-		nlinfo(_LoginData->Message.toUtf8().c_str());
-	}
 }
 
 SBCLIENT_CALLBACK_IMPL(CLogin, cbAuthenticateUser)

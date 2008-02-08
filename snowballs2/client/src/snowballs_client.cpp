@@ -339,17 +339,17 @@ void CSnowballsClient::loadUtils()
 		varsize = var->size();
 		for (uint i = 0; i < varsize; i += 2)
 			CPath::remapExtension(var->asString(i), var->asString(i + 1), true);
-
+		
 		// set the language code
 		CI18N::load(_Config->getVar("LanguageCode").asString());
 		_I18NHelper = new CI18NHelper("i18n", false);
 		_I18NHelper->set("VERSION", ucstring(SBCLIENT_VERSION_STRING));
-
+		
 		// load the loading screen manager
 		nlassert(!_Loading);
 		_Loading = new CLoading(_LoadingScreen, "Loading", _I18NHelper);
 		nlassert(_Loading);
-
+		
 		// register commands
 		nlassert(!_SetStateCommand);
 		_SetStateCommand = new CCommandWrapper(SBCLIENT_NAME,

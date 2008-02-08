@@ -41,11 +41,16 @@
 // NeL includes
 #include <nel/net/login_cookie.h>
 #include <nel/net/callback_net_base.h>
+#include <nel/misc/mutex.h>
 
 // STL includes
 
 namespace NLNET {
 	class CCallbackClient;
+}
+
+namespace NLMISC {
+	class IThread;
 }
 
 namespace SBCLIENT {
@@ -60,6 +65,7 @@ namespace SBCLIENT {
  */
 class CLSClient
 {
+	friend class _CLSClientAuthenticateThread;
 public:
 	struct CShard
 	{
@@ -74,6 +80,9 @@ public:
 	typedef std::vector<CShard> TShardList;
 protected:	
 	// pointers
+	NLMISC::CMutex _Mutex;
+	_CLSClientAuthenticateThread *_Runnable;
+	NLMISC::IThread *_Thread;
 	NLNET::CCallbackClient *_LSCallbackClient;
 	SBCLIENT_CALLBACK _Callback;
 	void *_Context;
