@@ -130,7 +130,7 @@ NLMISC_COMMAND(add_entity,"add a local entity","<nb_entities> <auto_update>")
 
 	for (uint i = 0; i < nb ; i++)
 	{
-		uint32 eid = ++NextEID;
+		uint32 eid = ++LastEID;
 		CVector start(ConfigFile->getVar("StartPoint").asFloat(0), ConfigFile->getVar("StartPoint").asFloat(1), ConfigFile->getVar("StartPoint").asFloat(2));
 		addEntity (eid, "Entity"+toString(eid), CEntity::Other, start, start);
 		EIT eit = findEntity (eid);

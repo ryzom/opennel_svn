@@ -64,6 +64,7 @@ namespace SBCLIENT {
  */
 class CAnimationOld
 {
+	friend class CEntitiesOld;
 	struct _CAnim
 	{
 		char *Name;

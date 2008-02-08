@@ -191,7 +191,7 @@ void C3dMouseListener::operator ()(const CEvent& event)
 		}
 		else
 		{
-			shotSnowball (++NextEID, Self->Id, _AimingPosition, _AimedTarget, SnowballSpeed, _AimingDamage);
+			shotSnowball (++LastEID, Self->Id, _AimingPosition, _AimedTarget, SnowballSpeed, _AimingDamage);
 		}
 	}
 	else if (event==EventMouseWheelId)

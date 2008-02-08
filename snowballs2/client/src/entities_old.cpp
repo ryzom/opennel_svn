@@ -66,7 +66,7 @@ UMoveContainer *moveContainer, UGlobalRetriever *globalRetriever,
 CAnimationOld *animation) : _TestCLS(false), Self(NULL), _Scene(scene), 
 _VisualCollisionManager(visualCollisionManager), 
 _MoveContainer(moveContainer), _GlobalRetriever(globalRetriever), 
-_Animation(animation), NextEID(1000000)
+_Animation(animation), LastEID(1000000)
 {
 	progressCallback.progress(0.0f);
 	nlassert(!Self);
@@ -75,6 +75,7 @@ _Animation(animation), NextEID(1000000)
 	nlassert(_MoveContainer);
 	nlassert(_GlobalRetriever);
 	nlassert(_Animation);
+	_Animation->_Entities = this;
 	progressCallback.progress(1.0f);
 }
 
@@ -97,7 +98,7 @@ CEntityOld *CEntitiesOld::getEntityPtr(uint32 eid)
 	return &entity->second;
 }
 
-void CEntitiesOld::addEntity(uint32 eid, std::string name, CEntityOld::TType type, const CVector &startPosition, const CVector &serverPosition)
+void CEntitiesOld::addEntity(uint32 eid, const ucstring &name, CEntityOld::TType type, const CVector &startPosition, const CVector &serverPosition)
 {
 	//nlinfo("adding entity %u", eid);
 
@@ -107,7 +108,7 @@ void CEntitiesOld::addEntity(uint32 eid, std::string name, CEntityOld::TType typ
 
 	// Create a new entity
 	CEntityMap::iterator eit = (Entities.insert(make_pair(eid, CEntityOld()))).first;
-	CEntityOld	&entity = (*eit).second;
+	CEntityOld &entity = (*eit).second;
 
 	// Check that in the case the entity newly created is a Self, there's not a Self yet.
 	if (type == CEntityOld::Self)
@@ -309,7 +310,7 @@ void CEntitiesOld::removeAll()
 		eit = nexteit;
 	}
 	Self = NULL;
-	NextEID = 1000000;
+	LastEID = 1000000;
 }
 
 void CEntitiesOld::stateAppear(CEntityOld &entity)
@@ -426,7 +427,7 @@ void CEntitiesOld::stateNormal(CEntityOld &entity)
 				CVector	direction = CVector((float)(cos(entity.Angle)), (float)(sin(entity.Angle)), 0.3f).normed();
 				#pragma SBCLIENT_WARNING("SBCLIENT_LANDSCAPE")
 				//CVector AimedTarget = getTarget(AimingPosition, direction, 100);
-				//shotSnowball(++NextEID, entity.Id, AimingPosition, AimedTarget, SnowballSpeed, 3.0f);
+				//shotSnowball(++LastEID, entity.Id, AimingPosition, AimedTarget, SnowballSpeed, 3.0f);
 			}
 			break;
 		case 4:
@@ -614,7 +615,7 @@ void CEntitiesOld::stateNormal(CEntityOld &entity)
 
 //////void CEntitiesOld::resetEntityPosition(uint32 eid)
 //////{
-//////	uint32 sbid = ++NextEID;
+//////	uint32 sbid = ++LastEID;
 //////	EIT eit = findEntity (eid);
 //////
 //////	CEntity	&entity = (*eit).second;
@@ -642,7 +643,7 @@ void CEntitiesOld::shotSnowball(uint32 sid, uint32 eid, const CVector &start, co
 	CVector direction = (target-start).normed();
 
 	// create a new snowball entity
-	addEntity(sid, "", CEntityOld::Snowball, start, target);
+	addEntity(sid, ucstring(), CEntityOld::Snowball, start, target);
 	CEntityOld &snowball = getEntity(sid);
 
 	snowball.AutoMove = 1;

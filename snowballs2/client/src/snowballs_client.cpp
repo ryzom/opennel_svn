@@ -95,6 +95,7 @@
 #include "collisions_old.h"
 #include "animation_old.h"
 #include "entities_old.h"
+#include "offline.h"
 
 #include <nel/misc/config_file.h>
 #include <nel/misc/path.h>
@@ -110,6 +111,8 @@
 #include <nel/3d/u_texture.h>
 #include <nel/misc/geom_ext.h>
 #include <nel/3d/u_material.h>
+#include <nel/3d/u_camera.h>
+#include <nel/3d/u_scene.h>
 
 using namespace std;
 using namespace NLMISC;
@@ -180,10 +183,13 @@ _Graphics(NULL), _GraphicsUpdateDriverId(0),
 _Sound(NULL), _SoundUpdateSoundId(0), 
 _Time(NULL), _TimeUpdateTimeId(0), 
 _Login(NULL), _LoginUpdateInterfaceId(0), _LoginRenderInterfaceId(0), _LoginUpdateNetworkId(0), 
-_Landscape(NULL), _LandscapeUpdateAnimationsId(0), _LandscapeUpdateLandscapeId(0), _LandscapeUpdateSceneId(0), 
+_Landscape(NULL), _LandscapeUpdateAnimationsId(0), _LandscapeUpdateLandscapeId(0), _LandscapeRenderSceneId(0), 
 _Collisions(NULL), 
 _Animation(NULL), _AnimationUpdateAnimationsId(0), 
 _Entities(NULL), _EntitiesUpdateEntitiesId(0), 
+_Offline(NULL), 
+_Snowballs3(NULL), 
+_Snowballs5(NULL), 
 // commands
 _SetStateCommand(NULL), 
 // states
@@ -747,7 +753,25 @@ void CSnowballsClient::enableIngame()
 	{		
 		_EnabledIngame = true;
 
-		// ...
+		nlassert(!_LandscapeUpdateAnimationsId);
+		_LandscapeUpdateAnimationsId = _UpdateFunctions.add(
+			CLandscape::updateAnimations, _Landscape, NULL, 0 + SBCLIENT_UPDATE_ANIMATIONS);
+
+		nlassert(!_LandscapeUpdateLandscapeId);
+		_LandscapeUpdateLandscapeId = _UpdateFunctions.add(
+			CLandscape::updateLandscape, _Landscape, NULL, 0 + SBCLIENT_UPDATE_LANDSCAPE);
+
+		nlassert(!_LandscapeRenderSceneId);
+		_LandscapeRenderSceneId = _RenderFunctions.add(
+			CLandscape::renderScene, _Landscape, NULL, 0 + SBCLIENT_RENDER_SCENE);
+	
+		nlassert(!_AnimationUpdateAnimationsId);
+		_AnimationUpdateAnimationsId = _UpdateFunctions.add(
+			CAnimationOld::updateAnimations, _Animation, NULL, 0 + SBCLIENT_UPDATE_ANIMATIONS);
+
+		nlassert(!_EntitiesUpdateEntitiesId);
+		_EntitiesUpdateEntitiesId = _UpdateFunctions.add(
+			CEntitiesOld::updateEntities, _Entities, NULL, 0 + SBCLIENT_UPDATE_ENTITIES);
 	}
 }
 
@@ -755,7 +779,25 @@ void CSnowballsClient::disableIngame()
 {
 	if (_EnabledIngame)
 	{
-		// ...
+		nlassert(_LandscapeUpdateAnimationsId);
+		_UpdateFunctions.remove(_LandscapeUpdateAnimationsId);
+		_LandscapeUpdateAnimationsId = 0;
+
+		nlassert(_EntitiesUpdateEntitiesId);
+		_UpdateFunctions.remove(_EntitiesUpdateEntitiesId);
+		_EntitiesUpdateEntitiesId = 0;
+
+		nlassert(_AnimationUpdateAnimationsId);
+		_UpdateFunctions.remove(_AnimationUpdateAnimationsId);
+		_AnimationUpdateAnimationsId = 0;
+
+		nlassert(_LandscapeRenderSceneId);
+		_RenderFunctions.remove(_LandscapeRenderSceneId);
+		_LandscapeRenderSceneId = 0;
+
+		nlassert(_LandscapeUpdateLandscapeId);
+		_UpdateFunctions.remove(_LandscapeUpdateLandscapeId);
+		_LandscapeUpdateLandscapeId = 0;
 
 		_EnabledIngame = false;
 	}
@@ -767,14 +809,14 @@ void CSnowballsClient::loadConnection()
 	{		
 		_LoadedConnection = true;
 
+		nlassert(!_Offline);
+		nlassert(!_Snowballs3);
+		nlassert(!_Snowballs5);
 		switch (_LoginData.Version)
 		{
 		case CLogin::Offline:
-			_LoginData.Message = ucstring::makeFromUtf8(toString(
-			CI18N::get("SomethingNotImplemented").toUtf8().c_str(),
-				"Offline"));
-			nlwarning(_LoginData.Message.toString().c_str());
-			_NextState = Login;
+			_Offline = new COffline(&_LoadingScreen, "Offline", 
+				&_LoginData, _Loading, _Landscape, _Entities);
 			break;
 		case CLogin::Snowballs3:
 			_LoginData.Message = ucstring::makeFromUtf8(toString(
@@ -803,8 +845,7 @@ void CSnowballsClient::unloadConnection()
 		switch (_LoginData.Version)
 		{
 		case CLogin::Offline:
-			// nlassert(_Offline);
-			// remove
+			nlassert(_Offline); delete _Offline; _Offline = NULL;
 			break;
 		case CLogin::Snowballs3:
 			// nlassert(_Snowballs3);
@@ -817,7 +858,9 @@ void CSnowballsClient::unloadConnection()
 		default:
 			nlerror("CSnowballsClient::unloadConnection: _LoginData.Version invalid");
 		}
-		// nlassert(!_*);
+		nlassert(!_Offline);
+		nlassert(!_Snowballs3);
+		nlassert(!_Snowballs5);
 		
 		_LoadedConnection = false;
 	}
@@ -833,16 +876,16 @@ void CSnowballsClient::enableConnection()
 		switch (_LoginData.Version)
 		{
 		case CLogin::Offline:
+			nlassert(_Offline);
 			// add
-			// nlassert(_Offline*Id);
 			break;
 		case CLogin::Snowballs3:
+			// nlassert(_Snowballs3);
 			// add
-			// nlassert(_Snowballs3*Id);
 			break;
 		case CLogin::Snowballs5:
+			// nlassert(_Snowballs5);
 			// add
-			// nlassert(_Snowballs5*Id);			
 			break;
 		default:
 			nlerror("CSnowballsClient::enableConnection: _LoginData.Version invalid"); 
@@ -926,6 +969,13 @@ SBCLIENT_CALLBACK_IMPL(CSnowballsClient, updateDebug)
 	//	testmaterial.setTexture(testtexture);
 	//}
 	//testmaterial.
+	if (_Landscape && _Entities && _Entities->Self)
+	{
+		// temp
+		NL3D::UCamera camera = _Landscape->Scene->getCam();
+		camera.setPos(_Entities->Self->Position + CVector(0,-6,3));
+		_Landscape->Scene->setCam(camera);
+	}
 }
 
 float progress = 0.0f;

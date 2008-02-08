@@ -33,6 +33,10 @@
 #include "offline.h"
 
 // Project includes
+#include "loading_screen.h"
+#include "loading.h"
+#include "entities_old.h"
+#include "landscape.h"
 
 // NeL includes
 // #include <nel/misc/debug.h>
@@ -40,46 +44,39 @@
 // STL includes
 
 using namespace std;
-// using namespace NLMISC;
+using namespace NLMISC;
 
 namespace SBCLIENT {
 
-COffline::COffline()
+COffline::COffline(CLoadingScreen *loadingScreen, const string &id, 
+CLogin::CLoginData *loginData, CLoading *loading, CLandscape *landscape,
+CEntitiesOld *entities) : _Config(id), _LoadingScreen(loadingScreen), 
+_LoginData(loginData), _Loading(loading), _Landscape(landscape), 
+_Entities(entities)
 {
-	//		_HasOffline = true;
+	_Loading->setBackground("OldLands");
 
-//		// another bunch of temp stuff
-//#if SBCLIENT_WITH_SOUND
-//		playMusic(SBCLIENT_MUSIC_WAIT);
-//#endif
-//
-//		uint32 id = ++NextEID;
-//		ucstring Login = ucstring("Entity" + toString(id));
-//
-//		// Creates the self entity
-//		displayLoadingState("Creating offline entity");
-//		addEntity(id, Login.toUtf8(), 
-//			CEntity::Self, CVector(
-//					ConfigFile->getVar("StartPoint").asFloat(0),
-//					ConfigFile->getVar("StartPoint").asFloat(1),
-//					ConfigFile->getVar("StartPoint").asFloat(2)),
-//				CVector(
-//					ConfigFile->getVar("StartPoint").asFloat(0),
-//					ConfigFile->getVar("StartPoint").asFloat(1),
-//					ConfigFile->getVar("StartPoint").asFloat(2)));
-//
-//		displayLoadingState("Load Landscape");
-//		LandscapeComponent->loadAllZonesAround();
-//
-//		// Display a local welcome message
-//		addLine(">>>>> Welcome to Snowballs!");
-//		addLine(">>>>> Press SHIFT-ESC to exit the game.");
-//
-//		displayLoadingState("Ready!");
-//	
-//#if SBCLIENT_WITH_SOUND
-//		playMusic(SBCLIENT_MUSIC_BACKGROUND);
-//#endif
+	_LoadingScreen->setRange(0.00f, 0.25f);
+	_LoadingScreen->progress(0.00f);
+
+	_Loading->setMessageState("CreateSelf");
+	_Entities->addEntity(++(_Entities->LastEID), _LoginData->Username, 
+		CEntityOld::Self, CVector(
+			_Config.getVar("StartPoint").asFloat(0),
+			_Config.getVar("StartPoint").asFloat(1),
+			_Config.getVar("StartPoint").asFloat(2)),
+		CVector(
+			_Config.getVar("StartPoint").asFloat(0),
+			_Config.getVar("StartPoint").asFloat(1),
+			_Config.getVar("StartPoint").asFloat(2)));
+	_Landscape->RefreshZonesAround = &_Entities->Self->Position;
+	_LoadingScreen->progress(1.00f);
+	
+	_Loading->setMessageState("RefreshLandscape");
+	_LoadingScreen->setRange(0.25f, 1.00f);
+	_Landscape->refresh(*_LoadingScreen);
+
+	_LoadingScreen->progress(1.00f);
 }
 
 COffline::~COffline()

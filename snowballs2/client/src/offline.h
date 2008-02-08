@@ -34,12 +34,18 @@
 #include <nel/misc/types_nl.h>
 
 // Project includes
+#include "config_proxy.h"
+#include "login.h"
 
 // NeL includes
 
 // STL includes
 
 namespace SBCLIENT {
+	class CLoading;
+	class CLoadingScreen;
+	class CLandscape;
+	class CEntitiesOld;
 
 /**
  * \brief COffline
@@ -51,12 +57,16 @@ class COffline
 {
 protected:
 	// pointers
-	// ...
+	CLoadingScreen *_LoadingScreen; // p
+	CLogin::CLoginData *_LoginData; // p
+	CLoading *_Loading; // p
+	CLandscape *_Landscape; // p
+	CEntitiesOld *_Entities; // p
 	
 	// instances
-	// ...
+	CConfigProxy _Config;
 public:
-	COffline();
+	COffline(CLoadingScreen *loadingScreen, const std::string &id, CLogin::CLoginData *loginData, CLoading *loading, CLandscape *landscape, CEntitiesOld *entities);
 	virtual ~COffline();
 }; /* class COffline */
 

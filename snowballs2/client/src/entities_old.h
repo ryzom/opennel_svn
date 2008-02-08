@@ -78,7 +78,7 @@ public:
 	CEntityMap Entities;
 
 	// Entity Id, only used offline
-	uint32 NextEID;
+	uint32 LastEID;
 
 	// The speed settings
 	static const float PlayerSpeed;
@@ -102,7 +102,7 @@ public:
 	// -- -- things like Creature, Effect, Scenery seem more flexible than Self, Other, Snowball
 	// -- -- entitybehavior (animations), entityinteraction (targetable, menu, )
 	/// Creates an entity, given its id, its type (Self, Other, Snowball), its start and server positions.
-	void addEntity(uint32 eid, std::string name, CEntityOld::TType type, const NLMISC::CVector &startPosition, const NLMISC::CVector &serverPosition);
+	void addEntity(uint32 eid, const ucstring &name, CEntityOld::TType type, const NLMISC::CVector &startPosition, const NLMISC::CVector &serverPosition);
 	
 	/// Remove an entity specified by its id
 	/// The entity passes into the Disappear state

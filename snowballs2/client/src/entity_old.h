@@ -116,7 +116,7 @@ public:
 	uint32 Id;
 
 	/// The name of the entity
-	std::string Name;
+	ucstring Name;
 
 	/// Contain the target position for this entity
 	NLMISC::CVector ServerPosition;

@@ -59,6 +59,9 @@ CAnimationOld::CAnimationOld(NLMISC::IProgressCallback &progressCallback,
 NL3D::UDriver *driver, NL3D::UScene *scene) : _AnimationSet(NULL), 
 _PlayListManager(NULL), _Driver(driver), _Scene(scene)
 {
+	nlassert(_Driver);
+	nlassert(_Scene);
+
 	progressCallback.progress(0.00f);
 	memset(_AnimIdArray, 0, sizeof(_AnimIdArray));
 	_AnimIdArray[0][0].Name = "patterfeet.anim";
