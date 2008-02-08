@@ -129,8 +129,9 @@ void CLSClient::update()
 		return;
 	}
 	
-	if (_Runnable)
+	if (_Thread)
 	{
+		nlassert(_Runnable);
 		_Mutex.enter();
 		bool done = _LSCallbackClient || !LastError.empty();
 		_Mutex.leave();
@@ -170,6 +171,12 @@ void CLSClient::disconnect()
 
 void CLSClient::_disconnect()
 {
+	if (_Thread)
+	{
+		nlassert(_Runnable);
+		delete _Thread;
+		delete _Runnable;
+	}
 	if (_LSCallbackClient)
 	{
 		if (_LSCallbackClient->connected())

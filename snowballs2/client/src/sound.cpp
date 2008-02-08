@@ -79,6 +79,7 @@ CSound::CSound(IProgressCallback &progressCallback, const std::string &id) : _Co
 
 CSound::~CSound()
 {
+	_Config.dropCallback("MaxTracks");
 	delete AudioMixer;
 }
 
