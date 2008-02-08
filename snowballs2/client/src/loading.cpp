@@ -51,7 +51,8 @@ CLoading::CLoading(CLoadingScreen &loadingScreen, const std::string &id, CI18NHe
 	_State = CStringIdentifier::get("State");
 	// background ids
 	_NeL = CStringIdentifier::get("NeL");
-	_Snowballs = CStringIdentifier::get("Snowballs");
+	_SnowballsLoading = CStringIdentifier::get("SnowballsLoading");
+	_SnowballsUnloading = CStringIdentifier::get("SnowballsUnloading");
 
 	CConfigFile::CVar &backgrounds = _Config.getVar("Background");
 	uint bgcount = backgrounds.size();
@@ -119,9 +120,19 @@ void CLoading::setBackgroundNeL()
 	_LoadingScreen->setBackground(_NeL);
 }
 
-void CLoading::setBackgroundSnowballs()
+void CLoading::setBackgroundSnowballsLoading()
 {
-	_LoadingScreen->setBackground(_Snowballs);
+	_LoadingScreen->setBackground(_SnowballsLoading);
+}
+
+void CLoading::setBackgroundSnowballsUnloading()
+{
+	_LoadingScreen->setBackground(_SnowballsUnloading);
+}
+
+void CLoading::setBackground(const std::string id)
+{
+	_LoadingScreen->setBackground(CStringIdentifier::get(id));
 }
 
 } /* namespace SBCLIENT */

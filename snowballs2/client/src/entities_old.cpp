@@ -68,6 +68,7 @@ _VisualCollisionManager(visualCollisionManager),
 _MoveContainer(moveContainer), _GlobalRetriever(globalRetriever), 
 _Animation(animation), NextEID(1000000)
 {
+	progressCallback.progress(0.0f);
 	nlassert(!Self);
 	nlassert(_Scene);
 	nlassert(_VisualCollisionManager);

@@ -129,13 +129,13 @@ CCollisionsOld::~CCollisionsOld()
 		MoveContainer->removePrimitive(_InstancesMovePrimitives[i]);
 	_InstancesMovePrimitives.clear();
 
-	// delete all allocated objects
-	UGlobalRetriever::deleteGlobalRetriever(GlobalRetriever);
-	URetrieverBank::deleteRetrieverBank(RetrieverBank);
-	UMoveContainer::deleteMoveContainer(MoveContainer);
-
 	// delete the visual collision manager
 	_Scene->deleteVisualCollisionManager(VisualCollisionManager);
+
+	// delete all allocated objects
+	UMoveContainer::deleteMoveContainer(MoveContainer);
+	UGlobalRetriever::deleteGlobalRetriever(GlobalRetriever);
+	URetrieverBank::deleteRetrieverBank(RetrieverBank);
 }
 
 } /* namespace SBCLIENT */

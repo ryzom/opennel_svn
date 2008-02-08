@@ -57,7 +57,8 @@ protected:
 	uint _State;
 	// background ids
 	uint _NeL;
-	uint _Snowballs;
+	uint _SnowballsLoading;
+	uint _SnowballsUnloading;
 public:
 	CLoading(CLoadingScreen &loadingScreen, const std::string &id, CI18NHelper *i18n);
 	virtual ~CLoading();
@@ -65,7 +66,14 @@ public:
 	void setMessageState(const std::string &label);
 
 	void setBackgroundNeL();
-	void setBackgroundSnowballs();
+	void setBackgroundSnowballsLoading();
+	void setBackgroundSnowballsUnloading();
+	void setBackground(const std::string id);
+	//void setBackgroundEnteringOldContinent();
+	//void setBackgroundEnteringSnowContinent();
+	//void setBackgroundEnteringWaterContinent();
+	//void setBackgroundEnteringFireContinent();
+
 }; /* class CLoading */
 
 } /* namespace SBCLIENT */

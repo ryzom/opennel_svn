@@ -81,7 +81,6 @@ CGraphics::CGraphics(NLMISC::IProgressCallback &progressCallback, const std::str
 	nlassert(!TextContext);
 	TextContext = Driver->createTextContext(CPath::lookup(
 		_Config.getValue("FontName", string("n019003l.pfb"))));
-	TextContext->setKeep800x600Ratio(false);
 	_Config.setCallbackAndCall("FontShadow", configFontShadow, this, NULL);
 	progressCallback.progress(1.0f);
 }

@@ -91,6 +91,7 @@ void CLoadingScreen::progress(float progressValue)
 		}
 		if (_TextContext)
 		{
+			_TextContext->setKeep800x600Ratio(true);
 			for (std::map<uint, _CLoadingMessage>::iterator it = _Messages.begin(); it != _Messages.end(); it++)
 			{
 				_CLoadingMessage &msg = it->second;

@@ -59,6 +59,7 @@ CAnimationOld::CAnimationOld(NLMISC::IProgressCallback &progressCallback,
 NL3D::UDriver *driver, NL3D::UScene *scene) : _AnimationSet(NULL), 
 _PlayListManager(NULL), _Driver(driver), _Scene(scene)
 {
+	progressCallback.progress(0.00f);
 	memset(_AnimIdArray, 0, sizeof(_AnimIdArray));
 	_AnimIdArray[0][0].Name = "patterfeet.anim";
 	_AnimIdArray[0][0].Loop = false;
@@ -88,7 +89,8 @@ _PlayListManager(NULL), _Driver(driver), _Scene(scene)
 	_AnimIdArray[8][0].Loop = false;
 	_AnimIdArray[8][1].Name = "";
 
-	_AnimationSet = _Driver->createAnimationSet();	
+	_AnimationSet = _Driver->createAnimationSet();
+	progressCallback.progress(0.30f);
 	// Add all animations in the animation set
 	for (uint i = 0; i < sizeof (_AnimIdArray) / sizeof (_AnimIdArray[0]); i++)
 	{
@@ -104,9 +106,11 @@ _PlayListManager(NULL), _Driver(driver), _Scene(scene)
 			_AnimIdArray[i][1].Animation = _AnimationSet->getAnimation(_AnimIdArray[i][1].Id);
 		}
 	}
-	_AnimationSet->build ();
+	_AnimationSet->build ();	
+	progressCallback.progress(0.60f);
 
 	_PlayListManager = _Scene->createPlayListManager();
+	progressCallback.progress(1.00f);
 }
 
 CAnimationOld::~CAnimationOld()

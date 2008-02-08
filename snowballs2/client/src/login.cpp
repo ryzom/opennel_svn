@@ -401,9 +401,10 @@ SBCLIENT_CALLBACK_IMPL(CLogin, renderInterface)
 {
 	_Driver->setMatrixMode2D11();
 	_Driver->drawQuad(_BackgroundQuad, _BackgroundMaterial);
+	_TextContext->setKeep800x600Ratio(true);
 	_TextContext->setColor(CRGBA(255, 255, 255, 255));
 	_TextContext->setHotSpot(UTextContext::MiddleMiddle);
-	_TextContext->setFontSize(48);
+	_TextContext->setFontSize(36);
 	_TextContext->printAt(0.675f, 0.4375f, _UsernameText);
 	_TextContext->printAt(0.675f, 0.2875f, _PasswordStarsText);
 	_Driver->clearZBuffer();
@@ -413,6 +414,7 @@ SBCLIENT_CALLBACK_IMPL(CLogin, renderInterface)
 		_Driver->drawQuad(_OverlayQuad, _OverlayMaterial);
 		_Driver->clearZBuffer();
 		_LogoScene->render();
+		_TextContext->setKeep800x600Ratio(false);
 		_TextContext->setColor(CRGBA(255, 255, 255, 255));
 		_TextContext->setHotSpot(UTextContext::MiddleMiddle);
 		if (_LoginData->Message.size() > 96) _TextContext->setFontSize(16);

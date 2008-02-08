@@ -517,7 +517,8 @@ void CSnowballsClient::loadLogin()
 	if (!_LoadedLogin)
 	{		
 		_LoadedLogin = true;
-		if (_CurrentState == Game) _Loading->setBackgroundSnowballs();
+		if (_CurrentState == Game) 
+			_Loading->setBackgroundSnowballsUnloading();
 		else _Loading->setBackgroundNeL();
 		_Loading->setMessageState("");
 
@@ -591,16 +592,17 @@ void CSnowballsClient::loadIngame()
 	if (!_LoadedIngame)
 	{		
 		_LoadedIngame = true;
-		_Loading->setBackgroundSnowballs();
+		_Loading->setBackgroundSnowballsLoading();
+		float max_progress = 4.f;
 
-		_LoadingScreen.setRange(0.00f, 0.25f);
+		_LoadingScreen.setRange(0.f / max_progress, 1.f / max_progress);
 		_Loading->setMessageState("InitializeLandscape");
 		nlassert(!_Landscape);
 		_Landscape = new CLandscape(_LoadingScreen, "Landscape", 
 			_Graphics->Driver, &_Time->AnimationTime);
 		nlassert(_Landscape);
 
-		_LoadingScreen.setRange(0.25f, 0.50f);
+		_LoadingScreen.setRange(1.f / max_progress, 2.f / max_progress);
 		_Loading->setMessageState("InitializeCollisions");
 		nlassert(!_Collisions);
 		_Collisions = new CCollisionsOld(_LoadingScreen, "Collisions", 
@@ -615,14 +617,14 @@ void CSnowballsClient::loadIngame()
 //		_ComponentManager->registerRender(WeatherComponent, -250);
 //		_ComponentManager->registerUpdate(WeatherComponent, 5000);
 
-		_LoadingScreen.setRange(0.50f, 0.75f);
+		_LoadingScreen.setRange(2.f / max_progress, 3.f / max_progress);
 		_Loading->setMessageState("InitializeAnimation");
 		nlassert(!_Animation);
 		_Animation = new CAnimationOld(_LoadingScreen,
 			_Graphics->Driver, _Landscape->Scene);
 		nlassert(_Animation);
 
-		_LoadingScreen.setRange(0.75f, 1.00f);
+		_LoadingScreen.setRange(3.f / max_progress, 4.f / max_progress);
 		_Loading->setMessageState("InitializeEntities");
 		nlassert(!_Entities);
 		_Entities = new CEntitiesOld(_LoadingScreen, 
@@ -638,7 +640,7 @@ void CSnowballsClient::loadIngame()
 //		displayLoadingState("Initialize Animation ");
 //		initAnimation();
 
-		_LoadingScreen.progress(1.0f);
+		_LoadingScreen.progress(1.f);
 
 
 
@@ -696,10 +698,23 @@ void CSnowballsClient::unloadIngame()
 {
 	if (_LoadedIngame)
 	{
-		nlassert(_Collisions); delete _Collisions; _Collisions = NULL;
-		nlassert(_Animation); delete _Animation; _Animation = NULL;
+		_Loading->setBackgroundSnowballsUnloading();
+		_LoadingScreen.setRange(0.f, 1.f);
+		float max_progress = 4.f;
+
+		_LoadingScreen.progress(0.f / max_progress);
+		_Loading->setMessageState("ReleaseCollisions");
 		nlassert(_Entities); delete _Entities; _Entities = NULL;
+		_LoadingScreen.progress(1.f / max_progress);
+		_Loading->setMessageState("ReleaseAnimation");
+		nlassert(_Animation); delete _Animation; _Animation = NULL;
+		_LoadingScreen.progress(2.f / max_progress);
+		_Loading->setMessageState("ReleaseCollisions");
+		nlassert(_Collisions); delete _Collisions; _Collisions = NULL;
+		_LoadingScreen.progress(3.f / max_progress);
+		_Loading->setMessageState("ReleaseLandscape");
 		nlassert(_Landscape); delete _Landscape; _Landscape = NULL;
+		_LoadingScreen.progress(4.f / max_progress);
 
 		//if (CaptureState)
 		//{
@@ -959,9 +974,10 @@ SBCLIENT_CALLBACK_IMPL(CSnowballsClient, renderVersion)
 	{
 		UTextContext *tc = _Graphics->TextContext; nlassert(tc);
 
+		tc->setKeep800x600Ratio(true);
 		tc->setColor(CRGBA(255, 255, 255, 255));
 		tc->setHotSpot(UTextContext::BottomRight);
-		tc->setFontSize(16);
+		tc->setFontSize(12);
 		tc->printAt(0.99f, 0.01f, ucstring(SBCLIENT_VERSION_STRING));
 
 		tc->setHotSpot(UTextContext::BottomLeft);
