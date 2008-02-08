@@ -37,6 +37,7 @@
 #include "loading.h"
 #include "entities_old.h"
 #include "landscape.h"
+#include "time.h"
 
 // NeL includes
 // #include <nel/misc/debug.h>
@@ -50,44 +51,47 @@ namespace SBCLIENT {
 
 COffline::COffline(CLoadingScreen *loadingScreen, const string &id, 
 CLogin::CLoginData *loginData, CLoading *loading, CLandscape *landscape,
-CEntitiesOld *entities) : _Config(id), _LoadingScreen(loadingScreen), 
-_LoginData(loginData), _Loading(loading), _Landscape(landscape), 
-_Entities(entities)
+CEntitiesOld *entities, CTime *time) : _Config(id), 
+_LoadingScreen(loadingScreen), _LoginData(loginData), _Loading(loading), 
+_Landscape(landscape), _Entities(entities), _Time(time)
 {
 	_Loading->setBackground("OldLands");
 
-	_LoadingScreen->setRange(0.00f, 0.25f);
-	_LoadingScreen->progress(0.00f);
 
-	_Loading->setMessageState("CreateSelf");
-	_Entities->addEntity(++(_Entities->LastEID), _LoginData->Username, 
-		CEntityOld::Self, CVector(
-			_Config.getVar("StartPoint").asFloat(0),
-			_Config.getVar("StartPoint").asFloat(1),
-			_Config.getVar("StartPoint").asFloat(2)),
-		CVector(
-			_Config.getVar("StartPoint").asFloat(0),
-			_Config.getVar("StartPoint").asFloat(1),
-			_Config.getVar("StartPoint").asFloat(2)));
-	_Landscape->RefreshZonesAround = &_Entities->Self->Position;
-	_LoadingScreen->progress(1.00f);
-	
 	_Loading->setMessageState("RefreshLandscape");
-	_LoadingScreen->setRange(0.25f, 1.00f);
+	_LoadingScreen->setRange(0.00f, 0.75f);
+	_LoadingScreen->progress(0.00f);
+	CVector start(
+		_Config.getVar("StartPoint").asFloat(0), 
+		_Config.getVar("StartPoint").asFloat(1), 
+		_Config.getVar("StartPoint").asFloat(2));
+	_Landscape->RefreshZonesAround = &start;
 	_Landscape->refresh(*_LoadingScreen);
 
+	
+	_Loading->setMessageState("CreateSelf");
+	_LoadingScreen->setRange(0.75f, 1.00f);
+	_Time->updateTime(NULL); // time update needed before doing the last small changes
+	_Entities->addEntity(++(_Entities->LastEID),
+		_LoginData->Username, CEntityOld::Self, start, start);
+	_Landscape->RefreshZonesAround = &_Entities->Self->Position;
+	_LoadingScreen->progress(1.00f);
+		
+	for (uint i = 0; i < 8; ++i)
+	{
+		uint32 eid = ++(_Entities->LastEID);
+		_Entities->addEntity(eid, "Entity" + toString(eid), 
+			CEntityOld::Other, start, start);
+		_Entities->getEntity(eid).AutoMove = true;
+	}
+	
+	
 	_LoadingScreen->progress(1.00f);
 }
 
 COffline::~COffline()
 {
-	//	if (_HasOffline)
-//	{
-//		//// temp
-//		//deleteAllEntities();
-//		
-//		_HasOffline = false;
-//	}
+	_Entities->removeAll();
 }
 
 } /* namespace SBCLIENT */

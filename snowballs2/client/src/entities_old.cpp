@@ -106,7 +106,7 @@ CEntityOld *CEntitiesOld::getEntityPtr(uint32 eid)
 
 void CEntitiesOld::addEntity(uint32 eid, const ucstring &name, CEntityOld::TType type, const CVector &startPosition, const CVector &serverPosition)
 {
-	//nlinfo("adding entity %u", eid);
+	nlinfo("adding entity %u", eid);
 	TGlobalAnimationTime gt = *_GlobalAnimationTime;
 
 	// Check that the entity doesn't exist yet
@@ -239,7 +239,7 @@ void CEntitiesOld::addEntity(uint32 eid, const ucstring &name, CEntityOld::TType
 
 void CEntitiesOld::removeEntity(uint32 eid)
 {
-	//nlinfo ("removing entity %u", eid);
+	nlinfo ("removing entity %u", eid);
 	TGlobalAnimationTime gt = *_GlobalAnimationTime;
 	
 	// look for the entity
@@ -302,7 +302,7 @@ void CEntitiesOld::deleteEntity(CEntityOld &entity)
 	#pragma SBCLIENT_WARNING("SBCLIENT_SOUND")
 	//deleteSound (entity);
 
-	//nlinf ("Remove the entity %u from the Entities list", entity.Id);
+	nlinfo("Remove the entity %u from the Entities list", entity.Id);
 	CEntityMap::iterator eit = Entities.find(entity.Id);
 	nlassert(eit != Entities.end());
 	Entities.erase(eit);

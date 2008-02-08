@@ -102,14 +102,18 @@ _GlobalAnimationTime(globalAnimationTime)
 	{
 		if (_AnimIdArray[i][0].Name[0] != '\0')
 		{
-			_AnimIdArray[i][0].Id = _AnimationSet->addAnimation(_AnimIdArray[i][0].Name, _AnimIdArray[i][0].Name);
-			_AnimIdArray[i][0].Animation = _AnimationSet->getAnimation(_AnimIdArray[i][0].Id);
+			_AnimIdArray[i][0].Id = _AnimationSet->addAnimation(
+				_AnimIdArray[i][0].Name, _AnimIdArray[i][0].Name);
+			_AnimIdArray[i][0].Animation = _AnimationSet->getAnimation(
+				_AnimIdArray[i][0].Id);
 		}
 
 		if (_AnimIdArray[i][1].Name[0] != '\0')
 		{
-			_AnimIdArray[i][1].Id = _AnimationSet->addAnimation(_AnimIdArray[i][1].Name, _AnimIdArray[i][1].Name);
-			_AnimIdArray[i][1].Animation = _AnimationSet->getAnimation(_AnimIdArray[i][1].Id);
+			_AnimIdArray[i][1].Id = _AnimationSet->addAnimation(
+				_AnimIdArray[i][1].Name, _AnimIdArray[i][1].Name);
+			_AnimIdArray[i][1].Animation = _AnimationSet->getAnimation(
+				_AnimIdArray[i][1].Id);
 		}
 	}
 	_AnimationSet->build ();	
@@ -121,47 +125,51 @@ _GlobalAnimationTime(globalAnimationTime)
 
 CAnimationOld::~CAnimationOld()
 {
+	nlassert(_PlayListManager);
 	_Scene->deletePlayListManager(_PlayListManager);
 
-// The next line doesn t work (say that AnimationSet is not a valid AnimationSet Ptr) so we comment it.
-//	_Scene->deleteAnimationSet(_AnimationSet);
+//// The next line doesn t work (say that AnimationSet is not a valid AnimationSet Ptr) so we comment it.
+////	_Scene->deleteAnimationSet(_AnimationSet);
 }
 
 void CAnimationOld::playAnimation(CEntityOld &entity, CEntityOld::TAnim anim, bool force)
 {
-	nlassert(anim > -2 && anim < 20);
-	nlinfo ("playAnimation() %d", anim);
-
 	// Get the current time
-	TGlobalAnimationTime currentTime = *_GlobalAnimationTime;
+	TGlobalAnimationTime gt = *_GlobalAnimationTime;
 
-	// Can't do animation without skeleton
-	if (entity.Skeleton.empty())
+	nlassert(anim > -2 && anim < 20);
+	nlinfo("playAnimation() %d at %lf", anim, gt);
+
+	// Can't do animation on entity without skeleton
+	if (entity.Skeleton.empty()) 
+	{
+		nlwarning("Can't do animation on entity %u '%s' without skeleton", entity.Id, entity.Name.toUtf8().c_str());
 		return;
+	}
 
 	// If the first time we play an animation, creates the animation class
-	if (entity.PlayList == NULL)
-		createAnimation(entity);
+	if (!entity.PlayList) createAnimation(entity);
 
 	if (force || entity.AnimQueue.empty())
 	{
 		computeAnimation(entity, anim);
 		
 		// clear the animation queue
-		//nlinfo ("clearing animation queue");
+		nlinfo("clearing animation queue");
 		while (!entity.AnimQueue.empty())
 			entity.AnimQueue.pop();
 	}
 
 	nlinfo("pushing animation %d", anim);
 	nlinfo("pushing animation %s", _AnimIdArray[anim][0].Name);
-	entity.AnimQueue.push (anim);
+	entity.AnimQueue.push(anim);
 }
 
 void CAnimationOld::createAnimation(SBCLIENT::CEntityOld &entity)
 {
-	nlassert(!entity.Instance.empty())
-	nlassert(!entity.Skeleton.empty())
+	nlassert(!entity.PlayList);
+	nlassert(!entity.Instance.empty());
+	nlassert(!entity.Skeleton.empty());
 	nlassert(_AnimationSet);
 
 	entity.PlayList = _PlayListManager->createPlayList(_AnimationSet);
@@ -171,37 +179,47 @@ void CAnimationOld::createAnimation(SBCLIENT::CEntityOld &entity)
 
 void CAnimationOld::deleteAnimation(SBCLIENT::CEntityOld &entity)
 {
-	if (entity.PlayList == NULL)
+	if (entity.PlayList == NULL) 
+	{
+		nlwarning("Entity %s does not have a playlist", entity.Name.toUtf8().c_str());
 		return;
+	}
 
 	_PlayListManager->deletePlayList(entity.PlayList);
-	entity.PlayList= NULL;
+	entity.PlayList = NULL;
 }
 
 SBCLIENT_CALLBACK_IMPL(CAnimationOld, updateAnimations)
 {
 	// Get the current time
-	TGlobalAnimationTime currentTime = *_GlobalAnimationTime;
+	TGlobalAnimationTime gt = *_GlobalAnimationTime;
 
-	for (CEntitiesOld::CEntityMap::iterator eit = _Entities->Entities.begin(); eit != _Entities->Entities.end(); eit++)
+	CEntitiesOld::CEntityMap::iterator
+		eit(_Entities->Entities.begin()),
+		end(_Entities->Entities.end());
+	for (; eit != end; ++eit)
 	{
-		CEntityOld &entity = (*eit).second;
+		CEntityOld &entity = eit->second;
 
 		if (entity.AnimQueue.empty())
 		{
-			nlwarning ("empty queue update!!!");
+			nlwarning("empty queue update!!!");
 			continue;
 		}
 
 		CEntityOld::TAnim currentAnim = entity.AnimQueue.front();
-		if (!_AnimIdArray[currentAnim][0].Loop && currentTime >= entity.StartAnimationTime + _AnimIdArray[currentAnim][0].Animation->getEndTime() - TransitionTime / 2)
+		if (!_AnimIdArray[currentAnim][0].Loop 
+			&& gt >= entity.StartAnimationTime 
+			+ _AnimIdArray[currentAnim][0].Animation->getEndTime() 
+			- TransitionTime / 2)
 		{
 			// remove the current anim
+			nlinfo("remove the current anim");
 			entity.AnimQueue.pop();
 
 			if (entity.AnimQueue.empty())
 			{
-				nlwarning ("empty queue!!!!!!");
+				nlwarning("empty queue!!!!!!");
 				continue;
 			}
 
@@ -227,59 +245,61 @@ SBCLIENT_CALLBACK_IMPL(CAnimationOld, updateAnimations)
 	}
 
 	// compute new animation position depending of the current time
-	_PlayListManager->animate(currentTime);
+	_PlayListManager->animate(gt);
 }
 
 void CAnimationOld::computeAnimation(CEntityOld &entity, CEntityOld::TAnim anim)
 {
 	// Get the current time
-	TGlobalAnimationTime currentTime = *_GlobalAnimationTime;
-
-	nlinfo("%d playing animation", anim);
-	nlinfo("%d playing animation %s ct%lf st%f et%f", anim, _AnimIdArray[anim][0].Name, currentTime, _AnimIdArray[anim][0].Animation->getBeginTime(), _AnimIdArray[anim][0].Animation->getEndTime());
-
+	TGlobalAnimationTime gt = *_GlobalAnimationTime;
+	
+	nlinfo("%d playing animation %s ct%lf st%f et%f", anim, 
+		_AnimIdArray[anim][0].Name, gt, 
+		_AnimIdArray[anim][0].Animation->getBeginTime(), 
+		_AnimIdArray[anim][0].Animation->getEndTime());
+	
 	// Find the new slot for the full animation (0 or 1)
 	uint newSlot = entity.NextEmptySlot;
 	uint oldSlot = 1 - entity.NextEmptySlot;
-	entity.NextEmptySlot = 1 - entity.NextEmptySlot;
-
-	UPlayList::TWrapMode wrapMode = _AnimIdArray[anim][0].Loop ? UPlayList::Repeat : UPlayList::Clamp;
+	entity.NextEmptySlot = oldSlot;
+	
+	UPlayList::TWrapMode wrapMode = _AnimIdArray[anim][0].Loop 
+		? UPlayList::Repeat : UPlayList::Clamp;
 	
 	entity.PlayList->setAnimation(newSlot, _AnimIdArray[anim][0].Id);
-	entity.PlayList->setTimeOrigin(newSlot, currentTime);
+	entity.PlayList->setTimeOrigin(newSlot, gt);
 	entity.PlayList->setWeightSmoothness(newSlot, 1.0f);
 	entity.PlayList->setWrapMode(newSlot, wrapMode);
-
-	double OldStartTime, OldEndTime;
-	double NewStartTime, NewEndTime;
-
+	
+	TGlobalAnimationTime OldStartTime, OldEndTime;
+	TGlobalAnimationTime NewStartTime, NewEndTime;
+	
 	// Get the starting time of the old animation slot
 	entity.PlayList->getStartWeight(oldSlot, OldStartTime);
 	
 	// Compute the time delta between start of the old animation and now
-	double dt = currentTime - OldStartTime;
+	TGlobalAnimationTime ani_dt = gt - OldStartTime;
 
 	// Compute the new transition value depending of the current time
+	if (ani_dt > TransitionTime)
+		ani_dt = TransitionTime;
 
-	if (dt > TransitionTime)
-		dt = TransitionTime;
-
-	OldStartTime = currentTime - (TransitionTime - dt);
-	OldEndTime = currentTime + dt;
-		
-	NewStartTime = currentTime;
-	NewEndTime = currentTime + dt;
-
+	OldStartTime = gt - (TransitionTime - ani_dt);
+	OldEndTime = gt + ani_dt;
+	
+	NewStartTime = gt;
+	NewEndTime = gt + ani_dt;
+	
 	// Set new weights on the old and the new animation slot
-
+	
 	entity.PlayList->setStartWeight(oldSlot, 1.0f, OldStartTime);
 	entity.PlayList->setEndWeight(oldSlot, 0.0f, OldEndTime);
-
+	
 	entity.PlayList->setStartWeight(newSlot, 0.0f, NewStartTime);
 	entity.PlayList->setEndWeight(newSlot, 1.0f, OldEndTime);
-
-	// Keep in mind what is the last animation id we set
-	entity.StartAnimationTime = currentTime;
+	
+	// Keep in mind when we set the animation
+	entity.StartAnimationTime = gt;
 }
 
 } /* namespace SBCLIENT */

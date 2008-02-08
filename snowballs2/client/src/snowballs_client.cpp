@@ -769,11 +769,11 @@ void CSnowballsClient::enableIngame()
 
 		nlassert(!_LandscapeUpdateAnimationsId);
 		_LandscapeUpdateAnimationsId = _UpdateFunctions.add(
-			CLandscape::updateAnimations, _Landscape, NULL, 0 + SBCLIENT_UPDATE_ANIMATIONS);
+			CLandscape::updateAnimations, _Landscape, NULL, -100 + SBCLIENT_UPDATE_ANIMATIONS);
 
 		nlassert(!_LandscapeUpdateLandscapeId);
 		_LandscapeUpdateLandscapeId = _UpdateFunctions.add(
-			CLandscape::updateLandscape, _Landscape, NULL, 0 + SBCLIENT_UPDATE_LANDSCAPE);
+			CLandscape::updateLandscape, _Landscape, NULL, -100 + SBCLIENT_UPDATE_LANDSCAPE);
 
 		nlassert(!_LandscapeRenderSceneId);
 		_LandscapeRenderSceneId = _RenderFunctions.add(
@@ -781,7 +781,7 @@ void CSnowballsClient::enableIngame()
 	
 		nlassert(!_AnimationUpdateAnimationsId);
 		_AnimationUpdateAnimationsId = _UpdateFunctions.add(
-			CAnimationOld::updateAnimations, _Animation, NULL, 0 + SBCLIENT_UPDATE_ANIMATIONS);
+			CAnimationOld::updateAnimations, _Animation, NULL, 100 + SBCLIENT_UPDATE_ANIMATIONS);
 
 		nlassert(!_EntitiesUpdateEntitiesId);
 		_EntitiesUpdateEntitiesId = _UpdateFunctions.add(
@@ -830,7 +830,7 @@ void CSnowballsClient::loadConnection()
 		{
 		case CLogin::Offline:
 			_Offline = new COffline(&_LoadingScreen, "Offline", 
-				&_LoginData, _Loading, _Landscape, _Entities);
+				&_LoginData, _Loading, _Landscape, _Entities, _Time);
 			break;
 		case CLogin::Snowballs3:
 			_LoginData.Message = ucstring::makeFromUtf8(toString(
@@ -983,12 +983,19 @@ SBCLIENT_CALLBACK_IMPL(CSnowballsClient, updateDebug)
 	//	testmaterial.setTexture(testtexture);
 	//}
 	//testmaterial.
+	if (_Graphics)
+	{
+		if (_Graphics->Driver->AsyncListener.isKeyPushed(KeyESCAPE))
+			_NextState = Login;
+	}
 	if (_Landscape && _Entities && _Entities->Self)
 	{
 		// temp
-		_Entities->Self->MovePrimitive->move(CVector(1,0,0), 0);
+		_Entities->Self->MovePrimitive->move(CVector(1,-1,0), 0);
 		NL3D::UCamera camera = _Landscape->Scene->getCam();
-		camera.setPos(_Entities->Self->Position + CVector(0,-6,3));
+		camera.setTransformMode(UTransformable::RotEuler);
+		camera.setPos(_Entities->Self->Position + CVector(0,-24,24));
+		camera.setRotEuler(-Pi / 4.0f, 0, 0);
 		_Landscape->Scene->setCam(camera);
 	}
 }

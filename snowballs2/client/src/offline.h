@@ -46,6 +46,7 @@ namespace SBCLIENT {
 	class CLoadingScreen;
 	class CLandscape;
 	class CEntitiesOld;
+	class CTime;
 
 /**
  * \brief COffline
@@ -62,11 +63,12 @@ protected:
 	CLoading *_Loading; // p
 	CLandscape *_Landscape; // p
 	CEntitiesOld *_Entities; // p
+	CTime *_Time; // p
 	
 	// instances
 	CConfigProxy _Config;
 public:
-	COffline(CLoadingScreen *loadingScreen, const std::string &id, CLogin::CLoginData *loginData, CLoading *loading, CLandscape *landscape, CEntitiesOld *entities);
+	COffline(CLoadingScreen *loadingScreen, const std::string &id, CLogin::CLoginData *loginData, CLoading *loading, CLandscape *landscape, CEntitiesOld *entities, CTime *time);
 	virtual ~COffline();
 }; /* class COffline */
 
