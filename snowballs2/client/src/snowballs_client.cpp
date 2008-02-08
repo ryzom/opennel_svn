@@ -35,21 +35,24 @@
 #define SBCLIENT_UPDATE_UTILITIES 9050000
 // 02. [+8000000 - +8099999] Update Time (deltas)
 #define SBCLIENT_UPDATE_TIME 8050000
-// 03. [+7000000 - +7099999] Update Driver (keyboard controls, etc)
-#define SBCLIENT_UPDATE_DRIVER 7050000
+// 03. [+7000000 - +7099999] Update Input (keyboard controls, etc)
+#define SBCLIENT_UPDATE_INPUT 7050000
+#define SBCLIENT_UPDATE_DRIVER SBCLIENT_UPDATE_INPUT
 // 04. [+6000000 - +6099999] Update Incoming (network, receive messages)
 #define SBCLIENT_UPDATE_INCOMING 6050000
 // 05. [+5000000 - +5099999] Update Weather (sky, snow, wind, fog, sun)
 #define SBCLIENT_UPDATE_WEATHER 5050000
 // 06. [+4000000 - +4099999] Update Landscape (async zone loading near entity)
 #define SBCLIENT_UPDATE_LANDSCAPE 4050000
+// ... [+4500000 - +4599999] Update Animations (TEST)
+#define SBCLIENT_UPDATE_ANIMATIONS 4550000
 // 07. [+3000000 - +3099999] Update Entities (collisions and actions)
 //                           - Move Other Entities (move//, animations, etc)
 //                           - Update Self Collision (move)
 #define SBCLIENT_UPDATE_ENTITIES 3050000
 //                           - Update Self Entity (animations//, etc)
 // 08. [+2000000 - +2099999] Update Animations (playlists)
-#define SBCLIENT_UPDATE_ANIMATIONS 2050000
+//#define SBCLIENT_UPDATE_ANIMATIONS 2050000
 // 09. [+1500000 - +1599999] Update Interface (login, ui, etc)
 #define SBCLIENT_UPDATE_INTERFACE 1550000
 // 10. [+1200000 - +1299999] Update Sound (sound driver)

@@ -98,15 +98,15 @@ public:
 	enum TAnim
 	{ 
 		NoAnim = -1, 
-		PrepareWalkAnim, 
-		WalkAnim, 
-		IdleAnim, 
-		LogInAnim, 
-		LogOffAnim, 
-		ThrowSnowball, 
-		PrepareSnowBall, 
-		PrepareSnowBallCycle, 
-		HitAnim 
+		PrepareWalkAnim = 0, 
+		WalkAnim = 1, 
+		IdleAnim = 2, 
+		LogInAnim = 3, 
+		LogOffAnim = 4, 
+		ThrowSnowball = 5, 
+		PrepareSnowBall = 6, 
+		PrepareSnowBallCycle = 7, 
+		HitAnim = 8,
 	};
 
 	/// Create a default entity

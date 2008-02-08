@@ -86,7 +86,7 @@ protected:
 	NL3D::TGlobalAnimationTime *_GlobalAnimationTime;
 	
 	// instances
-	_CAnim _AnimIdArray[9][2];
+	_CAnim _AnimIdArray[9];
 public:
 	CAnimationOld(NLMISC::IProgressCallback &progressCallback, NL3D::UDriver *driver, NL3D::UScene *scene, NL3D::TGlobalAnimationTime *globalAnimationTime);
 	virtual ~CAnimationOld();

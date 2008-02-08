@@ -123,6 +123,8 @@ _TypingPassword(false), _Enabled(false), _Selection(0)
 
 	_LoginData->Username = _Config.getValue("Username", ucstring());
 	_PasswordText = _Config.getValue("Password", ucstring());
+
+	if (_Config.getValue("Skip", false)) connect();
 }
 
 CLogin::~CLogin()
