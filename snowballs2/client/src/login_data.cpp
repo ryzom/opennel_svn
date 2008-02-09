@@ -1,15 +1,16 @@
 /**
- * \file command_wrapper.cpp
- * \brief CCommandWrapper
- * \date 2008-02-06 16:46GMT
+ * \file login_data.cpp
+ * \brief CLoginData
+ * \date 2008-02-09 17:15GMT
  * \author Jan Boon (Kaetemi)
- * CCommandWrapper
+ * CLoginData
  * 
  * $Id$
  */
 
 /* 
  * Copyright (C) 2008  Jan Boon (Kaetemi)
+ * Based on NEVRAX SNOWBALLS, Copyright (C) 2001  Nevrax Ltd.
  * 
  * This file is part of OpenNeL Snowballs.
  * OpenNeL Snowballs is free software: you can redistribute it and/or
@@ -29,37 +30,49 @@
  */
 
 #include <nel/misc/types_nl.h>
-#include "command_wrapper.h"
+#include "login_data.h"
 
-// Project includes
-
-// NeL includes
 // #include <nel/misc/debug.h>
 
-// STL includes
-
 using namespace std;
-// using namespace NLMISC;
+using namespace NLMISC;
 
 namespace SBCLIENT {
 
-CCommandWrapper::CCommandWrapper(const char *categoryName, 
-const char *commandName, const char *commandHelp, const char *commandArgs, 
-TCommandCallback callback, void *context, void *tag) 
-: ICommand(categoryName, commandName, commandHelp, commandArgs), 
-Callback(callback), Context(context), Tag(tag) 
+CLoginData::CLoginData(CComponentManager *manager, const string &instanceId, IProgressCallback &progressCallback)
+	: IConfigurableComponent(manager, instanceId, progressCallback)
 {
-	
+	nlwarning("Unknown IComponent CLoginData() call");
 }
 
-CCommandWrapper::~CCommandWrapper()
+CLoginData::~CLoginData()
 {
-	
+	nlwarning("Unknown IComponent ~CLoginData() call");
 }
 
-bool CCommandWrapper::execute(const std::string &rawCommandString, const std::vector<std::string> &args, NLMISC::CLog &log, bool quiet, bool human)
+void CLoginData::update()
 {
-	return Callback(Context, *(static_cast<NLMISC::ICommand *>(this)), rawCommandString, args, log, quiet, human, Tag);
+	nlwarning("Unknown IComponent update() call");
+}
+
+void CLoginData::render()
+{
+	nlwarning("Unknown IComponent render() call");
+}
+
+void CLoginData::config(const string &varName, CConfigFile::CVar &var)
+{
+	nlwarning("Unknown IConfigurableComponent config(varName, var) call");
+}
+
+void CLoginData::componentUp(IComponent *component)
+{
+	nlwarning("Unknown IComponent componentUp(component) call");
+}
+
+void CLoginData::componentDown(IComponent *component)
+{
+	nlwarning("Unknown IComponent componentDown(component) call");
 }
 
 } /* namespace SBCLIENT */

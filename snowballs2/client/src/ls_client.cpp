@@ -186,7 +186,7 @@ void CLSClient::_disconnect()
 	}
 }
 
-void CLSClient::authenticateUser(SBCLIENT_CALLBACK cb, void *context, void *tag, const string &ls, const ucstring &login, const string &cpassword, const string &application)
+void CLSClient::authenticateUser(TCallback cb, void *context, void *tag, const string &ls, const ucstring &login, const string &cpassword, const string &application)
 {
 	nlassert(!_Callback); _Callback = cb; nlassert(_Callback);
 	_Context = context; _Tag = tag;
@@ -204,7 +204,7 @@ void CLSClient::authenticateUser(SBCLIENT_CALLBACK cb, void *context, void *tag,
 	return;
 }
 
-void CLSClient::selectShard(SBCLIENT_CALLBACK cb, void *context, void *tag, sint32 shardId)
+void CLSClient::selectShard(TCallback cb, void *context, void *tag, sint32 shardId)
 {
 	nlassert(!_Callback); _Callback = cb; nlassert(_Callback);
 	_Context = context; _Tag = tag;
@@ -263,7 +263,7 @@ void CLSClient::callback()
 	nlassert(_Callback);
 	if (!LastError.empty())
 		nlwarning("CLSClient::callback(): %s", LastError.c_str());
-	SBCLIENT_CALLBACK cb = _Callback;
+	TCallback cb = _Callback;
 	_Callback = NULL;
 	cb(_Context, _Tag);
 }

@@ -1,9 +1,9 @@
 /**
- * \file command_wrapper.h
- * \brief CCommandWrapper
- * \date 2008-02-06 16:46GMT
+ * \file client_context_utils.h
+ * \brief CClientContext
+ * \date 2008-02-09 17:20GMT
  * \author Jan Boon (Kaetemi)
- * CCommandWrapper
+ * CClientContext
  * 
  * $Id$
  */
@@ -28,43 +28,35 @@
  * 02110-1301 USA.
  */
 
-#ifndef SBCLIENT_COMMAND_WRAPPER_H
-#define SBCLIENT_COMMAND_WRAPPER_H
+#ifndef SBCLIENT_CLIENT_CONTEXT_UTILS_H
+#define SBCLIENT_CLIENT_CONTEXT_UTILS_H
 #include <nel/misc/types_nl.h>
 
 // Project includes
-#include "member_callback_type.h"
 
 // NeL includes
-#include <nel/misc/command.h>
 
 // STL includes
 
 namespace SBCLIENT {
 
 /**
- * \brief CCommandWrapper
- * \date 2008-02-06 16:46GMT
+ * \brief CClientContext
+ * \date 2008-02-09 17:20GMT
  * \author Jan Boon (Kaetemi)
- * CCommandWrapper
+ * CClientContext
  */
-struct CCommandWrapper : public NLMISC::ICommand
+struct CClientContext
 {
-	CCommandWrapper(const char *categoryName, 
-		const char *commandName, const char *commandHelp, 
-		const char *commandArgs, TCommandCallback callback, 
-		void *context, void *tag);
-	virtual ~CCommandWrapper();
-	
-	virtual bool execute(const std::string &rawCommandString, const std::vector<std::string> &args, NLMISC::CLog &log, bool quiet, bool human);
-	
-	TCommandCallback Callback;
-	void *Context;
-	void *Tag;
-}; /* struct CCommandWrapper */
+	friend class CSnowballsClient;
+
+private:
+	CClientContext();
+	virtual ~CClientContext();
+}; /* class CClientContext */
 
 } /* namespace SBCLIENT */
 
-#endif /* #ifndef SBCLIENT_COMMAND_WRAPPER_H */
+#endif /* #ifndef SBCLIENT_CLIENT_CONTEXT_UTILS_H */
 
 /* end of file */

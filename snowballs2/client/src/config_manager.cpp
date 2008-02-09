@@ -128,7 +128,7 @@ CConfigFile *CConfigManager::getConfigSub(const std::string &id)
 	return _ConfigFile;
 }
 
-void CConfigManager::setCallback(NLMISC::CConfigFile *configFile, SBCLIENT_CALLBACK_CONFIG cb, const std::string &var, void *context, const std::string &name, void *tag)
+void CConfigManager::setCallback(NLMISC::CConfigFile *configFile, TConfigCallback cb, const std::string &var, void *context, const std::string &name, void *tag)
 {
 	if (_ConfigCallbacks.find(var) != _ConfigCallbacks.end())
 		nlwarning("Config callback for '%s' already exists, overriding", var.c_str());

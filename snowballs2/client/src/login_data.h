@@ -1,15 +1,16 @@
 /**
- * \file command_wrapper.h
- * \brief CCommandWrapper
- * \date 2008-02-06 16:46GMT
+ * \file login_data.h
+ * \brief CLoginData
+ * \date 2008-02-09 17:15GMT
  * \author Jan Boon (Kaetemi)
- * CCommandWrapper
+ * CLoginData
  * 
  * $Id$
  */
 
 /* 
  * Copyright (C) 2008  Jan Boon (Kaetemi)
+ * Based on NEVRAX SNOWBALLS, Copyright (C) 2001  Nevrax Ltd.
  * 
  * This file is part of OpenNeL Snowballs.
  * OpenNeL Snowballs is free software: you can redistribute it and/or
@@ -28,43 +29,39 @@
  * 02110-1301 USA.
  */
 
-#ifndef SBCLIENT_COMMAND_WRAPPER_H
-#define SBCLIENT_COMMAND_WRAPPER_H
+#ifndef SBCLIENT_LOGIN_DATA_H
+#define SBCLIENT_LOGIN_DATA_H
 #include <nel/misc/types_nl.h>
-
-// Project includes
-#include "member_callback_type.h"
-
-// NeL includes
-#include <nel/misc/command.h>
-
-// STL includes
+#include "configurable_component.h"
 
 namespace SBCLIENT {
 
 /**
- * \brief CCommandWrapper
- * \date 2008-02-06 16:46GMT
+ * \brief CLoginData
+ * \date 2008-02-09 17:15GMT
  * \author Jan Boon (Kaetemi)
- * CCommandWrapper
+ * CLoginData
  */
-struct CCommandWrapper : public NLMISC::ICommand
+class CLoginData : public IConfigurableComponent
 {
-	CCommandWrapper(const char *categoryName, 
-		const char *commandName, const char *commandHelp, 
-		const char *commandArgs, TCommandCallback callback, 
-		void *context, void *tag);
-	virtual ~CCommandWrapper();
+protected:
+	// pointers
+	// ...
 	
-	virtual bool execute(const std::string &rawCommandString, const std::vector<std::string> &args, NLMISC::CLog &log, bool quiet, bool human);
-	
-	TCommandCallback Callback;
-	void *Context;
-	void *Tag;
-}; /* struct CCommandWrapper */
+	// instances
+	// ...
+public:
+	CLoginData(CComponentManager *manager, const std::string &instanceId, NLMISC::IProgressCallback &progressCallback);
+	~CLoginData();
+	void update();
+	void render();
+	void config(const std::string &varName, NLMISC::CConfigFile::CVar &var);
+	void componentUp(IComponent *component);
+	void componentDown(IComponent *component);
+}; /* class CLoginData */
 
 } /* namespace SBCLIENT */
 
-#endif /* #ifndef SBCLIENT_COMMAND_WRAPPER_H */
+#endif /* #ifndef SBCLIENT_LOGIN_DATA_H */
 
 /* end of file */

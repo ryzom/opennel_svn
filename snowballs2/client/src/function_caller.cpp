@@ -57,7 +57,7 @@ CFunctionCaller::~CFunctionCaller()
 		nlwarning("Disabled function with id '%u' was not properly removed", it->first);
 }
 
-uint CFunctionCaller::add(SBCLIENT_CALLBACK function, void *context, void *tag, sint priority)
+uint CFunctionCaller::add(TCallback function, void *context, void *tag, sint priority)
 {
 	// increase id and check if not 0 (would happen when going over limit)
 	++_LastId; nlassert(_LastId);
@@ -166,7 +166,7 @@ bool CFunctionCaller::flip(uint id)
 // todo: flip, disable, and the special remove functions!
 // also the destructor!
 
-void CFunctionCaller::removeF(SBCLIENT_CALLBACK function, bool all)
+void CFunctionCaller::removeF(TCallback function, bool all)
 {
 	// find those with function and remove
 	for (CFunctionInfos::iterator it = _Functions.begin(); it != _Functions.end();)

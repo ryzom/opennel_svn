@@ -32,15 +32,23 @@
 #define SBCLIENT_MEMBER_CALLBACK_TYPE_H
 #include <nel/misc/types_nl.h>
 
+class ucstring;
 #include <nel/misc/config_file.h>
 namespace NLMISC {
 	class ICommand;
+	class CEvent;
 }
 
-typedef void (*SBCLIENT_CALLBACK)(void *context, void *tag);
-typedef void (*SBCLIENT_CALLBACK_ERROR)(void *context, const std::string &error, void *tag);
-typedef void (*SBCLIENT_CALLBACK_CONFIG)(void *context, const std::string &varName, NLMISC::CConfigFile::CVar &var, void *tag);
-typedef bool (*SBCLIENT_CALLBACK_COMMAND)(void *context, NLMISC::ICommand &command, const std::string &rawCommandString, const std::vector<std::string> &args, NLMISC::CLog &log, bool quiet, bool human, void *tag);
+namespace SBCLIENT {
+
+typedef void (*TCallback)(void *context, void *tag);
+typedef void (*TStringCallback)(void *context, const std::string &s, void *tag);
+typedef void (*TUcStringCallback)(void *context, const ucstring &s, void *tag);
+typedef void (*TConfigCallback)(void *context, const std::string &varName, NLMISC::CConfigFile::CVar &var, void *tag);
+typedef bool (*TCommandCallback)(void *context, NLMISC::ICommand &command, const std::string &rawCommandString, const std::vector<std::string> &args, NLMISC::CLog &log, bool quiet, bool human, void *tag);
+typedef bool (*TEventCallback)(void *context, const NLMISC::CEvent &ev, void *tag);
+
+}
 
 #endif /* #ifndef SBCLIENT_MEMBER_CALLBACK_TYPE_H */
 

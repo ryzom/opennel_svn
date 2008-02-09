@@ -73,8 +73,8 @@ public:
 	bool getValue(const std::string &varName, bool defaultValue);
 	NLMISC::CRGBA getValue(const std::string &varName, NLMISC::CRGBA &defaultValue);
 
-	void setCallback(const std::string &varName, SBCLIENT_CALLBACK_CONFIG cb, void *context, void *tag);
-	void setCallbackAndCall(const std::string &varName, SBCLIENT_CALLBACK_CONFIG cb, void *context, void *tag);
+	void setCallback(const std::string &varName, TConfigCallback cb, void *context, void *tag);
+	void setCallbackAndCall(const std::string &varName, TConfigCallback cb, void *context, void *tag);
 	void dropCallback(const std::string &varName);
 }; /* class CConfigProxy */
 

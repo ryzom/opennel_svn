@@ -41,6 +41,14 @@
 	static void __name(void *context, const std::string &error, void *tag); \
 	inline void __name(const std::string &error, void *tag);
 
+#define SBCLIENT_CALLBACK_STRING_DECL(__name) \
+	static void __name(void *context, const std::string &str, void *tag); \
+	inline void __name(const std::string &str, void *tag);
+
+#define SBCLIENT_CALLBACK_UCSTRING_DECL(__name) \
+	static void __name(void *context, const ucstring &uc, void *tag); \
+	inline void __name(const ucstring &uc, void *tag);
+
 #define SBCLIENT_CALLBACK_CONFIG_DECL(__name) \
 	static void __name(void *context, const std::string &varName, NLMISC::CConfigFile::CVar &var, void *tag); \
 	inline void __name(const std::string &varName, NLMISC::CConfigFile::CVar &var, void *tag);
@@ -48,6 +56,10 @@
 #define SBCLIENT_CALLBACK_COMMAND_DECL(__name) \
 	static bool __name(void *context, NLMISC::ICommand &command, const std::string &rawCommandString, const std::vector<std::string> &args, NLMISC::CLog &log, bool quiet, bool human, void *tag); \
 	inline bool __name(NLMISC::ICommand &command, const std::string &rawCommandString, const std::vector<std::string> &args, NLMISC::CLog &log, bool quiet, bool human, void *tag);
+
+#define SBCLIENT_CALLBACK_EVENT_DECL(__name) \
+	static bool __name(void *context, const NLMISC::CEvent &ev, void *tag); \
+	inline bool __name(const NLMISC::CEvent &ev, void *tag);
 
 #endif /* #ifndef SBCLIENT_MEMBER_CALLBACK_DECL_H */
 

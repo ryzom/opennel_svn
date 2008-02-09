@@ -1,9 +1,9 @@
 /**
- * \file command_wrapper.h
- * \brief CCommandWrapper
- * \date 2008-02-06 16:46GMT
+ * \file key_binder.h
+ * \brief CKeyBinder
+ * \date 2008-02-09 21:27GMT
  * \author Jan Boon (Kaetemi)
- * CCommandWrapper
+ * CKeyBinder
  * 
  * $Id$
  */
@@ -28,43 +28,52 @@
  * 02110-1301 USA.
  */
 
-#ifndef SBCLIENT_COMMAND_WRAPPER_H
-#define SBCLIENT_COMMAND_WRAPPER_H
+#ifndef SBCLIENT_KEY_BINDER_H
+#define SBCLIENT_KEY_BINDER_H
 #include <nel/misc/types_nl.h>
 
 // Project includes
-#include "member_callback_type.h"
 
 // NeL includes
-#include <nel/misc/command.h>
 
 // STL includes
+
+namespace NL3D {
+	class UDriver;
+}
 
 namespace SBCLIENT {
 
 /**
- * \brief CCommandWrapper
- * \date 2008-02-06 16:46GMT
+ * \brief CKeyBinder
+ * \date 2008-02-09 21:27GMT
  * \author Jan Boon (Kaetemi)
- * CCommandWrapper
+ * CKeyBinder
  */
-struct CCommandWrapper : public NLMISC::ICommand
+class CKeyBinder
 {
-	CCommandWrapper(const char *categoryName, 
-		const char *commandName, const char *commandHelp, 
-		const char *commandArgs, TCommandCallback callback, 
-		void *context, void *tag);
-	virtual ~CCommandWrapper();
+protected:
+	// pointers
+	// ...
 	
-	virtual bool execute(const std::string &rawCommandString, const std::vector<std::string> &args, NLMISC::CLog &log, bool quiet, bool human);
-	
-	TCommandCallback Callback;
-	void *Context;
-	void *Tag;
-}; /* struct CCommandWrapper */
+	// instances
+	// ...
+public:
+	CKeyBinder();
+	virtual ~CKeyBinder();
+
+	void blah();
+
+	// add iskeydown handler (bool *) per frame X (b shift, b ctrl)
+	// -- maybe also handle mouse (buttons) in this class?
+	// add event key up down press handler (TEventCallback) X (b shift, b ctrl)
+	// bind key to handler X
+	// update with driver, check hasControl on input listener
+	// add to an input listener
+}; /* class CKeyBinder */
 
 } /* namespace SBCLIENT */
 
-#endif /* #ifndef SBCLIENT_COMMAND_WRAPPER_H */
+#endif /* #ifndef SBCLIENT_KEY_BINDER_H */
 
 /* end of file */

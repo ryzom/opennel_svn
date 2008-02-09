@@ -53,9 +53,9 @@ class CConfigManager
 	struct CConfigCallback
 	{
 		CConfigCallback() { }
-		CConfigCallback(SBCLIENT_CALLBACK_CONFIG cb, void *context, const std::string &name, void *tag)
+		CConfigCallback(TConfigCallback cb, void *context, const std::string &name, void *tag)
 			: Callback(cb), Context(context), Name(name), Tag(tag) { }
-		SBCLIENT_CALLBACK_CONFIG Callback;
+		TConfigCallback Callback;
 		void *Context;
 		std::string Name;
 		void *Tag;
@@ -79,7 +79,7 @@ public:
 	void dropConfigFile(NLMISC::CConfigFile *configFile);
 	NLMISC::CConfigFile *getConfigSub(const std::string &id);
 
-	void setCallback(NLMISC::CConfigFile *configFile, SBCLIENT_CALLBACK_CONFIG cb, const std::string &var, void *context, const std::string &name, void *tag);
+	void setCallback(NLMISC::CConfigFile *configFile, TConfigCallback cb, const std::string &var, void *context, const std::string &name, void *tag);
 	void dropCallback(NLMISC::CConfigFile *configFile, const std::string &varName);
 
 private:

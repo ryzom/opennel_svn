@@ -84,7 +84,7 @@ protected:
 	_CLSClientAuthenticateThread *_Runnable;
 	NLMISC::IThread *_Thread;
 	NLNET::CCallbackClient *_LSCallbackClient;
-	SBCLIENT_CALLBACK _Callback;
+	TCallback _Callback;
 	void *_Context;
 	void *_Tag;
 	
@@ -115,10 +115,10 @@ public:
 	* If the authentication is ok, the function return an empty 
 	* string else it returns the reason of the failure.
 	*/
-	void authenticateUser(SBCLIENT_CALLBACK cb, void *context, void *tag, const std::string &ls, const ucstring &login, const std::string &cpassword, const std::string &application);
+	void authenticateUser(TCallback cb, void *context, void *tag, const std::string &ls, const ucstring &login, const std::string &cpassword, const std::string &application);
 
 	/// Select a shard. If ok, we have a login cookie and frontend address.
-	void selectShard(SBCLIENT_CALLBACK cb, void *context, void *tag, sint32 shardId);
+	void selectShard(TCallback cb, void *context, void *tag, sint32 shardId);
 	
 	/// Get a shard by id, returns NULL if it doesn't exist.
 	CLSClient::CShard *getShard(uint32 shardId);

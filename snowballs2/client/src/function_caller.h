@@ -52,10 +52,10 @@ class CFunctionCaller
 	struct CFunctionInfo
 	{
 		CFunctionInfo() { }
-		CFunctionInfo(SBCLIENT_CALLBACK function, void *context, void *tag, uint id, sint priority)
+		CFunctionInfo(TCallback function, void *context, void *tag, uint id, sint priority)
 			: Function(function), Context(context), Tag(tag), Id(id), Priority(priority) { }
 		/** The function to be called */
-		SBCLIENT_CALLBACK Function;
+		TCallback Function;
 		/** Usually an instance of a class */
 		void *Context;
 		/** Anything that needs to tag along */
@@ -92,7 +92,7 @@ public:
 		Returns a unique id that should be used to remove the function.
 		Added functions are enabled by default.
 	*/
-	uint add(SBCLIENT_CALLBACK function, void *context, void *tag, sint priority);
+	uint add(TCallback function, void *context, void *tag, sint priority);
 	/** Removes the function with 'id' from list. */
 	void remove(uint id);
 	/** Calls all functions */
@@ -115,7 +115,7 @@ public:
 	// NOTE: The following should only be used during development.
 	// These functions will give warnings when they actually do something.
 	/** Removes 'function's from the list (only one if 'all' false). */
-	void removeF(SBCLIENT_CALLBACK function, bool all);
+	void removeF(TCallback function, bool all);
 	/** Removes functions with 'tag' from the list (only one if 'all' false). */
 	void removeT(void *tag, bool all);
 	/** Removes functions in 'context' from the list (only one if 'all' false). */

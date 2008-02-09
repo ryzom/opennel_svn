@@ -507,6 +507,14 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="ReleaseDebug|Win32"
 						ExcludedFromBuild="true"
 						>
@@ -520,6 +528,14 @@
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
 						ExcludedFromBuild="true"
 						>
 						<Tool
@@ -547,6 +563,14 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="ReleaseDebug|Win32"
 						ExcludedFromBuild="true"
 						>
@@ -560,6 +584,14 @@
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
 						ExcludedFromBuild="true"
 						>
 						<Tool
@@ -587,6 +619,14 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="ReleaseDebug|Win32"
 						ExcludedFromBuild="true"
 						>
@@ -607,6 +647,14 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="ReleaseDebug|Win32"
 						ExcludedFromBuild="true"
 						>
@@ -620,6 +668,14 @@
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
 						ExcludedFromBuild="true"
 						>
 						<Tool
@@ -650,6 +706,14 @@
 							/>
 						</FileConfiguration>
 						<FileConfiguration
+							Name="Release|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="ReleaseDebug|Win32"
 							ExcludedFromBuild="true"
 							>
@@ -663,6 +727,14 @@
 						>
 						<FileConfiguration
 							Name="DebugFast|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
 							ExcludedFromBuild="true"
 							>
 							<Tool
@@ -690,6 +762,14 @@
 							/>
 						</FileConfiguration>
 						<FileConfiguration
+							Name="Release|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="ReleaseDebug|Win32"
 							ExcludedFromBuild="true"
 							>
@@ -703,6 +783,14 @@
 						>
 						<FileConfiguration
 							Name="DebugFast|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
 							ExcludedFromBuild="true"
 							>
 							<Tool
@@ -730,6 +818,14 @@
 							/>
 						</FileConfiguration>
 						<FileConfiguration
+							Name="Release|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="ReleaseDebug|Win32"
 							ExcludedFromBuild="true"
 							>
@@ -743,6 +839,14 @@
 						>
 						<FileConfiguration
 							Name="DebugFast|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
 							ExcludedFromBuild="true"
 							>
 							<Tool
@@ -770,6 +874,14 @@
 							/>
 						</FileConfiguration>
 						<FileConfiguration
+							Name="Release|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="ReleaseDebug|Win32"
 							ExcludedFromBuild="true"
 							>
@@ -783,6 +895,14 @@
 						>
 						<FileConfiguration
 							Name="DebugFast|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
 							ExcludedFromBuild="true"
 							>
 							<Tool
@@ -810,6 +930,14 @@
 							/>
 						</FileConfiguration>
 						<FileConfiguration
+							Name="Release|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="ReleaseDebug|Win32"
 							ExcludedFromBuild="true"
 							>
@@ -823,6 +951,14 @@
 						>
 						<FileConfiguration
 							Name="DebugFast|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
 							ExcludedFromBuild="true"
 							>
 							<Tool
@@ -855,6 +991,14 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="ReleaseDebug|Win32"
 						ExcludedFromBuild="true"
 						>
@@ -875,6 +1019,14 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="ReleaseDebug|Win32"
 						ExcludedFromBuild="true"
 						>
@@ -888,6 +1040,14 @@
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
 						ExcludedFromBuild="true"
 						>
 						<Tool
@@ -923,6 +1083,14 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="ReleaseDebug|Win32"
 						ExcludedFromBuild="true"
 						>
@@ -936,6 +1104,14 @@
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
 						ExcludedFromBuild="true"
 						>
 						<Tool
@@ -963,6 +1139,14 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="ReleaseDebug|Win32"
 						ExcludedFromBuild="true"
 						>
@@ -983,6 +1167,14 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="ReleaseDebug|Win32"
 						ExcludedFromBuild="true"
 						>
@@ -994,10 +1186,26 @@
 				<File
 					RelativePath=".\src\mouse.cpp"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\mouse.h"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
 				</File>
 			</Filter>
 			<Filter
@@ -1008,6 +1216,14 @@
 					>
 					<FileConfiguration
 						Name="DebugFast|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
 						ExcludedFromBuild="true"
 						>
 						<Tool
@@ -1035,6 +1251,14 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="ReleaseDebug|Win32"
 						ExcludedFromBuild="true"
 						>
@@ -1049,14 +1273,6 @@
 				</File>
 				<File
 					RelativePath=".\src\loading_screen.h"
-					>
-				</File>
-				<File
-					RelativePath=".\src\ls_client.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\ls_client.h"
 					>
 				</File>
 			</Filter>
@@ -1128,6 +1344,30 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\input_listener.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\input_listener.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\key_binder.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\key_binder.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\ls_client.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\ls_client.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\string_identifier.cpp"
 					>
 				</File>
@@ -1143,6 +1383,10 @@
 			<Filter
 				Name="2_1_structures"
 				>
+				<File
+					RelativePath=".\src\client_context_utils.h"
+					>
+				</File>
 				<File
 					RelativePath=".\src\entity_old.cpp"
 					>

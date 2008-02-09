@@ -139,12 +139,12 @@ CRGBA CConfigProxy::getValue(const string &varName, CRGBA &defaultValue)
 	return defaultValue;
 }
 
-void CConfigProxy::setCallback(const std::string &varName, SBCLIENT_CALLBACK_CONFIG cb, void *context, void *tag)
+void CConfigProxy::setCallback(const std::string &varName, TConfigCallback cb, void *context, void *tag)
 {
 	CConfigManager::getInstance().setCallback(_ConfigFile, cb, _IdU + varName, context, varName, tag);
 }
 
-void CConfigProxy::setCallbackAndCall(const std::string &varName, SBCLIENT_CALLBACK_CONFIG cb, void *context, void *tag)
+void CConfigProxy::setCallbackAndCall(const std::string &varName, TConfigCallback cb, void *context, void *tag)
 {
 	std::string fullName = _IdU + varName;
 	CConfigManager::getInstance().setCallback(_ConfigFile, cb, fullName, context, varName, tag);
