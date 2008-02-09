@@ -56,8 +56,7 @@ _LoadingScreen(loadingScreen), _LoginData(loginData), _Loading(loading),
 _Landscape(landscape), _Entities(entities), _Time(time)
 {
 	_Loading->setBackground("OldLands");
-
-
+	
 	_Loading->setMessageState("RefreshLandscape");
 	_LoadingScreen->setRange(0.00f, 0.75f);
 	_LoadingScreen->progress(0.00f);
@@ -67,16 +66,15 @@ _Landscape(landscape), _Entities(entities), _Time(time)
 		_Config.getVar("StartPoint").asFloat(2));
 	_Landscape->RefreshZonesAround = &start;
 	_Landscape->refresh(*_LoadingScreen);
-
-	
+		
 	_Loading->setMessageState("CreateSelf");
 	_LoadingScreen->setRange(0.75f, 1.00f);
-	_Time->updateTime(NULL); // time update needed before doing the last small changes
+	//_Time->updateTime(NULL); // time update needed before doing the last small changes
 	_Entities->addEntity(++(_Entities->LastEID),
 		_LoginData->Username, CEntityOld::Self, start, start);
 	_Landscape->RefreshZonesAround = &_Entities->Self->Position;
 	_LoadingScreen->progress(1.00f);
-		
+	
 	for (uint i = 0; i < 8; ++i)
 	{
 		uint32 eid = ++(_Entities->LastEID);
@@ -84,8 +82,7 @@ _Landscape(landscape), _Entities(entities), _Time(time)
 			CEntityOld::Other, start, start);
 		_Entities->getEntity(eid).AutoMove = true;
 	}
-	
-	
+		
 	_LoadingScreen->progress(1.00f);
 }
 

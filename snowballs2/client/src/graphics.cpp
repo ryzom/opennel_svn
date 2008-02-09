@@ -59,8 +59,16 @@ CGraphics::CGraphics(NLMISC::IProgressCallback &progressCallback, const std::str
 
 	// create the driver
 	nlassert(!Driver);
-	Driver = UDriver::createDriver(0, _Config.getValue(
-		"Driver", string("OpenGL")) == string("Direct3D"), DriverExit);
+	string driver = _Config.getValue("Driver", string("OpenGL"));
+	if (driver == "Direct3D") _Driver = Direct3D;
+	else if (driver == "OpenGL") _Driver = OpenGL;
+	else
+	{
+		nlwarning("Invalid driver specified, defaulting to OpenGL");
+		_Config.getVar("Driver").forceAsString("OpenGL");
+		_Driver = OpenGL;
+	}
+	Driver = UDriver::createDriver(0, isDriver(Direct3D), DriverExit);
 	// initialize the window with config file values
 	Driver->setDisplay(UDriver::CMode(
 		_Config.getValue("ScreenWidth", 800), 
@@ -102,6 +110,16 @@ CGraphics::~CGraphics()
 	Driver->release();
 	delete Driver;
 	Driver = NULL;
+}
+
+bool CGraphics::isDriver(CGraphics::TDriver driver) const
+{
+	return _Driver == driver;
+}
+
+CGraphics::TDriver CGraphics::getDriver() const
+{
+	return _Driver;
 }
 
 SBCLIENT_CALLBACK_IMPL(CGraphics, updateDriver)

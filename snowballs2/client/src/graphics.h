@@ -58,12 +58,20 @@ namespace SBCLIENT {
  */
 class CGraphics
 {
+public:
+	// types
+	enum TDriver
+	{
+		OpenGL, 
+		Direct3D
+	};
 protected:
 	// instances
 	CConfigProxy _Config;
 
 	// pointers
 	CI18NHelper *_I18N; // not deleted here
+	TDriver _Driver;
 public:
 	// pointers
 	NL3D::UDriver *Driver; // deleted here
@@ -71,6 +79,9 @@ public:
 public:
 	CGraphics(NLMISC::IProgressCallback &progressCallback, const std::string &id, CI18NHelper *i18n);
 	virtual ~CGraphics();
+
+	inline bool isDriver(TDriver driver) const;
+	inline TDriver getDriver() const;
 
 	SBCLIENT_CALLBACK_DECL(updateDriver);
 

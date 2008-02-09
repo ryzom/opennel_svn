@@ -312,6 +312,8 @@ SwitchState:
 	}
 	else
 	{
+		nlassert(_Time); nlassert(_Graphics);
+		_Time->skipAnimationOnce();
 		do { if (!_Graphics->Driver->isActive()) 
 				{ _NextState = Exit; goto SkipLoop; }
 			// call all update functions

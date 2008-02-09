@@ -102,10 +102,25 @@ SBCLIENT_CALLBACK_IMPL(CTime, updateTime)
 	_LastCycleUpdate += LocalTimeDelta;
 
 
-	// component specific	
-	if (_AnimateServer) AnimationDelta = ServerTimeDelta;
-	else AnimationDelta = LocalTimeDelta;
-	AnimationTime += AnimationDelta;
+	// component specific
+	if (!_SkipAnimationOnce)
+	{
+		if (_AnimateServer) 
+		{
+			AnimationTimeDelta = (TAnimationTime)ServerTimeDelta;
+			GlobalAnimationTime += (TGlobalAnimationTime)ServerTimeDelta;
+			AnimationDelta = ServerTimeDelta; // old
+			AnimationTime += AnimationDelta; // old
+		}
+		else
+		{
+			AnimationTimeDelta = (TAnimationTime)LocalTimeDelta;
+			GlobalAnimationTime += (TGlobalAnimationTime)LocalTimeDelta;
+			AnimationDelta = LocalTimeDelta; // old
+			AnimationTime += AnimationDelta; // old
+		}
+	}
+	else _SkipAnimationOnce = false;
 
 	nlinfo("CTime::updateTime: AnimationTime = %lf", AnimationTime);
 }
@@ -125,6 +140,11 @@ void CTime::setGameCycle(TGameCycle gameCycle, TLocalTime secondsPerCycle, TGame
 void CTime::updateGameCycle(TGameCycle gameCycle)
 {
 	_NewGameCycle = gameCycle;
+}
+
+void CTime::skipAnimationOnce()
+{
+	_SkipAnimationOnce = true;
 }
 
 } /* namespace SBCLIENT */
