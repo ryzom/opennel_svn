@@ -35,6 +35,8 @@
 #include "member_callback_type.h"
 
 #include <set>
+#include <map>
+#include <vector>
 
 namespace SBCLIENT {
 
@@ -49,6 +51,7 @@ class CFunctionCaller
 	/** Structure containing information about a callable function */
 	struct CFunctionInfo
 	{
+		CFunctionInfo() { }
 		CFunctionInfo(SBCLIENT_CALLBACK function, void *context, void *tag, uint id, sint priority)
 			: Function(function), Context(context), Tag(tag), Id(id), Priority(priority) { }
 		/** The function to be called */
@@ -67,13 +70,18 @@ class CFunctionCaller
 		return (_Left.Priority > _Right.Priority); } // higher first
 	};
 	typedef std::multiset<CFunctionInfo, CFunctionInfoOrder> CFunctionInfos;
+	typedef std::map<uint, CFunctionInfo> CFunctionMap;
+	typedef std::vector<CFunctionInfos::iterator> CFunctionWaitList;
 protected:
 	// pointers
 	// ...
 	
 	// instances
 	CFunctionInfos _Functions;
+	CFunctionMap _Disabled;
+	CFunctionWaitList _Erase;
 	uint _LastId;
+	CFunctionInfos::iterator _Current;
 public:
 	CFunctionCaller();
 	virtual ~CFunctionCaller();
@@ -82,6 +90,7 @@ public:
 		Adds a function. Higher priority called first.
 		Can only be called 2^sizeof(uint) times.
 		Returns a unique id that should be used to remove the function.
+		Added functions are enabled by default.
 	*/
 	uint add(SBCLIENT_CALLBACK function, void *context, void *tag, sint priority);
 	/** Removes the function with 'id' from list. */
@@ -91,6 +100,17 @@ public:
 	// NOTE: Function that can filter the called functions between
 	// two given priorities might be useful at some point.
 	// void execute(sint fromPriority, sint toPriority);
+	/** Stops execution */
+	void abort();
+
+	/** Enable or disable a function, does nothing if no state change */
+	void enable(uint id, bool enable);
+	/** Enable a function, does nothing if already enabled */
+	void enable(uint id);
+	/** Switch a function between enabled and disabled */
+	bool flip(uint id);
+	/** Disable a function, does nothing if already disabled */
+	void disable(uint id);
 
 	// NOTE: The following should only be used during development.
 	// These functions will give warnings when they actually do something.

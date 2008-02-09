@@ -80,13 +80,12 @@ protected:
 	/** used camera */
 	NL3D::UCamera _Camera;
 	/** materials */
-	NL3D::UMaterial _Black;
-	NL3D::UMaterial _White;
+	NL3D::UMaterial _Pink;
+	NL3D::UMaterial _Original;
 	NL3D::UMaterial _Dazzle;
 	/** things for the d3d workaround */
+	NLMISC::CBitmap _BitmapPink;
 	NLMISC::CBitmap _BitmapOriginal;
-	NLMISC::CBitmap _BitmapBlack;
-	NLMISC::CBitmap _BitmapWhite;
 public:
 	CLensFlare(NL3D::UDriver *driver, const NL3D::UCamera &camera);
 	virtual ~CLensFlare();

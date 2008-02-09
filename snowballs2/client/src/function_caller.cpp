@@ -39,13 +39,22 @@ namespace SBCLIENT {
 
 CFunctionCaller::CFunctionCaller() : _LastId(0)
 {
-	
+	_Current = _Functions.end();
 }
 
 CFunctionCaller::~CFunctionCaller()
 {
-	for (CFunctionInfos::iterator it = _Functions.begin(); it != _Functions.end(); it++)
+	nlassert(_Current == _Functions.end());
+	if (_Erase.size() > 0)
+	{
+		for (CFunctionWaitList::iterator w_it = _Erase.begin(); w_it != _Erase.end(); ++w_it)
+			_Functions.erase(*w_it);
+		_Erase.clear();
+	}
+	for (CFunctionInfos::iterator it = _Functions.begin(); it != _Functions.end(); ++it)
 		nlwarning("Function with id '%u' was not properly removed", it->Id);
+	for (CFunctionMap::iterator it = _Disabled.begin(); it != _Disabled.end(); ++it)
+		nlwarning("Disabled function with id '%u' was not properly removed", it->first);
 }
 
 uint CFunctionCaller::add(SBCLIENT_CALLBACK function, void *context, void *tag, sint priority)
@@ -61,22 +70,101 @@ uint CFunctionCaller::add(SBCLIENT_CALLBACK function, void *context, void *tag, 
 void CFunctionCaller::remove(uint id)
 {
 	// find the one with the id and remove
-	for (CFunctionInfos::iterator it = _Functions.begin(); it != _Functions.end(); it++)
+	for (CFunctionInfos::iterator it = _Functions.begin(); it != _Functions.end(); ++it)
 	{
 		if (it->Id == id)
 		{
-			_Functions.erase(it);
+			if (_Current == it) _Erase.push_back(it);
+			else _Functions.erase(it);
+			return;
+		}
+	}
+	CFunctionMap::iterator d_it = _Disabled.find(id);
+	if (d_it == _Disabled.end())
+		nlerror("Function with id '%u' not found", id);
+	_Disabled.erase(d_it);
+}
+
+void CFunctionCaller::execute()
+{
+	nlassert(_Current == _Functions.end());
+	if (_Erase.size() > 0)
+	{
+		for (CFunctionWaitList::iterator w_it = _Erase.begin(); w_it != _Erase.end(); ++w_it)
+			_Functions.erase(*w_it);
+		_Erase.clear();
+	}
+	for (_Current = _Functions.begin(); _Current != _Functions.end(); ++_Current)
+		_Current->Function(_Current->Context, _Current->Tag);
+}
+
+void CFunctionCaller::abort()
+{
+	_Current = _Functions.end();
+}
+
+void CFunctionCaller::enable(uint id, bool enable)
+{
+	if (enable) this->enable(id);
+	else disable(id);
+}
+
+void CFunctionCaller::enable(uint id)
+{
+	CFunctionMap::iterator d_it = _Disabled.find(id);
+	if (d_it == _Disabled.end())
+	{
+		for (CFunctionInfos::iterator it = _Functions.begin(); it != _Functions.end(); ++it)
+			if (it->Id == id) return;
+		nlerror("Function with id '%u' not found", id);
+	}
+	for (CFunctionWaitList::iterator w_it = _Erase.begin(); w_it != _Erase.end(); ++w_it)
+	{
+		if ((*w_it)->Id == id)
+		{
+			_Erase.erase(w_it);
+			_Disabled.erase(d_it);
+			return;
+		}
+	}
+	CFunctionInfo info = d_it->second;
+	_Disabled.erase(d_it);
+	_Functions.insert(info);
+}
+
+void CFunctionCaller::disable(uint id)
+{
+	if (_Disabled.find(id) != _Disabled.end()) return;
+	for (CFunctionInfos::iterator it = _Functions.begin(); it != _Functions.end(); ++it)
+	{
+		if (it->Id == id)
+		{
+			CFunctionInfo info = *it;
+			if (_Current == it) _Erase.push_back(it);
+			else _Functions.erase(it);
+			_Disabled[id] = info;
 			return;
 		}
 	}
 	nlerror("Function with id '%u' not found", id);
 }
 
-void CFunctionCaller::execute()
+bool CFunctionCaller::flip(uint id)
 {
-	for (CFunctionInfos::iterator it = _Functions.begin(); it != _Functions.end(); it++)
-		it->Function(it->Context, it->Tag);
+	if (_Disabled.find(id) == _Disabled.end()) 
+	{ 
+		disable(id);
+		return false;
+	}
+	else 
+	{
+		enable(id);
+		return true;
+	}
 }
+
+// todo: flip, disable, and the special remove functions!
+// also the destructor!
 
 void CFunctionCaller::removeF(SBCLIENT_CALLBACK function, bool all)
 {
@@ -87,11 +175,24 @@ void CFunctionCaller::removeF(SBCLIENT_CALLBACK function, bool all)
 		{
 			nlwarning("Removing function with id '%u'", it->Id);
 			CFunctionInfos::iterator erase = it;
-			it++;
-			_Functions.erase(erase);
+			++it;
+			if (_Current == it) _Erase.push_back(it);
+			else _Functions.erase(it);
 			if (!all) return;
 		}
-		else it++;
+		else ++it;
+	}
+	for (CFunctionMap::iterator it = _Disabled.begin(); it != _Disabled.end();)
+	{
+		if (it->second.Function == function)
+		{
+			nlwarning("Removing disabled function with id '%u'", it->first);
+			CFunctionMap::iterator erase = it;
+			++it;
+			_Disabled.erase(it);
+			if (!all) return;
+		}
+		else ++it;
 	}
 }
 
@@ -104,11 +205,24 @@ void CFunctionCaller::removeT(void *tag, bool all)
 		{
 			nlwarning("Removing function with id '%u'", it->Id);
 			CFunctionInfos::iterator erase = it;
-			it++;
-			_Functions.erase(erase);
+			++it;
+			if (_Current == it) _Erase.push_back(it);
+			else _Functions.erase(it);
 			if (!all) return;
 		}
-		else it++;
+		else ++it;
+	}
+	for (CFunctionMap::iterator it = _Disabled.begin(); it != _Disabled.end();)
+	{
+		if (it->second.Tag == tag)
+		{
+			nlwarning("Removing disabled function with id '%u'", it->first);
+			CFunctionMap::iterator erase = it;
+			++it;
+			_Disabled.erase(it);
+			if (!all) return;
+		}
+		else ++it;
 	}
 }
 
@@ -121,19 +235,38 @@ void CFunctionCaller::removeC(void *context, bool all)
 		{
 			nlwarning("Removing function with id '%u'", it->Id);
 			CFunctionInfos::iterator erase = it;
-			it++;
-			_Functions.erase(erase);
+			++it;
+			if (_Current == it) _Erase.push_back(it);
+			else _Functions.erase(it);
 			if (!all) return;
 		}
-		else it++;
+		else ++it;
+	}
+	for (CFunctionMap::iterator it = _Disabled.begin(); it != _Disabled.end();)
+	{
+		if (it->second.Context == context)
+		{
+			nlwarning("Removing disabled function with id '%u'", it->first);
+			CFunctionMap::iterator erase = it;
+			++it;
+			_Disabled.erase(it);
+			if (!all) return;
+		}
+		else ++it;
 	}
 }
 
 void CFunctionCaller::removeA()
 {
-	for (CFunctionInfos::iterator it = _Functions.begin(); it != _Functions.end(); it++)
+	for (CFunctionInfos::iterator it = _Functions.begin(); it != _Functions.end(); ++it)
+	{
 		nlwarning("Removing function with id '%u'", it->Id);
-	_Functions.clear();
+		if (_Current == it) _Erase.push_back(it);
+		else _Functions.erase(it);
+	}
+	for (CFunctionMap::iterator it = _Disabled.begin(); it != _Disabled.end(); ++it)
+		nlwarning("Removing disabled function with id '%u'", it->first);
+	_Disabled.clear();
 }
 
 bool CFunctionCaller::test()

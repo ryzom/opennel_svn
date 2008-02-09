@@ -39,9 +39,9 @@ using namespace std;
 using namespace NLMISC;
 using namespace NL3D;
 
-#include "_mouse_listener.h"
-#include <nel/misc/vectord.h> // temp!
-extern C3dMouseListener *MouseListener;
+//#include "_mouse_listener.h"
+//#include <nel/misc/vectord.h> // temp!
+//extern C3dMouseListener *MouseListener;
 
 namespace SBCLIENT {
 
@@ -52,27 +52,34 @@ CLensFlare::CLensFlare(NL3D::UDriver *driver, const NL3D::UCamera &camera)
 	nlassert(driver); _Driver = driver;
 	_SunDirection = CVector::Null;
 
-	_Black = _Driver->createMaterial();
-    _Black.initUnlit();
-    _Black.setBlend(true);
-	_Black.setColor(CRGBA(0, 0, 0, 255));
-
-	_White = _Driver->createMaterial();
-    _White.initUnlit();
-    _White.setBlend(true);
-	_White.setColor(CRGBA(255, 255, 255, 255));
-
+	// create an ugly color to test stuff
+	_Pink = _Driver->createMaterial();
+    _Pink.initUnlit();
+    _Pink.setBlend(true);
+	_Pink.setColor(CRGBA(255, 0, 255, 255));
+	
+	// material to place back original
+	_Original = _Driver->createMaterial();
+    _Original.initUnlit();
+    _Original.setBlend(true);
+	_Original.setColor(CRGBA(255, 255, 255, 255));
+	_Original.setZWrite(false);
+	_Original.setZFunc(UMaterial::always);
+	
+	// a white glow that fills the screen
 	_Dazzle = _Driver->createMaterial();
     _Dazzle.initUnlit();
     _Dazzle.setBlend(true);
 	_Dazzle.setColor(CRGBA(255, 0, 0, 255));
+	_Dazzle.setZWrite(false);
+	_Dazzle.setZFunc(UMaterial::always);
 }
 
 CLensFlare::~CLensFlare()
 {
-	_Driver->deleteMaterial(_Black);
 	_Driver->deleteMaterial(_Dazzle);
-	_Driver->deleteMaterial(_White);
+	_Driver->deleteMaterial(_Original);
+	_Driver->deleteMaterial(_Pink);
 
 	for(_CFlares::iterator it = _Flares.begin(); it != _Flares.end(); it++)
 		_Driver->deleteMaterial(it->Material);
@@ -152,7 +159,7 @@ void CLensFlare::show()
 		CRect pixels(rect.X, 
 			h - rect.bottom(), 
 			rect.Width, rect.Height);
-
+		
 		// quad for drawing rectangles to screen
 		float x0 = rect.X / (float)w;
 		float y0 = rect.Y / (float)h;
@@ -161,29 +168,30 @@ void CLensFlare::show()
 		CQuad quad = CQuad(
 			CVector(x0, y0, -1), CVector(x1, y0, -1),
 			CVector(x1, y1, -1), CVector(x0, y1, -1));
-
+		
 		// get the original view, todo: copy to texture to place back		
 		_Driver->getBufferPart(_BitmapOriginal, pixels);		 
 		CObjectVector<uint8> &pixelsOriginal = _BitmapOriginal.getPixels();
-
-		// draw a black and a white square behind everything else
-		_Driver->drawQuad(quad, _Black);
-		_Driver->getBufferPart(_BitmapBlack, pixels);
-		CObjectVector<uint8> &pixelsBlack = _BitmapBlack.getPixels();
-		uint8 *bitsBlack = pixelsBlack.getPtr();
-
-		_Driver->drawQuad(quad, _White);
-		_Driver->getBufferPart(_BitmapWhite, pixels);
-		CObjectVector<uint8> &pixelsWhite = _BitmapWhite.getPixels();
-		uint8 *bitsWhite = pixelsWhite.getPtr();
-
-		// compare the black and white squares
-		nlassert(pixelsWhite.size() == pixelsBlack.size());
+		
+		// draw a pink square behind everything else
+		_Driver->drawQuad(quad, _Pink);
+		_Driver->getBufferPart(_BitmapPink, pixels);
+		_BitmapPink::convertToType(CBitmap::RGBA);
+		CObjectVector<uint8> &pixelsPink = _BitmapPink.getPixels();
+		uint8 *bitsPink = pixelsPink.getPtr();
+		
+		// compare with pink CRGBA(255, 0, 255, 255))
 		uint32 difference = 0;
-		uint pixelcount = (uint)pixelsWhite.size();
-		for (uint i = 0; i < pixelcount; ++i)
-			difference += (uint32)(bitsWhite[i] - bitsBlack[i]); // black is less than white
-		view = (float)((double)difference / (double)pixelcount / 255.0);
+		uint32 pixel_color_count = (uint)pixelsPink.size();
+		for (uint i = 0; i < pixel_color_count; i += 4)
+		{
+			if (bitsPink[i] != 255 || bitsPink[i + 1] != 0
+				|| bitsPink[i + 2] != 255 || bitsPink[i + 3] != 255)
+			{
+				++difference;
+			}
+		}
+		view = (float)((double)difference / (double)(pixel_color_count / 4)));
 	}
 	else // normal way
 	{

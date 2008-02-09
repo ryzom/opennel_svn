@@ -104,6 +104,8 @@ private:
 	uint _LandscapeUpdateAnimationsId;
 	uint _LandscapeUpdateLandscapeId;
 	uint _LandscapeRenderSceneId;
+	uint _LandscapeInitBloomId;
+	uint _LandscapeEndBloomId;
 	SBCLIENT::CLandscapeIGOld *_LandscapeIG;
 	SBCLIENT::CCollisionsOld *_Collisions;
 	SBCLIENT::CAnimationOld *_Animation;
@@ -116,6 +118,7 @@ private:
 
 	// commands, must be deleted
 	CCommandWrapper *_SetStateCommand;
+	CCommandWrapper *_SwitchDebugCommand;
 	
 	// instances
 	// the function callers
@@ -163,6 +166,10 @@ private:
 
 	// commands
 	SBCLIENT_CALLBACK_COMMAND_DECL(commandSetState);
+	SBCLIENT_CALLBACK_COMMAND_DECL(commandSwitchDebug);
+
+	// config
+	SBCLIENT_CALLBACK_CONFIG_DECL(configDebugEnabled);
 
 	// update and render functions
 	SBCLIENT_CALLBACK_DECL(updateUtilities);

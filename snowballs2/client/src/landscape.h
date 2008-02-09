@@ -42,6 +42,12 @@
 
 // STL includes
 
+//#define SBCLIENT_BLOOM_TEST
+
+#ifdef SBCLIENT_BLOOM_TEST
+#include <nel/3d/bloom_effect.h>
+#endif
+
 namespace NLPACS {
 	class UMovePrimitive;
 }
@@ -75,13 +81,15 @@ public:
 
 	/// The landscape is updated around this vector
 	NLMISC::CVector *RefreshZonesAround; // p
-
 protected:
 	/// Must always point to the animation time (NOT THE DELTA)
 	NL3D::TGlobalAnimationTime *_GlobalAnimationTime; // p
 
 	// instances
-	CConfigProxy _Config;
+	CConfigProxy _Config;	
+#ifdef SBCLIENT_BLOOM_TEST
+	NL3D::CBloomEffect _BloomEffect;
+#endif
 private:
 	float _Vision;
 	float _VisionInitial;
@@ -97,6 +105,10 @@ public:
 
 	/// Render the scene and landscape
 	SBCLIENT_CALLBACK_DECL(renderScene);
+
+	/// Start and end of bloom effect
+	SBCLIENT_CALLBACK_DECL(initBloom);
+	SBCLIENT_CALLBACK_DECL(endBloom);
 
 	/// Force refresh for use within a loading/teleporting screen
 	void refresh(NLMISC::IProgressCallback &progressCallback);

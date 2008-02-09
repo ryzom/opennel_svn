@@ -61,20 +61,18 @@
 #define SBCLIENT_UPDATE_OUTGOING 1050000
 // 12. [-1000000 - +0999999] Update Debug (stuff for dev)
 #define SBCLIENT_UPDATE_DEBUG 0
-//
+#define SBCLIENT_INIT_BLOOM 9000000
 // 01. [+8000000 - +8099999] Render Driver (background black, done here)
-#define SBCLIENT_RENDER_DRIVER 8050000
+// #define SBCLIENT_RENDER_DRIVER 8050000
 // 02. [+7000000 - +7099999] Render Sky (sky scene)
 #define SBCLIENT_RENDER_SKY 7050000
-// 03. [+6000000 - +6099999] Render Landscape (landscape zones)
-#define SBCLIENT_RENDER_LANDSCAPE 6050000
 // 04. [+5000000 - +5099999] Render Scene (entity scene)
 #define SBCLIENT_RENDER_SCENE 5050000
+#define SBCLIENT_END_BLOOM 4500000
 // 05. [+4000000 - +4099999] Render Effects (flare)
 #define SBCLIENT_RENDER_EFFECTS 4050000
 // 06. [+3000000 - +3099999] Render Interface 3D (player names)
 #define SBCLIENT_RENDER_INTERFACE_3D 3050000
-//                           - Might need switch with Effects due to Z
 // 07. [+2000000 - +2099999] Render Interface 2D (chatboxes etc, optionally does have 3d)
 #define SBCLIENT_RENDER_INTERFACE_2D 2050000
 // 08. [-1000000 - +0999999] Render Debug (stuff for dev)
@@ -188,8 +186,11 @@ _Loading(NULL),
 _Graphics(NULL), _GraphicsUpdateDriverId(0), 
 _Sound(NULL), _SoundUpdateSoundId(0), 
 _Time(NULL), _TimeUpdateTimeId(0), 
-_Login(NULL), _LoginUpdateInterfaceId(0), _LoginRenderInterfaceId(0), _LoginUpdateNetworkId(0), 
-_Landscape(NULL), _LandscapeUpdateAnimationsId(0), _LandscapeUpdateLandscapeId(0), _LandscapeRenderSceneId(0), 
+_Login(NULL), _LoginUpdateInterfaceId(0), _LoginRenderInterfaceId(0), 
+	_LoginUpdateNetworkId(0), 
+_Landscape(NULL), _LandscapeUpdateAnimationsId(0), 
+	_LandscapeUpdateLandscapeId(0), _LandscapeRenderSceneId(0), 
+	_LandscapeInitBloomId(0), _LandscapeEndBloomId(0), 
 _LandscapeIG(NULL), 
 _Collisions(NULL), 
 _Animation(NULL), _AnimationUpdateAnimationsId(0), 
@@ -198,7 +199,7 @@ _Offline(NULL),
 _Snowballs3(NULL), 
 _Snowballs5(NULL), 
 // commands
-_SetStateCommand(NULL), 
+_SetStateCommand(NULL), _SwitchDebugCommand(NULL), 
 // states
 _LoadedUtils(false), _LoadedBase(false), _LoadedLogin(false), 
 _LoadedIngame(false), _LoadedConnection(false), 
@@ -217,7 +218,8 @@ _EnabledIngame(false), _EnabledConnection(false) // do not change these
 
 CSnowballsClient::~CSnowballsClient()
 {
-	// just to be sure ;)
+	_UpdateFunctions.abort();
+	_RenderFunctions.abort();
 	disableAll();
 	unloadAll();
 }
@@ -367,8 +369,8 @@ void CSnowballsClient::loadUtils()
 		nlassert(!_SetStateCommand);
 		_SetStateCommand = new CCommandWrapper(SBCLIENT_NAME,
 			_Config->getValue("SetStateCommand", string("set_state")).c_str(),
-			_I18NHelper->get("i18nSetStateCommandHelp").toString().c_str(),
-			_I18NHelper->get("i18nSetStateCommandVariables").toString().c_str(),
+			CI18N::get("SetStateCommandHelp").toUtf8().c_str(),
+			CI18N::get("SetStateCommandVariables").toUtf8().c_str(),
 			CSnowballsClient::commandSetState, this, NULL);
 		nlassert(_SetStateCommand);
 	}
@@ -405,6 +407,7 @@ void CSnowballsClient::enableUtils()
 	{
 		_EnabledUtils = true;
 		
+		// function callbacks
 		nlassert(!_UpdateDebugId);
 		_UpdateDebugId = _UpdateFunctions.add(
 			updateDebug, this, NULL, 0);
@@ -416,6 +419,19 @@ void CSnowballsClient::enableUtils()
 		nlassert(!_UpdateUtilitiesId);
 		_UpdateUtilitiesId = _UpdateFunctions.add(
 			updateUtilities, this, NULL, 9050000);
+
+		// function switch commands
+		nlassert(!_SwitchDebugCommand);
+		_SwitchDebugCommand = new CCommandWrapper(SBCLIENT_NAME,
+			_Config->getValue("SwitchDebugCommand", string("switch_debug")).c_str(),
+			CI18N::get("SwitchDebugCommandHelp").toUtf8().c_str(),
+			CI18N::get("SwitchDebugCommandVariables").toUtf8().c_str(),
+			CSnowballsClient::commandSwitchDebug, this, NULL);
+		nlassert(_SwitchDebugCommand);
+
+		// function switch configs
+		_Config->setCallbackAndCall("DebugEnabled",
+			CSnowballsClient::configDebugEnabled, this, NULL);
 	}
 }
 
@@ -423,6 +439,13 @@ void CSnowballsClient::disableUtils()
 {
 	if (_EnabledUtils)
 	{
+		// function switch configs
+		_Config->dropCallback("DebugEnabled");
+
+		// function switch commands
+		nlassert(_SwitchDebugCommand); delete _SwitchDebugCommand; _SwitchDebugCommand = NULL;
+		
+		// function callbacks
 		nlassert(_UpdateUtilitiesId);
 		_UpdateFunctions.remove(_UpdateUtilitiesId);
 		_UpdateUtilitiesId = 0;
@@ -722,21 +745,22 @@ void CSnowballsClient::unloadIngame()
 		_LoadingScreen.setRange(0.f, 1.f);
 		float max_progress = 5.f;
 
+		_Loading->setMessageState("ReleaseEntities");
 		_LoadingScreen.progress(0.f / max_progress);
-		_Loading->setMessageState("ReleaseCollisions");
 		nlassert(_Entities); delete _Entities; _Entities = NULL;
-		_LoadingScreen.progress(1.f / max_progress);
 		_Loading->setMessageState("ReleaseAnimation");
+		_LoadingScreen.progress(1.f / max_progress);
 		nlassert(_Animation); delete _Animation; _Animation = NULL;
-		_LoadingScreen.progress(2.f / max_progress);
 		_Loading->setMessageState("ReleaseCollisions");
+		_LoadingScreen.progress(2.f / max_progress);
 		nlassert(_Collisions); delete _Collisions; _Collisions = NULL;
-		_LoadingScreen.progress(3.f / max_progress);
 		_Loading->setMessageState("ReleaseLandscapeIG");
+		_LoadingScreen.progress(3.f / max_progress);
 		nlassert(_LandscapeIG); delete _LandscapeIG; _LandscapeIG = NULL;
-		_LoadingScreen.progress(4.f / max_progress);
 		_Loading->setMessageState("ReleaseLandscape");
+		_LoadingScreen.progress(4.f / max_progress);
 		nlassert(_Landscape); delete _Landscape; _Landscape = NULL;
+		_Loading->setMessageState("SeeYouLater");
 		_LoadingScreen.progress(5.f / max_progress);
 
 		//if (CaptureState)
@@ -782,6 +806,14 @@ void CSnowballsClient::enableIngame()
 		_LandscapeRenderSceneId = _RenderFunctions.add(
 			CLandscape::renderScene, _Landscape, NULL, 0 + SBCLIENT_RENDER_SCENE);
 	
+		nlassert(!_LandscapeInitBloomId);
+		_LandscapeInitBloomId = _RenderFunctions.add(
+			CLandscape::initBloom, _Landscape, NULL, SBCLIENT_INIT_BLOOM);
+
+		nlassert(!_LandscapeEndBloomId);
+		_LandscapeEndBloomId = _RenderFunctions.add(
+			CLandscape::initBloom, _Landscape, NULL, SBCLIENT_END_BLOOM);
+
 		nlassert(!_AnimationUpdateAnimationsId);
 		_AnimationUpdateAnimationsId = _UpdateFunctions.add(
 			CAnimationOld::updateAnimations, _Animation, NULL, 100 + SBCLIENT_UPDATE_ANIMATIONS);
@@ -807,6 +839,14 @@ void CSnowballsClient::disableIngame()
 		nlassert(_AnimationUpdateAnimationsId);
 		_UpdateFunctions.remove(_AnimationUpdateAnimationsId);
 		_AnimationUpdateAnimationsId = 0;
+
+		nlassert(_LandscapeEndBloomId);
+		_RenderFunctions.remove(_LandscapeEndBloomId);
+		_LandscapeEndBloomId = 0;
+
+		nlassert(_LandscapeInitBloomId);
+		_RenderFunctions.remove(_LandscapeInitBloomId);
+		_LandscapeInitBloomId = 0;
 
 		nlassert(_LandscapeRenderSceneId);
 		_RenderFunctions.remove(_LandscapeRenderSceneId);
@@ -967,6 +1007,32 @@ SBCLIENT_CALLBACK_COMMAND_IMPL(CSnowballsClient, commandSetState)
 	return true;
 }
 
+SBCLIENT_CALLBACK_COMMAND_IMPL(CSnowballsClient, commandSwitchDebug)
+{
+	// no arguments required, fail
+	if (args.size() != 0) return false;
+	//// functions not registered, fail
+	//if (_UpdateDebugId == 0) return false;
+	//if (_RenderDebugId == 0) return false;
+
+	// flip the functions, make sure they're both in the same state
+	bool enable = _UpdateFunctions.flip(_UpdateDebugId);
+	_RenderFunctions.enable(_RenderDebugId, enable);
+
+	// change the config
+	_Config->getVar("DebugEnabled").forceAsInt(enable ? 1 : 0);
+
+	// everything ok
+	return true;
+}
+
+SBCLIENT_CALLBACK_CONFIG_IMPL(CSnowballsClient, configDebugEnabled)
+{
+	bool enable = var.asBool();
+	_UpdateFunctions.enable(_UpdateDebugId, enable);
+	_RenderFunctions.enable(_RenderDebugId, enable);
+}
+
 SBCLIENT_CALLBACK_IMPL(CSnowballsClient, updateUtilities)
 {
 	// check all config files for updates
@@ -990,6 +1056,9 @@ SBCLIENT_CALLBACK_IMPL(CSnowballsClient, updateDebug)
 	{
 		if (_Graphics->Driver->AsyncListener.isKeyPushed(KeyESCAPE))
 			_NextState = Login;
+		if (_Graphics->Driver->AsyncListener.isKeyPushed(KeyD))
+			ICommand::execute("switch_debug", 
+			*INelContext::getInstance().getInfoLog());
 	}
 	if (_Landscape && _Entities && _Entities->Self)
 	{

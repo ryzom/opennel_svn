@@ -71,10 +71,11 @@ CGraphics::CGraphics(NLMISC::IProgressCallback &progressCallback, const std::str
 	_Config.setCallback("ScreenHeight", configDisplayMode, this, NULL);
 	_Config.setCallback("ScreenDepth", configDisplayMode, this, NULL);
 	_Config.setCallback("ScreenFull", configDisplayMode, this, NULL);
-	// set the cache size for the font manager(in bytes)
-	Driver->setFontManagerMaxMemory(2097152);
 	// register config callbacks
 	_Config.setCallbackAndCall("WindowTitle", configWindowTitle, this, NULL);
+	// set the cache size for the font manager(in bytes)
+	Driver->setFontManagerMaxMemory(2097152);
+	//_BloomEffect.init(
 	progressCallback.progress(0.5f);
 
 	// create the text context

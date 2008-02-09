@@ -49,30 +49,39 @@ using namespace std;
 using namespace NLMISC;
 using namespace NL3D;
 
+////namespace NL3D {
+////	wth ...
+////	...... SquareBloom;
+////	...... DensityBloom;
+////}
+
 namespace SBCLIENT {
 
-CLandscape::CLandscape(IProgressCallback &progressCallback, 
+CLandscape::CLandscape(IProgressCallback &progress, 
 const std::string &id, UDriver *driver,
 TGlobalAnimationTime *globalAnimationTime) 
 : _Config(id), _Driver(driver), _GlobalAnimationTime(globalAnimationTime)
 {
+	progress.progress(0.00f);
 	nlassert(_Driver);
 	nlassert(_GlobalAnimationTime);
-	progressCallback.progress(0.0f);
 
 	// create a scene
 	Scene = _Driver->createScene(false);
 	nlassert(Scene);
+	progress.progress(0.20f);
 
 	// create the landscape
 	Landscape = Scene->createLandscape();
 	nlassert(Landscape);
+	progress.progress(0.40f);
 
 	// load the bank files
 	Landscape->loadBankFiles(
 		_Config.getVar("BankName").asString(), 
 		_Config.getVar("FarBankName").asString());
 	Landscape->invalidateAllTiles();
+	progress.progress(0.60f);
 
 	//Landscape->postfixTileFilename("_sp");
 	//Landscape->postfixTileVegetableDesc("_sp");
@@ -85,12 +94,21 @@ TGlobalAnimationTime *globalAnimationTime)
 		_Config.getValue("DiffuseColor", CRGBA(255, 255, 255, 255)),
 		_Config.getValue("AmbiantColor", CRGBA(255, 255, 255, 255)),
 		_Config.getValue("MultiplyFactor", 1.0f));
+	progress.progress(0.80f);
+
+#ifdef SBCLIENT_BLOOM_TEST
+	_BloomEffect.init(true, _Driver, Scene);
+	////NL3D::SquareBloom = false;
+	////NL3D::DensityBloom = 255;
+	progress.progress(0.90f);
+#endif
 
 	_Config.setCallbackAndCall("ReceiveShadowMap", configReceiveShadowMap, this, NULL);
 	_Config.setCallbackAndCall("TileNear", configTileNear, this, NULL);
 	_Config.setCallbackAndCall("Threshold", configThreshold, this, NULL);
 	_Config.setCallbackAndCall("Vision", configVision, this, NULL);
 	_Config.setCallbackAndCall("VisionInitial", configVisionInitial, this, NULL);
+	progress.progress(1.00f);
 }
 
 CLandscape::~CLandscape()
@@ -122,7 +140,29 @@ SBCLIENT_CALLBACK_IMPL(CLandscape, updateLandscape)
 
 SBCLIENT_CALLBACK_IMPL(CLandscape, renderScene)
 {
+#ifdef SBCLIENT_BLOOM_TEST
+	_Driver->clearBuffers(CRGBA(255, 255, 255, 255));
+#endif
 	Scene->render();
+}
+
+SBCLIENT_CALLBACK_IMPL(CLandscape, initBloom)
+{
+#ifdef SBCLIENT_BLOOM_TEST
+	_BloomEffect.initBloom();
+#ifdef SBCLIENT_BLOOM_TEST
+	_Driver->clearBuffers(CRGBA(255, 255, 255, 255));
+#endif
+#endif
+}
+
+SBCLIENT_CALLBACK_IMPL(CLandscape, endBloom)
+{
+#ifdef SBCLIENT_BLOOM_TEST
+	_BloomEffect.endBloom();
+	_BloomEffect.endInterfacesDisplayBloom();
+	_Driver->clearZBuffer();
+#endif
 }
 
 void CLandscape::refresh(IProgressCallback &progressCallback)

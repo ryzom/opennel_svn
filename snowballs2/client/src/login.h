@@ -108,7 +108,8 @@ protected:
 	bool _TypingPassword;
 	bool _Enabled;
 	uint8 _Selection;
-	ucstring _PasswordText;
+	ucchar _PasswordText[NLMISC::MaxCStringSize];
+	uint _PasswordTextPos;
 	double _TimeOut;
 	CLSClient _LSClient;
 public:

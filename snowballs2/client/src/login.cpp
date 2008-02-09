@@ -58,13 +58,14 @@ namespace SBCLIENT {
 CLogin::CLogin(const std::string &id, SBCLIENT::CTime *time, NL3D::UDriver *driver, NL3D::UTextContext *textContext, CI18NHelper *i18n, CLoginData *loginData)
 : _Time(time), _Driver(driver), _TextContext(textContext), _I18N(i18n), 
 _LoginData(loginData), _Config(id), _LogoAngle(0.0f), _TimeOut(5.0), 
-_TypingPassword(false), _Enabled(false), _Selection(0)
+_TypingPassword(false), _Enabled(false), _Selection(0), _PasswordTextPos(0)
 {
 	nlassert(_Time);
 	nlassert(_Driver);
 	nlassert(_TextContext);
 	nlassert(_I18N);
 	nlassert(_LoginData);
+	memset(_PasswordText, 0x00, sizeof(_PasswordText));
 
 	// todo: get stuff from config
 	_BackgroundTexture = _Driver->createTextureFile("snowballs_login.tga");
@@ -121,14 +122,24 @@ _TypingPassword(false), _Enabled(false), _Selection(0)
 	_Logo.setPos(0.0f, 3.0f, 0.0f);
 	_Logo.setTransformMode(UTransformable::RotEuler);
 
+	// get the userinfo from the configuration
 	_LoginData->Username = _Config.getValue("Username", ucstring());
-	_PasswordText = _Config.getValue("Password", ucstring());
+	// putting your pwd in config isn't really that safe, y'know
+	ucstring ucp = _Config.getValue("Password", ucstring());
+	ucstring::iterator it(ucp.begin()), end(ucp.end());
+	while (it != end && _PasswordTextPos < sizeof(_PasswordText) / sizeof(_PasswordText[0]) - 1)
+	{
+		_PasswordText[_PasswordTextPos] = *it;
+		++it; ++_PasswordTextPos;
+	}
 
+	// see if the user wants to skip the login screen
 	if (_Config.getValue("Skip", false)) connect();
 }
 
 CLogin::~CLogin()
 {
+	memset(_PasswordText, 0x00, sizeof(_PasswordText));
 	_LogoScene->deleteInstance(_Logo);
 	_Driver->deleteScene(_LogoScene);
 	_SnowScene->deleteInstance(_Snow);
@@ -205,9 +216,10 @@ void CLogin::operator () (const CEvent &event)
 		case KeyBACK:
 			if(_TypingPassword)
 			{
-				if (_PasswordText.size() != 0 )
+				if (_PasswordTextPos != 0 )
 				{
-					_PasswordText.erase(_PasswordText.end() - 1);
+					--_PasswordTextPos;
+					_PasswordText[_PasswordTextPos] = 0x0000;
 				}
 			}
 			else
@@ -227,9 +239,10 @@ void CLogin::operator () (const CEvent &event)
 			_TypingPassword = !_TypingPassword;
 			break;
 		default:			
-			if(_TypingPassword)
+			if(_TypingPassword && _PasswordTextPos < sizeof(_PasswordText) / sizeof(_PasswordText[0]) - 1)
 			{
-				_PasswordText += (char)ec.Char;
+				_PasswordText[_PasswordTextPos] = ec.Char;
+				++_PasswordTextPos;
 			}
 			else
 			{
@@ -303,7 +316,8 @@ void CLogin::connect()
 
 	_LSClient.authenticateUser(cbAuthenticateUser, this, NULL, 
 		_Config.getValue("LSHost", string("localhost")), 
-		_LoginData->Username, CLSClient::encryptPassword(_PasswordText), 
+		_LoginData->Username, 
+		CLSClient::encryptPassword(_PasswordText, _PasswordTextPos), 
 		_Config.getValue("ClientApplication", string("snowballs")));
 }
 
@@ -366,7 +380,7 @@ SBCLIENT_CALLBACK_IMPL(CLogin, updateInterface)
 	// some silly code to add the | and do the stars
 	_UsernameText =_LoginData->Username;
 	_PasswordStarsText = "";
-	for (uint i = 0; i < _PasswordText.size(); ++i)
+	for (uint i = 0; i < _PasswordTextPos; ++i)
 		_PasswordStarsText += "*";
 	if (_LoginData->Message.empty()) {
 	if (_TypingPassword) _PasswordStarsText += "|";

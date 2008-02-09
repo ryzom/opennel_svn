@@ -250,9 +250,9 @@ CLSClient::CShard *CLSClient::getShard(uint32 shardId)
 	return NULL;
 }
 
-string CLSClient::encryptPassword(const ucstring &password)
+string CLSClient::encryptPassword(const ucchar *password, uint32 ucchars)
 {
-	CHashKeyMD5 hk = getMD5((uint8 *)password.c_str(), password.size());
+	CHashKeyMD5 hk = getMD5((uint8 *)password, ucchars * sizeof(ucchar));
 	string cpassword = hk.toString();
 	nlinfo("The encrypted password is %s", cpassword.c_str());
 	return cpassword;

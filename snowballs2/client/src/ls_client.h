@@ -124,7 +124,7 @@ public:
 	CLSClient::CShard *getShard(uint32 shardId);
 
 	/// Encrypt a pasword
-	static std::string encryptPassword(const ucstring &password);
+	static std::string encryptPassword(const ucchar *password, uint32 ucchars);
 
 private:
 	inline void callback();
