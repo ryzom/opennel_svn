@@ -36,6 +36,8 @@
 #include "config_proxy.h"
 
 // NeL includes
+#include <nel/misc/vector.h>
+#include <nel/3d/animation_time.h>
 
 // STL includes
 #include <vector>
@@ -49,6 +51,7 @@ namespace NLPACS {
 
 namespace NL3D {
 	class UVisualCollisionManager;
+	class UVisualCollisionEntity;
 	class UScene;
 	class ULandscape;
 }
@@ -58,6 +61,7 @@ namespace NLMISC {
 }
 
 namespace SBCLIENT {
+	class CTrajectoryOld;
 
 /**
  * \brief CCollisionsOld
@@ -81,14 +85,19 @@ public:
 protected:
 	// pointers
 	NL3D::UScene *_Scene;
+	NL3D::ULandscape *_Landscape;
 	/// The collision primitive for the instances in the landscape
 	std::vector<NLPACS::UMovePrimitive *> _InstancesMovePrimitives; // P
-
+	/// Used to trace the landscape
+	NL3D::UVisualCollisionEntity *_AimingEntity;
 	// instances
 	CConfigProxy _Config;
 public:
 	CCollisionsOld(NLMISC::IProgressCallback &progressCallback, const std::string &id, NL3D::UScene *scene, NL3D::ULandscape *landscape);
 	virtual ~CCollisionsOld();
+
+	NLMISC::CVector getTarget(const NLMISC::CVector &start, const NLMISC::CVector &step, uint numSteps);
+	NLMISC::CVector	getTarget(CTrajectoryOld &trajectory, NL3D::TAnimationTime dtSteps, uint numSteps);
 }; /* class CCollisionsOld */
 
 } /* namespace SBCLIENT */

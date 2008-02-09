@@ -58,6 +58,7 @@ namespace NLPACS {
 
 namespace SBCLIENT {
 	class CAnimationOld;
+	class CCollisionsOld;
 
 /**
  * \brief CEntitiesOld
@@ -93,10 +94,11 @@ protected:
 	NLPACS::UMoveContainer *_MoveContainer; // p
 	NLPACS::UGlobalRetriever *_GlobalRetriever; // p
 	CAnimationOld *_Animation; // c
+	CCollisionsOld *_Collisions; // c
 	NL3D::TGlobalAnimationTime *_GlobalAnimationTime; // p
 	NL3D::TGlobalAnimationTime *_GlobalAnimationTimeDelta; // p
 public:
-	CEntitiesOld(NLMISC::IProgressCallback &progressCallback, NL3D::UScene *scene, NL3D::UVisualCollisionManager *visualCollisionManager, NLPACS::UMoveContainer *moveContainer, NLPACS::UGlobalRetriever *globalRetriever, CAnimationOld *animation, NL3D::TGlobalAnimationTime *globalAnimationTime, NL3D::TGlobalAnimationTime *globalAnimationTimeDelta);
+	CEntitiesOld(NLMISC::IProgressCallback &progressCallback, NL3D::UScene *scene, NL3D::UVisualCollisionManager *visualCollisionManager, NLPACS::UMoveContainer *moveContainer, NLPACS::UGlobalRetriever *globalRetriever, CAnimationOld *animation, NL3D::TGlobalAnimationTime *globalAnimationTime, NL3D::TGlobalAnimationTime *globalAnimationTimeDelta, CCollisionsOld *collisions);
 	virtual ~CEntitiesOld();
 
 	CEntityOld &getEntity(uint32 eid);

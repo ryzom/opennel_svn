@@ -34,6 +34,7 @@
 // Project includes
 #include "member_callback_impl.h"
 #include "animation_old.h"
+#include "collisions_old.h"
 
 // NeL includes
 // #include <nel/misc/debug.h>
@@ -48,7 +49,9 @@
 
 // STL includes
 
-#define SBCLIENT_WARNING(__text) message(__FILE__ " : warning SBCLIENT: " __text)
+#define SBCLIENT_TOSTRING_2(x) #x
+#define SBCLIENT_TOSTRING(x) SBCLIENT_TOSTRING_2(x)
+#define SBCLIENT_WARNING(__text) message(__FILE__ "(" SBCLIENT_TOSTRING(__LINE__) ") : warning SBCLIENT: " __text)
 
 using namespace std;
 using namespace NLMISC;
@@ -64,13 +67,13 @@ CEntitiesOld::CEntitiesOld(NLMISC::IProgressCallback &progressCallback,
 UScene *scene, NL3D::UVisualCollisionManager *visualCollisionManager, 
 UMoveContainer *moveContainer, UGlobalRetriever *globalRetriever, 
 CAnimationOld *animation, TGlobalAnimationTime *globalAnimationTime,
-TGlobalAnimationTime *globalAnimationTimeDelta) : 
+TGlobalAnimationTime *globalAnimationTimeDelta, CCollisionsOld *collisions) : 
 _TestCLS(false), Self(NULL), _Scene(scene), 
 _VisualCollisionManager(visualCollisionManager), 
 _MoveContainer(moveContainer), _GlobalRetriever(globalRetriever), 
 _Animation(animation), LastEID(1000000), 
 _GlobalAnimationTime(globalAnimationTime), 
-_GlobalAnimationTimeDelta(globalAnimationTimeDelta)
+_GlobalAnimationTimeDelta(globalAnimationTimeDelta), _Collisions(collisions)
 {
 	progressCallback.progress(0.0f);
 	nlassert(!Self);
@@ -81,6 +84,7 @@ _GlobalAnimationTimeDelta(globalAnimationTimeDelta)
 	nlassert(_Animation);
 	nlassert(_GlobalAnimationTime);
 	nlassert(_GlobalAnimationTimeDelta);
+	nlassert(_Collisions);
 	_Animation->_Entities = this;
 	progressCallback.progress(1.0f);
 }
@@ -438,9 +442,8 @@ void CEntitiesOld::stateNormal(CEntityOld &entity)
 				entity.BotStateStart = gt;
 				CVector	AimingPosition = entity.Position + CVector(0.0f, 0.0f, 2.0f);
 				CVector	direction = CVector((float)(cos(entity.Angle)), (float)(sin(entity.Angle)), 0.3f).normed();
-				#pragma SBCLIENT_WARNING("SBCLIENT_LANDSCAPE")
-				//CVector AimedTarget = getTarget(AimingPosition, direction, 100);
-				//shotSnowball(++LastEID, entity.Id, AimingPosition, AimedTarget, SnowballSpeed, 3.0f);
+				CVector AimedTarget = _Collisions->getTarget(AimingPosition, direction, 100);
+				shotSnowball(++LastEID, entity.Id, AimingPosition, AimedTarget, SnowballSpeed, 3.0f);
 			}
 			break;
 		case 4:
@@ -689,13 +692,14 @@ SBCLIENT_CALLBACK_IMPL(CEntitiesOld, updateEntities)
 	#pragma SBCLIENT_WARNING("SBCLIENT_TIME")
 	TGlobalAnimationTime dt = *_GlobalAnimationTimeDelta;
 	TGlobalAnimationTime gt = *_GlobalAnimationTime;
-	CEntityMap::iterator eit;
+	CEntityMap::iterator eit, nexteit;
 
 	// move entities
-	for (eit = Entities.begin(); eit != Entities.end(); eit++)
+	for (eit = Entities.begin(); eit != Entities.end();)
 	{
+		// this was done because the entity can be deleted in stateDisappear
+		nexteit = eit; ++nexteit;
 		CEntityOld &entity = (*eit).second;
-
 		switch (entity.State)
 		{
 		case CEntityOld::Appear:
@@ -711,6 +715,7 @@ SBCLIENT_CALLBACK_IMPL(CEntitiesOld, updateEntities)
 			nlstop;
 			break;
 		}
+		eit = nexteit;
 	}
 
 	// WHAT ? WHAT ? WHAT ? :p

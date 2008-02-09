@@ -675,7 +675,8 @@ void CSnowballsClient::loadIngame()
 		_Entities = new CEntitiesOld(_LoadingScreen, 
 			_Landscape->Scene, _Collisions->VisualCollisionManager, 
 			_Collisions->MoveContainer, _Collisions->GlobalRetriever,
-			_Animation, &_Time->AnimationTime, &_Time->AnimationDelta); // yay
+			_Animation, &_Time->AnimationTime, &_Time->AnimationDelta,
+			_Collisions); // yay
 		nlassert(_Entities);
 
 //		// Init the entities prefs

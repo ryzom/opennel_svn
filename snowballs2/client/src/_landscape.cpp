@@ -75,7 +75,7 @@ using namespace NL3D;
 
 
 
-UVisualCollisionEntity	*AimingEntity = NULL;
+
 
 
 
@@ -172,76 +172,18 @@ void	initAiming()
 	// -- -- random note: is an extension of "camera that follows entity"
 
 	// Create an aiming entity
-	AimingEntity = VisualCollisionManager->createEntity();
-	AimingEntity->setCeilMode(true);
+
 }
 
 void	releaseAiming()
 {
 	// -- -- belongs in CAimingEntityCamera
 
-	VisualCollisionManager->deleteEntity(AimingEntity);
+	
 }
 
-// -- -- mix with following bit of code for higher accuracy
-//NLMISC::CVector CSceneryMouse::getLandscape()
-//{
-//	if (_LandscapeCached) return _LandscapeCache;
-//	CViewport v = _Driver->getViewport();
-//	CVector pos, dir; -- -- random note: this code gets the landscape position where the mouse is pointing at
-//	v.getRayWithPoint(_X * v.getWidth(), _Y * v.getHeight(), pos, dir, _Camera.getMatrix(), _Camera.getFrustum());
-//	dir.normalize();
-//	dir *= 50;
-// -- -- float rc = _Landscape->getRayCollision(pos, pos + dir);
-// -- -- _LandscapeCache = pos + (rc * dir);
-//	_LandscapeCached = true;
-//	return _LandscapeCache;
-//}
-// -- -- if higher than 50 or something, use code below
-CVector	getTarget(const CVector &start, const CVector &step, uint numSteps)
-{
-	CVector	testPos = start;
 
-	uint	i;
-	for (i=0; i<numSteps; ++i)
-	{
-		CVector	snapped = testPos, 
-				normal;
 
-		// here use normal to check if we have collision
-		if (AimingEntity->snapToGround(snapped, normal) && (testPos.z-snapped.z)*normal.z < 0.0f)
-		{
-			testPos -= step*0.5f;
-			break;
-		}
-		testPos += step;
-	}
-	return testPos;
-}
-
-CVector	getTarget(CTrajectory &trajectory, TTime dtSteps, uint numSteps)
-{
-	TTime	t = trajectory.getStartTime();
-	CVector	testPos;
-
-	uint	i;
-	for (i=0; i<numSteps; ++i)
-	{
-		testPos = trajectory.eval(t);
-		CVector	snapped = testPos, 
-				normal;
-
-		// here use normal to check if we have collision
-		if (AimingEntity->snapToGround(snapped, normal) && (testPos.z-snapped.z)*normal.z < 0.0f)
-		{
-			t -= (dtSteps/2);
-			testPos = trajectory.eval(t);
-			break;
-		}
-		t += dtSteps;
-	}
-	return testPos;
-}
 
 /*
 CVector	getTarget(const CVector &start, const CVector &step, uint numSteps)

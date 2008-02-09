@@ -903,26 +903,6 @@
 						/>
 					</FileConfiguration>
 				</File>
-				<File
-					RelativePath=".\src\_landscape.h"
-					>
-					<FileConfiguration
-						Name="DebugFast|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="ReleaseDebug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
 			</Filter>
 		</Filter>
 		<Filter

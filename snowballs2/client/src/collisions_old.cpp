@@ -32,6 +32,7 @@
 #include "collisions_old.h"
 
 // Project includes
+#include "trajectory_old.h"
 
 // NeL includes
 // #include <nel/misc/debug.h>
@@ -42,6 +43,7 @@
 #include <nel/pacs/u_move_container.h>
 #include <nel/3d/u_scene.h>
 #include <nel/3d/u_visual_collision_manager.h>
+#include <nel/3d/u_visual_collision_entity.h>
 
 // STL includes
 
@@ -53,9 +55,11 @@ using namespace NL3D;
 namespace SBCLIENT {
 
 CCollisionsOld::CCollisionsOld(NLMISC::IProgressCallback &progressCallback, const std::string &id, NL3D::UScene *scene, NL3D::ULandscape *landscape)
-: _Config(id), _Scene(scene)
+: _Config(id), _Scene(scene), _Landscape(landscape), _AimingEntity(NULL)
 {
 	progressCallback.progress(0.0f);
+	nlassert(_Scene);
+	nlassert(_Landscape);
 
 	// init the retriever bank
 	RetrieverBank = URetrieverBank::createRetrieverBank(
@@ -68,16 +72,19 @@ CCollisionsOld::CCollisionsOld(NLMISC::IProgressCallback &progressCallback, cons
 		RetrieverBank);
 	progressCallback.progress(0.4f);
 
-	// create the move primitive
+	// create the move container
 	MoveContainer = UMoveContainer::createMoveContainer(
 		GlobalRetriever, 100, 100, 6.0);
 	progressCallback.progress(0.6f);
 
 	// create a visual collision manager
 	VisualCollisionManager = _Scene->createVisualCollisionManager();
-	VisualCollisionManager->setLandscape(landscape);
+	VisualCollisionManager->setLandscape(_Landscape);
 	progressCallback.progress(0.8f);
 
+	// create the aiming entity
+	_AimingEntity = VisualCollisionManager->createEntity();
+	_AimingEntity->setCeilMode(true);
 	// -- -- move this to snowballs specific game task
 	// create a move primitive for each instance in the instance group
 	//////uint	i, j;
@@ -129,13 +136,76 @@ CCollisionsOld::~CCollisionsOld()
 		MoveContainer->removePrimitive(_InstancesMovePrimitives[i]);
 	_InstancesMovePrimitives.clear();
 
+	// delete the aiming entity
+	VisualCollisionManager->deleteEntity(_AimingEntity);
+
 	// delete the visual collision manager
 	_Scene->deleteVisualCollisionManager(VisualCollisionManager);
 
-	// delete all allocated objects
+	// delete all pacs stuff
 	UMoveContainer::deleteMoveContainer(MoveContainer);
 	UGlobalRetriever::deleteGlobalRetriever(GlobalRetriever);
 	URetrieverBank::deleteRetrieverBank(RetrieverBank);
+}
+
+// -- -- mix with following bit of code for higher accuracy
+//NLMISC::CVector CSceneryMouse::getLandscape()
+//{
+//	if (_LandscapeCached) return _LandscapeCache;
+//	CViewport v = _Driver->getViewport();
+//	CVector pos, dir; -- -- random note: this code gets the landscape position where the mouse is pointing at
+//	v.getRayWithPoint(_X * v.getWidth(), _Y * v.getHeight(), pos, dir, _Camera.getMatrix(), _Camera.getFrustum());
+//	dir.normalize();
+//	dir *= 50;
+// -- -- float rc = _Landscape->getRayCollision(pos, pos + dir);
+// -- -- _LandscapeCache = pos + (rc * dir);
+//	_LandscapeCached = true;
+//	return _LandscapeCache;
+//}
+// -- -- if higher than 50 or something, use code below
+CVector CCollisionsOld::getTarget(const CVector &start, const CVector &step, uint numSteps)
+{
+	CVector	testPos = start;
+
+	uint	i;
+	for (i=0; i<numSteps; ++i)
+	{
+		CVector	snapped = testPos;
+		CVector	normal;
+
+		// here use normal to check if we have collision
+		if (_AimingEntity->snapToGround(snapped, normal) && (testPos.z - snapped.z) * normal.z < 0.0f)
+		{
+			testPos -= step * 0.5f;
+			break;
+		}
+		testPos += step;
+	}
+	return testPos;
+}
+
+CVector CCollisionsOld::getTarget(CTrajectoryOld &trajectory, TAnimationTime dtSteps, uint numSteps)
+{
+	TGlobalAnimationTime gt = trajectory.getStartTime();
+	CVector	testPos;
+
+	uint i;
+	for (i = 0; i < numSteps; ++i)
+	{
+		testPos = trajectory.eval(gt);
+		CVector	snapped = testPos;
+		CVector	normal;
+
+		// here use normal to check if we have collision
+		if (_AimingEntity->snapToGround(snapped, normal) && (testPos.z - snapped.z) * normal.z < 0.0f)
+		{
+			gt -= (dtSteps / 2);
+			testPos = trajectory.eval(gt);
+			break;
+		}
+		gt += dtSteps;
+	}
+	return testPos;
 }
 
 } /* namespace SBCLIENT */
