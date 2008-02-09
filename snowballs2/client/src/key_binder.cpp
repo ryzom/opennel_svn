@@ -36,6 +36,7 @@
 // NeL includes
 // #include <nel/misc/debug.h>
 #include <nel/3d/u_driver.h>
+#include <nel/misc/event.h>
 
 // STL includes
 
@@ -59,6 +60,7 @@ void CKeyBinder::blah()
 {
 	UDriver *driver;
 	//driver->AsyncListener.isKeyDown
+	//CEventKey::getKeyFromString(const std::string &str);
 }
 
 } /* namespace SBCLIENT */
