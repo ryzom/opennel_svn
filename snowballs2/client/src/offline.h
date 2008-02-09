@@ -70,6 +70,9 @@ protected:
 public:
 	COffline(CLoadingScreen *loadingScreen, const std::string &id, CLogin::CLoginData *loginData, CLoading *loading, CLandscape *landscape, CEntitiesOld *entities, CTime *time);
 	virtual ~COffline();
+
+	ucstring generateBotName();
+	void addBot();
 }; /* class COffline */
 
 } /* namespace SBCLIENT */

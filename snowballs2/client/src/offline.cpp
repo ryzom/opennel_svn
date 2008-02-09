@@ -75,13 +75,8 @@ _Landscape(landscape), _Entities(entities), _Time(time)
 	_Landscape->RefreshZonesAround = &_Entities->Self->Position;
 	_LoadingScreen->progress(1.00f);
 	
-	for (uint i = 0; i < 8; ++i)
-	{
-		uint32 eid = ++(_Entities->LastEID);
-		_Entities->addEntity(eid, "Entity" + toString(eid), 
-			CEntityOld::Other, start, start);
-		_Entities->getEntity(eid).AutoMove = true;
-	}
+	uint bots = _Config.getValue("Bots", 8);
+	for (uint i = 0; i < bots; ++i) addBot();
 		
 	_LoadingScreen->progress(1.00f);
 }
@@ -89,6 +84,33 @@ _Landscape(landscape), _Entities(entities), _Time(time)
 COffline::~COffline()
 {
 	_Entities->removeAll();
+}
+
+ucstring COffline::generateBotName()
+{
+	ucstring result;
+	result.resize((rand() % 8) + 4);
+	ucstring::iterator it(result.begin()), end(result.end());
+	*it = (ucchar)((rand() % 26) + 65);
+	it++;
+	for (; it != end; ++it)
+	{
+		*it = (ucchar)((rand() % 26) + 97);
+	}
+	return result;
+}
+
+void COffline::addBot()
+{
+	CVector start(
+		_Config.getVar("StartPoint").asFloat(0) + ((float)(rand() % 100) / 10.0f), 
+		_Config.getVar("StartPoint").asFloat(1) + ((float)(rand() % 100) / 10.0f), 
+		_Config.getVar("StartPoint").asFloat(2) + ((float)(rand() % 100) / 10.0f));
+	uint32 eid = ++(_Entities->LastEID);
+	ucstring name = generateBotName();
+	nlinfo("Adding offline bot eid(%u) name(%s)", eid, name.toUtf8().c_str());
+	_Entities->addEntity(eid, name, CEntityOld::Other, start, start);
+	_Entities->getEntity(eid).AutoMove = true;
 }
 
 } /* namespace SBCLIENT */
