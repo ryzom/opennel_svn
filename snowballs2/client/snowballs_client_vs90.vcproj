@@ -1212,14 +1212,6 @@
 				Name="1_1_classes"
 				>
 				<File
-					RelativePath=".\src\entity_controller.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\entity_controller.h"
-					>
-				</File>
-				<File
 					RelativePath=".\src\lens_flare.cpp"
 					>
 					<FileConfiguration
@@ -1336,6 +1328,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\entity_controller.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\entity_controller.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\function_caller.cpp"
 					>
 				</File>
@@ -1448,6 +1448,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\keyboard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\keyboard.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\landscape.cpp"
 					>
 				</File>
@@ -1511,14 +1519,6 @@
 			<Filter
 				Name="3_2_interface"
 				>
-				<File
-					RelativePath=".\src\keyboard.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\keyboard.h"
-					>
-				</File>
 				<File
 					RelativePath=".\src\login.cpp"
 					>

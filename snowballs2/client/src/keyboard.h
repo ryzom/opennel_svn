@@ -33,30 +33,50 @@
 #include <nel/misc/types_nl.h>
 
 // Project includes
+#include "key_binder.h"
 
 // NeL includes
 
 // STL includes
 
+namespace NL3D {
+	class UDriver;
+}
+
+namespace NLMISC {
+	class IProgressCallback;
+}
+
 namespace SBCLIENT {
+	class CInputListener;
+	class CConfigProxy;
 
 /**
  * \brief CKeyboard
  * \date 2008-02-07 18:02GMT
  * \author Jan Boon (Kaetemi)
- * CKeyboard
+ * TASKS:
+ * - CKeyBinder::updateInput in KeyBinder
  */
 class CKeyboard
 {
 protected:
 	// pointers
-	// ...
-	
+	NL3D::UDriver *_Driver; // p
+	CInputListener *_InputListener; // p
+	CConfigProxy *_Config; // P
+public:
 	// instances
-	// ...
+	CKeyBinder KeyBinder;
 public:
 	CKeyboard();
 	virtual ~CKeyboard();
+
+	void init(NLMISC::IProgressCallback &progress, const std::string &id, NL3D::UDriver *driver, CInputListener *inputListener);
+	void release();
+	
+	void assertINIT();
+	void assertNULL();
 }; /* class CKeyboard */
 
 } /* namespace SBCLIENT */

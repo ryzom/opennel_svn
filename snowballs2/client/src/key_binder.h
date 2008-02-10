@@ -134,7 +134,7 @@ protected:
 		_CKeySetting KeySetting;
 		_CKeyStateHandler StateHandler;
 	};
-	typedef std::vector<_CKeyStateBinding> _CKeyStateBindingVector;
+	typedef std::multimap<bool *, _CKeyStateBinding> _CKeyStateBindingMultiMap;
 	
 	// pointers
 	CInputListener *_InputListener;
@@ -149,18 +149,28 @@ protected:
 	_CKeyStateHandlerMap _KeyStateHandlers;
 	/// Holds all the registrations of _CKeySettings
 	_CKeySettingMap _KeySettings;
-	/// Holds bindings between settings and handlers
+	/// Holds bindings between settings and handlers, sorted by key
 	_CKeyActionBindingMultiMap _KeyActionBindings;
-	/// Holds bindings between settings and handlers
-	_CKeyStateBindingVector _KeyStateBindings;
-	/// The last assigned registration id
+	/// Holds bindings between settings and handlers, sorted by state handler bool pointer
+	_CKeyStateBindingMultiMap _KeyStateBindings;
+	/// The last assigned registration id, does not reset on init
 	uint _LastId;
 public:
 	CKeyBinder();
 	virtual ~CKeyBinder();
 	
-	inline void takeControl(NL3D::UDriver *driver, CInputListener *inputListener);
-	inline void dropControl();
+	/// Initialize before calling takeControl
+	void init();
+	/// Control must have been dropped using dropControl first
+	/// This function gives warnings on all registrations that were
+	/// not released, and proceeds with clearing the lists.
+	void release();
+
+	void assertINIT();
+	void assertNULL();
+
+	void takeControl(NL3D::UDriver *driver, CInputListener *inputListener);
+	void dropControl();
 	
 	void addActionHandler(uint &id, const std::string &bindingId, TInterfaceCallback callback, void *context, void *tag, const std::string &parameters);
 	void removeActionHandler(uint &id);
@@ -177,8 +187,6 @@ public:
 private:
 	/// Called when to check the driver for keys that are down
 	SBCLIENT_CALLBACK_DECL(updateInput);
-	
-	
 	
 	// add iskeydown handler (bool *) per frame X (b shift, b ctrl)
 	// -- maybe also handle mouse (buttons) in this class?

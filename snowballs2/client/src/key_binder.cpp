@@ -50,12 +50,97 @@ namespace SBCLIENT {
 CKeyBinder::CKeyBinder() : _InputListener(NULL), _EventInputId(0), 
 _Driver(NULL), _LastId(0)
 {
-	
+	assertNULL();
 }
 
 CKeyBinder::~CKeyBinder()
 {
-	
+	assertNULL(); // yes, assert first, you must call release first
+	release(); // and then just to be sure release anyway
+}
+
+void CKeyBinder::init()
+{
+	assertNULL();
+
+	// init params can be changed later, 
+	// so make sure you call this anyway,
+	// then you'll see an error when the
+	// implementation changes
+	// ...
+
+	assertINIT();
+}
+
+void CKeyBinder::release()
+{
+	// assertINIT should be called in the main client code before releasing
+	// it could also be called trough another class's assertINIT function
+
+	{
+		_CKeyActionHandlerMap::iterator
+			it(_KeyActionHandlers.begin()),
+			end(_KeyActionHandlers.end());
+		for (; it != end; ++it)
+			nlwarning("KEYB: key action handler not released, killing binding '%s'", it->second.BindingId.c_str());
+		_KeyActionHandlers.clear();
+	}
+	{
+		_CKeyStateHandlerMap::iterator
+			it(_KeyStateHandlers.begin()),
+			end(_KeyStateHandlers.end());
+		for (; it != end; ++it)
+			nlwarning("KEYB: key state handler not released, killing binding '%s'", it->second.BindingId.c_str());
+		_KeyStateHandlers.clear();
+	}
+	{
+		_CKeySettingMap::iterator
+			it(_KeySettings.begin()),
+			end(_KeySettings.end());
+		for (; it != end; ++it)
+			nlwarning("KEYB: key setting not released, killing binding '%s'", it->second.BindingId.c_str());
+		_KeySettings.clear();
+	}
+	{
+		_CKeyActionBindingMultiMap::iterator
+			it(_KeyActionBindings.begin()),
+			end(_KeyActionBindings.end());
+		for (; it != end; ++it)
+			nlwarning("KEYB: key action binding not released, killing binding '%s'", it->second.KeySetting.BindingId.c_str());
+		_KeyActionBindings.clear();
+	}
+	{
+		_CKeyStateBindingMultiMap::iterator
+			it(_KeyStateBindings.begin()),
+			end(_KeyStateBindings.end());
+		for (; it != end; ++it)
+			nlwarning("KEYB: key state binding not released, killing binding '%s'", it->second.KeySetting.BindingId.c_str());
+		_KeyStateBindings.clear();
+	}
+
+	assertNULL();
+}
+
+void CKeyBinder::assertINIT()
+{
+	// ...
+}
+
+void CKeyBinder::assertNULL()
+{
+	// they should be empty
+	nlassert(_KeyActionHandlers.empty());
+	nlassert(_KeyStateHandlers.empty());
+	nlassert(_KeySettings.empty());
+	nlassert(_KeyActionBindings.empty());
+	nlassert(_KeyStateBindings.empty());
+
+	// assert callback ids
+	nlassert(!_EventInputId);
+
+	// assert external pointers
+	nlassert(!_InputListener);
+	nlassert(!_Driver);
 }
 
 void CKeyBinder::takeControl(UDriver *driver, CInputListener *inputListener)
@@ -83,6 +168,7 @@ void CKeyBinder::addActionHandler(uint &id, const std::string &bindingId, TInter
 	nlassert(!id);
 	id = ++_LastId;
 	nlassert(id);
+	nlassert(callback);
 
 	// create structure
 	_CKeyActionHandler handler;
@@ -106,9 +192,9 @@ void CKeyBinder::addActionHandler(uint &id, const std::string &bindingId, TInter
 			if (it->second.BindingId == bindingId)
 			{
 				_CKeyActionBinding binding;
-				binding.ActionHandler = handler;
 				binding.KeySetting = it->second;
-				nldebug("KEYB: new action, binding '%s' to key '%s'", 
+				binding.ActionHandler = handler;
+				nldebug("KEYB: new action handler, binding '%s' to key '%s'", 
 					bindingId.c_str(), 
 					CEventKey::getStringFromKey(binding.KeySetting.Key).c_str());
 				_KeyActionBindings.insert(make_pair(
@@ -154,8 +240,38 @@ void CKeyBinder::addStateHandler(uint &id, const std::string &bindingId, bool *k
 	nlassert(!id);
 	id = ++_LastId;
 	nlassert(id);
+	nlassert(keyDown);
 	
-	// ...
+	// create structure
+	_CKeyStateHandler handler;
+	handler.RegistrationId = id;
+	handler.BindingId = bindingId;
+	handler.KeyDown = keyDown;
+
+	// insert registration
+	_KeyStateHandlers[id] = handler;
+
+	// create bindings
+	{
+		_CKeySettingMap::iterator
+			it(_KeySettings.begin()), 
+			end(_KeySettings.end());
+		for (; it != end; ++it)
+		{
+			if (it->second.BindingId == bindingId)
+			{
+				_CKeyStateBinding binding;
+				binding.KeySetting = it->second;
+				binding.StateHandler = handler;
+				nldebug("KEYB: new state handler, binding '%s' to key '%s'", 
+					bindingId.c_str(), 
+					CEventKey::getStringFromKey(binding.KeySetting.Key).c_str());
+				_KeyStateBindings.insert(make_pair(
+					handler.KeyDown, // pointer to bool
+					binding));
+			}
+		}
+	}
 }
 
 void CKeyBinder::removeStateHandler(uint &id)
@@ -166,20 +282,21 @@ void CKeyBinder::removeStateHandler(uint &id)
 	{
 		_CKeyStateHandlerMap::iterator
 			it(_KeyStateHandlers.find(id));
-		nlassert(it != _KeyStateHandlers.end());	
+		nlassert(it != _KeyStateHandlers.end());
+		*(it->second.KeyDown) = false;
 		_KeyStateHandlers.erase(it);
 	}
 	
 	// erase all bindings
 	{
-		_CKeyStateBindingVector::iterator
+		_CKeyStateBindingMultiMap::iterator
 			it(_KeyStateBindings.begin()), 
 			next(it), 
 			end(_KeyStateBindings.end());
 		while (it != end)
 		{
 			++next;
-			if (it->StateHandler.RegistrationId == id)
+			if (it->second.StateHandler.RegistrationId == id)
 				_KeyStateBindings.erase(it);
 			it = next;
 		}
@@ -227,14 +344,15 @@ void CKeyBinder::removeKeySetting(uint &id)
 
 	// erase all bindings to states
 	{
-		_CKeyStateBindingVector::iterator
+		_CKeyStateBindingMultiMap::iterator
 			it(_KeyStateBindings.begin()), 
 			next(it), 
 			end(_KeyStateBindings.end());
 		while (it != end)
 		{
 			++next;
-			if (it->KeySetting.RegistrationId == id)
+			*(it->second.StateHandler.KeyDown) = false;
+			if (it->second.KeySetting.RegistrationId == id)
 				_KeyStateBindings.erase(it);
 			it = next;
 		}
@@ -246,19 +364,94 @@ void CKeyBinder::removeKeySetting(uint &id)
 SBCLIENT_CALLBACK_EVENT_IMPL(CKeyBinder, eventInput)
 {
 	if (!_Driver || !_InputListener) return false;
+	nlassert(_InputListener->hasControl(_EventInputId));
 
-	// ev
+	// note: EventCharId isn't handled here,
+	// you must take control trough the CInputListener
+	// if you need to grab those events (used for textboxes).
+	// in such implementation you must handle all three
+	// key events, since keychar is probly accompanied
+	// by a keydown and a keyup event
+	TKey key;
+	if (ev == EventKeyDownId) key = ((CEventKeyDown &)ev).Key;
+	else if (ev == EventKeyUpId) key = ((CEventKeyUp &)ev).Key;
+	else if (ev == EventCharId) return false;
+	else { nlwarning("Invalid event sent to key binder"); return false; }
+	// get ctrl, shift, alt states
+	TKeyButton keyButton = ((CEventKey &)ev).Button;
 
+	// callback implementations must check (ev == EventUpId) themselves,
+	// depending on how they handle the different key events
+	// this way you can have a hold/release team list key configured
+	_CKeyActionBindingMultiMap::iterator
+		it(_KeyActionBindings.lower_bound(key)),
+		end(_KeyActionBindings.upper_bound(key));
+	for (; it != end; ++it)
+	{
+		switch (it->second.KeySetting.Ctrl)
+		{
+		case Down: if (!keyButton && ctrlKeyButton) { continue; } break;
+		case Up: if (keyButton && ctrlKeyButton) { continue; } break;
+		}
+		switch (it->second.KeySetting.Shift)
+		{
+		case Down: if (!keyButton && shiftKeyButton) { continue; } break;
+		case Up: if (keyButton && shiftKeyButton) { continue; } break;
+		}
+		switch (it->second.KeySetting.Alt)
+		{
+		case Down: if (!keyButton && altKeyButton) { continue; } break;
+		case Up: if (keyButton && altKeyButton) { continue; } break;
+		}
+		_CKeyActionHandler &ah = it->second.ActionHandler;
+		ah.Callback(ah.Context, ah.Parameters, const_cast<CEvent *>(&ev), ah.Tag);
+	}
+	
 	return true;
 }
 
 SBCLIENT_CALLBACK_IMPL(CKeyBinder, updateInput)
 {
 	if (!_Driver || !_InputListener) return;
+	if (!_InputListener->hasControl(_EventInputId)) return;
 
-	//driver->AsyncListener.isKeyDown
-	
-	//_Driver->AsyncListener.isk
+	// store the last one that was down, 
+	// to make sure we don't set it back to false
+	bool *lastDown = NULL;
+	_CKeyStateBindingMultiMap::iterator
+		it(_KeyStateBindings.begin()),
+		end(_KeyStateBindings.begin());
+	for (; it != end; ++it)
+	{
+		if (_Driver->AsyncListener.isKeyDown(it->second.KeySetting.Key))
+		{
+			switch (it->second.KeySetting.Ctrl)
+			{
+			case Down: if (!_Driver->AsyncListener.isKeyDown(KeyCONTROL)) { goto KeyFalse; } break;
+			case Up: if (_Driver->AsyncListener.isKeyDown(KeyCONTROL)) { goto KeyFalse; } break;
+			}
+			switch (it->second.KeySetting.Shift)
+			{
+			case Down: if (!_Driver->AsyncListener.isKeyDown(KeySHIFT)) { goto KeyFalse; } break;
+			case Up: if (_Driver->AsyncListener.isKeyDown(KeySHIFT)) { goto KeyFalse; } break;
+			}
+			switch (it->second.KeySetting.Alt)
+			{
+			case Down: if (!_Driver->AsyncListener.isKeyDown(KeyMENU)) { goto KeyFalse; } break;
+			case Up: if (_Driver->AsyncListener.isKeyDown(KeyMENU)) { goto KeyFalse; } break;
+			}
+			*(it->second.StateHandler.KeyDown) = true;
+			lastDown = it->second.StateHandler.KeyDown;
+			goto KeyOk;
+		}
+KeyFalse:
+		if (lastDown != it->second.StateHandler.KeyDown) 
+		{
+			// key not down (or ctrl shift alt not ok)
+			*(it->second.StateHandler.KeyDown) = false;
+		}
+KeyOk:;
+	}
 }
 
 } /* namespace SBCLIENT */

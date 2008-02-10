@@ -32,6 +32,7 @@
 #include "keyboard.h"
 
 // Project includes
+#include "config_proxy.h"
 
 // NeL includes
 // #include <nel/misc/debug.h>
@@ -43,14 +44,72 @@ using namespace std;
 
 namespace SBCLIENT {
 
-CKeyboard::CKeyboard()
+CKeyboard::CKeyboard() : _Driver(NULL), _InputListener(NULL), 
+_Config(NULL)
 {
-	
+	assertNULL();
 }
 
 CKeyboard::~CKeyboard()
 {
+	assertNULL(); // yes, assert first, you must call release first
+	release(); // and then just to be sure release anyway
+}
+
+void CKeyboard::init(NLMISC::IProgressCallback &progress, const std::string &id, NL3D::UDriver *driver, SBCLIENT::CInputListener *inputListener)
+{
+	assertNULL();
 	
+	// init external pointers
+	_Driver = driver;
+	_InputListener = inputListener;
+
+	// init internal pointers
+	_Config = new CConfigProxy(id);
+
+	// init key binder
+	KeyBinder.init();
+	KeyBinder.takeControl(_Driver, _InputListener);
+
+	// read configured keys
+
+	assertINIT();
+}
+
+void CKeyboard::release()
+{
+	// assertINIT should be called in the main client code before releasing
+
+	// release configured keys
+
+	// release key binder
+	KeyBinder.dropControl();
+	KeyBinder.release();
+	
+	// release internal pointers
+	delete _Config; _Config = NULL;
+
+	// release external pointers
+	_Driver = NULL;
+	_InputListener = NULL;
+
+	assertNULL();
+}
+
+void CKeyboard::assertINIT()
+{
+	nlassert(_Driver);
+	nlassert(_InputListener);
+	nlassert(_Config);
+	KeyBinder.assertINIT();
+}
+
+void CKeyboard::assertNULL()
+{
+	nlassert(!_Driver);
+	nlassert(!_InputListener);
+	nlassert(!_Config);
+	KeyBinder.assertNULL();
 }
 
 } /* namespace SBCLIENT */
