@@ -1212,6 +1212,14 @@
 				Name="1_1_classes"
 				>
 				<File
+					RelativePath=".\src\entity_controller.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\entity_controller.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\lens_flare.cpp"
 					>
 					<FileConfiguration

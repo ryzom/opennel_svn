@@ -71,9 +71,9 @@ public:
 	{
 		CShard() : ShardId(-1), NbPlayers(0), Online(false) { }
 		sint32 ShardId;
-		uint8 NbPlayers;
+		uint16 NbPlayers;
 		ucstring Name;
-		bool Online;
+		uint8 Online;
 		std::string Version;
 		std::string DynPatchURL;
 	};

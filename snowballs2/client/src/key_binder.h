@@ -33,16 +33,22 @@
 #include <nel/misc/types_nl.h>
 
 // Project includes
+#include "member_callback_decl.h"
+#include "member_callback_type.h"
 
 // NeL includes
+#include <nel/misc/events.h>
 
 // STL includes
+#include <map>
+#include <vector>
 
 namespace NL3D {
 	class UDriver;
 }
 
 namespace SBCLIENT {
+	class CInputListener;
 
 /**
  * \brief CKeyBinder
@@ -52,18 +58,128 @@ namespace SBCLIENT {
  */
 class CKeyBinder
 {
+public:
+	// types
+	enum TKeyState
+	{
+		Any,
+		Down,
+		Up
+	};
 protected:
+	// types	
+	struct _CKeyActionHandler // input listener event
+	{
+		/// A unique identifier for the registration
+		uint RegistrationId;
+
+		/// A unique identifier for the binding
+		std::string BindingId;
+
+		/// The function to call when this action is triggered
+		TInterfaceCallback Callback;
+
+		/// Usually the class that owns the functions
+		void *Context;
+
+		/// Any other user data
+		void *Tag;
+
+		/// Extra parameters for the action
+		std::string Parameters;
+	};
+	
+	struct _CKeyStateHandler // driver is key down
+	{
+		/// A unique identifier for the registration
+		uint RegistrationId;
+
+		/// A unique identifier for the binding
+		std::string BindingId;
+
+		/// The bool to set every frame depending on the state of the key
+		bool *KeyDown;
+	};
+	
+	struct _CKeySetting // set by configuration or whatever
+	{
+		/// A unique identifier for the registration
+		uint RegistrationId;
+
+		/// A unique identifier for the binding
+		std::string BindingId;
+
+		/// The key
+		NLMISC::TKey Key;
+
+		/// Key states
+		TKeyState Ctrl;
+		TKeyState Shift;
+		TKeyState Alt;
+	};
+	
+	typedef std::map<uint, _CKeyActionHandler> _CKeyActionHandlerMap;
+	typedef std::map<uint, _CKeyStateHandler> _CKeyStateHandlerMap;
+	typedef std::map<uint, _CKeySetting> _CKeySettingMap;
+	
+	struct _CKeyActionBinding // binds keyinfo to keyactionhandler
+	{
+		_CKeySetting KeySetting;
+		_CKeyActionHandler ActionHandler;
+	};
+	typedef std::multimap<NLMISC::TKey, _CKeyActionBinding> _CKeyActionBindingMultiMap;
+	
+	struct _CKeyStateBinding // binds keyinfo to keystatehandler
+	{
+		_CKeySetting KeySetting;
+		_CKeyStateHandler StateHandler;
+	};
+	typedef std::vector<_CKeyStateBinding> _CKeyStateBindingVector;
+	
 	// pointers
-	// ...
+	CInputListener *_InputListener;
+	NL3D::UDriver *_Driver;
 	
 	// instances
-	// ...
+	/// Identifier of event in _InputListener
+	uint _EventInputId;
+	/// Holds all the registrations of _CKeyActionHandlers
+	_CKeyActionHandlerMap _KeyActionHandlers;
+	/// Holds all the registrations of _CKeyStateHandlers
+	_CKeyStateHandlerMap _KeyStateHandlers;
+	/// Holds all the registrations of _CKeySettings
+	_CKeySettingMap _KeySettings;
+	/// Holds bindings between settings and handlers
+	_CKeyActionBindingMultiMap _KeyActionBindings;
+	/// Holds bindings between settings and handlers
+	_CKeyStateBindingVector _KeyStateBindings;
+	/// The last assigned registration id
+	uint _LastId;
 public:
 	CKeyBinder();
 	virtual ~CKeyBinder();
-
-	void blah();
-
+	
+	inline void takeControl(NL3D::UDriver *driver, CInputListener *inputListener);
+	inline void dropControl();
+	
+	void addActionHandler(uint &id, const std::string &bindingId, TInterfaceCallback callback, void *context, void *tag, const std::string &parameters);
+	void removeActionHandler(uint &id);
+	
+	void addStateHandler(uint &id, const std::string &bindingId, bool *keyDown);
+	void removeStateHandler(uint &id);
+	
+	void addKeySetting(uint &id, const std::string &bindingId, NLMISC::TKey &key, TKeyState ctrl, TKeyState shift, TKeyState alt);
+	void removeKeySetting(uint &id);
+	
+	/// Called by input listener
+	SBCLIENT_CALLBACK_EVENT_DECL(eventInput);
+	
+private:
+	/// Called when to check the driver for keys that are down
+	SBCLIENT_CALLBACK_DECL(updateInput);
+	
+	
+	
 	// add iskeydown handler (bool *) per frame X (b shift, b ctrl)
 	// -- maybe also handle mouse (buttons) in this class?
 	// add event key up down press handler (TEventCallback) X (b shift, b ctrl)

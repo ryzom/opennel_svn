@@ -32,8 +32,15 @@
 #define SBCLIENT_MEMBER_CALLBACK_IMPL_H
 #include <nel/misc/types_nl.h>
 
+// NeL includes
 #include <nel/misc/debug.h>
 
+// parameters that are possibly not used by a callback implementation
+namespace NLMISC {
+	class CEvent;
+}
+
+// definitions used in the class implementation cpp
 #define SBCLIENT_CALLBACK_IMPL(__class, __name) \
 	void __class::__name(void *context, void *tag) \
 	{ \
@@ -89,6 +96,14 @@
 		return ((__class *)context)->__name(ev, tag); \
 	} \
 	bool __class::__name(const NLMISC::CEvent &ev, void *tag)
+
+#define SBCLIENT_CALLBACK_INTERFACE_IMPL(__class, __name) \
+	bool __class::__name(void *context, const std::string &params, NLMISC::CEvent *ev, void *tag) \
+	{ \
+		nlassert(context); \
+		return ((__class *)context)->__name(params, ev, tag); \
+	} \
+	bool __class::__name(const std::string &params, NLMISC::CEvent *ev, void *tag)
 
 #endif /* #ifndef SBCLIENT_MEMBER_CALLBACK_IMPL_H */
 

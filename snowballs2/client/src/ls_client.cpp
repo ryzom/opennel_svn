@@ -290,18 +290,27 @@ void CLSClient::cbAuthenticateUser(CMessage &msgin, TSockId from, CCallbackNetBa
 				ls_client.ShardList.clear();
 				for (uint i = 0; i < nb_shard; i++)
 				{
-					CShard shard;
+					ucstring name;
+					uint8 nb_players;
+					sint32 shard_id;
 					msgin.serial(
-						shard.Name, 
-						shard.NbPlayers, 
-						shard.ShardId);
-					shard.Online = true;
-					shard.Version = "";
-					shard.DynPatchURL = "";
+						name,
+						nb_players, 
+						shard_id);
+
+					CShard shard;
+					shard.ShardId = shard_id;
+					shard.NbPlayers = (uint16)nb_players;
+					shard.Name = name;
+					shard.Online = 2; // ...
+					shard.Version = ""; // ...
+					shard.DynPatchURL = ""; // ...
+
 					// todo: implement this if nobody has problems with it...
 					//  client ls connection is implemented waaaay too different
 					//  from the old http login connection :/  (kinda useless)
 					//  oh and SERIOUSLY, NbPlayers in a uint8?
+
 					//msgin.serial(
 					//	shard.ShardId,
 					//	shard.NbPlayers,
