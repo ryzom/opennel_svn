@@ -87,6 +87,7 @@ protected:
 	SBCLIENT_CALLBACK_INTERFACE_DECL(actionCommand);
 	SBCLIENT_CALLBACK_CONFIG_DECL(configKeySettings);
 	void releaseKeys();
+	static CKeyBinder::TKeyState getKeyState(char c);
 }; /* class CKeyboard */
 
 } /* namespace SBCLIENT */

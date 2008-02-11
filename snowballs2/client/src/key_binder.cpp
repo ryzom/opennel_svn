@@ -394,18 +394,18 @@ SBCLIENT_CALLBACK_EVENT_IMPL(CKeyBinder, eventInput)
 		_CKeySetting &ks = it->second.KeySetting;
 		switch (ks.Ctrl)
 		{
-		case Down: if (!keyButton && ctrlKeyButton) { continue; } break;
-		case Up: if (keyButton && ctrlKeyButton) { continue; } break;
+		case Down: if (!(keyButton & ctrlKeyButton)) { continue; } break;
+		case Up: if (keyButton & ctrlKeyButton) { continue; } break;
 		}
 		switch (ks.Shift)
 		{
-		case Down: if (!keyButton && shiftKeyButton) { continue; } break;
-		case Up: if (keyButton && shiftKeyButton) { continue; } break;
+		case Down: if (!(keyButton & shiftKeyButton)) { continue; } break;
+		case Up: if (keyButton & shiftKeyButton) { continue; } break;
 		}
 		switch (ks.Alt)
 		{
-		case Down: if (!keyButton && altKeyButton) { continue; } break;
-		case Up: if (keyButton && altKeyButton) { continue; } break;
+		case Down: if (!(keyButton & altKeyButton)) { continue; } break;
+		case Up: if (keyButton & altKeyButton) { continue; } break;
 		}
 		_CKeyActionHandler &ah = it->second.ActionHandler;
 		ah.Callback(ah.Context, ks.Parameters, &ev, ah.Tag);

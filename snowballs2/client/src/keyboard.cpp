@@ -103,6 +103,7 @@ SBCLIENT_CALLBACK_CONFIG_IMPL(CKeyboard, configKeySettings)
 		vector<string> keys;
 		explode(var.asString(i + 3), string("|"), keys, true);
 		uint keys_size = keys.size();
+		std::string ctrl_shift_alt = var.asString(i + 2);
 		for (uint j = 0; j < keys_size; ++j)
 		{
 			uint key_id = 0;
@@ -110,9 +111,9 @@ SBCLIENT_CALLBACK_CONFIG_IMPL(CKeyboard, configKeySettings)
 				key_id, 
 				var.asString(i + 0), 
 				CEventKey::getKeyFromString(keys[j]), 
-				CKeyBinder::Any, 
-				CKeyBinder::Any, 
-				CKeyBinder::Any, 
+				getKeyState(ctrl_shift_alt[0]), 
+				getKeyState(ctrl_shift_alt[1]), 
+				getKeyState(ctrl_shift_alt[2]), 
 				var.asString(i + 1));
 		}
 	}
@@ -126,6 +127,21 @@ void CKeyboard::releaseKeys()
 	for (; it != end; ++it)
 	{
 		KeyBinder.removeKeySetting(*it);
+	}
+}
+
+CKeyBinder::TKeyState CKeyboard::getKeyState(char c)
+{
+	switch (c)
+	{
+	case '+':
+		return CKeyBinder::Down;
+	case '-':
+		return CKeyBinder::Up;
+	case '*':
+		return CKeyBinder::Any;
+	default:
+		nlerror("Invalid ctrl/shift/alt configuration value");
 	}
 }
 
