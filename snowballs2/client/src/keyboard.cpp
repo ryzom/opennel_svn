@@ -71,6 +71,7 @@ _ActionCommandId(0)
 CKeyboard::~CKeyboard()
 {
 	// release configured keys
+	_Config.dropCallback("KeySettings");
 	releaseKeys();
 
 	// release special key actions handlers
@@ -115,6 +116,7 @@ SBCLIENT_CALLBACK_CONFIG_IMPL(CKeyboard, configKeySettings)
 				getKeyState(ctrl_shift_alt[1]), 
 				getKeyState(ctrl_shift_alt[2]), 
 				var.asString(i + 1));
+			_KeyIds.push_back(key_id);
 		}
 	}
 }
@@ -128,6 +130,7 @@ void CKeyboard::releaseKeys()
 	{
 		KeyBinder.removeKeySetting(*it);
 	}
+	_KeyIds.clear();
 }
 
 CKeyBinder::TKeyState CKeyboard::getKeyState(char c)

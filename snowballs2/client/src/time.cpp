@@ -122,7 +122,7 @@ SBCLIENT_CALLBACK_IMPL(CTime, updateTime)
 	}
 	else _SkipAnimationOnce = false;
 
-	nlinfo("CTime::updateTime: AnimationTime = %lf", AnimationTime);
+	//nlinfo("CTime::updateTime: AnimationTime = %lf", AnimationTime);
 }
 
 void CTime::setGameCycle(TGameCycle gameCycle, TLocalTime secondsPerCycle, TGameTime gameTimePerSecond, TGameCycle cyclesPerUpdate)

@@ -758,25 +758,28 @@ void CSnowballsClient::unloadIngame()
 	{
 		_Loading->setBackgroundSnowballsUnloading();
 		_LoadingScreen.setRange(0.f, 1.f);
-		float max_progress = 5.f;
+		float max_progress = 6.f;
 
-		_Loading->setMessageState("ReleaseEntities");
+		_Loading->setMessageState("ReleaseKeyboard");
 		_LoadingScreen.progress(0.f / max_progress);
+		nlassert(_Keyboard); delete _Keyboard; _Keyboard = NULL;
+		_Loading->setMessageState("ReleaseEntities");
+		_LoadingScreen.progress(1.f / max_progress);
 		nlassert(_Entities); delete _Entities; _Entities = NULL;
 		_Loading->setMessageState("ReleaseAnimation");
-		_LoadingScreen.progress(1.f / max_progress);
+		_LoadingScreen.progress(2.f / max_progress);
 		nlassert(_Animation); delete _Animation; _Animation = NULL;
 		_Loading->setMessageState("ReleaseCollisions");
-		_LoadingScreen.progress(2.f / max_progress);
+		_LoadingScreen.progress(3.f / max_progress);
 		nlassert(_Collisions); delete _Collisions; _Collisions = NULL;
 		_Loading->setMessageState("ReleaseLandscapeIG");
-		_LoadingScreen.progress(3.f / max_progress);
+		_LoadingScreen.progress(4.f / max_progress);
 		nlassert(_LandscapeIG); delete _LandscapeIG; _LandscapeIG = NULL;
 		_Loading->setMessageState("ReleaseLandscape");
-		_LoadingScreen.progress(4.f / max_progress);
+		_LoadingScreen.progress(5.f / max_progress);
 		nlassert(_Landscape); delete _Landscape; _Landscape = NULL;
 		_Loading->setMessageState("SeeYouLater");
-		_LoadingScreen.progress(5.f / max_progress);
+		_LoadingScreen.progress(6.f / max_progress);
 
 		//if (CaptureState)
 		//{
