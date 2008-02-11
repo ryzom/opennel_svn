@@ -32,84 +32,101 @@
 #include "keyboard.h"
 
 // Project includes
-#include "config_proxy.h"
+#include "member_callback_impl.h"
 
 // NeL includes
-// #include <nel/misc/debug.h>
+#include <nel/misc/debug.h>
+#include <nel/misc/progress_callback.h>
+#include <nel/misc/command.h>
+#include <nel/misc/app_context.h>
 
 // STL includes
 
 using namespace std;
-// using namespace NLMISC;
+using namespace NLMISC;
 
 namespace SBCLIENT {
 
-CKeyboard::CKeyboard() : _Driver(NULL), _InputListener(NULL), 
-_Config(NULL)
+CKeyboard::CKeyboard(NLMISC::IProgressCallback &progress, 
+const std::string &id, NL3D::UDriver *driver, CInputListener *inputListener) : 
+_Driver(driver), _InputListener(inputListener), _Config(id),
+_ActionCommandId(0)
 {
-	assertNULL();
+	progress.progress(0.00f);
+	// verify external pointers
+	nlassert(_Driver);
+	nlassert(_InputListener);
+
+	// add special key actions handlers
+	KeyBinder.addActionHandler(_ActionCommandId, 
+		_Config.getValue("CommandAction", string("command")), 
+		CKeyboard::actionCommand, this, NULL);
+
+	// read configured keys
+	_Config.setCallbackAndCall("KeySettings", configKeySettings, this, NULL);
+
+	progress.progress(1.00f);
 }
 
 CKeyboard::~CKeyboard()
 {
-	assertNULL(); // yes, assert first, you must call release first
-	release(); // and then just to be sure release anyway
-}
-
-void CKeyboard::init(NLMISC::IProgressCallback &progress, const std::string &id, NL3D::UDriver *driver, SBCLIENT::CInputListener *inputListener)
-{
-	assertNULL();
-	
-	// init external pointers
-	_Driver = driver;
-	_InputListener = inputListener;
-
-	// init internal pointers
-	_Config = new CConfigProxy(id);
-
-	// init key binder
-	KeyBinder.init();
-	KeyBinder.takeControl(_Driver, _InputListener);
-
-	// read configured keys
-
-	assertINIT();
-}
-
-void CKeyboard::release()
-{
-	// assertINIT should be called in the main client code before releasing
-
 	// release configured keys
+	releaseKeys();
 
-	// release key binder
+	// release special key actions handlers
+	KeyBinder.removeActionHandler(_ActionCommandId);
+}
+
+void CKeyboard::enable()
+{
+	// key binder takes control over input
+	KeyBinder.takeControl(_Driver, _InputListener);	// move to Enable thingy
+}
+
+void CKeyboard::disable()
+{
+	// key binder drops control over input
 	KeyBinder.dropControl();
-	KeyBinder.release();
-	
-	// release internal pointers
-	delete _Config; _Config = NULL;
-
-	// release external pointers
-	_Driver = NULL;
-	_InputListener = NULL;
-
-	assertNULL();
 }
 
-void CKeyboard::assertINIT()
+SBCLIENT_CALLBACK_INTERFACE_IMPL(CKeyboard, actionCommand)
 {
-	nlassert(_Driver);
-	nlassert(_InputListener);
-	nlassert(_Config);
-	KeyBinder.assertINIT();
+	ICommand::execute(params, *INelContext::getInstance().getInfoLog());
 }
 
-void CKeyboard::assertNULL()
+SBCLIENT_CALLBACK_CONFIG_IMPL(CKeyboard, configKeySettings)
 {
-	nlassert(!_Driver);
-	nlassert(!_InputListener);
-	nlassert(!_Config);
-	KeyBinder.assertNULL();
+	if (!_KeyIds.empty()) releaseKeys();
+	uint var_size = var.size();
+	for (uint i = 0; i < var_size; i += 4)
+	{
+		vector<string> keys;
+		explode(var.asString(i + 3), string("|"), keys, true);
+		uint keys_size = keys.size();
+		for (uint j = 0; j < keys_size; ++j)
+		{
+			uint key_id = 0;
+			KeyBinder.addKeySetting(
+				key_id, 
+				var.asString(i + 0), 
+				CEventKey::getKeyFromString(keys[j]), 
+				CKeyBinder::Any, 
+				CKeyBinder::Any, 
+				CKeyBinder::Any, 
+				var.asString(i + 1));
+		}
+	}
+}
+
+void CKeyboard::releaseKeys()
+{
+	std::vector<uint>::iterator
+		it(_KeyIds.begin()),
+		end(_KeyIds.end());
+	for (; it != end; ++it)
+	{
+		KeyBinder.removeKeySetting(*it);
+	}
 }
 
 } /* namespace SBCLIENT */

@@ -92,6 +92,8 @@
 #include "graphics.h"
 #include "sound.h"
 #include "time.h"
+#include "input.h"
+#include "keyboard.h"
 #include "landscape.h"
 #include "landscape_ig_old.h"
 #include "collisions_old.h"
@@ -186,9 +188,10 @@ _Loading(NULL),
 _Graphics(NULL), _GraphicsUpdateDriverId(0), 
 _Sound(NULL), _SoundUpdateSoundId(0), 
 _Time(NULL), _TimeUpdateTimeId(0), 
+_Input(NULL), 
 _Login(NULL), _LoginUpdateInterfaceId(0), _LoginRenderInterfaceId(0), 
 	_LoginUpdateNetworkId(0), 
-_KeyboardUpdateInputId(0), 
+_Keyboard(NULL), _KeyboardUpdateInputId(0), 
 _Landscape(NULL), _LandscapeUpdateAnimationsId(0), 
 	_LandscapeUpdateLandscapeId(0), _LandscapeRenderSceneId(0), 
 	_LandscapeInitBloomId(0), _LandscapeEndBloomId(0), 
@@ -487,11 +490,18 @@ void CSnowballsClient::loadBase()
 		_Sound = new CSound(_LoadingScreen, "Sound");
 		nlassert(_Sound);
 
-		_LoadingScreen.setRange(0.90f, 1.00f);
+		_LoadingScreen.setRange(0.90f, 0.95f);
 		/* _Loading->setMessageState("InitializeTime"); */
 		nlassert(!_Time);
 		_Time = new SBCLIENT::CTime(_LoadingScreen);
 		nlassert(_Time);
+
+		_LoadingScreen.setRange(0.95f, 1.00f);
+		/* _Loading->setMessageState("InitializeInput"); */
+		nlassert(!_Input);
+		_Input = new SBCLIENT::CInput(_LoadingScreen, 
+			_Graphics->Driver);
+		nlassert(_Input);
 
 		_LoadingScreen.progress(1.0f);
 	}
@@ -501,6 +511,7 @@ void CSnowballsClient::unloadBase()
 {
 	if (_LoadedBase)
 	{
+		nlassert(_Input); delete _Input; _Input = NULL;
 		nlassert(_Time); delete _Time; _Time = NULL;
 		nlassert(_Sound); delete _Sound; _Sound = NULL;
 		_LoadingScreen.setTextContext(NULL);
@@ -637,21 +648,21 @@ void CSnowballsClient::loadIngame()
 		_LoadingScreen.setRange(0.f / max_progress, 1.f / max_progress);
 		_Loading->setMessageState("InitializeLandscape");
 		nlassert(!_Landscape);
-		_Landscape = new CLandscape(_LoadingScreen, "Landscape", 
+		_Landscape = new SBCLIENT::CLandscape(_LoadingScreen, "Landscape", 
 			_Graphics->Driver, &_Time->AnimationTime);
 		nlassert(_Landscape);
 
 		_LoadingScreen.setRange(1.f / max_progress, 2.f / max_progress);
 		_Loading->setMessageState("InitializeLandscapeIG");
 		nlassert(!_LandscapeIG);
-		_LandscapeIG = new CLandscapeIGOld(_LoadingScreen, "LandscapeIG", 
+		_LandscapeIG = new SBCLIENT::CLandscapeIGOld(_LoadingScreen, "LandscapeIG", 
 			_Landscape->Scene);
 		nlassert(_LandscapeIG);
 
 		_LoadingScreen.setRange(2.f / max_progress, 3.f / max_progress);
 		_Loading->setMessageState("InitializeCollisions");
 		nlassert(!_Collisions);
-		_Collisions = new CCollisionsOld(_LoadingScreen, "Collisions", 
+		_Collisions = new SBCLIENT::CCollisionsOld(_LoadingScreen, "Collisions", 
 			_Landscape->Scene, _Landscape->Landscape);
 		nlassert(_Collisions);
 
@@ -666,26 +677,26 @@ void CSnowballsClient::loadIngame()
 		_LoadingScreen.setRange(3.f / max_progress, 4.f / max_progress);
 		_Loading->setMessageState("InitializeAnimation");
 		nlassert(!_Animation);
-		_Animation = new CAnimationOld(_LoadingScreen,
+		_Animation = new SBCLIENT::CAnimationOld(_LoadingScreen,
 			_Graphics->Driver, _Landscape->Scene, &_Time->AnimationTime);
 		nlassert(_Animation);
 
 		_LoadingScreen.setRange(4.f / max_progress, 5.f / max_progress);
 		_Loading->setMessageState("InitializeEntities");
 		nlassert(!_Entities);
-		_Entities = new CEntitiesOld(_LoadingScreen, 
+		_Entities = new SBCLIENT::CEntitiesOld(_LoadingScreen, 
 			_Landscape->Scene, _Collisions->VisualCollisionManager, 
 			_Collisions->MoveContainer, _Collisions->GlobalRetriever,
 			_Animation, &_Time->AnimationTime, &_Time->AnimationDelta,
 			_Collisions); // yay
 		nlassert(_Entities);
 
-//		// Init the entities prefs
-//		displayLoadingState("Initialize Entities ");
-//		initEntities();
-//		// Init animation system
-//		displayLoadingState("Initialize Animation ");
-//		initAnimation();
+		_LoadingScreen.setRange(4.f / max_progress, 5.f / max_progress);
+		_Loading->setMessageState("InitializeKeyboard");
+		nlassert(!_Keyboard);
+		_Keyboard = new SBCLIENT::CKeyboard(_LoadingScreen, "Keyboard",
+			_Graphics->Driver, &_Input->Keyboard);
+		nlassert(_Keyboard);
 
 		_LoadingScreen.progress(1.f);
 
@@ -798,6 +809,7 @@ void CSnowballsClient::enableIngame()
 	{		
 		_EnabledIngame = true;
 
+		// functions
 		nlassert(!_LandscapeUpdateAnimationsId);
 		_LandscapeUpdateAnimationsId = _UpdateFunctions.add(
 			CLandscape::updateAnimations, _Landscape, NULL, -100 + SBCLIENT_UPDATE_ANIMATIONS);
@@ -825,6 +837,13 @@ void CSnowballsClient::enableIngame()
 		nlassert(!_EntitiesUpdateEntitiesId);
 		_EntitiesUpdateEntitiesId = _UpdateFunctions.add(
 			CEntitiesOld::updateEntities, _Entities, NULL, 0 + SBCLIENT_UPDATE_ENTITIES);
+	
+		nlassert(!_KeyboardUpdateInputId);
+		_KeyboardUpdateInputId = _UpdateFunctions.add(
+			CKeyBinder::updateInput, &_Keyboard->KeyBinder, NULL, SBCLIENT_UPDATE_INPUT);
+
+		// input
+		_Keyboard->enable();
 	}
 }
 
@@ -832,6 +851,14 @@ void CSnowballsClient::disableIngame()
 {
 	if (_EnabledIngame)
 	{
+		// input
+		_Keyboard->disable();
+
+		// functions
+		nlassert(_KeyboardUpdateInputId);
+		_UpdateFunctions.remove(_KeyboardUpdateInputId);
+		_KeyboardUpdateInputId = 0;
+
 		nlassert(_LandscapeUpdateAnimationsId);
 		_UpdateFunctions.remove(_LandscapeUpdateAnimationsId);
 		_LandscapeUpdateAnimationsId = 0;
@@ -1058,8 +1085,8 @@ SBCLIENT_CALLBACK_IMPL(CSnowballsClient, updateDebug)
 	//testmaterial.
 	if (_Graphics)
 	{
-		if (_Graphics->Driver->AsyncListener.isKeyPushed(KeyESCAPE))
-			_NextState = Login;
+		//if (_Graphics->Driver->AsyncListener.isKeyPushed(KeyESCAPE))
+		//	_NextState = Login;
 		if (_Graphics->Driver->AsyncListener.isKeyPushed(KeyD))
 			ICommand::execute("switch_debug", 
 			*INelContext::getInstance().getInfoLog());

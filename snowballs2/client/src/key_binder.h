@@ -84,9 +84,6 @@ protected:
 
 		/// Any other user data
 		void *Tag;
-
-		/// Extra parameters for the action
-		std::string Parameters;
 	};
 	
 	struct _CKeyStateHandler // driver is key down
@@ -116,6 +113,9 @@ protected:
 		TKeyState Ctrl;
 		TKeyState Shift;
 		TKeyState Alt;
+
+		/// Extra parameters for the action
+		std::string Parameters;
 	};
 	
 	typedef std::map<uint, _CKeyActionHandler> _CKeyActionHandlerMap;
@@ -158,35 +158,25 @@ protected:
 public:
 	CKeyBinder();
 	virtual ~CKeyBinder();
-	
-	/// Initialize before calling takeControl
-	void init();
-	/// Control must have been dropped using dropControl first
-	/// This function gives warnings on all registrations that were
-	/// not released, and proceeds with clearing the lists.
-	void release();
-
-	void assertINIT();
-	void assertNULL();
 
 	void takeControl(NL3D::UDriver *driver, CInputListener *inputListener);
 	void dropControl();
 	
-	void addActionHandler(uint &id, const std::string &bindingId, TInterfaceCallback callback, void *context, void *tag, const std::string &parameters);
+	void addActionHandler(uint &id, const std::string &bindingId, TInterfaceCallback callback, void *context, void *tag);
 	void removeActionHandler(uint &id);
 	
 	void addStateHandler(uint &id, const std::string &bindingId, bool *keyDown);
 	void removeStateHandler(uint &id);
 	
-	void addKeySetting(uint &id, const std::string &bindingId, NLMISC::TKey &key, TKeyState ctrl, TKeyState shift, TKeyState alt);
+	void addKeySetting(uint &id, const std::string &bindingId, const NLMISC::TKey &key, TKeyState ctrl, TKeyState shift, TKeyState alt, const std::string &parameters);
 	void removeKeySetting(uint &id);
 	
-	/// Called by input listener
-	SBCLIENT_CALLBACK_EVENT_DECL(eventInput);
-	
-private:
 	/// Called when to check the driver for keys that are down
 	SBCLIENT_CALLBACK_DECL(updateInput);
+	
+protected:
+	/// Called by input listener
+	SBCLIENT_CALLBACK_EVENT_DECL(eventInput);
 	
 	// add iskeydown handler (bool *) per frame X (b shift, b ctrl)
 	// -- maybe also handle mouse (buttons) in this class?

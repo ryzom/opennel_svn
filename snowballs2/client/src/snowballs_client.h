@@ -40,7 +40,6 @@
 #include "member_callback_decl.h"
 
 #include "login.h"
-#include "keyboard.h"
 
 namespace NLMISC {
 	class CFileDisplayer;
@@ -60,6 +59,9 @@ namespace SBCLIENT {
 	class CLoading;
 	class CGraphics;
 	class CSound;
+	class CTime;
+	class CInput;
+	class CKeyboard;
 	class CLandscape;
 	class CLandscapeIGOld;
 	class CCollisionsOld;
@@ -94,16 +96,15 @@ private:
 	SBCLIENT::CGraphics *_Graphics; // graphics driver
 	uint _GraphicsUpdateDriverId;
 	SBCLIENT::CSound *_Sound; // sound driver
+	uint _SoundUpdateSoundId;
 	SBCLIENT::CTime *_Time; // time component
 	uint _TimeUpdateTimeId;
-	uint _SoundUpdateSoundId;
-	//SBCLIENT::CInput _Input; // input listener
-	//uint _InputUpdateInputId;
+	SBCLIENT::CInput *_Input; // input listener
 	SBCLIENT::CLogin *_Login; // login interface
 	uint _LoginUpdateInterfaceId;
 	uint _LoginRenderInterfaceId;
 	uint _LoginUpdateNetworkId;
-	//SBCLIENT::CKeyboard _Keyboard; // ingame keyboard
+	SBCLIENT::CKeyboard *_Keyboard; // ingame keyboard
 	uint _KeyboardUpdateInputId;
 	SBCLIENT::CLandscape *_Landscape;
 	uint _LandscapeUpdateAnimationsId;

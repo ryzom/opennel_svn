@@ -121,6 +121,7 @@ CConfigFile *CConfigManager::getConfigSub(const std::string &id)
 			CConfigFile *drop = config;
 			config = getConfigFile(config->getVar(id).asString());
 			dropConfigFile(drop);
+			if (config == drop) break; // happens when nonexisting config file gets default root file
 		}
 		return config;
 	}

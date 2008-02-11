@@ -98,12 +98,12 @@ namespace NLMISC {
 	bool __class::__name(const NLMISC::CEvent &ev, void *tag)
 
 #define SBCLIENT_CALLBACK_INTERFACE_IMPL(__class, __name) \
-	void __class::__name(void *context, const std::string &params, NLMISC::CEvent *ev, void *tag) \
+	void __class::__name(void *context, const std::string &params, const NLMISC::CEvent *ev, void *tag) \
 	{ \
 		nlassert(context); \
 		((__class *)context)->__name(params, ev, tag); \
 	} \
-	void __class::__name(const std::string &params, NLMISC::CEvent *ev, void *tag)
+	void __class::__name(const std::string &params, const NLMISC::CEvent *ev, void *tag)
 
 #endif /* #ifndef SBCLIENT_MEMBER_CALLBACK_IMPL_H */
 

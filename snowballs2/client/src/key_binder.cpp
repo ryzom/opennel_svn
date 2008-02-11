@@ -50,40 +50,19 @@ namespace SBCLIENT {
 CKeyBinder::CKeyBinder() : _InputListener(NULL), _EventInputId(0), 
 _Driver(NULL), _LastId(0)
 {
-	assertNULL();
+	
 }
 
 CKeyBinder::~CKeyBinder()
 {
-	assertNULL(); // yes, assert first, you must call release first
-	release(); // and then just to be sure release anyway
-}
-
-void CKeyBinder::init()
-{
-	assertNULL();
-
-	// init params can be changed later, 
-	// so make sure you call this anyway,
-	// then you'll see an error when the
-	// implementation changes
-	// ...
-
-	assertINIT();
-}
-
-void CKeyBinder::release()
-{
-	// assertINIT should be called in the main client code before releasing
-	// it could also be called trough another class's assertINIT function
-
+	nlassert(!_InputListener);
+	nlassert(!_Driver);
 	{
 		_CKeyActionHandlerMap::iterator
 			it(_KeyActionHandlers.begin()),
 			end(_KeyActionHandlers.end());
 		for (; it != end; ++it)
 			nlwarning("KEYB: key action handler not released, killing binding '%s'", it->second.BindingId.c_str());
-		_KeyActionHandlers.clear();
 	}
 	{
 		_CKeyStateHandlerMap::iterator
@@ -91,7 +70,6 @@ void CKeyBinder::release()
 			end(_KeyStateHandlers.end());
 		for (; it != end; ++it)
 			nlwarning("KEYB: key state handler not released, killing binding '%s'", it->second.BindingId.c_str());
-		_KeyStateHandlers.clear();
 	}
 	{
 		_CKeySettingMap::iterator
@@ -99,7 +77,6 @@ void CKeyBinder::release()
 			end(_KeySettings.end());
 		for (; it != end; ++it)
 			nlwarning("KEYB: key setting not released, killing binding '%s'", it->second.BindingId.c_str());
-		_KeySettings.clear();
 	}
 	{
 		_CKeyActionBindingMultiMap::iterator
@@ -107,7 +84,6 @@ void CKeyBinder::release()
 			end(_KeyActionBindings.end());
 		for (; it != end; ++it)
 			nlwarning("KEYB: key action binding not released, killing binding '%s'", it->second.KeySetting.BindingId.c_str());
-		_KeyActionBindings.clear();
 	}
 	{
 		_CKeyStateBindingMultiMap::iterator
@@ -115,32 +91,7 @@ void CKeyBinder::release()
 			end(_KeyStateBindings.end());
 		for (; it != end; ++it)
 			nlwarning("KEYB: key state binding not released, killing binding '%s'", it->second.KeySetting.BindingId.c_str());
-		_KeyStateBindings.clear();
 	}
-
-	assertNULL();
-}
-
-void CKeyBinder::assertINIT()
-{
-	// ...
-}
-
-void CKeyBinder::assertNULL()
-{
-	// they should be empty
-	nlassert(_KeyActionHandlers.empty());
-	nlassert(_KeyStateHandlers.empty());
-	nlassert(_KeySettings.empty());
-	nlassert(_KeyActionBindings.empty());
-	nlassert(_KeyStateBindings.empty());
-
-	// assert callback ids
-	nlassert(!_EventInputId);
-
-	// assert external pointers
-	nlassert(!_InputListener);
-	nlassert(!_Driver);
 }
 
 void CKeyBinder::takeControl(UDriver *driver, CInputListener *inputListener)
@@ -163,7 +114,7 @@ void CKeyBinder::dropControl()
 	_Driver = NULL;
 }
 
-void CKeyBinder::addActionHandler(uint &id, const std::string &bindingId, TInterfaceCallback callback, void *context, void *tag, const std::string &parameters)
+void CKeyBinder::addActionHandler(uint &id, const std::string &bindingId, TInterfaceCallback callback, void *context, void *tag)
 {
 	nlassert(!id);
 	id = ++_LastId;
@@ -177,7 +128,6 @@ void CKeyBinder::addActionHandler(uint &id, const std::string &bindingId, TInter
 	handler.Callback = callback;
 	handler.Context = context;
 	handler.Tag = tag;
-	handler.Parameters = parameters;
 
 	// insert registration
 	_KeyActionHandlers[id] = handler;
@@ -306,13 +256,66 @@ void CKeyBinder::removeStateHandler(uint &id)
 }
 
 //CEventKey::getKeyFromString(const std::string &str);
-void CKeyBinder::addKeySetting(uint &id, const std::string &bindingId, NLMISC::TKey &key, TKeyState ctrl, TKeyState shift, TKeyState alt)
+void CKeyBinder::addKeySetting(uint &id, const std::string &bindingId, const NLMISC::TKey &key, TKeyState ctrl, TKeyState shift, TKeyState alt, const std::string &parameters)
 {
 	nlassert(!id);
 	id = ++_LastId;
 	nlassert(id);
-	
-	// ...
+		
+	// create structure
+	_CKeySetting setting;
+	setting.RegistrationId = id;
+	setting.BindingId = bindingId;
+	setting.Key = key;
+	setting.Ctrl = ctrl;
+	setting.Shift = shift;
+	setting.Alt = alt;
+	setting.Parameters = parameters;
+
+	// insert registration
+	_KeySettings[id] = setting;
+
+	// create bindings
+	{
+		_CKeyActionHandlerMap::iterator
+			it(_KeyActionHandlers.begin()), 
+			end(_KeyActionHandlers.end());
+		for (; it != end; ++it)
+		{
+			if (it->second.BindingId == bindingId)
+			{
+				_CKeyActionBinding binding;
+				binding.KeySetting = setting;
+				binding.ActionHandler = it->second;
+				nldebug("KEYB: new key setting '%s', binding '%s' to action", 
+					bindingId.c_str(), 
+					CEventKey::getStringFromKey(key).c_str());
+				_KeyActionBindings.insert(make_pair(
+					key, 
+					binding));
+			}
+		}
+	}
+	{
+		_CKeyStateHandlerMap::iterator
+			it(_KeyStateHandlers.begin()), 
+			end(_KeyStateHandlers.end());
+		for (; it != end; ++it)
+		{
+			if (it->second.BindingId == bindingId)
+			{
+				_CKeyStateBinding binding;
+				binding.KeySetting = setting;
+				binding.StateHandler = it->second;
+				nldebug("KEYB: new key setting '%s', binding '%s' to state", 
+					bindingId.c_str(), 
+					CEventKey::getStringFromKey(key).c_str());
+				_KeyStateBindings.insert(make_pair(
+					binding.StateHandler.KeyDown, // pointer to bool
+					binding));
+			}
+		}
+	}
 }
 
 void CKeyBinder::removeKeySetting(uint &id)
@@ -388,23 +391,24 @@ SBCLIENT_CALLBACK_EVENT_IMPL(CKeyBinder, eventInput)
 		end(_KeyActionBindings.upper_bound(key));
 	for (; it != end; ++it)
 	{
-		switch (it->second.KeySetting.Ctrl)
+		_CKeySetting &ks = it->second.KeySetting;
+		switch (ks.Ctrl)
 		{
 		case Down: if (!keyButton && ctrlKeyButton) { continue; } break;
 		case Up: if (keyButton && ctrlKeyButton) { continue; } break;
 		}
-		switch (it->second.KeySetting.Shift)
+		switch (ks.Shift)
 		{
 		case Down: if (!keyButton && shiftKeyButton) { continue; } break;
 		case Up: if (keyButton && shiftKeyButton) { continue; } break;
 		}
-		switch (it->second.KeySetting.Alt)
+		switch (ks.Alt)
 		{
 		case Down: if (!keyButton && altKeyButton) { continue; } break;
 		case Up: if (keyButton && altKeyButton) { continue; } break;
 		}
 		_CKeyActionHandler &ah = it->second.ActionHandler;
-		ah.Callback(ah.Context, ah.Parameters, const_cast<CEvent *>(&ev), ah.Tag);
+		ah.Callback(ah.Context, ks.Parameters, &ev, ah.Tag);
 	}
 	
 	return true;

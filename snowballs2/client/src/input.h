@@ -1,9 +1,9 @@
 /**
- * \file keyboard.h
- * \brief CKeyboard
- * \date 2008-02-07 18:02GMT
+ * \file input.h
+ * \brief CInput
+ * \date 2008-02-11 09:04GMT
  * \author Jan Boon (Kaetemi)
- * CKeyboard
+ * CInput
  * 
  * $Id$
  */
@@ -28,19 +28,16 @@
  * 02110-1301 USA.
  */
 
-#ifndef SBCLIENT_KEYBOARD_H
-#define SBCLIENT_KEYBOARD_H
+#ifndef SBCLIENT_INPUT_H
+#define SBCLIENT_INPUT_H
 #include <nel/misc/types_nl.h>
 
 // Project includes
-#include "key_binder.h"
-#include "config_proxy.h"
-#include "member_callback_decl.h"
+#include "input_listener.h"
 
 // NeL includes
 
 // STL includes
-#include <vector>
 
 namespace NL3D {
 	class UDriver;
@@ -51,46 +48,29 @@ namespace NLMISC {
 }
 
 namespace SBCLIENT {
-	class CInputListener;
-	class CConfigProxy;
 
 /**
- * \brief CKeyboard
- * \date 2008-02-07 18:02GMT
+ * \brief CInput
+ * \date 2008-02-11 09:04GMT
  * \author Jan Boon (Kaetemi)
- * TASKS:
- * - CKeyBinder::updateInput in KeyBinder
+ * CInput
  */
-class CKeyboard
+class CInput
 {
 protected:
 	// pointers
-	NL3D::UDriver *_Driver; // p
-	CInputListener *_InputListener; // p
-
-	// instances
-	CConfigProxy _Config;
-	uint _ActionCommandId;
-	std::vector<uint> _KeyIds;
-
+	NL3D::UDriver *_Driver;
 public:
 	// instances
-	CKeyBinder KeyBinder;
+	CInputListener Keyboard;
+	CInputListener Mouse;
 public:
-	CKeyboard(NLMISC::IProgressCallback &progress, const std::string &id, NL3D::UDriver *driver, CInputListener *inputListener);
-	virtual ~CKeyboard();
-
-	void enable();
-	void disable();
-
-protected:
-	SBCLIENT_CALLBACK_INTERFACE_DECL(actionCommand);
-	SBCLIENT_CALLBACK_CONFIG_DECL(configKeySettings);
-	void releaseKeys();
-}; /* class CKeyboard */
+	CInput(NLMISC::IProgressCallback &progress, NL3D::UDriver *driver);
+	virtual ~CInput();
+}; /* class CInput */
 
 } /* namespace SBCLIENT */
 
-#endif /* #ifndef SBCLIENT_KEYBOARD_H */
+#endif /* #ifndef SBCLIENT_INPUT_H */
 
 /* end of file */

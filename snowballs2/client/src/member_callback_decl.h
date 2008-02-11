@@ -69,7 +69,7 @@ namespace NLMISC {
 
 #define SBCLIENT_CALLBACK_INTERFACE_DECL(__name) \
 	static void __name(void *context, const std::string &params, const NLMISC::CEvent *ev, void *tag); \
-	inline void __name(const std::string &params, NLMISC::CEvent *ev, void *tag);
+	inline void __name(const std::string &params, const NLMISC::CEvent *ev, void *tag);
 
 #endif /* #ifndef SBCLIENT_MEMBER_CALLBACK_DECL_H */
 

@@ -47,7 +47,7 @@ typedef void (*TUcStringCallback)(void *context, const ucstring &s, void *tag);
 typedef void (*TConfigCallback)(void *context, const std::string &varName, NLMISC::CConfigFile::CVar &var, void *tag);
 typedef bool (*TCommandCallback)(void *context, NLMISC::ICommand &command, const std::string &rawCommandString, const std::vector<std::string> &args, NLMISC::CLog &log, bool quiet, bool human, void *tag);
 typedef bool (*TEventCallback)(void *context, const NLMISC::CEvent &ev, void *tag);
-typedef void (*TInterfaceCallback)(void *context, const std::string &params, NLMISC::CEvent *ev, void *tag);
+typedef void (*TInterfaceCallback)(void *context, const std::string &params, const NLMISC::CEvent *ev, void *tag);
 
 }
 
