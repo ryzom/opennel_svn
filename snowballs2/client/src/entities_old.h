@@ -34,6 +34,7 @@
 
 // Project includes
 #include "member_callback_decl.h"
+#include "entity_controller.h"
 #include "entity_old.h"
 
 // NeL includes
@@ -97,6 +98,13 @@ protected:
 	CCollisionsOld *_Collisions; // c
 	NL3D::TGlobalAnimationTime *_GlobalAnimationTime; // p
 	NL3D::TGlobalAnimationTime *_GlobalAnimationTimeDelta; // p
+
+	// instances
+	/// calculates the movement for the controlled entity
+	/// bool are set trough key state callbacks
+	// todo:
+	// - call update in update loop
+	CEntityController _EntityController;
 public:
 	CEntitiesOld(NLMISC::IProgressCallback &progressCallback, NL3D::UScene *scene, NL3D::UVisualCollisionManager *visualCollisionManager, NLPACS::UMoveContainer *moveContainer, NLPACS::UGlobalRetriever *globalRetriever, CAnimationOld *animation, NL3D::TGlobalAnimationTime *globalAnimationTime, NL3D::TGlobalAnimationTime *globalAnimationTimeDelta, CCollisionsOld *collisions);
 	virtual ~CEntitiesOld();

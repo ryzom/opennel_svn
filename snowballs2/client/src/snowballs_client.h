@@ -64,6 +64,7 @@ namespace SBCLIENT {
 	class CKeyboard;
 	class CLandscape;
 	class CLandscapeIGOld;
+	class CEnvironment;
 	class CCollisionsOld;
 	class CAnimationOld;
 	class CEntitiesOld;
@@ -113,6 +114,10 @@ private:
 	uint _LandscapeInitBloomId;
 	uint _LandscapeEndBloomId;
 	SBCLIENT::CLandscapeIGOld *_LandscapeIG;
+	SBCLIENT::CEnvironment *_Environment;
+	uint _EnvironmentUpdateWeather;
+	uint _EnvironmentRenderSky;
+	uint _EnvironmentRenderEffects;
 	SBCLIENT::CCollisionsOld *_Collisions;
 	SBCLIENT::CAnimationOld *_Animation;
 	uint _AnimationUpdateAnimationsId;

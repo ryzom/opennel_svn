@@ -10,6 +10,7 @@
 
 /* 
  * Copyright (C) 2008  Jan Boon (Kaetemi)
+ * Based on NEVRAX SNOWBALLS, Copyright (C) 2001  Nevrax Ltd.
  * 
  * This file is part of OpenNeL Snowballs.
  * OpenNeL Snowballs is free software: you can redistribute it and/or
@@ -35,6 +36,7 @@
 // Project includes
 
 // NeL includes
+#include <nel/misc/vector.h>
 
 // STL includes
 
@@ -48,15 +50,19 @@ namespace SBCLIENT {
  */
 class CEntityController
 {
-protected:
-	// pointers
-	// ...
-	
-	// instances
-	// ...
+public:
+	// set
+	bool MoveForward, MoveBackward, MoveLeft, MoveRight;
+	bool RotateLeft, RotateRight;
+	float Speed;
+	// get
+	NLMISC::CVector Move;
+	float Rotation;
 public:
 	CEntityController();
 	virtual ~CEntityController();
+
+	void update();
 }; /* class CEntityController */
 
 } /* namespace SBCLIENT */

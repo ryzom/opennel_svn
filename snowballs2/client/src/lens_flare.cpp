@@ -46,11 +46,10 @@ using namespace NL3D;
 namespace SBCLIENT {
 
 CLensFlare::CLensFlare(NL3D::UDriver *driver, const NL3D::UCamera &camera) 
-	: _AlphaCoef(1.0f), _MaxLensFlareLenght(0.4f), 
-	_Camera(camera), _SunRadius(24)
+: _AlphaCoef(1.0f), _MaxLensFlareLenght(0.4f), _Camera(camera), 
+_SunRadius(24), _Driver(driver), _SunDirection(CVector::Null)
 {
-	nlassert(driver); _Driver = driver;
-	_SunDirection = CVector::Null;
+	nlassert(_Driver);
 
 	// create an ugly color to test stuff
 	_Pink = _Driver->createMaterial();
@@ -120,7 +119,8 @@ void CLensFlare::show()
 {
 	// vector to sun
 	//==============
-	CVector userLook = MouseListener->getViewDirection();
+	// CVector userLook = MouseListener->getViewDirection();
+	CVector userLook = _Camera.getRotEuler();
 	CVector sunDirection = (-100000 * _SunDirection);
 
 	// cosinus between the two previous vectors
@@ -176,7 +176,7 @@ void CLensFlare::show()
 		// draw a pink square behind everything else
 		_Driver->drawQuad(quad, _Pink);
 		_Driver->getBufferPart(_BitmapPink, pixels);
-		_BitmapPink::convertToType(CBitmap::RGBA);
+		_BitmapPink.convertToType(CBitmap::RGBA);
 		CObjectVector<uint8> &pixelsPink = _BitmapPink.getPixels();
 		uint8 *bitsPink = pixelsPink.getPtr();
 		
@@ -191,7 +191,7 @@ void CLensFlare::show()
 				++difference;
 			}
 		}
-		view = (float)((double)difference / (double)(pixel_color_count / 4)));
+		view = (float)((double)difference / (double)(pixel_color_count / 4));
 	}
 	else // normal way
 	{

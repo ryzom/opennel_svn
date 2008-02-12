@@ -62,6 +62,7 @@ class CLensFlare
 		float Scale;
 	};
 	typedef std::vector<_CFlare> _CFlares;
+
 protected:
 	// pointers
 	NL3D::UDriver *_Driver;

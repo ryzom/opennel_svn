@@ -96,6 +96,7 @@
 #include "keyboard.h"
 #include "landscape.h"
 #include "landscape_ig_old.h"
+#include "environment.h"
 #include "collisions_old.h"
 #include "animation_old.h"
 #include "entities_old.h"
@@ -196,6 +197,8 @@ _Landscape(NULL), _LandscapeUpdateAnimationsId(0),
 	_LandscapeUpdateLandscapeId(0), _LandscapeRenderSceneId(0), 
 	_LandscapeInitBloomId(0), _LandscapeEndBloomId(0), 
 _LandscapeIG(NULL), 
+_Environment(NULL), _EnvironmentUpdateWeather(0), _EnvironmentRenderSky(0), 
+	_EnvironmentRenderEffects(0), 
 _Collisions(NULL), 
 _Animation(NULL), _AnimationUpdateAnimationsId(0), 
 _Entities(NULL), _EntitiesUpdateEntitiesId(0), 
@@ -660,6 +663,13 @@ void CSnowballsClient::loadIngame()
 		nlassert(_LandscapeIG);
 
 		_LoadingScreen.setRange(2.f / max_progress, 3.f / max_progress);
+		_Loading->setMessageState("InitializeEnvironment");
+		nlassert(!_Environment);
+		_Environment = new SBCLIENT::CEnvironment(_LoadingScreen, "Environment", 
+			_Graphics->Driver, _Landscape->Scene, _Time);
+		nlassert(_Environment);
+
+		_LoadingScreen.setRange(3.f / max_progress, 4.f / max_progress);
 		_Loading->setMessageState("InitializeCollisions");
 		nlassert(!_Collisions);
 		_Collisions = new SBCLIENT::CCollisionsOld(_LoadingScreen, "Collisions", 
@@ -668,20 +678,20 @@ void CSnowballsClient::loadIngame()
 
 //		// init weather
 //		displayLoadingState("Initialize Weather");
-//		WeatherComponent = new CWeatherComponent(
+//		WeatherComponent = new CEnvironmentComponent(
 //			_ComponentManager, "Weather", _LoadingScreen);
 //		_ComponentManager->registerComponent(WeatherComponent);
 //		_ComponentManager->registerRender(WeatherComponent, -250);
 //		_ComponentManager->registerUpdate(WeatherComponent, 5000);
 
-		_LoadingScreen.setRange(3.f / max_progress, 4.f / max_progress);
+		_LoadingScreen.setRange(4.f / max_progress, 5.f / max_progress);
 		_Loading->setMessageState("InitializeAnimation");
 		nlassert(!_Animation);
 		_Animation = new SBCLIENT::CAnimationOld(_LoadingScreen,
 			_Graphics->Driver, _Landscape->Scene, &_Time->AnimationTime);
 		nlassert(_Animation);
 
-		_LoadingScreen.setRange(4.f / max_progress, 5.f / max_progress);
+		_LoadingScreen.setRange(5.f / max_progress, 6.f / max_progress);
 		_Loading->setMessageState("InitializeEntities");
 		nlassert(!_Entities);
 		_Entities = new SBCLIENT::CEntitiesOld(_LoadingScreen, 
@@ -691,7 +701,7 @@ void CSnowballsClient::loadIngame()
 			_Collisions); // yay
 		nlassert(_Entities);
 
-		_LoadingScreen.setRange(4.f / max_progress, 5.f / max_progress);
+		_LoadingScreen.setRange(6.f / max_progress, 7.f / max_progress);
 		_Loading->setMessageState("InitializeKeyboard");
 		nlassert(!_Keyboard);
 		_Keyboard = new SBCLIENT::CKeyboard(_LoadingScreen, "Keyboard",
@@ -772,6 +782,9 @@ void CSnowballsClient::unloadIngame()
 		_Loading->setMessageState("ReleaseCollisions");
 		_LoadingScreen.progress(3.f / max_progress);
 		nlassert(_Collisions); delete _Collisions; _Collisions = NULL;
+		_Loading->setMessageState("ReleaseEnvironment");
+		_LoadingScreen.progress(3.f / max_progress);
+		nlassert(_Environment); delete _Environment; _Environment = NULL;
 		_Loading->setMessageState("ReleaseLandscapeIG");
 		_LoadingScreen.progress(4.f / max_progress);
 		nlassert(_LandscapeIG); delete _LandscapeIG; _LandscapeIG = NULL;
@@ -824,7 +837,7 @@ void CSnowballsClient::enableIngame()
 		nlassert(!_LandscapeRenderSceneId);
 		_LandscapeRenderSceneId = _RenderFunctions.add(
 			CLandscape::renderScene, _Landscape, NULL, 0 + SBCLIENT_RENDER_SCENE);
-	
+
 		nlassert(!_LandscapeInitBloomId);
 		_LandscapeInitBloomId = _RenderFunctions.add(
 			CLandscape::initBloom, _Landscape, NULL, SBCLIENT_INIT_BLOOM);
@@ -832,6 +845,18 @@ void CSnowballsClient::enableIngame()
 		nlassert(!_LandscapeEndBloomId);
 		_LandscapeEndBloomId = _RenderFunctions.add(
 			CLandscape::initBloom, _Landscape, NULL, SBCLIENT_END_BLOOM);
+
+		nlassert(!_EnvironmentUpdateWeather);
+		_EnvironmentUpdateWeather = _UpdateFunctions.add(
+			CEnvironment::updateWeather, _Environment, NULL, SBCLIENT_UPDATE_WEATHER);
+
+		nlassert(!_EnvironmentRenderSky);
+		_EnvironmentRenderSky = _RenderFunctions.add(
+			CEnvironment::renderSky, _Environment, NULL, SBCLIENT_RENDER_SKY);
+
+		nlassert(!_EnvironmentRenderEffects);
+		_EnvironmentRenderEffects = _RenderFunctions.add(
+			CEnvironment::renderEffects, _Environment, NULL, SBCLIENT_RENDER_EFFECTS);
 
 		nlassert(!_AnimationUpdateAnimationsId);
 		_AnimationUpdateAnimationsId = _UpdateFunctions.add(
@@ -873,6 +898,18 @@ void CSnowballsClient::disableIngame()
 		nlassert(_AnimationUpdateAnimationsId);
 		_UpdateFunctions.remove(_AnimationUpdateAnimationsId);
 		_AnimationUpdateAnimationsId = 0;
+		
+		nlassert(_EnvironmentRenderSky);
+		_RenderFunctions.remove(_EnvironmentRenderSky);
+		_EnvironmentRenderSky = 0;
+
+		nlassert(_EnvironmentRenderEffects);
+		_RenderFunctions.remove(_EnvironmentRenderEffects);
+		_EnvironmentRenderEffects = 0;
+
+		nlassert(_EnvironmentUpdateWeather);
+		_UpdateFunctions.remove(_EnvironmentUpdateWeather);
+		_EnvironmentUpdateWeather = 0;
 
 		nlassert(_LandscapeEndBloomId);
 		_RenderFunctions.remove(_LandscapeEndBloomId);
@@ -1090,9 +1127,9 @@ SBCLIENT_CALLBACK_IMPL(CSnowballsClient, updateDebug)
 	{
 		//if (_Graphics->Driver->AsyncListener.isKeyPushed(KeyESCAPE))
 		//	_NextState = Login;
-		if (_Graphics->Driver->AsyncListener.isKeyPushed(KeyD))
-			ICommand::execute("switch_debug", 
-			*INelContext::getInstance().getInfoLog());
+		//if (_Graphics->Driver->AsyncListener.isKeyPushed(KeyD))
+		//	ICommand::execute("switch_debug", 
+		//	*INelContext::getInstance().getInfoLog());
 	}
 	if (_Landscape && _Entities && _Entities->Self)
 	{
@@ -1101,7 +1138,7 @@ SBCLIENT_CALLBACK_IMPL(CSnowballsClient, updateDebug)
 		NL3D::UCamera camera = _Landscape->Scene->getCam();
 		camera.setTransformMode(UTransformable::RotEuler);
 		camera.setPos(_Entities->Self->Position + CVector(0,-24,24));
-		camera.setRotEuler(-Pi / 4.0f, 0, 0);
+		//camera.setRotEuler(-Pi / 4.0f, 0, 0);
 		_Landscape->Scene->setCam(camera);
 	}
 }
