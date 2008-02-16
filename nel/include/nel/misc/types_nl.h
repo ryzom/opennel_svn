@@ -78,11 +78,6 @@
 #   endif
 #	if _MSC_VER >= 1400
 #		define NL_COMP_VC8
-// #		define time _time32		// use the old 32 bit time function
-// #		define mktime _mktime32	// use the old 32 bit time function
-// #		define gmtime _gmtime32	// use the old 32 bit time function
-// #		define localtime _localtime32	// use the old 32 bit time function
-// #		define difftime _difftime32	// use the old 32 bit time function
 #	elif _MSC_VER >= 1310
 #		define NL_COMP_VC71
 #	elif _MSC_VER >= 1300
@@ -336,18 +331,6 @@ typedef	uint16	ucchar;
 #  define INT64_CONSTANT(c)		(c##LL)
 #  define SINT64_CONSTANT(c)	(c##LL)
 #  define UINT64_CONSTANT(c)	(c##ULL)
-#endif
-
-#if (_MSC_VER >= 1200) && (_MSC_VER < 1400) && (WINVER < 0x0500)
-//Using VC7 and later lib, need this to compile on VC6
-extern "C" long _ftol( double ); //defined by VC6 C libs
-extern "C" long _ftol2( double dblSource );
-#endif
-
-// Fake "for" to be conform with ANSI "for scope" on Windows compiler older than Visual Studio 8
-// On Visual Studio 8, the for is conform with ANSI, no need to define this macro in this case
-#if defined(NL_OS_WINDOWS) && !defined(NL_EXTENDED_FOR_SCOPE) && !defined(NL_COMP_VC8)
-#  define for if(false) {} else for
 #endif
 
 // Define a macro to write template function according to compiler weakness

@@ -352,7 +352,7 @@ void	setCrashAlreadyReported(bool state);
 
 // removed because we always check assert (even in release mode) #if defined (NL_OS_WINDOWS) && defined (NL_DEBUG)
 #if defined (NL_OS_WINDOWS)
-#define NLMISC_BREAKPOINT _asm { int 3 }
+#define NLMISC_BREAKPOINT __debugbreak();
 #else
 #define NLMISC_BREAKPOINT abort()
 #endif

@@ -131,6 +131,9 @@ public:
 /** For fast vector/point multiplication. Special usage for Skinning.
  *	NB: SSE is no more used (no speed gain, some memory problem), but keep it for possible future usage.
  */ 
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 class	CMatrix3x4SSE
 {
 public:
@@ -184,6 +187,7 @@ public:
 			movss	[edi]vout.z, xmm0
 		}
 	}
+
 	// mulSetpoint. NB: in should be different as v!! (else don't work).
 	void	mulSetPoint(const CVector &vin, CVector &vout)
 	{
@@ -382,8 +386,10 @@ public:
 			movss	[edi]vout.z, xmm0
 		}
 	}
-
 };
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
 #else // NL_OS_WINDOWS
 /// dummy CMatrix3x4SSE for non windows platform

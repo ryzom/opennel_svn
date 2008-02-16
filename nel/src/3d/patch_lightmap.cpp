@@ -597,6 +597,9 @@ void		CPatch::computeTileLightmapEdgeAutomatic(uint ts, uint tt, uint edge, CRGB
 }
 
 // ***************************************************************************
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 void		CPatch::computeTileLightmapPixelAutomatic(uint ts, uint tt, uint s, uint t, CRGBA *dest)
 {
 	float		u,v;
@@ -643,7 +646,9 @@ void		CPatch::computeTileLightmapPixelAutomatic(uint ts, uint tt, uint s, uint t
 	// ambiant/diffuse lighting.
 	*dest= getLandscape()->getStaticLight()[ic];
 }
-
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
 // ***************************************************************************
 void		CPatch::getTileLumelmapPrecomputed(uint ts, uint tt, uint8 *dest, uint stride)

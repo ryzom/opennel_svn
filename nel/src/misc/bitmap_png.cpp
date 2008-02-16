@@ -80,6 +80,9 @@ namespace NLMISC
 							readPNG
 \*-------------------------------------------------------------------*/
 
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 uint8 CBitmap::readPNG( NLMISC::IStream &f )
 {
 
@@ -596,6 +599,9 @@ uint8 CBitmap::readPNG( NLMISC::IStream &f )
    //test->close();
    return iBitDepth*bit;//return the size of a pixel, either 8,24,32 bit
 }
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
 /*-------------------------------------------------------------------*\
 								readPNGData		

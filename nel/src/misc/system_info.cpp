@@ -545,6 +545,9 @@ uint64 CSystemInfo::getProcessorFrequency(bool quick)
 	return freq;
 }
 
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 static bool DetectMMX()
 {		
 	#ifdef NL_CPU_INTEL	
@@ -582,8 +585,13 @@ static bool DetectMMX()
 		return false;
 	#endif // NL_CPU_INTEL
 }
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
-
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 static bool DetectSSE()
 {	
 	#ifdef NL_CPU_INTEL
@@ -644,10 +652,16 @@ static bool DetectSSE()
 		return false;
 	#endif // NL_CPU_INTEL
 }
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
 bool CSystemInfo::_HaveMMX = DetectMMX ();
 bool CSystemInfo::_HaveSSE = DetectSSE ();
 
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 bool CSystemInfo::hasCPUID ()
 {
 	#ifdef NL_CPU_INTEL
@@ -718,8 +732,13 @@ bool CSystemInfo::hasCPUID ()
 		return false;
 	#endif
 }
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
-
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 uint32 CSystemInfo::getCPUID()
 {
 #ifdef NL_CPU_INTEL
@@ -747,11 +766,17 @@ uint32 CSystemInfo::getCPUID()
 #endif // NL_CPU_INTEL
 		return 0;
 }
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
 /*
  *	Note: Not used in NeL probably in Ryzom closed source. Not translated in AT&T asm, I don't understand the aim of this method
  *	      Returns true if the CPU has HT,  even if it is disabled. Maybe shoud count how many (virtual) core there is.
  */
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 bool CSystemInfo::hasHyperThreading()
 {
 #ifdef NL_OS_WINDOWS
@@ -784,6 +809,9 @@ bool CSystemInfo::hasHyperThreading()
 #endif
 		return false;
 }
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
 bool CSystemInfo::isNT()
 {

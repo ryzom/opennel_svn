@@ -171,6 +171,9 @@ void setAssert (bool assert)
 	INelContext::getInstance().setNoAssert(!assert);
 }
 
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 void nlFatalError (const char *format, ...)
 {
 	char *str;
@@ -188,9 +191,14 @@ void nlFatalError (const char *format, ...)
 	//	exit(EXIT_FAILURE);
 	abort ();
 #endif
-
 }
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 void nlError (const char *format, ...)
 {
 	char *str;
@@ -208,6 +216,9 @@ void nlError (const char *format, ...)
 	abort ();
 #endif
 }
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
 // the default behavior is to display all in standard output and to a file named "log.log";
 
@@ -969,7 +980,13 @@ private:
 // workaround of VCPP synchronous exception and se translator
 bool global_force_exception_flag = false;
 #define WORKAROUND_VCPP_SYNCHRONOUS_EXCEPTION  if (global_force_exception_flag) force_exception_frame();
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 void force_exception_frame(...) {std::cout.flush();}
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
 static void exceptionTranslator(unsigned, EXCEPTION_POINTERS *pexp)
 {
@@ -1048,7 +1065,7 @@ void getCallStack(std::string &result, sint skipNFirst)
 
 void getCallStackAndLog (string &result, sint skipNFirst)
 {
-	getCallStack(result, skipNFirst);
+	//getCallStack(result, skipNFirst);
 //#ifdef NL_OS_WINDOWS
 //	try
 //	{

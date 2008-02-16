@@ -194,6 +194,9 @@ test_again:
  * \author Nevrax France
  * \date 2002, 2003
  */
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 class CFastMutex
 {
 public:
@@ -213,14 +216,14 @@ public:
 		// Workaround for dumb inlining bug (returning of function goes into the choux): push/pop registers
 		__asm
 		{
-				push eax
-				push ecx
+			push eax
+			push ecx
 			mov ecx,lockPtr
 			mov eax,1
 			xchg [ecx],eax
 			mov [result],eax
-				pop ecx
-				pop eax
+			pop ecx
+			pop eax
 		}
 #else
 		__asm
@@ -282,8 +285,9 @@ public:
 private:
 	volatile uint32	_Lock;
 };
-
-
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
 
 /**

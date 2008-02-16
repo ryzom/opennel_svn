@@ -40,6 +40,7 @@
 
 #ifdef NL_OS_WINDOWS
 #	include <process.h>
+#	include <intrin.h>
 #else
 #	include <cmath>
 #	include <unistd.h>
@@ -53,23 +54,29 @@
 namespace	NLMISC
 {
 
-
-/** Read the time stamp counter. Supports only intel architectures for now  
+/** Read the time stamp counter. Supports only Intel architectures for now  
   */ 
 #ifdef NL_CPU_INTEL
 
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 inline uint64 rdtsc()
 {
 	uint64 ticks;
-#	ifndef NL_OS_WINDOWS		
+#	ifndef NL_OS_WINDOWS
 		__asm__ volatile(".byte 0x0f, 0x31" : "=a" (ticks.low), "=d" (ticks.high));				
-#	else 		
+#	else
+		// We should use the intrinsic code now. ticks = uint64(__rdtsc());
 		__asm	rdtsc
 		__asm	mov		DWORD PTR [ticks], eax
 		__asm	mov		DWORD PTR [ticks + 4], edx		
 #	endif
 	return ticks;	
 }
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
 #endif	// NL_CPU_INTEL
 

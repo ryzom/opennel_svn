@@ -45,23 +45,23 @@
 using namespace std;
 
 #ifdef NL_OS_WINDOWS
-#pragma message( " " )
+#	pragma message( " " )
 
-	#if FINAL_VERSION
-		#pragma message( "************************" )
-		#pragma message( "**** FINAL_VERSION *****" )
-		#pragma message( "************************" )
-	#else
-		#pragma message( "Not using FINAL_VERSION")
-	#endif // FINAL_VERSION
+#	if FINAL_VERSION
+#		pragma message( "************************" )
+#		pragma message( "**** FINAL_VERSION *****" )
+#		pragma message( "************************" )
+#	else
+#		pragma message( "Not using FINAL_VERSION")
+#	endif // FINAL_VERSION
 
-	#ifdef ASSERT_THROW_EXCEPTION
-		#pragma message( "nlassert throws exceptions" )
-	#else
-		#pragma message( "nlassert does not throw exceptions" )
-	#endif // ASSERT_THROW_EXCEPTION
+#	ifdef ASSERT_THROW_EXCEPTION
+#		pragma message( "nlassert throws exceptions" )
+#	else
+#		pragma message( "nlassert does not throw exceptions" )
+#	endif // ASSERT_THROW_EXCEPTION
 
-	#pragma message( " " )
+#	pragma message( " " )
 
 #	if (_MSC_VER >= 1200) && (_MSC_VER < 1400) && (WINVER < 0x0500)
 //Using VC7 and later lib, need this to compile on VC6
@@ -178,7 +178,9 @@ string stringFromVector( const vector<uint8>& v, bool limited )
 */	return s;
 }
 
-
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 sint smprintf( char *buffer, size_t count, const char *format, ... )
 {
 	sint ret;
@@ -194,6 +196,9 @@ sint smprintf( char *buffer, size_t count, const char *format, ... )
 
 	return( ret );
 }
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
 
 sint64 atoiInt64 (const char *ident, sint64 base)
@@ -543,11 +548,17 @@ Exception::Exception(const std::string &reason) : _Reason(reason)
 	nlinfo("Exception will be launched: %s", _Reason.c_str());
 }
 
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 Exception::Exception(const char *format, ...)
 {
 	NLMISC_CONVERT_VARGS (_Reason, format, NLMISC::MaxCStringSize);
 	nlinfo("Exception will be launched: %s", _Reason.c_str());
 }
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
 const char	*Exception::what() const throw()
 {

@@ -3530,6 +3530,9 @@ void	CBitmap::rot90CCW()
 }
 
 //===========================================================================
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 void CBitmap::blend(CBitmap &Bm0, CBitmap &Bm1, uint16 factor, bool inputBitmapIsMutable /*= false*/)
 {
 	nlassert(factor <= 256);
@@ -3693,8 +3696,9 @@ void CBitmap::blend(CBitmap &Bm0, CBitmap &Bm1, uint16 factor, bool inputBitmapI
 		while (dest != endPix);
 	}
 }
-
-
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
 //-----------------------------------------------
 CRGBA CBitmap::getRGBAPixel(sint x, sint y, uint32 numMipMap /*=0*/) const

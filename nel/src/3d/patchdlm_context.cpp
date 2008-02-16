@@ -645,6 +645,9 @@ inline void	fastClamp01(float &x)
 
 
 // ***************************************************************************
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 void			CPatchDLMContext::addPointLightInfluence(const CPatchDLMPointLight &pl)
 {
 
@@ -896,7 +899,9 @@ void			CPatchDLMContext::addPointLightInfluence(const CPatchDLMPointLight &pl)
 	//==============
 	_IsSrcTextureFullBlack= false;
 }
-
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
 // ***************************************************************************
 void			CPatchDLMContext::compileLighting(TCompileType compType, CRGBA modulateCte)

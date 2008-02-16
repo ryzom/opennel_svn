@@ -361,6 +361,9 @@ static inline void	computeLodLighting(CRGBA &lightRes, const CVector &lightObjec
 
 
 // ***************************************************************************
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 bool			CLodCharacterManager::addRenderCharacterKey(CLodCharacterInstance &instance, const CMatrix &worldMatrix, 
 	CRGBA paramAmbient, CRGBA paramDiffuse, const CVector &lightDir)
 {
@@ -749,10 +752,12 @@ bool			CLodCharacterManager::addRenderCharacterKey(CLodCharacterInstance &instan
 	// Inc Prim count.
 	_CurrentTriId+= clod->getNumTriangles() * 3;
 
-
 	// key added
 	return true;
 }
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
 // ***************************************************************************
 void			CLodCharacterManager::endRender()

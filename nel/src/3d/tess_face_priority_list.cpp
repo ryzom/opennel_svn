@@ -206,6 +206,9 @@ void		CTessFacePriorityList::clear()
 
 
 // ***************************************************************************
+#ifdef NL_OS_WINDOWS
+#pragma managed(push, off)
+#endif
 uint		CTessFacePriorityList::selectQuadrant(const CVector &direction)
 {
 	// if numQuadrants=0, ret 0.
@@ -264,10 +267,11 @@ uint		CTessFacePriorityList::selectQuadrant(const CVector &direction)
 			bestQuadrant= i;
 		}
 	}
-
 	return bestQuadrant;
 }
-
+#ifdef NL_OS_WINDOWS
+#pragma managed(pop)
+#endif
 
 // ***************************************************************************
 void		CTessFacePriorityList::insert(uint quadrantId, float distance, CTessFace *value)
