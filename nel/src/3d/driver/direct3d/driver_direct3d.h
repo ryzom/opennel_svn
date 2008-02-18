@@ -2056,6 +2056,8 @@ public:
 	HRESULT STDMETHODCALLTYPE SetVertexShaderConstantI(UINT StartRegister, CONST INT* pConstantData, UINT RegisterCount);
 private:
 
+	void findNearestFullscreenVideoMode();
+
 	// Windows
 	std::string				_WindowClass;
 	HWND					_HWnd;	

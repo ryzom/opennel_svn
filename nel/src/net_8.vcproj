@@ -395,7 +395,7 @@
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="1"
 			ManagedExtensions="0"
-			WholeProgramOptimization="1"
+			WholeProgramOptimization="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -419,7 +419,6 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
-				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
 				PreprocessorDefinitions="NL_STATIC;_LIB;NL_RELEASE_DEBUG;LIBXML_STATIC;WIN32;NDEBUG;ASSERT_THROW_EXCEPTION;$(NOINHERIT)"
 				StringPooling="true"

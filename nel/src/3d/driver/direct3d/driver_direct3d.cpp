@@ -1363,6 +1363,7 @@ bool CDriverD3D::setDisplay(void* wnd, const GfxMode& mode, bool show, bool resi
 		else
 		{
 			WndFlags = D3D_FULLSCREEN_STYLE;
+			findNearestFullscreenVideoMode();
 		}
 
 		WndFlags &= ~WS_VISIBLE;
@@ -1440,19 +1441,19 @@ bool CDriverD3D::setDisplay(void* wnd, const GfxMode& mode, bool show, bool resi
 	HRESULT result = _D3D->CreateDevice (adapter, _Rasterizer, (HWND)_HWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING|D3DCREATE_PUREDEVICE, &parameters, &_DeviceInterface);
 	if (result != D3D_OK)
 	{
-		nlwarning ("Can't create device hr:0x%x adap:0x%x rast:0x%x ", result, adapter, _Rasterizer);
+		nlwarning ("Can't create device hr:0x%x adap:0x%x rast:0x%x", result, adapter, _Rasterizer);
 
 		// Create the D3D device without puredevice
 		HRESULT result = _D3D->CreateDevice (adapter, _Rasterizer, (HWND)_HWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, &parameters, &_DeviceInterface);
 		if (result != D3D_OK)
 		{
-			nlwarning ("Can't create device without puredevice hr:0x%x adap:0x%x rast:0x%x ", result, adapter, _Rasterizer);
+			nlwarning ("Can't create device without puredevice hr:0x%x adap:0x%x rast:0x%x", result, adapter, _Rasterizer);
 
 			// Create the D3D device without puredevice and hardware
 			HRESULT result = _D3D->CreateDevice (adapter, _Rasterizer, (HWND)_HWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &parameters, &_DeviceInterface);
 			if (result != D3D_OK)
 			{
-				nlwarning ("Can't create device without puredevice and hardware hr:0x%x adap:0x%x rast:0x%x ", result, adapter, _Rasterizer);
+				nlwarning ("Can't create device without puredevice and hardware hr:0x%x adap:0x%x rast:0x%x", result, adapter, _Rasterizer);
 				release();
 				return false;
 			}
@@ -3704,3 +3705,41 @@ void CDriverD3D::getZBufferPart (std::vector<float>  &zbuffer, NLMISC::CRect &re
 
 
 } // NL3D
+
+void NL3D::CDriverD3D::findNearestFullscreenVideoMode() 
+{
+	if(_CurrentMode.Windowed)
+		return;
+
+	std::vector<GfxMode> modes;
+	if(getModes(modes))
+	{
+		sint32 nbPixels = _CurrentMode.Width * _CurrentMode.Height;
+		sint32 minError = nbPixels;
+		uint bestMode = modes.size();
+		for(uint i=0; i < modes.size(); i++)
+		{
+			if(!modes[i].Windowed)
+			{
+				if(modes[i].Width==_CurrentMode.Width && modes[i].Height==_CurrentMode.Height)
+				{
+					// ok we found the perfect mode
+					return;
+				}
+				sint32 currentPixels = modes[i].Width * modes[i].Height;
+				sint32 currentError = abs(nbPixels - currentPixels);
+				if(currentError < minError)
+				{
+					minError = currentError;
+					bestMode = i;
+				}
+			}
+		}
+		if(bestMode != modes.size())
+		{
+			nlwarning("The video mode %dx%d doesn't exist, use the nearest mode %dx%d", _CurrentMode.Width, _CurrentMode.Height, modes[bestMode].Width, modes[bestMode].Height);
+			_CurrentMode.Width = modes[bestMode].Width;
+			_CurrentMode.Height = modes[bestMode].Height;
+		}
+	}
+}
