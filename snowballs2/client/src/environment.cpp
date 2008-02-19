@@ -96,7 +96,7 @@ _Scene(scene), _LensFlare(driver, scene->getCam()), _Time(time)
 	_Snow.setTransformMode(UTransformable::DirectMatrix);
 
 	// set the fog (temp)
-	_Driver->enableFog(false);
+	_Driver->enableFog(true);
 	_Driver->setupFog(100.0f, 250.0f, CRGBA(80, 77, 118));
 
 	progress.progress(1.00f);

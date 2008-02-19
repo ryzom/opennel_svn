@@ -424,7 +424,7 @@ SBCLIENT_CALLBACK_IMPL(CKeyBinder, updateInput)
 	bool *lastDown = NULL;
 	_CKeyStateBindingMultiMap::iterator
 		it(_KeyStateBindings.begin()),
-		end(_KeyStateBindings.begin());
+		end(_KeyStateBindings.end());
 	for (; it != end; ++it)
 	{
 		if (_Driver->AsyncListener.isKeyDown(it->second.KeySetting.Key))

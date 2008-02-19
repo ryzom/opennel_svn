@@ -60,6 +60,7 @@ namespace NLPACS {
 namespace SBCLIENT {
 	class CAnimationOld;
 	class CCollisionsOld;
+	class CKeyBinder;
 
 /**
  * \brief CEntitiesOld
@@ -98,6 +99,7 @@ protected:
 	CCollisionsOld *_Collisions; // c
 	NL3D::TGlobalAnimationTime *_GlobalAnimationTime; // p
 	NL3D::TGlobalAnimationTime *_GlobalAnimationTimeDelta; // p
+	CKeyBinder *_KeyBinder; // p
 
 	// instances
 	/// calculates the movement for the controlled entity
@@ -105,9 +107,18 @@ protected:
 	// todo:
 	// - call update in update loop
 	CEntityController _EntityController;
+	uint _StateMoveForwardId;
+	uint _StateMoveBackwardId;
+	uint _StateMoveLeftId;
+	uint _StateMoveRightId;
+	uint _StateRotateLeftId;
+	uint _StateRotateRightId;
 public:
-	CEntitiesOld(NLMISC::IProgressCallback &progressCallback, NL3D::UScene *scene, NL3D::UVisualCollisionManager *visualCollisionManager, NLPACS::UMoveContainer *moveContainer, NLPACS::UGlobalRetriever *globalRetriever, CAnimationOld *animation, NL3D::TGlobalAnimationTime *globalAnimationTime, NL3D::TGlobalAnimationTime *globalAnimationTimeDelta, CCollisionsOld *collisions);
+	CEntitiesOld(NLMISC::IProgressCallback &progressCallback, NL3D::UScene *scene, NL3D::UVisualCollisionManager *visualCollisionManager, NLPACS::UMoveContainer *moveContainer, NLPACS::UGlobalRetriever *globalRetriever, CAnimationOld *animation, NL3D::TGlobalAnimationTime *globalAnimationTime, NL3D::TGlobalAnimationTime *globalAnimationTimeDelta, CCollisionsOld *collisions, CKeyBinder *keyBinder);
 	virtual ~CEntitiesOld();
+
+	void enable(); // 
+	void disable(); //
 
 	CEntityOld &getEntity(uint32 eid);
 	CEntityOld *getEntityPtr(uint32 eid);

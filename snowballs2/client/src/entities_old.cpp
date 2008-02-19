@@ -35,6 +35,7 @@
 #include "member_callback_impl.h"
 #include "animation_old.h"
 #include "collisions_old.h"
+#include "key_binder.h"
 
 // NeL includes
 // #include <nel/misc/debug.h>
@@ -67,13 +68,16 @@ CEntitiesOld::CEntitiesOld(NLMISC::IProgressCallback &progressCallback,
 UScene *scene, NL3D::UVisualCollisionManager *visualCollisionManager, 
 UMoveContainer *moveContainer, UGlobalRetriever *globalRetriever, 
 CAnimationOld *animation, TGlobalAnimationTime *globalAnimationTime,
-TGlobalAnimationTime *globalAnimationTimeDelta, CCollisionsOld *collisions) : 
-_TestCLS(false), Self(NULL), _Scene(scene), 
+TGlobalAnimationTime *globalAnimationTimeDelta, CCollisionsOld *collisions
+, CKeyBinder *keyBinder) : _TestCLS(false), Self(NULL), _Scene(scene), 
 _VisualCollisionManager(visualCollisionManager), 
 _MoveContainer(moveContainer), _GlobalRetriever(globalRetriever), 
 _Animation(animation), LastEID(1000000), 
 _GlobalAnimationTime(globalAnimationTime), 
-_GlobalAnimationTimeDelta(globalAnimationTimeDelta), _Collisions(collisions)
+_GlobalAnimationTimeDelta(globalAnimationTimeDelta), 
+_Collisions(collisions), _KeyBinder(keyBinder), _StateMoveForwardId(0), 
+_StateMoveBackwardId(0), _StateMoveLeftId(0), _StateMoveRightId(0), 
+_StateRotateLeftId(0), _StateRotateRightId(0)
 {
 	progressCallback.progress(0.0f);
 	nlassert(!Self);
@@ -85,13 +89,45 @@ _GlobalAnimationTimeDelta(globalAnimationTimeDelta), _Collisions(collisions)
 	nlassert(_GlobalAnimationTime);
 	nlassert(_GlobalAnimationTimeDelta);
 	nlassert(_Collisions);
+	nlassert(_KeyBinder);
 	_Animation->_Entities = this;
+
+	_EntityController.MoveSpeed = PlayerSpeed;
+	_EntityController.RotateSpeed = 0.1f;
+
 	progressCallback.progress(1.0f);
 }
 
 CEntitiesOld::~CEntitiesOld()
 {
 	removeAll();
+}
+
+void CEntitiesOld::enable()
+{
+	// get from config!
+	_KeyBinder->addStateHandler(_StateMoveForwardId,
+		"move_forward", &_EntityController.MoveForward);
+	_KeyBinder->addStateHandler(_StateMoveBackwardId,
+		"move_backward", &_EntityController.MoveBackward);
+	_KeyBinder->addStateHandler(_StateMoveLeftId,
+		"move_left", &_EntityController.MoveLeft);
+	_KeyBinder->addStateHandler(_StateMoveRightId,
+		"move_right", &_EntityController.MoveRight);
+	_KeyBinder->addStateHandler(_StateRotateLeftId,
+		"rotate_left", &_EntityController.RotateLeft);
+	_KeyBinder->addStateHandler(_StateRotateRightId,
+		"rotate_right", &_EntityController.RotateRight);
+}
+
+void CEntitiesOld::disable()
+{
+	_KeyBinder->removeStateHandler(_StateMoveForwardId);
+	_KeyBinder->removeStateHandler(_StateMoveBackwardId);
+	_KeyBinder->removeStateHandler(_StateMoveLeftId);
+	_KeyBinder->removeStateHandler(_StateMoveRightId);
+	_KeyBinder->removeStateHandler(_StateRotateLeftId);
+	_KeyBinder->removeStateHandler(_StateRotateRightId);
 }
 
 CEntityOld &CEntitiesOld::getEntity(uint32 eid)
@@ -174,8 +210,7 @@ void CEntitiesOld::addEntity(uint32 eid, const ucstring &name, CEntityOld::TType
 
 		entity.Instance.hide();
 
-		//#pragma SBCLIENT_WARNING("SBCLIENT_MOUSE_LISTENER")
-		//entity.Angle = MouseListener->getOrientation();
+		// set default angle ...
 		entity.Angle = 0.0f;
 
 		// setup final parameters
@@ -539,13 +574,16 @@ void CEntitiesOld::stateNormal(CEntityOld &entity)
 	{
 		// get new position
 		//#pragma SBCLIENT_WARNING("SBCLIENT_MOUSE_LISTENER")
+		// todo: clean up and put in right order
+		_EntityController.update(*_GlobalAnimationTimeDelta);
+		entity.MovePrimitive->move(_EntityController.Move, 0);
 		UGlobalPosition	gPos;
 		entity.MovePrimitive->getGlobalPosition(gPos, 0);
 		newPos = _GlobalRetriever->getGlobalPosition(gPos);
 		//newPos = MouseListener->getPosition();
 		// get new orientation
-		#pragma SBCLIENT_WARNING("SBCLIENT_MOUSE_LISTENER")
-		//entity.Angle = MouseListener->getOrientation();
+		//#pragma SBCLIENT_WARNING("SBCLIENT_MOUSE_LISTENER")
+		entity.Angle = _EntityController.Rotation;
 
 		// Interpolate the character orientation towards the server angle
 		// for smoother movements

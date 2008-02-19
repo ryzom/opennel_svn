@@ -691,6 +691,13 @@ void CSnowballsClient::loadIngame()
 			_Graphics->Driver, _Landscape->Scene, &_Time->AnimationTime);
 		nlassert(_Animation);
 
+		_LoadingScreen.setRange(6.f / max_progress, 7.f / max_progress);
+		_Loading->setMessageState("InitializeKeyboard");
+		nlassert(!_Keyboard);
+		_Keyboard = new SBCLIENT::CKeyboard(_LoadingScreen, "Keyboard",
+			_Graphics->Driver, &_Input->Keyboard);
+		nlassert(_Keyboard);
+
 		_LoadingScreen.setRange(5.f / max_progress, 6.f / max_progress);
 		_Loading->setMessageState("InitializeEntities");
 		nlassert(!_Entities);
@@ -698,15 +705,8 @@ void CSnowballsClient::loadIngame()
 			_Landscape->Scene, _Collisions->VisualCollisionManager, 
 			_Collisions->MoveContainer, _Collisions->GlobalRetriever,
 			_Animation, &_Time->AnimationTime, &_Time->AnimationDelta,
-			_Collisions); // yay
+			_Collisions, &_Keyboard->KeyBinder); // yay
 		nlassert(_Entities);
-
-		_LoadingScreen.setRange(6.f / max_progress, 7.f / max_progress);
-		_Loading->setMessageState("InitializeKeyboard");
-		nlassert(!_Keyboard);
-		_Keyboard = new SBCLIENT::CKeyboard(_LoadingScreen, "Keyboard",
-			_Graphics->Driver, &_Input->Keyboard);
-		nlassert(_Keyboard);
 
 		_LoadingScreen.progress(1.f);
 
@@ -770,12 +770,12 @@ void CSnowballsClient::unloadIngame()
 		_LoadingScreen.setRange(0.f, 1.f);
 		float max_progress = 6.f;
 
-		_Loading->setMessageState("ReleaseKeyboard");
-		_LoadingScreen.progress(0.f / max_progress);
-		nlassert(_Keyboard); delete _Keyboard; _Keyboard = NULL;
 		_Loading->setMessageState("ReleaseEntities");
 		_LoadingScreen.progress(1.f / max_progress);
 		nlassert(_Entities); delete _Entities; _Entities = NULL;
+		_Loading->setMessageState("ReleaseKeyboard");
+		_LoadingScreen.progress(0.f / max_progress);
+		nlassert(_Keyboard); delete _Keyboard; _Keyboard = NULL;
 		_Loading->setMessageState("ReleaseAnimation");
 		_LoadingScreen.progress(2.f / max_progress);
 		nlassert(_Animation); delete _Animation; _Animation = NULL;
@@ -861,17 +861,16 @@ void CSnowballsClient::enableIngame()
 		nlassert(!_AnimationUpdateAnimationsId);
 		_AnimationUpdateAnimationsId = _UpdateFunctions.add(
 			CAnimationOld::updateAnimations, _Animation, NULL, 100 + SBCLIENT_UPDATE_ANIMATIONS);
-
-		nlassert(!_EntitiesUpdateEntitiesId);
-		_EntitiesUpdateEntitiesId = _UpdateFunctions.add(
-			CEntitiesOld::updateEntities, _Entities, NULL, 0 + SBCLIENT_UPDATE_ENTITIES);
-	
+		
 		nlassert(!_KeyboardUpdateInputId);
 		_KeyboardUpdateInputId = _UpdateFunctions.add(
 			CKeyBinder::updateInput, &_Keyboard->KeyBinder, NULL, SBCLIENT_UPDATE_INPUT);
-
-		// input
 		_Keyboard->enable();
+		
+		nlassert(!_EntitiesUpdateEntitiesId);
+		_EntitiesUpdateEntitiesId = _UpdateFunctions.add(
+			CEntitiesOld::updateEntities, _Entities, NULL, 0 + SBCLIENT_UPDATE_ENTITIES);
+		_Entities->enable();
 	}
 }
 
@@ -879,10 +878,12 @@ void CSnowballsClient::disableIngame()
 {
 	if (_EnabledIngame)
 	{
-		// input
-		_Keyboard->disable();
+		_Entities->disable();
+		nlassert(_EntitiesUpdateEntitiesId);
+		_UpdateFunctions.remove(_EntitiesUpdateEntitiesId);
+		_EntitiesUpdateEntitiesId = 0;
 
-		// functions
+		_Keyboard->disable();
 		nlassert(_KeyboardUpdateInputId);
 		_UpdateFunctions.remove(_KeyboardUpdateInputId);
 		_KeyboardUpdateInputId = 0;
@@ -890,10 +891,6 @@ void CSnowballsClient::disableIngame()
 		nlassert(_LandscapeUpdateAnimationsId);
 		_UpdateFunctions.remove(_LandscapeUpdateAnimationsId);
 		_LandscapeUpdateAnimationsId = 0;
-
-		nlassert(_EntitiesUpdateEntitiesId);
-		_UpdateFunctions.remove(_EntitiesUpdateEntitiesId);
-		_EntitiesUpdateEntitiesId = 0;
 
 		nlassert(_AnimationUpdateAnimationsId);
 		_UpdateFunctions.remove(_AnimationUpdateAnimationsId);
@@ -1134,10 +1131,10 @@ SBCLIENT_CALLBACK_IMPL(CSnowballsClient, updateDebug)
 	if (_Landscape && _Entities && _Entities->Self)
 	{
 		// temp
-		_Entities->Self->MovePrimitive->move(CVector(1,-1,0), 0);
+		//_Entities->Self->MovePrimitive->move(CVector(1,-1,0), 0);
 		NL3D::UCamera camera = _Landscape->Scene->getCam();
 		camera.setTransformMode(UTransformable::RotEuler);
-		camera.setPos(_Entities->Self->Position + CVector(0,-24,24));
+		camera.setPos(_Entities->Self->Position + CVector(0,-24,16));
 		//camera.setRotEuler(-Pi / 4.0f, 0, 0);
 		_Landscape->Scene->setCam(camera);
 	}

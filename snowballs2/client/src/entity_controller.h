@@ -54,15 +54,15 @@ public:
 	// set
 	bool MoveForward, MoveBackward, MoveLeft, MoveRight;
 	bool RotateLeft, RotateRight;
-	float Speed;
+	float RotateSpeed, MoveSpeed; // per second
 	// get
-	NLMISC::CVector Move;
-	float Rotation;
+	NLMISC::CVector Move; // delta movement (vectorD for move)
+	float Rotation; // actual rotation
 public:
 	CEntityController();
 	virtual ~CEntityController();
 
-	void update();
+	void update(double serverTimeDelta);
 }; /* class CEntityController */
 
 } /* namespace SBCLIENT */

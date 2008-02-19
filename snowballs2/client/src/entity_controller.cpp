@@ -40,7 +40,7 @@
 // STL includes
 
 using namespace std;
-// using namespace NLMISC;
+using namespace NLMISC;
 
 namespace SBCLIENT {
 
@@ -54,14 +54,18 @@ CEntityController::~CEntityController()
 	
 }
 
-void CEntityController::update()
+void CEntityController::update(double serverTimeDelta)
 {
-	// todo:
-	// - read rotate bools
-	// - update rotation
-	// - read move bools
-	// - update move (using direction set by rotation)
-	// (rotation is the actial direction the character is facing)
+	if (RotateLeft) Rotation -= RotateSpeed;
+	if (RotateRight) Rotation += RotateSpeed;
+	Move = CVector::Null;
+	if (MoveForward) Move.x = 1;
+	if (MoveBackward) Move.x -= 1;
+	if (MoveLeft) Move.y = 1;
+	if (MoveRight) Move.y -= 1; // might need switch x y
+	Move.normalize();
+	// rotate mov
+	Move *= MoveSpeed;
 }
 
 } /* namespace SBCLIENT */
