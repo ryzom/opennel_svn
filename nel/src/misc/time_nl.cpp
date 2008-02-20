@@ -35,6 +35,11 @@
 #	include <unistd.h>
 #endif
 
+#ifdef NL_OS_MAC
+#include <mach/mach.h>
+#include <mach/mach_time.h>
+#endif
+
 #include "nel/misc/time_nl.h"
 #include "nel/misc/sstring.h"
 
@@ -180,13 +185,14 @@ TTicks CTime::getPerformanceTime ()
 		return ret.QuadPart;
 	else
 		return 0;
-#else // NL_OS_WINDOWS
-
+#elif defined(NL_OS_MAC)
+	return mach_absolute_time();
+#else
 #if defined(HAVE_X86_64)
 	unsigned long long int hi, lo;
 	__asm__ volatile (".byte 0x0f, 0x31" : "=a" (lo), "=d" (hi));
 	return (hi << 32) | (lo & 0xffffffff);
-#elif defined(HAVE_X86)
+#elif defined(HAVE_X86) and !defined(NL_OS_MAC)
 	unsigned long long int x;
 	__asm__ volatile (".byte 0x0f, 0x31" : "=A" (x));
 	return x;
@@ -223,6 +229,12 @@ double CTime::ticksToSecond (TTicks ticks)
 		return (double)(sint64)ticks/(double)ret.QuadPart;
 	}
 	else
+#elif defined(NL_OS_MAC)
+	{
+		static mach_timebase_info_data_t tbInfo;
+		if(tbInfo.denom == 0) mach_timebase_info(&tbInfo);
+		return double(ticks * tbInfo.numer / tbInfo.denom)/1000000.0;
+	}
 #endif // NL_OS_WINDOWS
 	{
 		static bool benchFrequency = true;

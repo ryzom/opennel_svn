@@ -124,9 +124,9 @@ public:
 	TOcclusionType					OcclusionType;  // current type of occlusion
 	uint							VisibleCount;	// number of samples that passed the test
 	// From IOcclusionQuery
-	virtual void begin();	
-	virtual void end();	
-	virtual TOcclusionType getOcclusionType();	
+	virtual void begin();
+	virtual void end();
+	virtual TOcclusionType getOcclusionType();
 	virtual uint getVisibleCount();
 };
 
@@ -152,7 +152,7 @@ public:
 
 	// enum to use for this texture (GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_NV..)
 	GLenum					TextureMode;
-	
+
 	// FBO Id
 	GLuint					FBOId;
 
@@ -177,7 +177,7 @@ public:
 	// For Debug info. return the memory cost of this texture
 	virtual uint	getTextureMemoryUsed() const {return TextureMemory;}
 
-	bool					initFrameBufferObject(ITexture * tex); 
+	bool					initFrameBufferObject(ITexture * tex);
 	bool					activeFrameBufferObject(ITexture * tex);
 };
 
@@ -240,16 +240,16 @@ public:
 	// NB: ptrs are invalid if VertexFormat does not support the compoennt. must test VertexFormat, not the ptr.
 	void					*ValuePtr[CVertexBuffer::NumValue];
 
-	
+
 	enum TVBMode { TVBModeNone = 0, SysMem, HwNVIDIA, HwARB, HwATI }; // standard VBs, or Hard VBs using different extensions
 
 	// Kind of vb
 	TVBMode					VBMode;
 	// the handle of ATI or ARB vertex object
-	uint					VertexObjectId;	
+	uint					VertexObjectId;
 
 	CVertexBufferInfo()
-	{		
+	{
 		VBMode = TVBModeNone;
 	}
 
@@ -358,7 +358,7 @@ public:
 	/// setup the texture matrix for a given number of stages (starting from 0)
 	void      setupUserTextureMatrix(uint numStages, CMaterial& mat);
 
-	/// disable all texture matrix 
+	/// disable all texture matrix
 	void      disableUserTextureMatrix();
 
 	/// For objects with caustics, setup the first texture (which actually is the one from the material)
@@ -409,7 +409,7 @@ public:
 	virtual	bool			supportCloudRenderSinglePass() const;
 
 	virtual bool			supportIndexOffset() const { return false; /* feature only supported in D3D for now */ }
-	
+
 
 	virtual	bool			slowUnlockVertexBufferHard() const;
 
@@ -426,7 +426,7 @@ public:
 	virtual bool			renderLines(CMaterial& mat, uint32 firstIndex, uint32 nlines);
 	virtual bool			renderTriangles(CMaterial& Mat, uint32 firstIndex, uint32 ntris);
 	virtual bool			renderSimpleTriangles(uint32 firstTri, uint32 ntris);
-	virtual bool			renderRawPoints(CMaterial& Mat, uint32 startIndex, uint32 numPoints);		
+	virtual bool			renderRawPoints(CMaterial& Mat, uint32 startIndex, uint32 numPoints);
 	virtual bool			renderRawLines(CMaterial& Mat, uint32 startIndex, uint32 numLines);
 	virtual bool			renderRawTriangles(CMaterial& Mat, uint32 startIndex, uint32 numTris);
 	virtual bool			renderRawQuads(CMaterial& Mat, uint32 startIndex, uint32 numQuads);
@@ -450,7 +450,7 @@ public:
 	virtual	uint32			profileSetupedModelMatrix() const;
 
 	void					enableUsedTextureMemorySum (bool enable);
-	
+
 	uint32					getUsedTextureMemory() const;
 
 	virtual	void			startProfileVBHardLock();
@@ -464,7 +464,7 @@ public:
 	virtual	void			endProfileIBLock(std::vector<std::string> &result);
 
 	virtual	void			profileIBAllocation(std::vector<std::string> &result);
-	
+
 	virtual bool			release();
 
 	virtual TMessageBoxId	systemMessageBox (const char* message, const char* title, TMessageBoxType type=okType, TMessageBoxIcon icon=noIcon);
@@ -500,7 +500,7 @@ public:
 	virtual void			setCapture (bool b);
 
 	virtual NLMISC::IMouseDevice			*enableLowLevelMouse(bool enable, bool exclusive);
-		
+
 	virtual NLMISC::IKeyboardDevice			*enableLowLevelKeyboard(bool enable);
 
 	virtual NLMISC::IInputDeviceManager		*getLowLevelInputDeviceManager();
@@ -519,18 +519,18 @@ public:
 
 	// copy the first texture in a second one of different dimensions
 	virtual bool			stretchRect(ITexture * srcText, NLMISC::CRect &srcRect, ITexture * destText, NLMISC::CRect &destRect);
-	
+
 	// return true if driver support Bloom effect.
 	virtual	bool			supportBloomEffect() const;
 
 	virtual bool			activeFrameBufferObject(ITexture * tex);
-	
+
 	virtual void			getZBufferPart (std::vector<float>  &zbuffer, NLMISC::CRect &rect);
-		
-	virtual bool			setRenderTarget (ITexture *tex, uint32 x, uint32 y, uint32 width, uint32 height, 
+
+	virtual bool			setRenderTarget (ITexture *tex, uint32 x, uint32 y, uint32 width, uint32 height,
 												uint32 mipmapLevel, uint32 cubeFace);
 
-	virtual bool			copyTargetToTexture (ITexture *tex, uint32 offsetx, uint32 offsety, uint32 x, uint32 y, 
+	virtual bool			copyTargetToTexture (ITexture *tex, uint32 offsetx, uint32 offsety, uint32 x, uint32 y,
 													uint32 width, uint32 height, uint32 mipmapLevel);
 
 	virtual bool			getRenderTargetSize (uint32 &width, uint32 &height);
@@ -549,7 +549,7 @@ public:
 	virtual void			setPerPixelLightingLight(CRGBA diffuse, CRGBA specular, float shininess);
 
 	virtual void			setLightMapDynamicLight (bool enable, const CLight& light);
-	
+
 	virtual void			setAmbientColor (CRGBA color);
 
 	/// \name Fog support.
@@ -576,7 +576,7 @@ public:
 
 	/// \name EMBM support
 	// @{
-		virtual bool supportEMBM() const;		
+		virtual bool supportEMBM() const;
 		virtual bool isEMBMSupportedAtStage(uint stage) const;
 		virtual void setEMBMMatrix(const uint stage, const float mat[4]);
 	// @}
@@ -627,8 +627,8 @@ public:
 	virtual void endBench ();
 	virtual void displayBench (class NLMISC::CLog *log);
 
-	virtual bool			supportOcclusionQuery() const;	
-	virtual IOcclusionQuery *createOcclusionQuery();	
+	virtual bool			supportOcclusionQuery() const;
+	virtual IOcclusionQuery *createOcclusionQuery();
 	virtual void			deleteOcclusionQuery(IOcclusionQuery *oq);
 
 	// Test wether this device supports the frame buffer object mecanism
@@ -636,8 +636,8 @@ public:
 	virtual bool			supportFrameBufferObject() const;
 	virtual bool			supportPackedDepthStencil() const;
 
-	virtual uint64			getSwapBufferCounter() const { return _SwapBufferCounter; }	
-	
+	virtual uint64			getSwapBufferCounter() const { return _SwapBufferCounter; }
+
 	virtual void			setCullMode(TCullMode cullMode);
 	virtual	TCullMode       getCullMode() const;
 
@@ -666,7 +666,7 @@ private:
 #ifdef NL_OS_WINDOWS
 
 	friend static bool GlWndProc(CDriverGL *driver, HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-	
+
 	HWND						_hWnd;
 	sint32						_WindowWidth, _WindowHeight, _WindowX, _WindowY;
 	HDC							_hDC;
@@ -674,7 +674,7 @@ private:
     HGLRC						_hRC;
 	static uint					_Registered;
 	DEVMODE						_OldScreenMode;
-	NLMISC::CEventEmitterMulti	_EventEmitter; // this can contains a win emitter and eventually a direct input emitter	
+	NLMISC::CEventEmitterMulti	_EventEmitter; // this can contains a win emitter and eventually a direct input emitter
 	bool						_DestroyWindow;
 
 	// Off-screen rendering in Dib section
@@ -720,7 +720,7 @@ private:
 	// To know if the projection matrix has been changed
 	bool					_ProjMatDirty;
 
-	// Mirror the gl projection matrix when _ProjMatDirty = false 
+	// Mirror the gl projection matrix when _ProjMatDirty = false
 	NLMISC::CMatrix			_GLProjMat;
 
 	// Ored of _LightSetupDirty and _ModelViewMatrixDirty
@@ -777,7 +777,7 @@ private:
 	// this is the backup of standard lighting (cause GL states may be modified by Lightmap Dynamic Lighting)
 	CLight						_UserLight0;
 	bool						_UserLightEnable[MaxLight];
-	
+
 	//\name description of the per pixel light
 	// @{
 		void checkForPerPixelLightingSupport();
@@ -788,15 +788,15 @@ private:
 		NLMISC::CRGBA				_PPLightSpecularColor;
 	// @}
 
-	
+
 
 	/// \name Prec settings, for optimisation.
 	// @{
 
 	// Special Texture environnements.
 	enum	CTexEnvSpecial {
-		TexEnvSpecialDisabled= 0, 
-		TexEnvSpecialLightMap, 
+		TexEnvSpecialDisabled= 0,
+		TexEnvSpecialLightMap,
 		TexEnvSpecialSpecularStage1,
 		TexEnvSpecialSpecularStage1NoText,
 		TexEnvSpecialPPLStage0,
@@ -839,7 +839,7 @@ private:
 
 	bool					_CurrentGlNormalize;
 
-private:	
+private:
 	// Get the proj matrix setupped in GL
 	void					refreshProjMatrixFromGL();
 
@@ -854,7 +854,7 @@ private:
 	void					activateTexEnvColor(uint stage, NLMISC::CRGBA col);
 	void					forceActivateTexEnvColor(uint stage, NLMISC::CRGBA col)
 	{
-		static	const float	OO255= 1.0f/255;	
+		static	const float	OO255= 1.0f/255;
 		_CurrentTexEnv[stage].ConstantColor= col;
 		// Setup the gl cte color.
 		_DriverGLStates.activeTextureARB(stage);
@@ -863,12 +863,12 @@ private:
 		glcol[1]= col.G*OO255;
 		glcol[2]= col.B*OO255;
 		glcol[3]= col.A*OO255;
-		glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, glcol);	
+		glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, glcol);
 	}
 	void					forceActivateTexEnvColor(uint stage, const CMaterial::CTexEnv  &env)
-	{	
+	{
 		H_AUTO_OGL(CDriverGL_forceActivateTexEnvColor)
-		forceActivateTexEnvColor(stage, env.ConstantColor);	
+		forceActivateTexEnvColor(stage, env.ConstantColor);
 	}
 
 
@@ -965,7 +965,7 @@ private:
 	void			setupWaterPass(uint pass);
 	void			endWaterMultiPass();
 	// @}
-		
+
 	/// \name Per pixel lighting
 	// @{
 	// per pixel lighting with specular
@@ -978,10 +978,10 @@ private:
 	void			setupPPLNoSpecPass(uint pass);
 	void			endPPLNoSpecMultiPass();
 
-	typedef NLMISC::CSmartPtr<CTextureCube> TSPTextureCube;	
-	typedef std::vector<TSPTextureCube> TTexCubeVect;	
+	typedef NLMISC::CSmartPtr<CTextureCube> TSPTextureCube;
+	typedef std::vector<TSPTextureCube> TTexCubeVect;
 	TTexCubeVect   _SpecularTextureCubes; // the cube maps used to compute the specular lighting.
-		
+
 
 	/// get (and if necessary, build) a cube map used for specular lighting. The range for exponent is limited, and only the best fit is used
 	CTextureCube   *getSpecularCubeMap(uint exp);
@@ -1048,7 +1048,7 @@ private:
 	void			setupLightMapDynamicLighting(bool enable);
 
 
-	/// \name VertexBufferHard 
+	/// \name VertexBufferHard
 	// @{
 	CPtrSet<IVertexBufferHardGL>	_VertexBufferHardSet;
 	friend class					CVertexArrayRangeNVidia;
@@ -1130,17 +1130,17 @@ private:
 	void			setConstant (uint index, float, float, float, float);
 	void			setConstant (uint index, double, double, double, double);
 	void			setConstant (uint indexStart, const NLMISC::CVector& value);
-	void			setConstant (uint indexStart, const NLMISC::CVectorD& value);	
-	void			setConstant (uint index, uint num, const float *src);	
+	void			setConstant (uint indexStart, const NLMISC::CVectorD& value);
+	void			setConstant (uint index, uint num, const float *src);
 	void			setConstant (uint index, uint num, const double *src);
-	void			setConstantMatrix (uint index, IDriver::TMatrix matrix, IDriver::TTransform transform);	
+	void			setConstantMatrix (uint index, IDriver::TMatrix matrix, IDriver::TTransform transform);
 	void			setConstantFog (uint index);
 	void			enableVertexProgramDoubleSidedColor(bool doubleSided);
 	bool		    supportVertexProgramDoubleSidedColor() const;
 
 	virtual	bool			supportMADOperator() const ;
-	
-	
+
+
 	// @}
 
 	/// \name Vertex program implementation
@@ -1204,7 +1204,7 @@ private:
 
 	/// \name EXTVertexShader specifics.
 	// @{
-			// Variants offset used for : 
+			// Variants offset used for :
 			// Secondary color
 			// Fog Coords
 			// Skin Weight
@@ -1216,16 +1216,16 @@ private:
 			// Handle for standard gl arrays
 			GLuint _EVSPositionHandle;
 			GLuint _EVSNormalHandle;
-			GLuint _EVSColorHandle;			
+			GLuint _EVSColorHandle;
 			GLuint _EVSTexHandle[8];
 			// Handle of the first constant c[0]. In vertex program we have 96 constant c[0] .. c[95]
 			GLuint _EVSConstantHandle;
 			// number of constant
 			static const uint _EVSNumConstant;
-			// 
+			//
 			bool   setupEXTVertexShader(const CVPParser::TProgram &program, GLuint id, uint variants[EVSNumVariants], uint16 &usedInputRegisters);
 			bool   setupARBVertexProgram (const CVPParser::TProgram &parsedProgram, GLuint id, bool &specularWritten);
-			//			
+			//
 	// @}
 
 	// init EMBM settings (set each stage to modify the next)
@@ -1248,7 +1248,7 @@ private:
 			GLuint ATICloudShaderHandle; // cloud support for R200 and more
 
 			GLuint ARBWaterShader[4]; // water support on R300, NV30 & the like
-			
+
 
 			void   initFragmentShaders();
 			void   deleteFragmentShaders();
@@ -1278,7 +1278,7 @@ private:
 	uint32					_TextureTargetHeight;
 	bool					_TextureTargetUpload;
 	uint					_TextureTargetCubeFace;
-	// @}	
+	// @}
 	// misc
 public:
 	static GLenum NLCubeFaceToGLCubeFace[6];
@@ -1292,8 +1292,8 @@ protected:
 	uint64					_SwapBufferCounter;
 public:
 	void incrementResetCounter() { ++_ResetCounter; }
-	bool isWndActive() const { return _WndActive; }	
-	const IVertexBufferHardGL	*getCurrentVertexBufferHard() const { return _CurrentVertexBufferHard; }	
+	bool isWndActive() const { return _WndActive; }
+	const IVertexBufferHardGL	*getCurrentVertexBufferHard() const { return _CurrentVertexBufferHard; }
 	// For debug : dump list of mapped buffers
 	#ifdef NL_DEBUG
 		void dumpMappedBuffers();
@@ -1303,7 +1303,7 @@ public:
 	void checkTextureOn() const;
 private:
 	/** Bind a texture at stage 0 for the good texture mode(2d or cube)
-	  * Parameters / part of the texture are ready to be changed in the gl after that	  
+	  * Parameters / part of the texture are ready to be changed in the gl after that
 	  * _CurrentTexture & _CurrentTextureInfoGL are not modified !
 	  */
 	inline void bindTextureWithMode(ITexture &tex);
@@ -1313,7 +1313,6 @@ private:
 	inline void setupTextureBasicParameters(ITexture &tex);
 
 };
-
 
 // ***************************************************************************
 class CVertexProgamDrvInfosGL : public IVertexProgramDrvInfos
@@ -1325,11 +1324,11 @@ public:
 	// ARB_vertex_program specific -> must know if specular part is written
 	bool					SpecularWritten;
 
-	/**  EXTVertexShader specific 
+	/**  EXTVertexShader specific
 	  *  handle of allocated variants
 	  */
 	GLuint					Variants[CDriverGL::EVSNumVariants];
-	/** EXTVertexShader specific 
+	/** EXTVertexShader specific
 	  * Used input registers.
 	  * This allow to activate only the gl arrays that are needed by a given shader.
 	  */
@@ -1339,6 +1338,11 @@ public:
 	// The gl id is auto created here.
 	CVertexProgamDrvInfosGL (CDriverGL *drv, ItVtxPrgDrvInfoPtrList it);
 };
+
+#ifdef NL_OS_MAC
+	// Specific mac functions
+	extern bool getMacModes(std::vector<GfxMode> &modes);
+#endif
 
 } // NL3D
 

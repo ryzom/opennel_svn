@@ -1599,23 +1599,33 @@ bool CDriverGL::getModes(std::vector<GfxMode> &modes)
 		// Mode index
 		modeIndex++;
 	}
+#elif defined(NL_OS_MAC)
+	getMacModes(modes);
 #else
 
 #	ifdef XF86VIDMODE
 	int nmodes;
 	XF86VidModeModeInfo **ms;
-	XF86VidModeGetAllModeLines(dpy, 0, &nmodes, &ms);
-	nldebug("3D: Available modes %d", nmodes);
-	for (int j = 0; j < nmodes; j++) {
-		// Add this mode
-		GfxMode mode;
-		mode.Width = (uint16)ms[j]->hdisplay;
-		mode.Height = (uint16)ms[j]->vdisplay;
-		mode.Frequency = 1000 * ms[j]->dotclock / (ms[j]->htotal * ms[j]->vtotal);
-		nldebug("3D:   Mode %d: width %d height %d freq %d", j, ms[j]->hdisplay,ms[j]->vdisplay, 1000 * ms[j]->dotclock / (ms[j]->htotal * ms[j]->vtotal));
-		modes.push_back (mode);
+	Bool ok = XF86VidModeGetAllModeLines(dpy, 0, &nmodes, &ms);
+	if(ok)
+	{
+		nldebug("3D: %d available modes:", nmodes);
+		for (int j = 0; j < nmodes; j++) {
+			// Add this mode
+			GfxMode mode;
+			mode.Width = (uint16)ms[j]->hdisplay;
+			mode.Height = (uint16)ms[j]->vdisplay;
+			mode.Frequency = 1000 * ms[j]->dotclock / (ms[j]->htotal * ms[j]->vtotal);
+			nldebug("3D:   Mode %d: %dx%d, %d Hz", j, ms[j]->hdisplay,ms[j]->vdisplay, 1000 * ms[j]->dotclock / (ms[j]->htotal * ms[j]->vtotal));
+			modes.push_back (mode);
+		}
+		XFree(ms);
 	}
-	XFree(ms);
+	else
+	{
+		nlwarning("XF86VidModeGetAllModeLines returns 0, cannot get available video mode");
+		return false;
+	}
 #	endif
 
 #endif

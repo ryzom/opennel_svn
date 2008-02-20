@@ -104,10 +104,12 @@
 #endif
 #	define NL_OS_UNIX
 #	define NL_COMP_GCC
-#	ifdef WORDS_BIGENDIAN
+#	ifdef __BIG_ENDIAN__
 #		define NL_BIG_ENDIAN
-#	else
+#	elif defined(__LITTLE_ENDIAN__)
 #		define NL_LITTLE_ENDIAN
+#   else
+#       error "Cannot detect the endianness of this Mac"
 #	endif
 #endif
 
