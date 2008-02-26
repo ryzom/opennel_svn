@@ -317,7 +317,7 @@
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
+			CharacterSet="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -393,7 +393,7 @@
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
+			CharacterSet="0"
 			ManagedExtensions="0"
 			WholeProgramOptimization="0"
 			>
@@ -420,7 +420,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="NL_STATIC;_LIB;NL_RELEASE_DEBUG;LIBXML_STATIC;WIN32;NDEBUG;ASSERT_THROW_EXCEPTION;$(NOINHERIT)"
+				PreprocessorDefinitions="NL_STATIC;_LIB;NL_RELEASE_DEBUG;LIBXML_STATIC;WIN32;NDEBUG;ASSERT_THROW_EXCEPTION"
 				StringPooling="true"
 				MinimalRebuild="true"
 				ExceptionHandling="2"

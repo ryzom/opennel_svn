@@ -104,7 +104,7 @@ public:
 	static ILoadProxy *getLoadProxy() { return _LoadProxy; }
 
 	/// Load a language file depending of the language code ("en", "fr", ...)
-	static void load (const std::string &languageCode);
+	static void load (const std::string &languageCode, const std::string &fallbackLanguageCode="");
 
 	/** Load a language file from its filename
 	  * \param filename name of the language file to load, with its extension	  
@@ -213,6 +213,9 @@ private:
 
 	static StrMapContainer										_StrMap;
 	static bool													_StrMapLoaded;
+
+	// the alternative language that will be used if the sentence is not found in the original language
+	static StrMapContainer										_StrMapFallback;
 
 	static const std::string									_LanguageCodes[];
 	static const uint											_NbLanguages;

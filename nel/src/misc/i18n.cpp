@@ -35,6 +35,7 @@ using namespace std;
 namespace NLMISC {
 
 CI18N::StrMapContainer	CI18N::_StrMap;
+CI18N::StrMapContainer	CI18N::_StrMapFallback;
 bool					CI18N::_StrMapLoaded = false;
 const ucstring			CI18N::_NotTranslatedValue("<Not Translated>");
 bool					CI18N::_LanguagesNamesLoaded = false;
@@ -48,12 +49,18 @@ void CI18N::setLoadProxy(ILoadProxy *loadProxy)
 }
 
 
-void CI18N::load (const string &languageCode)
+void CI18N::load (const string &languageCode, const string &fallbackLanguageCode)
 {
 	if (_StrMapLoaded)	_StrMap.clear ();
 	else				_StrMapLoaded = true;
 	_SelectedLanguageCode = languageCode;
-	loadFileIntoMap(languageCode + ".uxt", _StrMap);	
+	loadFileIntoMap(languageCode + ".uxt", _StrMap);
+
+	_StrMapFallback.clear();
+	if(!fallbackLanguageCode.empty())
+	{
+		loadFileIntoMap(fallbackLanguageCode + ".uxt", _StrMapFallback);
+	}
 }
 
 bool CI18N::loadFileIntoMap(const string &fileName, StrMapContainer &destMap)
@@ -149,6 +156,11 @@ const ucstring &CI18N::get (const string &label)
 		nlwarning("I18N: The string %s did not exist in language %s (display once)", label.c_str(), _SelectedLanguageCode.c_str());
 		missingStrings.insert(label);
 	}
+
+	// use the fallback language if it exists
+	it = _StrMapFallback.find(label);
+	if (it != _StrMapFallback.end())
+		return it->second;
 
 	static ucstring	badString;
 
