@@ -99,18 +99,25 @@
 	// define NOMINMAX to be sure that windows includes will not define min max macros, but instead, use the stl template
 #	define NOMINMAX
 #else
-#ifdef __APPLE__
-#define NL_OS_MAC
-#endif
+#	ifdef __APPLE__
+#		define NL_OS_MAC
+#		ifdef __BIG_ENDIAN__
+#			define NL_BIG_ENDIAN
+#		elif defined(__LITTLE_ENDIAN__)
+#			define NL_LITTLE_ENDIAN
+#		else
+#			error "Cannot detect the endianness of this Mac"
+#		endif
+#	else
+#		ifdef WORDS_BIGENDIAN
+#			define NL_BIG_ENDIAN
+#		else
+#			define NL_LITTLE_ENDIAN
+#		endif
+#	endif
+// these define are set the linux and mac os
 #	define NL_OS_UNIX
 #	define NL_COMP_GCC
-#	ifdef __BIG_ENDIAN__
-#		define NL_BIG_ENDIAN
-#	elif defined(__LITTLE_ENDIAN__)
-#		define NL_LITTLE_ENDIAN
-#   else
-#       error "Cannot detect the endianness of this Mac"
-#	endif
 #endif
 
 // Mode checks: NL_DEBUG and NL_DEBUG_FAST are allowed at the same time, but not with any release mode
