@@ -95,6 +95,9 @@ bool CI18N::loadFileIntoMap(const string &fileName, StrMapContainer &destMap)
 			return false;
 		}
 
+		// remove white spaces that can be in the end of the string
+		ucs = trimRightWhiteSpaces(ucs);
+
 		// ok, a line read.
 		pair<map<string, ucstring>::iterator, bool> ret;
 		ret = destMap.insert(make_pair(label, ucs));
