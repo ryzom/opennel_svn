@@ -1012,16 +1012,4 @@ bool openDoc (const char *document)
 	return false;
 }
 
-std::string trim (const std::string &str)
-{
-	uint start = 0;
-	const uint size = str.size();
-	while (start < size && str[start] <= 32)
-		start++;
-	uint end = size;
-	while (end > start && str[end-1] <= 32)
-		end--;
-	return str.substr (start, end-start);
-}
-
 } // NLMISC

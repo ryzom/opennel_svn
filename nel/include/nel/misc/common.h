@@ -221,8 +221,27 @@ void		toLower ( char *str );
 std::string	toUpper ( const std::string &str);
 void		toUpper ( char *str);
 
-// Remove all the characters <= 32 (tab, space, new line, return, vertical tab etc..) at the begning and at the end of a string
-std::string trim (const std::string &str);
+// Remove all the characters <= 32 (tab, space, new line, return, vertical tab etc..) at the beginning and at the end of a string
+template <class T> T trim (const T &str)
+{
+	T::size_type start = 0;
+	const T::size_type size = str.size();
+	while (start < size && str[start] <= 32)
+		start++;
+	T::size_type end = size;
+	while (end > start && str[end-1] <= 32)
+		end--;
+	return str.substr (start, end-start);
+}
+
+// remove spaces at the end of the string
+template <class T> T trimRightWhiteSpaces (const T &str)
+{
+	T::size_type end = str.size();
+	while (end > 0 && str[end-1] == ' ')
+		end--;
+	return str.substr (0, end);
+}
 
 //////////////////////////////////////////////////////////////////////////
 // ****  DEPRECATED *****: PLEASE DON'T USE THESE METHODS BUT FUNCTIONS ABOVE toLower() and toUpper()
