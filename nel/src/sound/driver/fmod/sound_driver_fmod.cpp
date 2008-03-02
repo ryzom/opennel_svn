@@ -572,7 +572,7 @@ bool getTag (std::string &result, const char *tag, FSOUND_STREAM *stream)
 		if (FSOUND_Stream_FindTagField(stream, types[i], tag, &name, &size))
 		{
 			strncpy (tmp, (const char*)name, min((int)sizeof(tmp),size));
-			result = trim(tmp);
+			result = trim(string(tmp));
 			return true;
 		}
 	}
