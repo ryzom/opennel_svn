@@ -174,12 +174,17 @@ const ucstring &CI18N::get (const string &label)
 
 bool CI18N::hasTranslation(const string &label)
 {
-	if (label.empty()) return true;	
-	
-	StrMapContainer::iterator it(_StrMap.find(label));	
-	return it != _StrMap.end();		
-}
+	if (label.empty()) return true;
 
+	if(_StrMap.find(label) != _StrMap.end())
+			return true;
+
+	// use the fallback language if it exists
+	if (_StrMapFallback.find(label) != _StrMapFallback.end())
+		return true;
+
+	return false;
+}
 
 ucstring CI18N::getCurrentLanguageName ()
 {
