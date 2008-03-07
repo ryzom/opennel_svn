@@ -1185,15 +1185,19 @@ void	registerGlExtensions(CGlExtensions &ext)
 	GLint	ntext;
 
 	nldebug("3D: Available OpenGL Extensions:");
-	vector<string> exts;
-	explode(string(glext), string(" "), exts);
-	for(uint i = 0; i < exts.size(); i++)
+
+	if (DebugLog)
 	{
-		if(i%5==0) DebugLog->displayRaw("3D:     ");
-		DebugLog->displayRaw(string(exts[i]+" ").c_str());
-		if(i%5==4) DebugLog->displayRaw("\n");
+		vector<string> exts;
+		explode(string(glext), string(" "), exts);
+		for(uint i = 0; i < exts.size(); i++)
+		{
+			if(i%5==0) DebugLog->displayRaw("3D:     ");
+			DebugLog->displayRaw(string(exts[i]+" ").c_str());
+			if(i%5==4) DebugLog->displayRaw("\n");
+		}
+		DebugLog->displayRaw("\n");
 	}
-	DebugLog->displayRaw("\n");
 
 	// Check ARBMultiTexture
 	ext.ARBMultiTexture= setupARBMultiTexture(glext);
@@ -1382,15 +1386,19 @@ bool	registerWGlExtensions(CGlExtensions &ext, HDC hDC)
 	}
 
 	nldebug("3D: Available WGL Extensions:");
-	vector<string> exts;
-	explode(string(glext), string(" "), exts);
-	for(uint i = 0; i < exts.size(); i++)
+
+	if (DebugLog)
 	{
-		if(i%5==0) DebugLog->displayRaw("3D:     ");
-		DebugLog->displayRaw(string(exts[i]+" ").c_str());
-		if(i%5==4) DebugLog->displayRaw("\n");
+		vector<string> exts;
+		explode(string(glext), string(" "), exts);
+		for(uint i = 0; i < exts.size(); i++)
+		{
+			if(i%5==0) DebugLog->displayRaw("3D:     ");
+			DebugLog->displayRaw(string(exts[i]+" ").c_str());
+			if(i%5==4) DebugLog->displayRaw("\n");
+		}
+		DebugLog->displayRaw("\n");
 	}
-	DebugLog->displayRaw("\n");
 
 	// Check for pbuffer
 	ext.WGLARBPBuffer= setupWGLARBPBuffer(glext);
