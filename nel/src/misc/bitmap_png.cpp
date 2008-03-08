@@ -628,20 +628,17 @@ bool CBitmap::writePNG( NLMISC::IStream &f, uint32 d)
 			d = 32;
 			break;
 		case Luminance:
-			return false; // format not implemented
 			d = 8;
 			break;
 		case Alpha:
-
-			return false; // format not implemented
 			d = 8;
 			break;
 		default:
-			return false; // format not implemented
 			;
 		}
 	}
-	if (d!=24 && d!=32 && d!=16 && d!=8) return false;
+
+	if (d!=24 && d!=32) return false;
 	if ((PixelFormat != RGBA)&&(PixelFormat != Alpha)&&(PixelFormat != Luminance)) return false;
 	if ((PixelFormat == Alpha) && (d != 8)) return false;
 	if ((PixelFormat == Luminance) && (d != 8)) return false;
@@ -824,7 +821,7 @@ bool CBitmap::writePNG( NLMISC::IStream &f, uint32 d)
 	//set the write functiun
 	png_set_write_fn(png_ptr, (void*)&f, writePNGData, NULL);
 
-	const int iColorType = PNG_COLOR_TYPE_RGBA; // only RGBA color type is implemented
+	const int iColorType = (d == 32) ? PNG_COLOR_TYPE_RGBA:PNG_COLOR_TYPE_RGB; // only RGBA and RGB color type is implemented
 	const int iBitDepth = 8; // we don't have to implement 16bits formats because NeL only uses 8bits
 
 	png_set_IHDR(png_ptr, info_ptr, _Width, _Height, iBitDepth, iColorType, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
@@ -881,7 +878,7 @@ bool CBitmap::writePNG( NLMISC::IStream &f, uint32 d)
 	{
 		uint32 k=0;
 
-		for(i=0; i<iWidth*4; i+=4) // 4:RGBA
+		for(i=0; i<iWidth*4; i+=4)
 		{
 			for(j=0; j<(sint32)d/8; ++j)
 			{
@@ -892,7 +889,7 @@ bool CBitmap::writePNG( NLMISC::IStream &f, uint32 d)
 		png_write_rows(png_ptr, (uint8**)&scanline, 1);
 	}
 
-	delete []scanline;
+	delete [] scanline;
 
 	png_write_end(png_ptr, info_ptr);
 	png_destroy_write_struct(&png_ptr, &info_ptr);
