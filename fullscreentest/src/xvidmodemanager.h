@@ -21,10 +21,16 @@ public:
 	virtual void initModes();
 	virtual GfxMode *getCurrentMode();
 	
+	void setNvidiaModeFilter(bool filter);
+	void setXineramaAvailable(bool avail);
+	void setIgnoreGLXTest(bool ignore);
+	
 private:
 	bool initXineramaLibrary();
 	
-	Bool xinAvail;
+	bool xinAvail;
+	bool nvModeFilter;
+	bool ignoreGLXTest; 
 	XF86VidModeModeInfo **ms;
 	void *libXineramaHandle;
 	void *libXVidModeHandle;

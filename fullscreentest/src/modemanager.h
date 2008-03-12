@@ -45,11 +45,10 @@ class ModeManager;
  * \arg After these steps the methods getModes(), getCurrentMode()
  *      and setMode() are free to use.
  */
-class ModeManager
-{
+class ModeManager {
 public:
 	virtual ~ModeManager();
-	
+
 	/**
 	 * \brief Returns the list of supported screen modes.
 	 * 
@@ -67,9 +66,9 @@ public:
 	virtual bool initLibraries() = 0;
 	virtual void initModes() = 0;
 	virtual GfxMode* getCurrentMode() = 0;
-	
+
 	void setLibraryPath(std::string name, std::string path);
-	
+
 protected:
 	std::vector<GfxMode*> modeList;
 	std::map<std::string, std::string> libraries;

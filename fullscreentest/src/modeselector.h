@@ -7,24 +7,22 @@
 #include <QApplication>
 #include "xvidmodemanager.h"
 
-
-class ModeSelectorWindow : public QWidget
-{
-	Q_OBJECT
+class ModeSelectorWindow : public QWidget {
+Q_OBJECT
 
 public:
 	ModeSelectorWindow(QApplication *app);
 	void setWindowFlags(Qt::WindowFlags flags);
-//private slots:
-//	void updatePreview();
+	//private slots:
+	//	void updatePreview();
 public slots:
 	void selectMode(int index);
 	void switchMode();
-	
+
 private:
 	QPushButton *quitButton, *switchButton;
-	QComboBox	*modeComboBox;
-	
+	QComboBox *modeComboBox;
+
 	XVidModeManager manager;
 	GfxMode *selectedMode;
 };

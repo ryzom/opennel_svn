@@ -1,18 +1,16 @@
 #include "xvidmodemanager.h"
-#include "modeexception.h"
+#include "exception.h"
 #include "gfxmode.h"
 #include "libfunctions.h"
 #include <dlfcn.h>
 #include <string>
 #include <iostream>
 
-#define USE_NVIDIA_FIX 1
-
-bool XVidModeManager::initXineramaLibrary()
-{
+bool XVidModeManager::initXineramaLibrary() {
 	// assume we have Xinerama as default
-	xinAvail = True;
-	std::string libPath = LIB_XINERAMA;
+	//xinAvail = true;
+	std::cout << "initXineramaLibrary start" << std::endl;
+	std::string libPath= LIB_XINERAMA;
 	if (libraries.count(libPath))
 		libPath = libraries[libPath];
 	if (libXineramaHandle != NULL && dlclose(libXineramaHandle)) {
@@ -27,36 +25,41 @@ bool XVidModeManager::initXineramaLibrary()
 		return false;
 	}
 	dlerror();
-	fnXineramaIsActive = (fnXineramaIsActive_t)dlsym(libXineramaHandle, FN_XINERAMA_IS_ACTIVE);
+	fnXineramaIsActive = (fnXineramaIsActive_t)dlsym(libXineramaHandle, 
+	FN_XINERAMA_IS_ACTIVE);
 	char *errMsg = dlerror();
 	if (errMsg != NULL) {
 		// TODO warning/error log
 		// no need to clean up libXineramaHandle, dtor or recall
 		// of initLibraries() will do that for us
-		std::cerr << ("dlsym([xinerama], " FN_XINERAMA_IS_ACTIVE ") failed.") << std::endl;
+		std::cerr << ("dlsym([xinerama], " FN_XINERAMA_IS_ACTIVE ") failed.")
+				<< std::endl;
 		return false;
 	}
-	fnXineramaQueryScreens = (fnXineramaQueryScreens_t)dlsym(libXineramaHandle,
-			FN_XINERAMA_QUERY_SCREENS);
+	fnXineramaQueryScreens = (fnXineramaQueryScreens_t)dlsym(libXineramaHandle, 
+	FN_XINERAMA_QUERY_SCREENS);
 	errMsg = dlerror();
 	if (errMsg != NULL) {
 		// TODO warning/error log
-		std::cerr << ("dlsym([xinerama], " FN_XINERAMA_QUERY_SCREENS ") failed.") << std::endl;
+		std::cerr
+				<< ("dlsym([xinerama], " FN_XINERAMA_QUERY_SCREENS ") failed.")
+				<< std::endl;
 		return false;
 	}
+	std::cout << "initXineramaLibrary successful end" << std::endl;
 	return true;
 }
 
-bool XVidModeManager::initLibraries()
-{
+bool XVidModeManager::initLibraries() {
 	// Xinerama is optional, which means initializing
 	// the library may fail, which results in a disabled
 	// Xinerama extension
-	if (!initXineramaLibrary())
-		xinAvail = False;
+	std::cout << "xinAvail = " << xinAvail << std::endl;
+	xinAvail = xinAvail && initXineramaLibrary();
+	std::cout << "xinAvail = " << xinAvail << std::endl;
 	
 	// XVidMode stuff
-	std::string libPath = LIB_XVIDMODE;
+	std::string libPath= LIB_XVIDMODE;
 	if (libraries.count(libPath))
 		libPath = libraries[libPath];
 	if (libXVidModeHandle != NULL && dlclose(libXVidModeHandle)) {
@@ -71,39 +74,44 @@ bool XVidModeManager::initLibraries()
 		return false;
 	}
 	dlerror();
-	fnXF86VidModeGetAllModeLines =
-		(fnXF86VidModeGetAllModeLines_t)dlsym(libXVidModeHandle,
-											FN_XVIDMODE_GET_ALL_MODE_LINES);
+	fnXF86VidModeGetAllModeLines = (fnXF86VidModeGetAllModeLines_t)dlsym(
+			libXVidModeHandle, 
+			FN_XVIDMODE_GET_ALL_MODE_LINES);
 	char *errMsg = dlerror();
 	if (errMsg != NULL) {
 		// TODO warning/error log
-		std::cerr << ("dlsym([xvidmode], " FN_XVIDMODE_GET_ALL_MODE_LINES ") failed.") << std::endl;
+		std::cerr
+				<< ("dlsym([xvidmode], " FN_XVIDMODE_GET_ALL_MODE_LINES ") failed.")
+				<< std::endl;
 		return false;
 	}
-	fnXF86VidModeSwitchToMode =
-		(fnXF86VidModeSwitchToMode_t)dlsym(libXVidModeHandle,
-				FN_XVIDMODE_SWITCH_TO_MODE);
+	fnXF86VidModeSwitchToMode = (fnXF86VidModeSwitchToMode_t)dlsym(
+			libXVidModeHandle, 
+			FN_XVIDMODE_SWITCH_TO_MODE);
 	if (errMsg != NULL) {
 		// TODO warning/error log
-		std::cerr << ("dlsym([xvidmode], " FN_XVIDMODE_SWITCH_TO_MODE ") failed.") << std::endl;
+		std::cerr
+				<< ("dlsym([xvidmode], " FN_XVIDMODE_SWITCH_TO_MODE ") failed.")
+				<< std::endl;
 		return false;
 	}
-	fnXF86VidModeSetViewPort =
-		(fnXF86VidModeSetViewPort_t)dlsym(libXVidModeHandle,
-				FN_XVIDMODE_SET_VIEW_PORT);
+	fnXF86VidModeSetViewPort = (fnXF86VidModeSetViewPort_t)dlsym(
+			libXVidModeHandle, 
+			FN_XVIDMODE_SET_VIEW_PORT);
 	if (errMsg != NULL) {
 		// TODO warning/error log
-		std::cerr << ("dlsym([xvidmode], " FN_XVIDMODE_SET_VIEW_PORT ") failed.") << std::endl;
+		std::cerr
+				<< ("dlsym([xvidmode], " FN_XVIDMODE_SET_VIEW_PORT ") failed.")
+				<< std::endl;
 		return false;
 	}
 	return true;
 }
 
-void XVidModeManager::initModes()
-{
+void XVidModeManager::initModes() {
 	// wipe the existing list of screen modes
 	modeList.clear();
-	
+
 	Display *dpy= NULL;
 	int nmodes;
 
@@ -113,7 +121,8 @@ void XVidModeManager::initModes()
 
 	int major, event, error;
 	if (xinAvail)
-		xinAvail = XQueryExtension(dpy, "XINERAMA", &major, &event, &error);
+		xinAvail = XQueryExtension(dpy, "XINERAMA", &major, &event, &error)
+				== True;
 	Bool glxAvail = XQueryExtension(dpy, "GLX", &major, &event, &error);
 	Bool xvmAvail = XQueryExtension(dpy, "XFree86-VidModeExtension", &major, &event, &error);
 
@@ -148,43 +157,47 @@ void XVidModeManager::initModes()
 			origin_y = xinInfo[screen].y_org;
 		}
 
-		// first check if we have GLX support on the screen
-		XVisualInfo *visualInfo = glXChooseVisual(dpy, screenNum,
-				glxVisualAttribList);
-		// don't do anything if there isn't
-		XFree(visualInfo);
-		// kludge, but works as long as we don't access
-		// the data visualInfo was pointing to once
-		if (visualInfo == NULL)
-			continue;
+		if (!ignoreGLXTest) {
+			// first check if we have GLX support on the screen
+			XVisualInfo *visualInfo = glXChooseVisual(dpy, screenNum,
+					glxVisualAttribList);
+			// don't do anything if there isn't
+			XFree(visualInfo);
+			// kludge, but works as long as we don't access
+			// the data visualInfo was pointing to once
+			if (visualInfo == NULL) {
+				std::cout << "ignoring modes on screen #" << screenNum << std::endl;
+				continue;
+			}
+		}
 
 		// otherwise collect mode information data
 		(*fnXF86VidModeGetAllModeLines)(dpy, screenNum, &nmodes, &ms);
 		//nldebug("Available modes %d", nmodes);
 		for (int modeNum = 0; modeNum < nmodes; modeNum++) {
-			// nVidia returns weird modes, filter them out
-#ifdef USE_NVIDIA_FIX			
-			if (ms[modeNum]->vdisplay <= ms[modeNum]->vtotal
-					&& ms[modeNum]->hdisplay <= ms[modeNum]->htotal) {
-#endif				
-				GfxMode *mode = new GfxMode(false, false,
-						ms[modeNum]->hdisplay,
-						ms[modeNum]->vdisplay,
-						24,
-						(uint8_t)(1000 * ms[modeNum]->dotclock /
-								(ms[modeNum]->htotal * ms[modeNum]->vtotal)),
-						0,
-						screenNum,
-						origin_x,
-						origin_y,
-						this,
-						ms[modeNum]);
+			// nVidia returns weird modes, filter them out if nvModeFilter is set
+			if (!nvModeFilter || (ms[modeNum]->vdisplay <= ms[modeNum]->vtotal
+					&& ms[modeNum]->hdisplay <= ms[modeNum]->htotal)) {
+				GfxMode
+						*mode =
+								new GfxMode(false, false,
+										ms[modeNum]->hdisplay,
+										ms[modeNum]->vdisplay,
+										24,
+										(uint8_t)(1000 * ms[modeNum]->dotclock /
+												(ms[modeNum]->htotal * ms[modeNum]->vtotal)),
+										0,
+										screenNum,
+										origin_x,
+										origin_y,
+										this,
+										ms[modeNum]);
 				modeList.push_back(mode);
-				std::cout << "added mode (@ " << ((void*)mode) << ") " << mode->Width << "x" << mode->Height << "_" << ((int)mode->Frequency)
-						<< " on screen " << screenNum << std::endl;
-#ifdef USE_NVIDIA_FIX				
+				std::cout << "added mode (@ " << ((void*)mode) << ") "
+						<< mode->Width << "x" << mode->Height << "_"
+						<< ((int)mode->Frequency) << " on screen " << screenNum
+						<< std::endl;
 			}
-#endif			
 		}
 
 	}
@@ -194,10 +207,11 @@ void XVidModeManager::initModes()
 	XCloseDisplay(dpy);
 }
 
-XVidModeManager::XVidModeManager()
-{
+XVidModeManager::XVidModeManager() {
 	ms = NULL;
-	xinAvail = 0;
+	xinAvail = true;
+	nvModeFilter = true;
+	ignoreGLXTest = false;
 	libXineramaHandle = NULL;
 	libXVidModeHandle = NULL;
 	fnXineramaIsActive = NULL;
@@ -207,8 +221,7 @@ XVidModeManager::XVidModeManager()
 	fnXF86VidModeSetViewPort = NULL;
 }
 
-XVidModeManager::~XVidModeManager()
-{
+XVidModeManager::~XVidModeManager() {
 	if (libXineramaHandle != NULL) {
 		dlclose(libXineramaHandle);
 		dlerror(); // "eat" error if there was one
@@ -221,8 +234,7 @@ XVidModeManager::~XVidModeManager()
 		XFree(ms);
 }
 
-void XVidModeManager::setMode(GfxMode *mode)
-{
+void XVidModeManager::setMode(GfxMode *mode) {
 	if (mode == NULL)
 		return;
 	if (mode->Manager != this)
@@ -239,7 +251,18 @@ void XVidModeManager::setMode(GfxMode *mode)
 	// return result == TRUE; ?
 }
 
-GfxMode *XVidModeManager::getCurrentMode()
-{
+GfxMode *XVidModeManager::getCurrentMode() {
 	return NULL;
 }
+
+void XVidModeManager::setNvidiaModeFilter(bool filter) {
+	nvModeFilter = filter;
+}
+
+void XVidModeManager::setXineramaAvailable(bool avail) {
+	xinAvail = avail;
+}
+void XVidModeManager::setIgnoreGLXTest(bool ignore) {
+	ignoreGLXTest = ignore;
+}
+

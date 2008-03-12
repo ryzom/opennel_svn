@@ -10,7 +10,7 @@ INCLUDEPATH += . src
 
 # Input
 HEADERS += src/gfxmode.h \
-           src/modeexception.h \
+           src/exception.h \
            src/modemanager.h \
            src/modeselector.h \
            src/xvidmodemanager.h
