@@ -31,6 +31,7 @@
 #include <cctype>
 #include <cstdio>
 #include <cmath>
+#include <cstring>
 #include <string>
 #include <vector>
 #include <cfloat>

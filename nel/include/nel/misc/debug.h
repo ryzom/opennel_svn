@@ -170,7 +170,7 @@ void	setCrashAlreadyReported(bool state);
  *\endcode
  */
 #ifdef NL_RELEASE
-#	if defined(NL_COMP_VC71) || defined(NL_COMP_VC8)
+#	if defined(NL_COMP_VC71) || defined(NL_COMP_VC8) || defined(NL_COMP_VC9)
 #		define nldebug __noop
 #	else
 #		define nldebug 0&&
@@ -185,7 +185,7 @@ void	setCrashAlreadyReported(bool state);
  * Same as nldebug but it will be display in debug and in release mode.
  */
 #ifdef NL_RELEASE
-#	if defined(NL_COMP_VC71) || defined(NL_COMP_VC8)
+#	if defined(NL_COMP_VC71) || defined(NL_COMP_VC8) || defined(NL_COMP_VC9)
 #		define nlinfo __noop
 #	else
 #		define nlinfo 0&&
@@ -213,7 +213,7 @@ void	setCrashAlreadyReported(bool state);
  */
 
 #ifdef NL_RELEASE
-#	if defined(NL_COMP_VC71) || defined(NL_COMP_VC8)
+#	if defined(NL_COMP_VC71) || defined(NL_COMP_VC8) || defined(NL_COMP_VC9)
 #		define nlwarning __noop
 #	else
 #		define nlwarning 0&&
