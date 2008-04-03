@@ -2,12 +2,14 @@
 #
 # NeL
 #  Authors: Nevrax and the OpenNeL Community
-#  Version: 0.6.0
+#  Version: 0.6.1
 #
 # Notes:
 #   * Changing install location: add -DCMAKE_INSTALL_PREFIX:PATH=/my/new/path
 #   * Enable building of documentation: add -DBUILD_DOCUMENTATION:BOOL=ON - new make target: DoxygenDoc
 #   * Updating version: update header (above) but also update NL_VERSION below.
+#   * To build binary archive, use the 'package' target.
+#     To build source archive, use the 'package_source' target.
 
 #-----------------------------------------------------------------------------
 # Load some macros.
@@ -28,7 +30,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
 PROJECT(OpenNeL CXX C)
 SET(NL_VERSION_MAJOR 0)
 SET(NL_VERSION_MINOR 6)
-SET(NL_VERSION_PATCH 0)
+SET(NL_VERSION_PATCH 1)
 SET(NL_VERSION "${NL_VERSION_MAJOR}.${NL_VERSION_MINOR}.${NL_VERSION_PATCH}")
 
 #-----------------------------------------------------------------------------
@@ -134,7 +136,7 @@ IF(BUILD_DOCUMENTATION)
     ADD_CUSTOM_TARGET(DoxygenDoc ${DOXYGEN} ${CMAKE_BINARY_DIR}/doc/Doxyfile)
 ENDIF(BUILD_DOCUMENTATION)
 
-# To build packages, use the 'package' target.
+# packaging information
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "NeL MMORPG Framework")
 SET(CPACK_PACKAGE_VENDOR "OpenNeL")
 SET(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_SOURCE_DIR}/README)
@@ -143,14 +145,17 @@ SET(CPACK_PACKAGE_VERSION_MAJOR "${NL_VERSION_MAJOR}")
 SET(CPACK_PACKAGE_VERSION_MINOR "${NL_VERSION_MINOR}")
 SET(CPACK_PACKAGE_VERSION_PATCH "${NL_VERSION_PATCH}")
 SET(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};OpenNeL;ALL;/")
-SET(CPACK_PACKAGE_EXECUTABLES "opennel0.6.0" "opennel")
+SET(CPACK_PACKAGE_EXECUTABLES "opennel${NL_VERSION}" "opennel")
 
 ## Source Packages
-  SET(CPACK_SOURCE_PACKAGE_FILE_NAME "nel-${NL_VERSION}")
+SET(CPACK_PACKAGE_FILE_NAME "nel-${NL_VERSION}")
+SET(CPACK_SOURCE_PACKAGE_FILE_NAME "nel-${NL_VERSION}")
 IF(WIN32)
-  SET(CPACK_SOURCE_GENERATOR ZIP)
+  SET(CPACK_GENERATOR "ZIP")
+  SET(CPACK_SOURCE_GENERATOR "ZIP")
 ELSE(WIN32)
-  SET(CPACK_SOURCE_GENERATOR TGZ)
+  SET(CPACK_GENERATOR "TGZ")
+  SET(CPACK_SOURCE_GENERATOR "TGZ")
 ENDIF(WIN32)
 set(CPACK_SOURCE_IGNORE_FILES
 	"~$"
