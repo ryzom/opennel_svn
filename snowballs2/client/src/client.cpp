@@ -86,7 +86,6 @@
 
 #include "component_manager.h"
 #include "landscape_component.h"
-using namespace SBCLIENT;
 
 //
 // Namespaces
@@ -96,6 +95,7 @@ using namespace std;
 using namespace NLMISC;
 using namespace NL3D;
 using namespace NLNET;
+using namespace SBCLIENT;
 
 // 
 // Constants
@@ -149,9 +149,9 @@ static string FSAddr, Cookie;
 
 void initLoadingState();
 void releaseLoadingState();
-void renderLoadingState(char *state, bool logo3d);
-void updateLoadingState(char *state, bool network, bool information);
-void displayLoadingState(char *state);
+void renderLoadingState(const char *state, bool logo3d);
+void updateLoadingState(const char *state, bool network, bool information);
+void displayLoadingState(const char *state);
 void renderLoadingState(ucstring state, bool logo3d);
 void updateLoadingState(ucstring state, bool network, bool information);
 void displayLoadingState(ucstring state);
@@ -342,7 +342,7 @@ void initIngame()
 		// Init the landscape using the previously created UScene
 		displayLoadingState("Initialize Landscape");
 		LandscapeComponent = new CLandscapeComponent(
-			ComponentManager, "Landscape", Scene);
+			ComponentManager, std::string("Landscape"), Scene);
 		initLandscape();
 		// Init the pacs
 		displayLoadingState("Initialize PACS ");
@@ -633,6 +633,7 @@ void loopIngame()
 		// Update the time counters
 		LastTime = NewTime;
 		NewTime = CTime::getLocalTime();
+		//nldebug("NewTime = %lld", NewTime);
 		DiffTime = NewTime - LastTime;
 
 		// Update all entities positions
@@ -826,7 +827,7 @@ void releaseLoadingState()
 	Driver->deleteTextureFile(NevraxLogo); NevraxLogo = NULL;
 }
 
-void renderLoadingState(char *state, bool logo3d)
+void renderLoadingState(const char *state, bool logo3d)
 {
 	renderLoadingState(ucstring(state), logo3d);
 }
@@ -875,7 +876,7 @@ void renderLoadingState(ucstring state, bool logo3d)
 #endif
 }
 
-void displayLoadingState(char *state)
+void displayLoadingState(const char *state)
 {
 	displayLoadingState(ucstring(state));
 }
@@ -889,7 +890,7 @@ void displayLoadingState(ucstring state)
 	//Driver->EventServer.pump();
 }
 
-void updateLoadingState(char *state, bool network, bool information)
+void updateLoadingState(const char *state, bool network, bool information)
 {
 	updateLoadingState(ucstring(state), network, information);
 }
