@@ -148,7 +148,7 @@
 #endif
 
 // gcc 4.1+ provides std::tr1
-#if defined(__GNUC__) && ((__GNUC__ > 4) || (__GNUC__ == 4) && (__GNUC_MINOR__ > 0))
+#if defined(__GNUC__) && ((__GNUC__ > 4) || (__GNUC__ == 4) && (__GNUC_MINOR__ > 1))
 #	define NL_ISO_STDTR1_AVAILABLE
 #endif
 
