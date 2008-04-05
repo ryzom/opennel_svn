@@ -74,7 +74,7 @@ class IWaterSurfaceAddedCallback
 {
 public:
 	virtual ~IWaterSurfaceAddedCallback() {};
-	// A water surface with the given height has been added. 	 
+	// A water surface with the given height has been added.
 	virtual void waterSurfaceAdded(const NLMISC::CPolygon2D &shape, const NLMISC::CMatrix &worldMatrix, bool splashEnabled, bool usesSceneWaterenvmap) = 0;
 	virtual void waterSurfaceRemoved(bool usesSceneWaterenvmap) = 0;
 };
@@ -113,7 +113,7 @@ protected:
 
 public:
 	enum TRenderPart
-	{ 
+	{
 		RenderNothing     = 0,
 		RenderOpaque	  = 0x01,
 		RenderTransparent = 0x02,
