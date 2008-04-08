@@ -5,13 +5,17 @@
 #include <QPushButton>
 #include <QComboBox>
 #include <QApplication>
-#include "xvidmodemanager.h"
+#include "xvidmodeextwrapper.h"
+#include "xineramaextwrapper.h"
+//#include "xvidmodemanager.h"
+#include "xrandrmodemanager.h"
 
 class ModeSelectorWindow : public QWidget {
 Q_OBJECT
 
 public:
 	ModeSelectorWindow(QApplication *app);
+	virtual ~ModeSelectorWindow();
 	void setWindowFlags(Qt::WindowFlags flags);
 	//private slots:
 	//	void updatePreview();
@@ -23,7 +27,12 @@ private:
 	QPushButton *quitButton, *switchButton;
 	QComboBox *modeComboBox;
 
-	XVidModeManager manager;
+	XVidModeExtensionWrapper *xvidwrapper;
+	XineramaExtensionWrapper *xinwrapper;
+	XRandRExtensionWrapper *xrandrwrapper;
+	ExtensionWrapperFactory wrapperFactory;
+	//XVidModeManager *manager;
+	XRandrModeManager *manager;
 	GfxMode *selectedMode;
 };
 

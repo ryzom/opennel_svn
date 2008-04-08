@@ -1,5 +1,5 @@
-#include "modemanager.h"
 #include <string>
+#include "modemanager.h"
 
 ModeManager::~ModeManager() {
 	std::vector<GfxMode*>::iterator iter;

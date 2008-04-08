@@ -1,10 +1,17 @@
-#include <QApplication>
 #include <QWidget>
 #include "modeselector.h"
+#include "fullscreentest.h"
+#include <map>
+#include <iostream>
+
+//bool FullscreenTest::x11EventFilter(XEvent *event) {
+//	QApplication::x11EventFilter(event);
+//}
+
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+    FullscreenTest app(argc, argv);
     ModeSelectorWindow selectorWindow(&app);
     selectorWindow.setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::FramelessWindowHint);
     selectorWindow.resize(300, 300);

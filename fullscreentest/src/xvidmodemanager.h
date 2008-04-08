@@ -8,12 +8,15 @@
 #include <GL/glx.h>
 
 #include "modemanager.h"
-#include "libfunctions.h"
+#include "xvidmodeextwrapper.h"
+#include "xineramaextwrapper.h"
 
 class XVidModeManager : public ModeManager
 {
 public:
-	XVidModeManager();
+	XVidModeManager(ExtensionWrapperFactory *fac) : ModeManager(fac), xinAvail(true),
+		nvModeFilter(true), ignoreGLXTest(false), ms(NULL), xvidmode(0), xinerama(0) {}
+
 	virtual ~XVidModeManager();
 	
 	virtual void setMode(GfxMode *mode);
@@ -26,20 +29,12 @@ public:
 	void setIgnoreGLXTest(bool ignore);
 	
 private:
-	bool initXineramaLibrary();
-	
 	bool xinAvail;
 	bool nvModeFilter;
 	bool ignoreGLXTest; 
 	XF86VidModeModeInfo **ms;
-	void *libXineramaHandle;
-	void *libXVidModeHandle;
-	fnXF86VidModeGetAllModeLines_t fnXF86VidModeGetAllModeLines;
-	fnXF86VidModeSwitchToMode_t fnXF86VidModeSwitchToMode;
-	fnXF86VidModeSetViewPort_t fnXF86VidModeSetViewPort;
-	fnXineramaIsActive_t fnXineramaIsActive;
-	fnXineramaQueryScreens_t fnXineramaQueryScreens;
-
+	XVidModeExtensionWrapper *xvidmode;
+	XineramaExtensionWrapper *xinerama;
 };
 
 #endif /*XVIMODEMANAGER_H_*/

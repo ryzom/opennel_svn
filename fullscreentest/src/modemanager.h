@@ -6,6 +6,7 @@ class ModeManager;
 #include <vector>
 #include <map>
 #include "gfxmode.h"
+#include "extensionwrapper.h"
 
 /**
  * \brief A ModeManager provides a list of screen modes and
@@ -47,6 +48,7 @@ class ModeManager;
  */
 class ModeManager {
 public:
+	ModeManager(ExtensionWrapperFactory *fac) : wrapperFactory(fac) {}
 	virtual ~ModeManager();
 
 	/**
@@ -70,6 +72,7 @@ public:
 	void setLibraryPath(std::string name, std::string path);
 
 protected:
+	ExtensionWrapperFactory *wrapperFactory;
 	std::vector<GfxMode*> modeList;
 	std::map<std::string, std::string> libraries;
 };

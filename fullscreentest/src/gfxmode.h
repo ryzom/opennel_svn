@@ -6,8 +6,6 @@ struct GfxMode;
 #include <stdint.h>
 #include "modemanager.h"
 
-// things missing:
-// - position of the screen in the framebuffer
 struct GfxMode
 {
 public:
@@ -31,7 +29,7 @@ public:
 	uint32_t	OriginX;	// origin in regard to the framebuffer in use, X
 	uint32_t	OriginY;	// and Y
 	ModeManager *Manager;	// the manager for this mode
-	void	   *UserData;	// handler specific userdata (i.e. XF86VidModeModeInfo data)
+	void	    *UserData;	// handler specific userdata (i.e. XF86VidModeModeInfo data)
 };
 
 #endif /*GFXMODE_H_*/
