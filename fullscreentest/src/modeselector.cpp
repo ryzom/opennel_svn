@@ -7,7 +7,7 @@
 #include "gfxmode.h"
 
 ModeSelectorWindow::ModeSelectorWindow(QApplication *app) {
-	char modename[32]; // that should be enough space for now
+	char modename[MODE_NAME_LENGTH]; // that should be enough space for now
 	selectedMode = NULL;
 	modeComboBox = new QComboBox();
 	connect(modeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(selectMode(int)));
@@ -30,7 +30,7 @@ ModeSelectorWindow::ModeSelectorWindow(QApplication *app) {
 		GfxMode * const *data = list.data();
 		for (unsigned int i = 0; i < list.size(); i++) {
 			GfxMode *mode = data[i];
-			snprintf(modename, 30, "%dx%d_%d /%d", mode->Width, mode->Height,
+			snprintf(modename, MODE_NAME_LENGTH-1, "%dx%d_%d /%d", mode->Width, mode->Height,
 					(int)mode->Frequency, (int)mode->CRTC);
 			modeComboBox->addItem(QString(modename),
 					QVariant::fromValue((void*)mode));

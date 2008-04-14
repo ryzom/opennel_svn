@@ -32,14 +32,15 @@ class XRandrModeManager : public ModeManager {
 public:
 	XRandrModeManager(ExtensionWrapperFactory *fac) :
 		ModeManager(fac), versionMajor(0), versionMinor(0), baseEventCode(0),
-				useXinerama(false), xinAvail(false), ignoreGLXTest(false),
-				xrandr(0), xinerama(0) { }
+				useXinerama(false), xinAvail(true), ignoreGLXTest(false),
+				xrandr(0), xinerama(0), resources(NULL) { }
 	virtual ~XRandrModeManager();
 
 	virtual void setMode(GfxMode *mode);
 	virtual bool initLibraries();
 	virtual void initModes();
 	virtual GfxMode *getCurrentMode();
+	virtual void cleanup(GfxMode *mode);
 
 	// enforce Xinerama use (disabled by default)
 	void setUseXinerama(bool use);
@@ -57,6 +58,37 @@ private:
 	bool ignoreGLXTest;
 	XRandRExtensionWrapper *xrandr;
 	XineramaExtensionWrapper *xinerama;
+	
+	XRRScreenResources *resources;
+	
+	// uses RandR 1.1 + Xinerama functions to fill mode list
+	void init11Modes(Display *dpy);
+	// uses RandR 1.2+ functions to fill mode list
+	void init12Modes(Display *dpy);
+
+	enum RandRVersion { RANDR_11, RANDR_12 };
+	
+	struct RandR11Mode {
+		RandRVersion version;
+	};
+	
+	/**
+	 * \brief Container to keep all the mode data not contained in
+	 *        GfxMode (which will be stored as a pointer in userdata
+	 *        section).
+	 * 
+	 * This data is RandR 1.2+ specific and used for the
+	 * XRRSetCrtcConfig() function.
+	 */
+	struct RandR12Mode {
+		RandRVersion version;
+		RRCrtc   crtc;
+		Time     timestamp;
+		RRMode   mode;
+		RROutput output;
+		Rotation rotation;
+	};
+	
 };
 
 #endif /*XRANDRMODEMANAGER_H_*/

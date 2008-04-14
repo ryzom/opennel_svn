@@ -8,8 +8,8 @@ class FullscreenTest : public QApplication {
 Q_OBJECT
 
 public:
-	FullscreenTest(int argc, char **argv) : QApplication(argc, argv) {}
-//	virtual bool x11EventFilter(XEvent *event);
+	FullscreenTest(int &argc, char **argv) : QApplication(argc, argv) {}
+	virtual bool x11EventFilter(XEvent *event);
 };
 
 #endif /*FULLSCREENTEST_H_*/

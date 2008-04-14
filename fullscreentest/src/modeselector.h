@@ -7,8 +7,13 @@
 #include <QApplication>
 #include "xvidmodeextwrapper.h"
 #include "xineramaextwrapper.h"
-//#include "xvidmodemanager.h"
+#include "xvidmodemanager.h"
 #include "xrandrmodemanager.h"
+
+/**
+ * \brief Length of the modename buffer in bytes.
+ */
+#define MODE_NAME_LENGTH 32
 
 class ModeSelectorWindow : public QWidget {
 Q_OBJECT

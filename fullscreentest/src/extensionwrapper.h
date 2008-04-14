@@ -8,12 +8,14 @@
 // helper define to initialize a function with dlsym();
 // useful for initLibrary() method content
 // TODO make this more C++-ish, if possible
-#define LIBRARY_FUNCTION(func, name)                                         \
+#define LIBRARY_FUNCTION_ACTION(func, name, action)                          \
 	func = reinterpret_cast<func##_t>(dlsym(libraryHandle, name));           \
 	if (func == NULL) {                                                      \
 		std::cerr << ("dlsym(" name ") failed: ") << dlerror() << std::endl; \
-		return false;                                                        \
+		action;                                                              \
 	}
+
+#define LIBRARY_FUNCTION(func, name) LIBRARY_FUNCTION_ACTION(func, name, return false)
 
 /**
  * \brief ExtensionWrappers cover all functions for a

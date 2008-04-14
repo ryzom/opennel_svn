@@ -68,6 +68,7 @@ public:
 	virtual bool initLibraries() = 0;
 	virtual void initModes() = 0;
 	virtual GfxMode* getCurrentMode() = 0;
+	virtual void cleanup(GfxMode* mode) {}
 
 	void setLibraryPath(std::string name, std::string path);
 

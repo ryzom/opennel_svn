@@ -4,9 +4,9 @@
 #include <map>
 #include <iostream>
 
-//bool FullscreenTest::x11EventFilter(XEvent *event) {
-//	QApplication::x11EventFilter(event);
-//}
+bool FullscreenTest::x11EventFilter(XEvent *event) {
+	return QApplication::x11EventFilter(event);
+}
 
 
 int main(int argc, char *argv[])
