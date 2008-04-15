@@ -19,7 +19,7 @@ public:
 
 	virtual ~XVidModeManager();
 	
-	virtual void setMode(GfxMode *mode);
+	virtual bool setMode(GfxMode *mode);
 	virtual bool initLibraries();
 	virtual void initModes();
 	virtual GfxMode *getCurrentMode();

@@ -64,7 +64,7 @@ public:
 	 * 
 	 * sjdgfjasdg
 	 */
-	virtual void setMode(GfxMode *mode) = 0;
+	virtual bool setMode(GfxMode *mode) = 0;
 	virtual bool initLibraries() = 0;
 	virtual void initModes() = 0;
 	virtual GfxMode* getCurrentMode() = 0;

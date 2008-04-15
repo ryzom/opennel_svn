@@ -177,26 +177,28 @@ XRandrModeManager::~XRandrModeManager() {
 		xrandr->XRRFreeScreenResources(resources);
 }
 
-void XRandrModeManager::setMode(GfxMode *mode) {
+bool XRandrModeManager::setMode(GfxMode *mode) {
 	// check for NULL info
 	if (mode == 0)
-		return;
+		return false;
 	// if we have no resources available, don't do anything
 	if (resources == NULL)
-		return;
+		return false;
 	// and don't do anything if the data doesn't belong to us
 	if (mode->Manager != this)
-		return;
+		return false;
 	// without additional data we can't do anything, either
 	if (mode->UserData == 0)
-		return;
+		return false;
 	// init display
 	Display *dpy= NULL;
 	dpy = XOpenDisplay(NULL);
 	if (dpy == NULL)
-		throw ModeException("Couldn't open display");
+		return false;
+		//throw ModeException("Couldn't open display");
 	// handle mode info according to the version tag
 	RandRVersion *version = reinterpret_cast<RandRVersion*>(mode->UserData);
+	bool result = false;
 	switch (*version) {
 	case RANDR_11: {
 		std::cout << "loading up RandR 1.1 mode" << std::endl;
@@ -205,9 +207,9 @@ void XRandrModeManager::setMode(GfxMode *mode) {
 	case RANDR_12: {
 		std::cout << "loading up RandR 1.2+ mode" << std::endl;
 		RandR12Mode *modeExt = reinterpret_cast<RandR12Mode*>(mode->UserData);
-		bool result = xrandr->XRRSetCrtcConfig(dpy, resources, modeExt->crtc,
+		result = (xrandr->XRRSetCrtcConfig(dpy, resources, modeExt->crtc,
 				modeExt->timestamp, (int)mode->OriginX, (int)mode->OriginY,
-				modeExt->mode, modeExt->rotation, &(modeExt->output), 1);
+				modeExt->mode, modeExt->rotation, &(modeExt->output), 1) == 0);
 		std::cout << "  crtc #" << modeExt->crtc << ", output #"
 				<< modeExt->output << ", mode #" << modeExt->mode << ", result = " << result << std::endl;
 		break;
@@ -218,7 +220,7 @@ void XRandrModeManager::setMode(GfxMode *mode) {
 	}
 	// close display
 	XCloseDisplay(dpy);
-	// return result == TRUE; ?
+	return result;
 }
 
 GfxMode *XRandrModeManager::getCurrentMode() {

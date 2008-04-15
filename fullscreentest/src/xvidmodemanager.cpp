@@ -143,23 +143,24 @@ XVidModeManager::~XVidModeManager() {
 		XFree(ms);
 }
 
-void XVidModeManager::setMode(GfxMode *mode) {
+bool XVidModeManager::setMode(GfxMode *mode) {
 	if (mode == NULL)
-		return;
+		return false;
 	if (mode->Manager != this)
-		return;
+		return false;
 	if (xvidmode == 0)
-		return;
+		return false;
 
 	Display *dpy= NULL;
 	dpy = XOpenDisplay(NULL);
 	if (dpy == NULL)
-		throw ModeException("Couldn't open display.");
+		return false;
+		//throw ModeException("Couldn't open display.");
 	Bool result = xvidmode->XF86VidModeSwitchToMode(dpy, (int)mode->CRTC, (XF86VidModeModeInfo*)mode->UserData);
 	if (result)
 		xvidmode->XF86VidModeSetViewPort(dpy, (int)mode->CRTC, 0, 0); //mode->OriginX, mode->OriginY);
 	XCloseDisplay(dpy);
-	// return result == TRUE; ?
+	return result == True;
 }
 
 GfxMode *XVidModeManager::getCurrentMode() {

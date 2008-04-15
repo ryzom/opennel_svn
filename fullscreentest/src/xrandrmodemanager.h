@@ -36,7 +36,7 @@ public:
 				xrandr(0), xinerama(0), resources(NULL) { }
 	virtual ~XRandrModeManager();
 
-	virtual void setMode(GfxMode *mode);
+	virtual bool setMode(GfxMode *mode);
 	virtual bool initLibraries();
 	virtual void initModes();
 	virtual GfxMode *getCurrentMode();

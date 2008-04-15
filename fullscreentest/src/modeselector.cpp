@@ -78,8 +78,10 @@ void ModeSelectorWindow::selectMode(int index) {
 
 void ModeSelectorWindow::switchMode() {
 	if (selectedMode != NULL && selectedMode->Manager != 0) {
-		selectedMode->Manager->setMode(selectedMode);
-		setGeometry(selectedMode->OriginX, selectedMode->OriginY,
-				selectedMode->Width, selectedMode->Height);
+		if (selectedMode->Manager->setMode(selectedMode))
+			setGeometry(selectedMode->OriginX, selectedMode->OriginY,
+					selectedMode->Width, selectedMode->Height);
+		else
+			std::cout << "failed to set mode" << std::endl;
 	}
 }
