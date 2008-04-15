@@ -52,8 +52,9 @@ void XRandrModeManager::init12Modes(Display *dpy) {
 	if (resources != NULL)
 		xrandr->XRRFreeScreenResources(resources);
 	resources = xrandr->XRRGetScreenResources(dpy, root);
-	std::cout << "resource with " << resources->ncrtc << " crtcs, " << resources->noutput
-			<< " outputs and " << resources->nmode << " modes" << std::endl;
+	std::cout << "resource with " << resources->ncrtc << " crtcs, "
+			<< resources->noutput << " outputs and " << resources->nmode
+			<< " modes" << std::endl;
 
 	// load mode list into a map for quick access
 	std::map<int, XRRModeInfo*> modeInfoList; // (res->nmode);
@@ -68,7 +69,8 @@ void XRandrModeManager::init12Modes(Display *dpy) {
 				resources->outputs[outputNum]);
 		// don't handle modes, if no crtc is connected
 		if (output->crtc > 0) {
-			XRRCrtcInfo *crtc = xrandr->XRRGetCrtcInfo(dpy, resources, output->crtc);
+			XRRCrtcInfo *crtc = xrandr->XRRGetCrtcInfo(dpy, resources,
+					output->crtc);
 			for (int modeNum = 0; modeNum < output->nmode; modeNum++) {
 				// go through all modes for a specific output
 				int modeIndex = output->modes[modeNum];
@@ -79,7 +81,7 @@ void XRandrModeManager::init12Modes(Display *dpy) {
 				modeExt->mode = output->modes[modeNum];
 				modeExt->output = resources->outputs[outputNum];
 				modeExt->rotation = crtc->rotation;
-				modeExt->timestamp = 0; // TODO add timestamp info
+				modeExt->timestamp = output->timestamp; // TODO add timestamp info
 				// construct GfxMode struct with all the data collected
 				GfxMode
 						*mode = new GfxMode(false, false,
@@ -179,6 +181,9 @@ void XRandrModeManager::setMode(GfxMode *mode) {
 	// check for NULL info
 	if (mode == 0)
 		return;
+	// if we have no resources available, don't do anything
+	if (resources == NULL)
+		return;
 	// and don't do anything if the data doesn't belong to us
 	if (mode->Manager != this)
 		return;
@@ -200,8 +205,11 @@ void XRandrModeManager::setMode(GfxMode *mode) {
 	case RANDR_12: {
 		std::cout << "loading up RandR 1.2+ mode" << std::endl;
 		RandR12Mode *modeExt = reinterpret_cast<RandR12Mode*>(mode->UserData);
+		bool result = xrandr->XRRSetCrtcConfig(dpy, resources, modeExt->crtc,
+				modeExt->timestamp, (int)mode->OriginX, (int)mode->OriginY,
+				modeExt->mode, modeExt->rotation, &(modeExt->output), 1);
 		std::cout << "  crtc #" << modeExt->crtc << ", output #"
-				<< modeExt->output << ", mode #" << modeExt->mode << std::endl;
+				<< modeExt->output << ", mode #" << modeExt->mode << ", result = " << result << std::endl;
 		break;
 	}
 	default: {

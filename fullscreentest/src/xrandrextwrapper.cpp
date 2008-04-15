@@ -5,13 +5,16 @@ bool XRandRExtensionWrapper::initLibrary(const char *path) {
 	if (path == NULL)
 		path = LIB_XRANDR;
 
-	std::cout << "XRandRExtensionWrapper::initLibrary(): init library (" << path << ") ..." << std::endl;
+	std::cout << "XRandRExtensionWrapper::initLibrary(): init library ("
+			<< path << ") ..." << std::endl;
 
 	if (!initLibraryHandle(path))
 		return false;
 
-	std::cout << "XRandRExtensionWrapper::initLibrary(): start function loading ..." << std::endl;
-	
+	std::cout
+			<< "XRandRExtensionWrapper::initLibrary(): start function loading ..."
+			<< std::endl;
+
 	LIBRARY_FUNCTION(fnXRRQueryVersion, FN_XRANDR_QUERY_VERSION)
 	init12 = true;
 	/* RandR 1.1 */
@@ -24,12 +27,24 @@ bool XRandRExtensionWrapper::initLibrary(const char *path) {
 	LIBRARY_FUNCTION(fnXRRConfigCurrentRate, FN_XRANDR_CONFIG_CURRENT_RATE)
 	/* RandR 1.2+ */
 	LIBRARY_FUNCTION_ACTION(fnXRRGetCrtcInfo, FN_XRANDR_GET_CRTC_INFO, init12 = false)
-	if (init12) { LIBRARY_FUNCTION_ACTION(fnXRRFreeCrtcInfo, FN_XRANDR_FREE_CRTC_INFO, init12 = false) }
-	if (init12) { LIBRARY_FUNCTION_ACTION(fnXRRGetOutputInfo, FN_XRANDR_GET_OUTPUT_INFO, init12 = false) }
-	if (init12) { LIBRARY_FUNCTION_ACTION(fnXRRFreeOutputInfo, FN_XRANDR_FREE_OUTPUT_INFO, init12 = false) }
-	if (init12) { LIBRARY_FUNCTION_ACTION(fnXRRSetCrtcConfig, FN_XRANDR_SET_CRTC_CONFIG, init12 = false) }
-	if (init12) { LIBRARY_FUNCTION_ACTION(fnXRRGetScreenResources, FN_XRANDR_GET_SCREEN_RESOURCES, init12 = false) }
-	if (init12) { LIBRARY_FUNCTION_ACTION(fnXRRFreeScreenResources, FN_XRANDR_FREE_SCREEN_RESOURCES, init12 = false) }
+	if (init12) {
+		LIBRARY_FUNCTION_ACTION(fnXRRFreeCrtcInfo, FN_XRANDR_FREE_CRTC_INFO, init12 = false)
+	}
+	if (init12) {
+		LIBRARY_FUNCTION_ACTION(fnXRRGetOutputInfo, FN_XRANDR_GET_OUTPUT_INFO, init12 = false)
+	}
+	if (init12) {
+		LIBRARY_FUNCTION_ACTION(fnXRRFreeOutputInfo, FN_XRANDR_FREE_OUTPUT_INFO, init12 = false)
+	}
+	if (init12) {
+		LIBRARY_FUNCTION_ACTION(fnXRRSetCrtcConfig, FN_XRANDR_SET_CRTC_CONFIG, init12 = false)
+	}
+	if (init12) {
+		LIBRARY_FUNCTION_ACTION(fnXRRGetScreenResources, FN_XRANDR_GET_SCREEN_RESOURCES, init12 = false)
+	}
+	if (init12) {
+		LIBRARY_FUNCTION_ACTION(fnXRRFreeScreenResources, FN_XRANDR_FREE_SCREEN_RESOURCES, init12 = false)
+	}
 
 	std::cout << "XRandRExtensionWrapper::initLibrary successful "
 			<< (init12 ? "(with v1.2+)" : "") << " end" << std::endl;
@@ -45,37 +60,43 @@ bool XRandRExtensionWrapper::XRRQueryVersion(Display *dpy, int *major,
 	return initialized && (*fnXRRQueryVersion)(dpy, major, minor) == True;
 }
 
-XRRScreenConfiguration *XRandRExtensionWrapper::XRRGetScreenInfo(Display *dpy, Window window) {
+XRRScreenConfiguration *XRandRExtensionWrapper::XRRGetScreenInfo(Display *dpy,
+		Window window) {
 	if (!initialized)
 		return NULL;
 	return (*fnXRRGetScreenInfo)(dpy, window);
 }
 
-void XRandRExtensionWrapper::XRRFreeScreenConfigInfo(XRRScreenConfiguration *config) {
+void XRandRExtensionWrapper::XRRFreeScreenConfigInfo(
+		XRRScreenConfiguration *config) {
 	if (!initialized)
 		return;
 	(*fnXRRFreeScreenConfigInfo)(config);
 }
 
-XRRScreenSize *XRandRExtensionWrapper::XRRConfigSizes(XRRScreenConfiguration *config, int *nsizes) {
+XRRScreenSize *XRandRExtensionWrapper::XRRConfigSizes(
+		XRRScreenConfiguration *config, int *nsizes) {
 	if (!initialized)
 		return NULL;
 	return (*fnXRRConfigSizes)(config, nsizes);
 }
 
-short *XRandRExtensionWrapper::XRRConfigRates(XRRScreenConfiguration *config, int sizeID, int *nrates) {
+short *XRandRExtensionWrapper::XRRConfigRates(XRRScreenConfiguration *config,
+		int sizeID, int *nrates) {
 	if (!initialized)
 		return NULL;
 	return (*fnXRRConfigRates)(config, sizeID, nrates);
 }
 
-SizeID XRandRExtensionWrapper::XRRConfigCurrentConfiguration(XRRScreenConfiguration *config, Rotation *rotation) {
+SizeID XRandRExtensionWrapper::XRRConfigCurrentConfiguration(
+		XRRScreenConfiguration *config, Rotation *rotation) {
 	if (!initialized)
 		return 0;
 	return (*fnXRRConfigCurrentConfiguration)(config, rotation);
 }
 
-short XRandRExtensionWrapper::XRRConfigCurrentRate(XRRScreenConfiguration *config) {
+short XRandRExtensionWrapper::XRRConfigCurrentRate(
+		XRRScreenConfiguration *config) {
 	if (!initialized)
 		return 0;
 	return (*fnXRRConfigCurrentRate)(config);
@@ -114,6 +135,13 @@ void XRandRExtensionWrapper::XRRFreeOutputInfo(XRROutputInfo *outputInfo) {
 	if (!init12)
 		return;
 	(*fnXRRFreeOutputInfo)(outputInfo);
+}
+
+bool XRandRExtensionWrapper::XRRSetCrtcConfig(Display *dpy,
+		XRRScreenResources *resources, RRCrtc crtc, Time timestamp, int x,
+		int y, RRMode mode, Rotation rotation, RROutput *outputs, int noutputs) {
+	return init12 && (*fnXRRSetCrtcConfig)(dpy, resources, crtc, timestamp, x,
+			y, mode, rotation, outputs, noutputs);
 }
 
 XRRScreenResources *XRandRExtensionWrapper::XRRGetScreenResources(Display *dpy,
