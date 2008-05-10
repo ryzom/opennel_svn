@@ -227,13 +227,14 @@ GfxMode *XRandrModeManager::getCurrentMode() {
 	return NULL;
 }
 
+/*
 void XRandrModeManager::setUseXinerama(bool use) {
 	useXinerama = use;
 }
 void XRandrModeManager::setIgnoreGLXTest(bool ignore) {
 	ignoreGLXTest = ignore;
 }
-
+*/
 bool XRandrModeManager::handleX11Event(XEvent *event) {
 	// empty for now
 	return false;

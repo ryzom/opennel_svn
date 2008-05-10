@@ -10,12 +10,23 @@
 #include "modemanager.h"
 #include "xvidmodeextwrapper.h"
 #include "xineramaextwrapper.h"
+#include "propdefs.h"
 
+/**
+ * XVidModeManager folds the XF86VidMode extension into the GfxMode
+ * struct NeL uses to manage video modes. If available, it relies on
+ * Xinerama to provide additional information about the different
+ * displays.
+ */
 class XVidModeManager : public ModeManager
 {
 public:
 	XVidModeManager(ExtensionWrapperFactory *fac) : ModeManager(fac), xinAvail(true),
-		nvModeFilter(true), ignoreGLXTest(false), ms(NULL), xvidmode(0), xinerama(0) {}
+		ms(NULL), xvidmode(0), xinerama(0) {
+		properties[P_USE_GLX_TEST] = true;
+		properties[P_USE_XINERAMA] = true;
+		properties[P_USE_MODE_FILTER] = true;
+	}
 
 	virtual ~XVidModeManager();
 	
@@ -24,14 +35,8 @@ public:
 	virtual void initModes();
 	virtual GfxMode *getCurrentMode();
 	
-	void setNvidiaModeFilter(bool filter);
-	void setXineramaAvailable(bool avail);
-	void setIgnoreGLXTest(bool ignore);
-	
 private:
 	bool xinAvail;
-	bool nvModeFilter;
-	bool ignoreGLXTest; 
 	XF86VidModeModeInfo **ms;
 	XVidModeExtensionWrapper *xvidmode;
 	XineramaExtensionWrapper *xinerama;

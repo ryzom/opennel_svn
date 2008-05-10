@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include "modeselector.h"
 #include "gfxmode.h"
+#include "propdefs.h"
 
 ModeSelectorWindow::ModeSelectorWindow(QApplication *app) {
 	char modename[MODE_NAME_LENGTH]; // that should be enough space for now
@@ -23,7 +24,8 @@ ModeSelectorWindow::ModeSelectorWindow(QApplication *app) {
 	//manager = new XVidModeManager(&wrapperFactory);
 	manager = new XRandrModeManager(&wrapperFactory);
 	
-	manager->setIgnoreGLXTest(true);
+	//bool b = false;
+	(*manager)[P_USE_GLX_TEST] = false; //->setIgnoreGLXTest(true);
 	if (manager->initLibraries()) {
 		manager->initModes();
 		const std::vector<GfxMode*> &list = manager->getModes();

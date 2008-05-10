@@ -10,6 +10,9 @@ INCLUDEPATH += . src
 
 # Input
 HEADERS += src/gfxmode.h \
+           src/variant.h \
+           src/propdefs.h \
+           src/properties.h \
            src/exception.h \
            src/extensionwrapper.h \
            src/xineramaextwrapper.h \

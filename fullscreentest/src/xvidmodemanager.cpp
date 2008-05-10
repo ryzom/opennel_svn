@@ -4,7 +4,7 @@
 #include "xvidmodemanager.h"
 #include "exception.h"
 #include "gfxmode.h"
-//#include "libfunctions.h"
+#include "propdefs.h"
 
 
 bool XVidModeManager::initLibraries() {
@@ -12,16 +12,14 @@ bool XVidModeManager::initLibraries() {
 	// the library may fail, which results in a disabled
 	// Xinerama extension
 	std::string libPath;
-	if (xinAvail) {
-		libPath = LIB_XINERAMA;
-		if (libraries.count(libPath))
-			libPath = libraries[libPath];
-		xinerama = reinterpret_cast<XineramaExtensionWrapper*>(wrapperFactory->getInstance(EXTWRAP_XINERAMA, libPath.c_str()));
-		if (xinerama == 0)
-			std::cerr << "failed to load Xinerama wrapper object. Disabling Xinerama usage." << std::endl;
-		xinAvail = (xinerama != 0);
-	}
-	
+	libPath = LIB_XINERAMA;
+	if (libraries.count(libPath))
+		libPath = libraries[libPath];
+	xinerama = reinterpret_cast<XineramaExtensionWrapper*>(wrapperFactory->getInstance(EXTWRAP_XINERAMA, libPath.c_str()));
+	if (xinerama == 0)
+		std::cerr << "failed to load Xinerama wrapper object. Disabling Xinerama usage." << std::endl;
+	xinAvail = (xinerama != 0);
+
 	libPath = LIB_XVIDMODE;
 	if (libraries.count(libPath))
 		libPath = libraries[libPath];
@@ -42,6 +40,10 @@ void XVidModeManager::initModes() {
 	if (xvidmode == 0)
 		return;
 
+	bool useXin = properties[P_USE_XINERAMA] && xinAvail;
+	bool useGlxTest = properties[P_USE_GLX_TEST];
+	bool useModeFilter = properties[P_USE_MODE_FILTER];
+
 	Display *dpy= NULL;
 	int nmodes;
 
@@ -50,9 +52,8 @@ void XVidModeManager::initModes() {
 		throw ModeException("Couldn't open display.");
 
 	int major, event, error;
-	if (xinAvail)
-		xinAvail = XQueryExtension(dpy, "XINERAMA", &major, &event, &error)
-				== True;
+	if (useXin)
+		useXin = XQueryExtension(dpy, "XINERAMA", &major, &event, &error) == True;
 	Bool glxAvail = XQueryExtension(dpy, "GLX", &major, &event, &error);
 	Bool xvmAvail = XQueryExtension(dpy, "XFree86-VidModeExtension", &major, &event, &error);
 
@@ -60,9 +61,9 @@ void XVidModeManager::initModes() {
 		XCloseDisplay(dpy);
 		throw ModeException("The server doesn't support the GLX extension.");
 	}
-	if (xinAvail) {
+	if (useXin) {
 		if (!xinerama->XineramaIsActive(dpy))
-			xinAvail = False;
+			useXin = false;
 	}
 	if (!xvmAvail) {
 		XCloseDisplay(dpy);
@@ -73,21 +74,24 @@ void XVidModeManager::initModes() {
 	int origin_x = 0;
 	int origin_y = 0;
 	XineramaScreenInfo *xinInfo= NULL;
-	if (xinAvail)
+	if (useXin) {
 		xinInfo = xinerama->XineramaQueryScreens(dpy, &screen_num);
+		useXin = xinInfo != NULL;
+	}
 
 	int glxVisualAttribList[] = { GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_RED_SIZE,
 			4, GLX_GREEN_SIZE, 4, GLX_BLUE_SIZE, 4, None };
 
+	
 	for (int screen = 0; screen < screen_num; screen++) {
 		int screenNum = screen;
-		if (xinAvail) {
+		if (useXin) {
 			screenNum = xinInfo[screen].screen_number;
 			origin_x = xinInfo[screen].x_org;
 			origin_y = xinInfo[screen].y_org;
 		}
 
-		if (!ignoreGLXTest) {
+		if (useGlxTest) {
 			// first check if we have GLX support on the screen
 			XVisualInfo *visualInfo = glXChooseVisual(dpy, screenNum,
 					glxVisualAttribList);
@@ -106,8 +110,8 @@ void XVidModeManager::initModes() {
 		xvidmode->XF86VidModeGetAllModeLines(dpy, screenNum, &nmodes, &ms);
 		//nldebug("Available modes %d", nmodes);
 		for (int modeNum = 0; modeNum < nmodes; modeNum++) {
-			// nVidia returns weird modes, filter them out if nvModeFilter is set
-			if (!nvModeFilter || (ms[modeNum]->vdisplay <= ms[modeNum]->vtotal
+			// filter out "weird" modes in case the filter flag is set
+			if (!useModeFilter || (ms[modeNum]->vdisplay <= ms[modeNum]->vtotal
 					&& ms[modeNum]->hdisplay <= ms[modeNum]->htotal)) {
 				GfxMode
 						*mode = new GfxMode(false, false,
@@ -132,7 +136,7 @@ void XVidModeManager::initModes() {
 		}
 
 	}
-	if (xinAvail)
+	if (useXin)
 		XFree(xinInfo);
 
 	XCloseDisplay(dpy);
@@ -143,12 +147,24 @@ XVidModeManager::~XVidModeManager() {
 		XFree(ms);
 }
 
+/*
+	Taken from XF86VidMode man page:
+
+       Note: Because of the asynchronous nature of the X protocol, a  call  to
+       XFlush  is needed if the application wants to see the mode change imme‐
+       diately.  To be informed of the execution status of the request, a cus‐
+       tom  error  handler  should  be installed using XSetErrorHandler before
+       calling the mode switching function.
+
+ */
 bool XVidModeManager::setMode(GfxMode *mode) {
 	if (mode == NULL)
 		return false;
 	if (mode->Manager != this)
 		return false;
 	if (xvidmode == 0)
+		return false;
+	if (mode->UserData == 0)
 		return false;
 
 	Display *dpy= NULL;
@@ -167,6 +183,7 @@ GfxMode *XVidModeManager::getCurrentMode() {
 	return NULL;
 }
 
+/*
 void XVidModeManager::setNvidiaModeFilter(bool filter) {
 	nvModeFilter = filter;
 }
@@ -177,3 +194,4 @@ void XVidModeManager::setXineramaAvailable(bool avail) {
 void XVidModeManager::setIgnoreGLXTest(bool ignore) {
 	ignoreGLXTest = ignore;
 }
+*/

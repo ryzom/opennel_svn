@@ -43,9 +43,9 @@ public:
 	virtual void cleanup(GfxMode *mode);
 
 	// enforce Xinerama use (disabled by default)
-	void setUseXinerama(bool use);
+	//void setUseXinerama(bool use);
 	// standard, probably contained in every manager
-	void setIgnoreGLXTest(bool ignore);
+	//void setIgnoreGLXTest(bool ignore);
 
 	// call this to handle XRandr events
 	bool handleX11Event(XEvent *event);

@@ -7,6 +7,7 @@ class ModeManager;
 #include <map>
 #include "gfxmode.h"
 #include "extensionwrapper.h"
+#include "properties.h"
 
 /**
  * \brief A ModeManager provides a list of screen modes and
@@ -71,11 +72,15 @@ public:
 	virtual void cleanup(GfxMode* mode) {}
 
 	void setLibraryPath(std::string name, std::string path);
+	
+	CVariant<u_int64_t> operator[](std::string& key) { return properties[key]; }
+	CVariant<u_int64_t> operator[](const char *key) { return properties[key]; }
 
 protected:
 	ExtensionWrapperFactory *wrapperFactory;
 	std::vector<GfxMode*> modeList;
 	std::map<std::string, std::string> libraries;
+	CProperties<u_int64_t> properties;
 };
 
 #endif /*MODEMANAGER_H_*/
