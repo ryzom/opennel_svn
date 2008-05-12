@@ -45,6 +45,7 @@
 #include <winsock.h>
 #endif
 #include <mysql.h>
+#include <mysql_version.h>
 
 #include "nel/misc/debug.h"
 #include "nel/misc/config_file.h"
@@ -632,6 +633,15 @@ void sqlInit ()
 		nlerror ("mysql_init() failed");
 	}
 
+	my_bool opt = true;
+	if (mysql_options (DatabaseConnection, MYSQL_OPT_RECONNECT, &opt))
+	{
+		mysql_close(db);
+		DatabaseConnection = 0;
+		nlerror("mysql_options() failed for database connection to '%s'", IService::getInstance()->ConfigFile.getVar("DatabaseHost").asString().c_str());
+ 		return;
+	}
+
 	DatabaseConnection = mysql_real_connect(db,
 		IService::getInstance()->ConfigFile.getVar("DatabaseHost").asString().c_str(),
 		IService::getInstance()->ConfigFile.getVar("DatabaseLogin").asString().c_str(),
@@ -648,7 +658,8 @@ void sqlInit ()
 			);
 	}
 
-	my_bool opt = true;
+#if MYSQL_VERSION_ID < 50019
+	opt = true;
 	if (mysql_options (DatabaseConnection, MYSQL_OPT_RECONNECT, &opt))
 	{
 		mysql_close(db);
@@ -656,6 +667,7 @@ void sqlInit ()
 		nlerror("mysql_options() failed for database connection to '%s'", IService::getInstance()->ConfigFile.getVar("DatabaseHost").asString().c_str());
  		return;
 	}
+#endif
 }
 
 

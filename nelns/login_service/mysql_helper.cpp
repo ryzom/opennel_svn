@@ -30,6 +30,8 @@
 
 #include "mysql_helper.h"
 
+#include "mysql/mysql_version.h"
+
 
 //
 // Namespaces
@@ -134,6 +136,16 @@ static void cbDatabaseVar(CConfigFile::CVar &var)
 		return;
 	}
 
+	my_bool opt = true;
+	if (mysql_options (DatabaseConnection, MYSQL_OPT_RECONNECT, &opt))
+	{
+		mysql_close(db);
+		DatabaseConnection = 0;
+		nlerror("mysql_options() failed for database connection to '%s'", DatabaseHost.c_str());
+		return;
+	}
+
+
 	DatabaseConnection = mysql_real_connect(db, DatabaseHost.c_str(), DatabaseLogin.c_str(), DatabasePassword.c_str(), DatabaseName.c_str(),0,0,0);
 	if (DatabaseConnection == 0 || DatabaseConnection != db)
 	{
@@ -143,7 +155,8 @@ static void cbDatabaseVar(CConfigFile::CVar &var)
 		return;
 	}
 
-	my_bool opt = true;
+#if MYSQL_VERSION_ID < 50019
+	opt = true;
 	if (mysql_options (DatabaseConnection, MYSQL_OPT_RECONNECT, &opt))
 	{
 		mysql_close(db);
@@ -151,6 +164,8 @@ static void cbDatabaseVar(CConfigFile::CVar &var)
 		nlerror("mysql_options() failed for database connection to '%s'", DatabaseHost.c_str());
 		return;
 	}
+#endif
+
 
 	sqlQuery("set names utf8");
 }
