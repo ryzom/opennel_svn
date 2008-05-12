@@ -9,6 +9,7 @@
 #include "xineramaextwrapper.h"
 #include "xvidmodemanager.h"
 #include "xrandrmodemanager.h"
+#include "usermodemanager.h"
 
 /**
  * \brief Length of the modename buffer in bytes.
@@ -36,8 +37,7 @@ private:
 	XineramaExtensionWrapper *xinwrapper;
 	XRandRExtensionWrapper *xrandrwrapper;
 	ExtensionWrapperFactory wrapperFactory;
-	//XVidModeManager *manager;
-	XRandrModeManager *manager;
+	ModeManager *manager;
 	GfxMode *selectedMode;
 };
 

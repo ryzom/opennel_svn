@@ -5,7 +5,9 @@
  * Simple variant data type. It only allows to use basic types
  * like integers, bools and such, as well as pointers. Complex
  * datatypes such as other classes (pointers to classes are ok)
- * are potentially risky to use.
+ * are potentially risky to use (has to do with object creation
+ * and destruction, which isn't handled properly by this variant
+ * data type implementation).
  * 
  * Use the biggest datatype to be stored in the variant as the
  * class Z, i.e. for pointers one could pick uintptr_t, for

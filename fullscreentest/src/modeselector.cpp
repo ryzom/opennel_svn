@@ -7,6 +7,8 @@
 #include "gfxmode.h"
 #include "propdefs.h"
 
+const char *blubb[] = { "1000x500-0-0", "800x600+200+100", "1680x1050+1600+0" };
+
 ModeSelectorWindow::ModeSelectorWindow(QApplication *app) {
 	char modename[MODE_NAME_LENGTH]; // that should be enough space for now
 	selectedMode = NULL;
@@ -21,11 +23,15 @@ ModeSelectorWindow::ModeSelectorWindow(QApplication *app) {
 	xrandrwrapper = new XRandRExtensionWrapper();
 	wrapperFactory.addWrapper(xrandrwrapper);
 
+	// TODO how do we select automagically between them? Do we
+	// even want this?
 	//manager = new XVidModeManager(&wrapperFactory);
-	manager = new XRandrModeManager(&wrapperFactory);
+	//manager = new XRandrModeManager(&wrapperFactory);
+	manager = new UserModeManager(&wrapperFactory);
 	
-	//bool b = false;
-	(*manager)[P_USE_GLX_TEST] = false; //->setIgnoreGLXTest(true);
+	(*manager)[P_USE_GLX_TEST] = false;
+	(*manager)[P_USER_MODES] = blubb;
+	(*manager)[P_USE_XINERAMA] = true; //false;
 	if (manager->initLibraries()) {
 		manager->initModes();
 		const std::vector<GfxMode*> &list = manager->getModes();

@@ -38,6 +38,26 @@ bool XRandrModeManager::initLibraries() {
 	return true;
 }
 
+bool XRandrModeManager::isScreenGLXCapable(Display *dpy) {
+	// check if we are even supposed to check GLX
+	bool useGlxTest = properties[P_USE_GLX_TEST];
+	// if not, assume everything works ...
+	if (!useGlxTest)
+		return true;
+	
+	// ... otherwise lets check for a GLX visual
+	int glxVisualAttribList[] = { GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_RED_SIZE,
+			4, GLX_GREEN_SIZE, 4, GLX_BLUE_SIZE, 4, None };
+	
+	// first check if we have GLX support on the screen
+	XVisualInfo *visualInfo = glXChooseVisual(dpy, DefaultScreen(dpy), glxVisualAttribList);
+	// don't do anything if there isn't
+	XFree(visualInfo);
+	// kludge, but works as long as we don't access
+	// the data visualInfo was pointing to once
+	return visualInfo != 0; //NULL;
+}
+
 void XRandrModeManager::init11Modes(Display *dpy) {
 	std::cerr << "RandR 1.1 support not implemented, yet." << std::endl;
 }
@@ -149,11 +169,18 @@ void XRandrModeManager::initModes() {
 			xinAvail = false;
 	}
 
+	if (!isScreenGLXCapable(dpy)) {
+		XCloseDisplay(dpy);
+		throw ModeException("Couldn't create a GLX visual.");
+	}
+	
+	bool use12 = properties[P_USE_RANDR12];
+	
 	try {
-		if (versionMajor > 1 || (versionMajor == 1 && versionMinor >= 2))
-		init12Modes(dpy);
+		if (use12 && (versionMajor > 1 || (versionMajor == 1 && versionMinor >= 2)))
+			init12Modes(dpy);
 		else
-		init11Modes(dpy);
+			init11Modes(dpy);
 		XCloseDisplay(dpy);
 	} catch (ModeException &me) {
 		// close display in case we received an error
@@ -164,12 +191,25 @@ void XRandrModeManager::initModes() {
 }
 
 void XRandrModeManager::cleanup(GfxMode *mode) {
-	// delete the RandR<ver>Mode data
-	// TODO stupid C++ complains about killing a (possible) *void
-	// here ... how to solve it without resorting to explicitely
-	// writing it down? WTS ...
-	if (mode->UserData != 0)
-		delete mode->UserData;
+	// don't attempt a delete if there is no UserData
+	if (mode->UserData == 0)
+		return;
+	// read RandR version information
+	RandRVersion *version = reinterpret_cast<RandRVersion*>(mode->UserData);
+	// and delete it according to the version information
+	switch (*version) {
+	case RANDR_11:
+		delete reinterpret_cast<RandR11Mode*>(mode->UserData);
+		mode->UserData = 0;
+		break;
+	case RANDR_12:
+		delete reinterpret_cast<RandR12Mode*>(mode->UserData);
+		mode->UserData = 0;
+		break;
+	default:
+		// do nothing?
+		;
+	}
 }
 
 XRandrModeManager::~XRandrModeManager() {
@@ -201,7 +241,7 @@ bool XRandrModeManager::setMode(GfxMode *mode) {
 	bool result = false;
 	switch (*version) {
 	case RANDR_11: {
-		std::cout << "loading up RandR 1.1 mode" << std::endl;
+		std::cout << "loading up RandR 1.1 mode (not implemented, yet)" << std::endl;
 		break;
 	}
 	case RANDR_12: {

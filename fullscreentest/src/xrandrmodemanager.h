@@ -11,6 +11,7 @@
 #include "extensionwrapper.h"
 #include "xrandrextwrapper.h"
 #include "xineramaextwrapper.h"
+#include "propdefs.h"
 
 /*
  What is still needed:
@@ -32,8 +33,11 @@ class XRandrModeManager : public ModeManager {
 public:
 	XRandrModeManager(ExtensionWrapperFactory *fac) :
 		ModeManager(fac), versionMajor(0), versionMinor(0), baseEventCode(0),
-				useXinerama(false), xinAvail(true), ignoreGLXTest(false),
-				xrandr(0), xinerama(0), resources(NULL) { }
+				xinAvail(true), xrandr(0), xinerama(0), resources(0) {
+		std::cout << "xrandrmodemanager properties init" << std::endl;
+		properties[P_USE_RANDR12] = true;
+		properties[P_USE_GLX_TEST] = true;
+	}
 	virtual ~XRandrModeManager();
 
 	virtual bool setMode(GfxMode *mode);
@@ -42,25 +46,22 @@ public:
 	virtual GfxMode *getCurrentMode();
 	virtual void cleanup(GfxMode *mode);
 
-	// enforce Xinerama use (disabled by default)
-	//void setUseXinerama(bool use);
-	// standard, probably contained in every manager
-	//void setIgnoreGLXTest(bool ignore);
-
 	// call this to handle XRandr events
 	bool handleX11Event(XEvent *event);
 
 private:
 	int versionMajor, versionMinor;
 	int baseEventCode;
-	bool useXinerama;
+	// TODO fix usage of xinAvail flag
 	bool xinAvail;
-	bool ignoreGLXTest;
 	XRandRExtensionWrapper *xrandr;
 	XineramaExtensionWrapper *xinerama;
 	
 	XRRScreenResources *resources;
 	
+	// returns true, if GLX test is either disabled or
+	// GLX init worked
+	bool isScreenGLXCapable(Display *dpy);
 	// uses RandR 1.1 + Xinerama functions to fill mode list
 	void init11Modes(Display *dpy);
 	// uses RandR 1.2+ functions to fill mode list

@@ -4,7 +4,8 @@
 class ModeManager;
 
 #include <vector>
-#include <map>
+#include <tr1/unordered_map>
+#define CHashMap std::tr1::unordered_map
 #include "gfxmode.h"
 #include "extensionwrapper.h"
 #include "properties.h"
@@ -73,14 +74,14 @@ public:
 
 	void setLibraryPath(std::string name, std::string path);
 	
-	CVariant<u_int64_t> operator[](std::string& key) { return properties[key]; }
-	CVariant<u_int64_t> operator[](const char *key) { return properties[key]; }
+	CVariant<uintptr_t>& operator[](std::string& key) { return properties[key]; }
+	CVariant<uintptr_t>& operator[](const char *key) { return properties[key]; }
 
 protected:
 	ExtensionWrapperFactory *wrapperFactory;
 	std::vector<GfxMode*> modeList;
-	std::map<std::string, std::string> libraries;
-	CProperties<u_int64_t> properties;
+	CHashMap<std::string, std::string> libraries;
+	CProperties<uintptr_t> properties;
 };
 
 #endif /*MODEMANAGER_H_*/
