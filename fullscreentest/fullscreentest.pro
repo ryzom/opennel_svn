@@ -22,7 +22,8 @@ HEADERS += src/gfxmode.h \
            src/xvidmodemanager.h \
            src/xrandrmodemanager.h \
            src/modeselector.h \
-           src/fullscreentest.h
+           src/fullscreentest.h \
+           src/usermodemanager.h
 SOURCES += src/fullscreentest.cpp \
            src/extensionwrapper.cpp \
            src/xineramaextwrapper.cpp \
@@ -31,4 +32,5 @@ SOURCES += src/fullscreentest.cpp \
            src/modemanager.cpp \
            src/xvidmodemanager.cpp \
            src/xrandrmodemanager.cpp \
-           src/modeselector.cpp
+           src/modeselector.cpp \
+           src/usermodemanager.cpp
