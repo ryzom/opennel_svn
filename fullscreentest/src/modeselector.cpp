@@ -7,7 +7,7 @@
 #include "gfxmode.h"
 #include "propdefs.h"
 
-const char *blubb[] = { "1000x500-0-0", "800x600+200+100", "1680x1050+1600+0" };
+const char *blubb[] = { "", "1000x500-0-0", "800x600+200+100", "1680x1050+1600+0", 0 };
 
 ModeSelectorWindow::ModeSelectorWindow(QApplication *app) {
 	char modename[MODE_NAME_LENGTH]; // that should be enough space for now

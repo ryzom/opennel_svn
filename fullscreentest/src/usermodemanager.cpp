@@ -88,9 +88,9 @@ void UserModeManager::initModes() {
 			unsigned int w, h;
 			int bitmask = XParseGeometry(userModes[screen], &x, &y, &w, &h);
 			
-			if (!(bitmask & WidthValue))
+			if (!(bitmask & WidthValue) || w == 0)
 				w = width;
-			if (!(bitmask & HeightValue))
+			if (!(bitmask & HeightValue) || h == 0)
 				h = height;
 			if (bitmask & XValue) {
 				if (bitmask & XNegative)
@@ -98,12 +98,16 @@ void UserModeManager::initModes() {
 				else
 					x += origin_x;
 			}
+			else
+				x = origin_x;
 			if (bitmask & YValue) {
 				if (bitmask & YNegative)
 					y = origin_y + height + y - h;
 				else
 					y += origin_y;
 			}
+			else
+				y = origin_y;
 			width = w;
 			height = h;
 			origin_x = x;
