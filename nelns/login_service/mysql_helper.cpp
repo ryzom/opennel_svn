@@ -30,7 +30,7 @@
 
 #include "mysql_helper.h"
 
-#include "mysql/mysql_version.h"
+#include "mysql_version.h"
 
 
 //
