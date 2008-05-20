@@ -774,6 +774,7 @@ public:
 	virtual void			disableHardwareTextureShader();
 	virtual void			forceDXTCCompression(bool dxtcComp);
 	virtual void			forceTextureResize(uint divisor);
+	virtual void			forceNativeFragmentPrograms(bool nativeOnly) {} // ignored
 
 	// Driver informations
 	virtual uint			getNumAdapter() const;

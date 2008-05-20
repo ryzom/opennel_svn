@@ -105,7 +105,7 @@ uint CDriverGL::_Registered=0;
 #endif // NL_OS_WINDOWS
 
 // Version of the driver. Not the interface version!! Increment when implementation of the driver change.
-const uint32 CDriverGL::ReleaseVersion = 0xc; // nico
+const uint32 CDriverGL::ReleaseVersion = 0xd; // Spex
 
 // Number of register to allocate for the EXTVertexShader extension
 const uint CDriverGL::_EVSNumConstant = 97;
@@ -324,6 +324,7 @@ CDriverGL::CDriverGL()
 
 	_ForceDXTCCompression= false;
 	_ForceTextureResizePower= 0;
+	_ForceNativeFragmentPrograms = true;
 
 	_SumTextureMemoryUsed = false;
 
@@ -3351,7 +3352,7 @@ END ";
 // ***************************************************************************
 /** Load a ARB_fragment_program_code, and ensure it is loaded natively
   */
-uint loadARBFragmentProgramStringNative(const char *prog)
+uint loadARBFragmentProgramStringNative(const char *prog, bool forceNativePrograms)
 {
 	H_AUTO_OGL(loadARBFragmentProgramStringNative);
 	if (!prog)
@@ -3372,20 +3373,18 @@ uint loadARBFragmentProgramStringNative(const char *prog)
 	nglBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, 0);
 	glGetIntegerv(GL_PROGRAM_ERROR_POSITION_ARB, &errorPos);
 	nglGetProgramivARB(GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB, &isNative);
-	if ((errorPos == -1) && (isNative == 1))
-	{
+	if (errorPos == -1) {
+		if (!isNative && forceNativePrograms) {
+			nlwarning("Fragment program isn't supported natively; purging program");
+			nglDeleteProgramsARB(1, &progID);
+			return 0;
+		}
 		return progID;
 	}
-	else
-	{
-		nlwarning("init failed: errorPos: %d isNative: %d", errorPos, isNative);
-		if (errorPos == -1)
-		{
-			nlwarning("There's no error in the fragment but the hardware doesn't support the fragment in native");
-			nglDeleteProgramsARB(1, &progID);
-		}
-		return 0;
+	else {
+		nlwarning("init fragment program failed: errorPos: %d isNative: %d", errorPos, isNative);
 	}
+	return 0;
 }
 
 
@@ -3415,6 +3414,11 @@ static void fetchPerturbedEnvMapR200()
 }
 
 // ***************************************************************************
+void CDriverGL::forceNativeFragmentPrograms(bool nativeOnly)
+{
+	_ForceNativeFragmentPrograms = nativeOnly;
+}
+
 void CDriverGL::initFragmentShaders()
 {
 	H_AUTO_OGL(CDriverGL_initFragmentShaders)
@@ -3427,10 +3431,10 @@ void CDriverGL::initFragmentShaders()
 	if (_Extensions.ARBFragmentProgram)
 	{
 		nlinfo("WATER: Try ARB_fragment_program");
-		ARBWaterShader[0] = loadARBFragmentProgramStringNative(WaterCodeNoDiffuseForARBFragmentProgram);
-		ARBWaterShader[1] = loadARBFragmentProgramStringNative(WaterCodeNoDiffuseWithFogForARBFragmentProgram);
-		ARBWaterShader[2] = loadARBFragmentProgramStringNative(WaterCodeForARBFragmentProgram);
-		ARBWaterShader[3] = loadARBFragmentProgramStringNative(WaterCodeWithFogForARBFragmentProgram);
+		ARBWaterShader[0] = loadARBFragmentProgramStringNative(WaterCodeNoDiffuseForARBFragmentProgram, _ForceNativeFragmentPrograms);
+		ARBWaterShader[1] = loadARBFragmentProgramStringNative(WaterCodeNoDiffuseWithFogForARBFragmentProgram, _ForceNativeFragmentPrograms);
+		ARBWaterShader[2] = loadARBFragmentProgramStringNative(WaterCodeForARBFragmentProgram, _ForceNativeFragmentPrograms);
+		ARBWaterShader[3] = loadARBFragmentProgramStringNative(WaterCodeWithFogForARBFragmentProgram, _ForceNativeFragmentPrograms);
 		bool ok = true;
 		for(uint k = 0; k < 4; ++k)
 		{

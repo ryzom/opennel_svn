@@ -454,6 +454,7 @@ public:
 	virtual TPolygonMode 	getPolygonMode ();
 	virtual void			forceDXTCCompression(bool dxtcComp);
 	virtual void			forceTextureResize(uint divisor);
+	virtual void			forceNativeFragmentPrograms(bool nativeOnly);
 	virtual bool			setMonitorColorProperties (const CMonitorColorProperties &properties);
 	// @}
 

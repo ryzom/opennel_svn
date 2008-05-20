@@ -351,6 +351,8 @@ public:
 	virtual void			forceDXTCCompression(bool dxtcComp);
 
 	virtual void			forceTextureResize(uint divisor);
+	
+	virtual void			forceNativeFragmentPrograms(bool nativeOnly);
 
 	/// Setup texture env functions. Used by setupMaterial
 	void				setTextureEnvFunction(uint stage, CMaterial& mat);
@@ -1175,6 +1177,8 @@ private:
 	bool							_ForceDXTCCompression;
 	/// Divisor for textureResize (power).
 	uint							_ForceTextureResizePower;
+	// enforcement of native fragment program check
+	bool							_ForceNativeFragmentPrograms;
 
 
 	// user texture matrix
