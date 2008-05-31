@@ -56,6 +56,7 @@ MACRO(NL_SETUP_DEFAULT_OPTIONS)
   OPTION(WITH_PACS                "Build NLPACS"                                  ON )
   OPTION(WITH_GEORGES             "Build NLGEORGES"                               ON )
   OPTION(WITH_LIGO                "Build NLLIGO"                                  ON )
+  OPTION(WITH_LOGIC               "Build NLLOGIC"                                 ON )
   OPTION(WITH_SOUND               "Build NLSOUND"                                 ON )
 
   ###
