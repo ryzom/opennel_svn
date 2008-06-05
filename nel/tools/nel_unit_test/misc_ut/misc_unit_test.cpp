@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
-#include "src/cpptest.h"
+#include "cpptest.h"
 
 #include "nel/misc/path.h"
 

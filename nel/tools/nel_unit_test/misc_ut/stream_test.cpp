@@ -5,7 +5,7 @@
 #include "nel/misc/sstring.h"
 #include "nel/misc/bit_mem_stream.h"
 
-#include "src/cpptest.h"
+#include "cpptest.h"
 
 using namespace std;
 using namespace NLMISC;

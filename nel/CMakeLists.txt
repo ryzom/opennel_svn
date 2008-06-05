@@ -76,6 +76,7 @@ ENDIF(WITH_GTK)
 
 IF(WITH_TESTS)
   FIND_PACKAGE(CppUnit)
+  FIND_PACKAGE(CppTest)
 ENDIF(WITH_TESTS)
 
 IF(UNIX)
@@ -116,11 +117,6 @@ ENDIF(WITH_SAMPLES)
 IF(WITH_TOOLS)
   ADD_SUBDIRECTORY(tools)
 ENDIF(WITH_TOOLS)
-
-#IF(WITH_TESTS)
-#  SUBDIRS(tests)
-#ENDIF(WITH_TESTS)
-
 
 # To build the documention, you will have to enable it
 # and then do the equivalent of "make DoxygenDoc".
