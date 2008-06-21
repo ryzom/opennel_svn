@@ -27,6 +27,8 @@
 // Includes
 //
 
+#include <nel/misc/types_nl.h>
+
 #include <nel/misc/event_server.h>
 #include <nel/3d/u_driver.h>
 #include <nel/3d/u_camera.h>

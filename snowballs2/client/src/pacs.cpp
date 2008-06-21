@@ -27,6 +27,8 @@
 // Includes
 //
 
+#include <nel/misc/types_nl.h>
+
 #include <vector>
 
 #include <nel/pacs/u_retriever_bank.h>

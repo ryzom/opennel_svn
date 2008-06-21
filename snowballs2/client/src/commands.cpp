@@ -27,9 +27,10 @@
 // Includes
 //
 
+#include <nel/misc/types_nl.h>
+
 #include <list>
 
-#include <nel/misc/types_nl.h>
 #include <nel/misc/event_listener.h>
 #include <nel/misc/command.h>
 #include <nel/misc/log.h>

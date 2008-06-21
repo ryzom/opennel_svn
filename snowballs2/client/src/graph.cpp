@@ -27,9 +27,10 @@
 // Includes
 //
 
+#include <nel/misc/types_nl.h>
+
 #include <deque>
 
-#include <nel/misc/types_nl.h>
 #include <nel/misc/vector.h>
 #include <nel/misc/matrix.h>
 #include <nel/misc/command.h>
