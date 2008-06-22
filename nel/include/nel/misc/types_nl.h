@@ -78,8 +78,10 @@
 #   endif
 #	if _MSC_VER >= 1500
 #		define NL_COMP_VC9
+#		include <string> // This way we know about _HAS_TR1 :O
 #		if defined(_HAS_TR1) && (_HAS_TR1 + 0) // VC9 TR1 feature pack
 #			define NL_ISO_STDTR1_AVAILABLE
+#			define NL_ISO_STDTR1_HEADER(header) <header>
 #		endif
 #	elif _MSC_VER >= 1400
 #		define NL_COMP_VC8
@@ -150,6 +152,7 @@
 // gcc 4.1+ provides std::tr1
 #if defined(__GNUC__) && ((__GNUC__ > 4) || (__GNUC__ == 4) && (__GNUC_MINOR__ > 1))
 #	define NL_ISO_STDTR1_AVAILABLE
+#	define NL_ISO_STDTR1_HEADER(header) <tr1/header>
 #endif
 
 // Remove stupid Visual C++ warnings
@@ -332,8 +335,8 @@ template<> struct hash<uint64>
 
 // use std::tr1 for CHash* classes, if available (gcc 4.1+ and VC9 with TR1 feature pack)
 #ifdef NL_ISO_STDTR1_AVAILABLE
-#	include <tr1/unordered_map>
-#	include <tr1/unordered_set>
+#	include NL_ISO_STDTR1_HEADER(unordered_map)
+#	include NL_ISO_STDTR1_HEADER(unordered_set)
 #	define CHashMap std::tr1::unordered_map
 #	define CHashSet std::tr1::unordered_set
 #	define CHashMultiMap std::tr1::unordered_multimap
