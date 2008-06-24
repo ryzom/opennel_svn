@@ -28,7 +28,9 @@
 
 #ifdef NL_OS_WINDOWS
 
-#include <winsock2.h>
+#if !defined(NL_COMP_VC9)
+#	include <winsock2.h>
+#endif
 
 #elif defined NL_OS_UNIX
 

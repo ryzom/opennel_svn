@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="configfile"
-	ProjectGUID="{F15C4E9E-FEF4-4FFC-A8A7-DFA6E9CACB7B}"
-	RootNamespace="configfile"
+	Name="pacs_sample"
+	ProjectGUID="{045CF530-9AA1-4AC7-980C-F4B5C0DE691D}"
+	RootNamespace="pacs_sample"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>
@@ -61,12 +61,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winmm.lib odbc32.lib odbccp32.lib"
+				AdditionalDependencies="ws2_32.lib winmm.lib odbc32.lib odbccp32.lib"
 				OutputFile="$(RootNamespace)_d.exe"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)\$(TargetName).pdb"
-				SubSystem="1"
+				SubSystem="2"
 				RandomizedBaseAddress="1"
 				TargetMachine="1"
 			/>
@@ -139,12 +139,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winmm.lib odbc32.lib odbccp32.lib"
+				AdditionalDependencies="ws2_32.lib winmm.lib odbc32.lib odbccp32.lib"
 				OutputFile="$(RootNamespace)_df.exe"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)\$(TargetName).pdb"
-				SubSystem="1"
+				SubSystem="2"
 				RandomizedBaseAddress="1"
 				TargetMachine="1"
 			/>
@@ -216,12 +216,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winmm.lib odbc32.lib odbccp32.lib"
+				AdditionalDependencies="ws2_32.lib winmm.lib odbc32.lib odbccp32.lib"
 				OutputFile="$(RootNamespace)_ds.exe"
 				IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)\$(TargetName).pdb"
-				SubSystem="1"
+				SubSystem="2"
 				RandomizedBaseAddress="1"
 				TargetMachine="1"
 			/>
@@ -299,10 +299,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winmm.lib odbc32.lib odbccp32.lib"
+				AdditionalDependencies="ws2_32.lib winmm.lib odbc32.lib odbccp32.lib"
 				OutputFile="$(RootNamespace).exe"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
-				SubSystem="1"
+				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				LinkTimeCodeGeneration="1"
@@ -383,10 +383,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winmm.lib odbc32.lib odbccp32.lib"
+				AdditionalDependencies="ws2_32.lib winmm.lib odbc32.lib odbccp32.lib"
 				OutputFile="$(RootNamespace)_rd.exe"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
-				SubSystem="1"
+				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				LinkTimeCodeGeneration="1"
@@ -467,10 +467,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winmm.lib odbc32.lib odbccp32.lib"
+				AdditionalDependencies="ws2_32.lib winmm.lib odbc32.lib odbccp32.lib"
 				OutputFile="$(RootNamespace)_rds.exe"
 				IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
-				SubSystem="1"
+				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				LinkTimeCodeGeneration="1"
@@ -508,7 +508,11 @@
 			>
 		</File>
 		<File
-			RelativePath="simpletest.txt"
+			RelativePath="object.cpp"
+			>
+		</File>
+		<File
+			RelativePath="object.h"
 			>
 		</File>
 	</Files>

@@ -450,7 +450,7 @@ int main()
 		}
 
 	}
-	while (!CNELU::AsyncListener.isKeyPushed (KeyESCAPE));
+	while ((!CNELU::AsyncListener.isKeyPushed(KeyESCAPE)) && CNELU::Driver->isActive());
 
 	return EXIT_SUCCESS;
 }

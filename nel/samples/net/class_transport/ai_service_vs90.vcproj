@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="configfile"
-	ProjectGUID="{F15C4E9E-FEF4-4FFC-A8A7-DFA6E9CACB7B}"
-	RootNamespace="configfile"
+	Name="ai_service"
+	ProjectGUID="{A6CEF757-43C1-4395-8993-C17F9B9713F5}"
+	RootNamespace="ai_service"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>
@@ -66,7 +66,7 @@
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)\$(TargetName).pdb"
-				SubSystem="1"
+				SubSystem="2"
 				RandomizedBaseAddress="1"
 				TargetMachine="1"
 			/>
@@ -144,7 +144,7 @@
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)\$(TargetName).pdb"
-				SubSystem="1"
+				SubSystem="2"
 				RandomizedBaseAddress="1"
 				TargetMachine="1"
 			/>
@@ -221,7 +221,7 @@
 				IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)\$(TargetName).pdb"
-				SubSystem="1"
+				SubSystem="2"
 				RandomizedBaseAddress="1"
 				TargetMachine="1"
 			/>
@@ -302,7 +302,7 @@
 				AdditionalDependencies="winmm.lib odbc32.lib odbccp32.lib"
 				OutputFile="$(RootNamespace).exe"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
-				SubSystem="1"
+				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				LinkTimeCodeGeneration="1"
@@ -386,7 +386,7 @@
 				AdditionalDependencies="winmm.lib odbc32.lib odbccp32.lib"
 				OutputFile="$(RootNamespace)_rd.exe"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
-				SubSystem="1"
+				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				LinkTimeCodeGeneration="1"
@@ -470,7 +470,7 @@
 				AdditionalDependencies="winmm.lib odbc32.lib odbccp32.lib"
 				OutputFile="$(RootNamespace)_rds.exe"
 				IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
-				SubSystem="1"
+				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				LinkTimeCodeGeneration="1"
@@ -504,11 +504,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="main.cpp"
+			RelativePath="ai_service.cfg"
 			>
 		</File>
 		<File
-			RelativePath="simpletest.txt"
+			RelativePath="ai_service.cpp"
 			>
 		</File>
 	</Files>

@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="shift_jis"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="configfile"
-	ProjectGUID="{F15C4E9E-FEF4-4FFC-A8A7-DFA6E9CACB7B}"
-	RootNamespace="configfile"
+	Name="client"
+	ProjectGUID="{4A9B36D5-BD03-4599-82A1-9C79D3FD2B3E}"
+	RootNamespace="client"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>
@@ -504,11 +504,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="main.cpp"
-			>
-		</File>
-		<File
-			RelativePath="simpletest.txt"
+			RelativePath="client.cpp"
 			>
 		</File>
 	</Files>
