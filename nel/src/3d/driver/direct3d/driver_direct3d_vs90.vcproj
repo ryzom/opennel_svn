@@ -4,8 +4,8 @@
 	Version="9,00"
 	Name="driver_direct3d"
 	ProjectGUID="{1FEE8B42-BE4C-4E23-9101-0EA410D41E29}"
-	RootNamespace="direct3d"
-	TargetFrameworkVersion="131072"
+	RootNamespace="nel_drv_direct3d_win"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -43,13 +43,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\..\include"
-				PreprocessorDefinitions="_WINDOWS;WIN32;_DEBUG;LIBXML_STATIC;_USRDLL;driver_direct3d_EXPORTS"
+				PreprocessorDefinitions="driver_direct3d_EXPORTS;LIBXML_STATIC;_USRDLL;WIN32;_DEBUG"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="stddirect3d.h"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -65,12 +65,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="d3dx9.lib d3d9.lib dinput8.lib dxguid.lib"
-				OutputFile="..\..\..\..\lib\nel_drv_$(RootNamespace)_win_d.dll"
+				OutputFile="..\..\..\..\lib\$(RootNamespace)_d.dll"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
-				ModuleDefinitionFile=".\driver_$(RootNamespace).def"
+				ModuleDefinitionFile=".\$(ProjectName).def"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
-				ImportLibrary="..\..\..\..\lib\nel_drv_$(RootNamespace)_win_d.lib"
+				ImportLibrary="..\..\..\..\lib\$(RootNamespace)_d.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -121,16 +121,16 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
+				Optimization="4"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\..\..\..\include"
-				PreprocessorDefinitions="_WINDOWS;WIN32;_DEBUG;NL_DEBUG_FAST;LIBXML_STATIC;_USRDLL;driver_direct3d_EXPORTS"
+				PreprocessorDefinitions="driver_direct3d_EXPORTS;LIBXML_STATIC;_USRDLL;WIN32;_DEBUG;NL_DEBUG_FAST"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="stddirect3d.h"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -145,13 +145,17 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				
+				
+				
 				AdditionalDependencies="d3dx9.lib d3d9.lib dinput8.lib dxguid.lib"
-				OutputFile="..\..\..\..\lib\nel_drv_$(RootNamespace)_win_df.dll"
+				OutputFile="..\..\..\..\lib\$(RootNamespace)_df.dll"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
-				ModuleDefinitionFile=".\driver_$(RootNamespace).def"
+				ModuleDefinitionFile=".\$(ProjectName).def"
 				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(IntDir)\$(TargetName).pdb"
 				RandomizedBaseAddress="1"
-				ImportLibrary="..\..\..\..\lib\nel_drv_$(RootNamespace)_win_df.lib"
+				ImportLibrary="..\..\..\..\lib\$(RootNamespace)_df.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -204,13 +208,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;NL_STATIC;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG;NL_STATIC"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="stddirect3d.h"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -226,7 +230,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="d3dx9.lib d3d9.lib dinput8.lib dxguid.lib"
-				OutputFile="..\..\..\..\lib\nldriver_$(RootNamespace)_ds.lib"
+				OutputFile="..\..\..\..\lib\$(RootNamespace)_ds.lib"
 				IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
 			/>
 			<Tool
@@ -271,7 +275,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="3"
+				Optimization="4"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
@@ -279,13 +283,13 @@
 				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\..\..\..\include"
-				PreprocessorDefinitions="_WINDOWS;WIN32;NDEBUG;ASSERT_THROW_EXCEPTION;FINAL_VERSION;LIBXML_STATIC;_USRDLL;driver_direct3d_EXPORTS"
+				PreprocessorDefinitions="driver_direct3d_EXPORTS;LIBXML_STATIC;_USRDLL;WIN32;NDEBUG;ASSERT_THROW_EXCEPTION;FINAL_VERSION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="stddirect3d.h"
 				WarningLevel="3"
 			/>
 			<Tool
@@ -300,14 +304,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="d3dx9.lib d3d9.lib dinput8.lib dxguid.lib"
-				OutputFile="..\..\..\..\lib\nel_drv_$(RootNamespace)_win_r.dll"
+				OutputFile="..\..\..\..\lib\$(RootNamespace)_r.dll"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
-				ModuleDefinitionFile=".\driver_$(RootNamespace).def"
+				ModuleDefinitionFile=".\$(ProjectName).def"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				LinkTimeCodeGeneration="1"
 				RandomizedBaseAddress="1"
-				ImportLibrary="..\..\..\..\lib\nel_drv_$(RootNamespace)_win_r.lib"
+				ImportLibrary="..\..\..\..\lib\$(RootNamespace)_r.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -358,16 +362,20 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="4"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\..\..\..\include"
-				PreprocessorDefinitions="_WINDOWS;WIN32;NDEBUG;NL_RELEASE_DEBUG;ASSERT_THROW_EXCEPTION;LIBXML_STATIC;_USRDLL;driver_direct3d_EXPORTS"
+				PreprocessorDefinitions="driver_direct3d_EXPORTS;LIBXML_STATIC;_USRDLL;WIN32;NDEBUG;NL_RELEASE_DEBUG;ASSERT_THROW_EXCEPTION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="stddirect3d.h"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -383,14 +391,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="d3dx9.lib d3d9.lib dinput8.lib dxguid.lib"
-				OutputFile="..\..\..\..\lib\nel_drv_$(RootNamespace)_win_rd.dll"
+				OutputFile="..\..\..\..\lib\$(RootNamespace)_rd.dll"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
-				ModuleDefinitionFile=".\driver_$(RootNamespace).def"
-				GenerateDebugInformation="true"
+				ModuleDefinitionFile=".\$(ProjectName).def"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				LinkTimeCodeGeneration="1"
 				RandomizedBaseAddress="1"
-				ImportLibrary="..\..\..\..\lib\nel_drv_$(RootNamespace)_win_rd.lib"
+				ImportLibrary="..\..\..\..\lib\$(RootNamespace)_rd.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -441,16 +449,20 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="4"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\..\..\..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;NL_STATIC;LIBXML_STATIC;ASSERT_THROW_EXCEPTION"
+				PreprocessorDefinitions="LIBXML_STATIC;_WINDOWS;WIN32;NDEBUG;NL_RELEASE_DEBUG;NL_STATIC;ASSERT_THROW_EXCEPTION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="stddirect3d.h"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -466,7 +478,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="d3dx9.lib d3d9.lib dinput8.lib dxguid.lib"
-				OutputFile="..\..\..\..\lib\nldriver_$(RootNamespace)_rds.lib"
+				OutputFile="..\..\..\..\lib\$(RootNamespace)_rds.lib"
 				IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
 			/>
 			<Tool
@@ -494,108 +506,108 @@
 			Filter="*.fx"
 			>
 			<File
-				RelativePath="cloud.fx"
+				RelativePath=".\cloud.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap0.fx"
+				RelativePath=".\lightmap0.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap0_x2.fx"
+				RelativePath=".\lightmap0_x2.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap0blend.fx"
+				RelativePath=".\lightmap0blend.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap0blend_x2.fx"
+				RelativePath=".\lightmap0blend_x2.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap1.fx"
+				RelativePath=".\lightmap1.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap1_x2.fx"
+				RelativePath=".\lightmap1_x2.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap1blend.fx"
+				RelativePath=".\lightmap1blend.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap1blend_x2.fx"
+				RelativePath=".\lightmap1blend_x2.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap2.fx"
+				RelativePath=".\lightmap2.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap2_x2.fx"
+				RelativePath=".\lightmap2_x2.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap2blend.fx"
+				RelativePath=".\lightmap2blend.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap2blend_x2.fx"
+				RelativePath=".\lightmap2blend_x2.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap3.fx"
+				RelativePath=".\lightmap3.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap3_x2.fx"
+				RelativePath=".\lightmap3_x2.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap3blend.fx"
+				RelativePath=".\lightmap3blend.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap3blend_x2.fx"
+				RelativePath=".\lightmap3blend_x2.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap4.fx"
+				RelativePath=".\lightmap4.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap4_x2.fx"
+				RelativePath=".\lightmap4_x2.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap4blend.fx"
+				RelativePath=".\lightmap4blend.fx"
 				>
 			</File>
 			<File
-				RelativePath="lightmap4blend_x2.fx"
+				RelativePath=".\lightmap4blend_x2.fx"
 				>
 			</File>
 			<File
-				RelativePath="water_diffuse.fx"
+				RelativePath=".\water_diffuse.fx"
 				>
 			</File>
 			<File
-				RelativePath="water_no_diffuse.fx"
+				RelativePath=".\water_no_diffuse.fx"
 				>
 			</File>
 		</Filter>
 		<File
-			RelativePath="direct3d.rc"
+			RelativePath=".\direct3d.rc"
 			>
 		</File>
 		<File
-			RelativePath="driver_direct3d.cpp"
+			RelativePath=".\driver_direct3d.cpp"
 			>
 		</File>
 		<File
-			RelativePath="driver_direct3d.def"
+			RelativePath=".\driver_direct3d.def"
 			>
 			<FileConfiguration
 				Name="DebugStatic|Win32"
@@ -615,59 +627,59 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="driver_direct3d.h"
+			RelativePath=".\driver_direct3d.h"
 			>
 		</File>
 		<File
-			RelativePath="driver_direct3d_index.cpp"
+			RelativePath=".\driver_direct3d_index.cpp"
 			>
 		</File>
 		<File
-			RelativePath="driver_direct3d_inputs.cpp"
+			RelativePath=".\driver_direct3d_inputs.cpp"
 			>
 		</File>
 		<File
-			RelativePath="driver_direct3d_light.cpp"
+			RelativePath=".\driver_direct3d_light.cpp"
 			>
 		</File>
 		<File
-			RelativePath="driver_direct3d_material.cpp"
+			RelativePath=".\driver_direct3d_material.cpp"
 			>
 		</File>
 		<File
-			RelativePath="driver_direct3d_matrix.cpp"
+			RelativePath=".\driver_direct3d_matrix.cpp"
 			>
 		</File>
 		<File
-			RelativePath="driver_direct3d_profile.cpp"
+			RelativePath=".\driver_direct3d_profile.cpp"
 			>
 		</File>
 		<File
-			RelativePath="driver_direct3d_render.cpp"
+			RelativePath=".\driver_direct3d_render.cpp"
 			>
 		</File>
 		<File
-			RelativePath="driver_direct3d_shader.cpp"
+			RelativePath=".\driver_direct3d_shader.cpp"
 			>
 		</File>
 		<File
-			RelativePath="driver_direct3d_texture.cpp"
+			RelativePath=".\driver_direct3d_texture.cpp"
 			>
 		</File>
 		<File
-			RelativePath="driver_direct3d_vertex.cpp"
+			RelativePath=".\driver_direct3d_vertex.cpp"
 			>
 		</File>
 		<File
-			RelativePath="driver_direct3d_vertex_program.cpp"
+			RelativePath=".\driver_direct3d_vertex_program.cpp"
 			>
 		</File>
 		<File
-			RelativePath="resource.h"
+			RelativePath=".\resource.h"
 			>
 		</File>
 		<File
-			RelativePath="stddirect3d.cpp"
+			RelativePath=".\stddirect3d.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"

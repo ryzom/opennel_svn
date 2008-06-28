@@ -151,9 +151,16 @@ void	setCrashAlreadyReported(bool state);
  *			can append using the NL_MACRO_TO_STR macro like in
  *			#define CLASS_NAME TheClassName
  *			#pragma message( NL_LOC_MGS "The class name is " NL_MACRO_TO_STR(CLASS_NAME))
+ *  Note 2 : To show a warning under GCC, use #warning "Your warning here", 
+ *           see nel/net/net_manager.h for an example on how to use these correctly.
  */
-#define NL_LOC_MSG __FILE__"("NL_MACRO_TO_STR(__LINE__)") : Message: "
-#define NL_LOC_WRN __FILE__"("NL_MACRO_TO_STR(__LINE__)") : Warning Msg: "
+#ifdef NL_COMP_VC9
+#	define NL_LOC_MSG __FILE__"("NL_MACRO_TO_STR(__LINE__)") : message: "
+#	define NL_LOC_WRN __FILE__"("NL_MACRO_TO_STR(__LINE__)") : warning NeL: "
+#else
+#	define NL_LOC_MSG __FILE__"("NL_MACRO_TO_STR(__LINE__)") : Message: "
+#	define NL_LOC_WRN __FILE__"("NL_MACRO_TO_STR(__LINE__)") : Warning Msg: "
+#endif
 
 
 /**

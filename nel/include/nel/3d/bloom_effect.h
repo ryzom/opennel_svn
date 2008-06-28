@@ -23,8 +23,10 @@
 // Misc
 #include "nel/misc/singleton.h"
 #include "nel/misc/vector_2f.h"
+#include "nel/misc/geom_ext.h"
 
 // 3D
+#include "nel/3d/u_material.h"
 #include "nel/3d/texture.h"
 
 namespace NL3D

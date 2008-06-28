@@ -4,8 +4,8 @@
 	Version="9,00"
 	Name="sound"
 	ProjectGUID="{EDB369A3-D7A4-4593-982C-96DEF4F9D485}"
-	RootNamespace="sound"
-	TargetFrameworkVersion="131072"
+	RootNamespace="nlsound"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -43,13 +43,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -64,7 +64,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_d.lib"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_d.lib"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 			/>
 			<Tool
@@ -109,16 +110,16 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
+				Optimization="4"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;NL_DEBUG_FAST;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG;NL_DEBUG_FAST"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -133,7 +134,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_df.lib"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_df.lib"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 			/>
 			<Tool
@@ -180,13 +182,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;NL_STATIC;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG;NL_STATIC"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -201,7 +203,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_ds.lib"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_ds.lib"
 				IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
 			/>
 			<Tool
@@ -228,6 +231,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -246,7 +250,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="3"
+				Optimization="4"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
@@ -254,13 +258,13 @@
 				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;LIBXML_STATIC;ASSERT_THROW_EXCEPTION;FINAL_VERSION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;ASSERT_THROW_EXCEPTION;FINAL_VERSION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 			/>
 			<Tool
@@ -274,8 +278,10 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_r.lib"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace).lib"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				LinkTimeCodeGeneration="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -301,6 +307,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -319,16 +326,20 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="4"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;LIBXML_STATIC;ASSERT_THROW_EXCEPTION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;ASSERT_THROW_EXCEPTION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -343,8 +354,10 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_rd.lib"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_rd.lib"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				LinkTimeCodeGeneration="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -370,6 +383,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -388,16 +402,20 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="4"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;NL_STATIC;LIBXML_STATIC;ASSERT_THROW_EXCEPTION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;NL_STATIC;ASSERT_THROW_EXCEPTION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -412,8 +430,10 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_rds.lib"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_rds.lib"
 				IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
+				LinkTimeCodeGeneration="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -455,19 +475,19 @@
 			Name="user_imp"
 			>
 			<File
-				RelativePath="sound\audio_mixer_user.cpp"
+				RelativePath=".\sound\audio_mixer_user.cpp"
 				>
 			</File>
 			<File
-				RelativePath="sound\audio_mixer_user.h"
+				RelativePath=".\sound\audio_mixer_user.h"
 				>
 			</File>
 			<File
-				RelativePath="sound\listener_user.cpp"
+				RelativePath=".\sound\listener_user.cpp"
 				>
 			</File>
 			<File
-				RelativePath="sound\listener_user.h"
+				RelativePath=".\sound\listener_user.h"
 				>
 			</File>
 		</Filter>
@@ -475,51 +495,51 @@
 			Name="sound_class"
 			>
 			<File
-				RelativePath="sound\background_sound.cpp"
+				RelativePath=".\sound\background_sound.cpp"
 				>
 			</File>
 			<File
-				RelativePath="sound\background_sound.h"
+				RelativePath=".\sound\background_sound.h"
 				>
 			</File>
 			<File
-				RelativePath="sound\complex_sound.cpp"
+				RelativePath=".\sound\complex_sound.cpp"
 				>
 			</File>
 			<File
-				RelativePath="sound\complex_sound.h"
+				RelativePath=".\sound\complex_sound.h"
 				>
 			</File>
 			<File
-				RelativePath="sound\context_sound.cpp"
+				RelativePath=".\sound\context_sound.cpp"
 				>
 			</File>
 			<File
-				RelativePath="sound\context_sound.h"
+				RelativePath=".\sound\context_sound.h"
 				>
 			</File>
 			<File
-				RelativePath="sound\music_sound.cpp"
+				RelativePath=".\sound\music_sound.cpp"
 				>
 			</File>
 			<File
-				RelativePath="sound\music_sound.h"
+				RelativePath=".\sound\music_sound.h"
 				>
 			</File>
 			<File
-				RelativePath="sound\simple_sound.cpp"
+				RelativePath=".\sound\simple_sound.cpp"
 				>
 			</File>
 			<File
-				RelativePath="sound\simple_sound.h"
+				RelativePath=".\sound\simple_sound.h"
 				>
 			</File>
 			<File
-				RelativePath="sound\sound.cpp"
+				RelativePath=".\sound\sound.cpp"
 				>
 			</File>
 			<File
-				RelativePath="sound\sound.h"
+				RelativePath=".\sound\sound.h"
 				>
 			</File>
 		</Filter>
@@ -527,7 +547,7 @@
 			Name="animation"
 			>
 			<File
-				RelativePath="sound\sound_anim_manager.cpp"
+				RelativePath=".\sound\sound_anim_manager.cpp"
 				>
 			</File>
 			<File
@@ -535,7 +555,7 @@
 				>
 			</File>
 			<File
-				RelativePath="sound\sound_anim_marker.cpp"
+				RelativePath=".\sound\sound_anim_marker.cpp"
 				>
 			</File>
 			<File
@@ -543,7 +563,7 @@
 				>
 			</File>
 			<File
-				RelativePath="sound\sound_animation.cpp"
+				RelativePath=".\sound\sound_animation.cpp"
 				>
 			</File>
 			<File
@@ -555,104 +575,104 @@
 			Name="source"
 			>
 			<File
-				RelativePath="sound\background_source.cpp"
+				RelativePath=".\sound\background_source.cpp"
 				>
 			</File>
 			<File
-				RelativePath="sound\background_source.h"
+				RelativePath=".\sound\background_source.h"
 				>
 			</File>
 			<File
-				RelativePath="sound\complex_source.cpp"
+				RelativePath=".\sound\complex_source.cpp"
 				>
 			</File>
 			<File
-				RelativePath="sound\complex_source.h"
+				RelativePath=".\sound\complex_source.h"
 				>
 			</File>
 			<File
-				RelativePath="sound\music_source.cpp"
+				RelativePath=".\sound\music_source.cpp"
 				>
 			</File>
 			<File
-				RelativePath="sound\music_source.h"
+				RelativePath=".\sound\music_source.h"
 				>
 			</File>
 			<File
-				RelativePath="sound\simple_source.cpp"
+				RelativePath=".\sound\simple_source.cpp"
 				>
 			</File>
 			<File
-				RelativePath="sound\simple_source.h"
+				RelativePath=".\sound\simple_source.h"
 				>
 			</File>
 			<File
-				RelativePath="sound\source_common.cpp"
+				RelativePath=".\sound\source_common.cpp"
 				>
 			</File>
 			<File
-				RelativePath="sound\source_common.h"
+				RelativePath=".\sound\source_common.h"
 				>
 			</File>
 		</Filter>
 		<File
-			RelativePath="sound\async_file_manager_sound.cpp"
+			RelativePath=".\sound\async_file_manager_sound.cpp"
 			>
 		</File>
 		<File
-			RelativePath="sound\async_file_manager_sound.h"
+			RelativePath=".\sound\async_file_manager_sound.h"
 			>
 		</File>
 		<File
-			RelativePath="sound\background_sound_manager.cpp"
+			RelativePath=".\sound\background_sound_manager.cpp"
 			>
 		</File>
 		<File
-			RelativePath="sound\background_sound_manager.h"
+			RelativePath=".\sound\background_sound_manager.h"
 			>
 		</File>
 		<File
-			RelativePath="sound\clustered_sound.cpp"
+			RelativePath=".\sound\clustered_sound.cpp"
 			>
 		</File>
 		<File
-			RelativePath="sound\clustered_sound.h"
+			RelativePath=".\sound\clustered_sound.h"
 			>
 		</File>
 		<File
-			RelativePath="sound\mixing_track.cpp"
+			RelativePath=".\sound\mixing_track.cpp"
 			>
 		</File>
 		<File
-			RelativePath="sound\mixing_track.h"
+			RelativePath=".\sound\mixing_track.h"
 			>
 		</File>
 		<File
-			RelativePath="sound\music_sound_manager.cpp"
+			RelativePath=".\sound\music_sound_manager.cpp"
 			>
 		</File>
 		<File
-			RelativePath="sound\music_sound_manager.h"
+			RelativePath=".\sound\music_sound_manager.h"
 			>
 		</File>
 		<File
-			RelativePath="sound\sample_bank.cpp"
+			RelativePath=".\sound\sample_bank.cpp"
 			>
 		</File>
 		<File
-			RelativePath="sound\sample_bank.h"
+			RelativePath=".\sound\sample_bank.h"
 			>
 		</File>
 		<File
-			RelativePath="sound\sound_bank.cpp"
+			RelativePath=".\sound\sound_bank.cpp"
 			>
 		</File>
 		<File
-			RelativePath="sound\sound_bank.h"
+			RelativePath=".\sound\sound_bank.h"
 			>
 		</File>
 		<File
-			RelativePath="sound\stdsound.cpp"
+			RelativePath=".\sound\stdsound.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -704,7 +724,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="sound\stdsound.h"
+			RelativePath=".\sound\stdsound.h"
 			>
 		</File>
 	</Files>

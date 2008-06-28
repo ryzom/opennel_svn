@@ -4,8 +4,8 @@
 	Version="9,00"
 	Name="3d"
 	ProjectGUID="{2B48BE83-108B-4E8E-8A55-6627CF09AC5A}"
-	RootNamespace="3d"
-	TargetFrameworkVersion="131072"
+	RootNamespace="nl3d"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -43,13 +43,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -65,7 +65,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="freetype.lib"
-				OutputFile="..\lib\nl$(RootNamespace)_d.lib"
+				OutputFile="..\lib\$(RootNamespace)_d.lib"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 			/>
 			<Tool
@@ -110,16 +110,16 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
+				Optimization="4"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;NL_DEBUG_FAST;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG;NL_DEBUG_FAST"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -135,7 +135,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="freetype.lib"
-				OutputFile="..\lib\nl$(RootNamespace)_df.lib"
+				OutputFile="..\lib\$(RootNamespace)_df.lib"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 			/>
 			<Tool
@@ -182,13 +182,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;NL_STATIC;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG;NL_STATIC"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -204,7 +204,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="freetype.lib"
-				OutputFile="..\lib\nl$(RootNamespace)_ds.lib"
+				OutputFile="..\lib\$(RootNamespace)_ds.lib"
 				IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
 			/>
 			<Tool
@@ -231,6 +231,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -249,7 +250,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="3"
+				Optimization="4"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
@@ -257,13 +258,13 @@
 				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;LIBXML_STATIC;ASSERT_THROW_EXCEPTION;FINAL_VERSION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;ASSERT_THROW_EXCEPTION;FINAL_VERSION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 			/>
 			<Tool
@@ -278,8 +279,9 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="freetype.lib"
-				OutputFile="..\lib\nl$(RootNamespace)_r.lib"
+				OutputFile="..\lib\$(RootNamespace).lib"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				LinkTimeCodeGeneration="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -305,6 +307,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -323,16 +326,20 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="4"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;LIBXML_STATIC;ASSERT_THROW_EXCEPTION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;ASSERT_THROW_EXCEPTION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -348,8 +355,9 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="freetype.lib"
-				OutputFile="..\lib\nl$(RootNamespace)_rd.lib"
+				OutputFile="..\lib\$(RootNamespace)_rd.lib"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				LinkTimeCodeGeneration="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -375,6 +383,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -393,16 +402,20 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="4"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;NL_STATIC;LIBXML_STATIC;ASSERT_THROW_EXCEPTION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;NL_STATIC;ASSERT_THROW_EXCEPTION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -418,8 +431,9 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="freetype.lib"
-				OutputFile="..\lib\nl$(RootNamespace)_rds.lib"
+				OutputFile="..\lib\$(RootNamespace)_rds.lib"
 				IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
+				LinkTimeCodeGeneration="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -445,7 +459,7 @@
 			Name="traversals"
 			>
 			<File
-				RelativePath="3d\anim_detail_trav.cpp"
+				RelativePath=".\3d\anim_detail_trav.cpp"
 				>
 			</File>
 			<File
@@ -453,7 +467,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\clip_trav.cpp"
+				RelativePath=".\3d\clip_trav.cpp"
 				>
 			</File>
 			<File
@@ -461,7 +475,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\hrc_trav.cpp"
+				RelativePath=".\3d\hrc_trav.cpp"
 				>
 			</File>
 			<File
@@ -469,7 +483,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\light_trav.cpp"
+				RelativePath=".\3d\light_trav.cpp"
 				>
 			</File>
 			<File
@@ -477,7 +491,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\load_balancing_trav.cpp"
+				RelativePath=".\3d\load_balancing_trav.cpp"
 				>
 			</File>
 			<File
@@ -485,7 +499,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\render_trav.cpp"
+				RelativePath=".\3d\render_trav.cpp"
 				>
 			</File>
 			<File
@@ -493,7 +507,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\trav_scene.cpp"
+				RelativePath=".\3d\trav_scene.cpp"
 				>
 			</File>
 			<File
@@ -505,7 +519,7 @@
 			Name="models"
 			>
 			<File
-				RelativePath="3d\camera.cpp"
+				RelativePath=".\3d\camera.cpp"
 				>
 			</File>
 			<File
@@ -513,7 +527,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\flare_model.cpp"
+				RelativePath=".\3d\flare_model.cpp"
 				>
 			</File>
 			<File
@@ -521,7 +535,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\landscape_model.cpp"
+				RelativePath=".\3d\landscape_model.cpp"
 				>
 			</File>
 			<File
@@ -529,7 +543,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mesh_base_instance.cpp"
+				RelativePath=".\3d\mesh_base_instance.cpp"
 				>
 			</File>
 			<File
@@ -537,7 +551,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mesh_instance.cpp"
+				RelativePath=".\3d\mesh_instance.cpp"
 				>
 			</File>
 			<File
@@ -545,7 +559,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mesh_mrm_instance.cpp"
+				RelativePath=".\3d\mesh_mrm_instance.cpp"
 				>
 			</File>
 			<File
@@ -553,7 +567,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mesh_mrm_skinned_instance.cpp"
+				RelativePath=".\3d\mesh_mrm_skinned_instance.cpp"
 				>
 			</File>
 			<File
@@ -561,7 +575,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mesh_multi_lod_instance.cpp"
+				RelativePath=".\3d\mesh_multi_lod_instance.cpp"
 				>
 			</File>
 			<File
@@ -569,7 +583,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\particle_system_model.cpp"
+				RelativePath=".\3d\particle_system_model.cpp"
 				>
 			</File>
 			<File
@@ -577,7 +591,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\point_light_model.cpp"
+				RelativePath=".\3d\point_light_model.cpp"
 				>
 			</File>
 			<File
@@ -585,7 +599,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\root_model.cpp"
+				RelativePath=".\3d\root_model.cpp"
 				>
 			</File>
 			<File
@@ -593,7 +607,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\seg_remanence.cpp"
+				RelativePath=".\3d\seg_remanence.cpp"
 				>
 			</File>
 			<File
@@ -601,7 +615,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\skeleton_model.cpp"
+				RelativePath=".\3d\skeleton_model.cpp"
 				>
 			</File>
 			<File
@@ -609,7 +623,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\transform.cpp"
+				RelativePath=".\3d\transform.cpp"
 				>
 			</File>
 			<File
@@ -617,7 +631,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\transform_shape.cpp"
+				RelativePath=".\3d\transform_shape.cpp"
 				>
 			</File>
 			<File
@@ -625,7 +639,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\water_model.cpp"
+				RelativePath=".\3d\water_model.cpp"
 				>
 			</File>
 			<File
@@ -637,7 +651,7 @@
 			Name="landscape"
 			>
 			<File
-				RelativePath="3d\bezier_patch.cpp"
+				RelativePath=".\3d\bezier_patch.cpp"
 				>
 			</File>
 			<File
@@ -645,7 +659,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\landscape.cpp"
+				RelativePath=".\3d\landscape.cpp"
 				>
 			</File>
 			<File
@@ -653,7 +667,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\landscape_def.cpp"
+				RelativePath=".\3d\landscape_def.cpp"
 				>
 			</File>
 			<File
@@ -661,7 +675,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\landscape_face_vector_manager.cpp"
+				RelativePath=".\3d\landscape_face_vector_manager.cpp"
 				>
 			</File>
 			<File
@@ -669,7 +683,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\landscape_profile.cpp"
+				RelativePath=".\3d\landscape_profile.cpp"
 				>
 			</File>
 			<File
@@ -677,7 +691,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\landscape_vegetable_block.cpp"
+				RelativePath=".\3d\landscape_vegetable_block.cpp"
 				>
 			</File>
 			<File
@@ -685,7 +699,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\landscapevb_allocator.cpp"
+				RelativePath=".\3d\landscapevb_allocator.cpp"
 				>
 			</File>
 			<File
@@ -693,7 +707,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\landscapevb_info.cpp"
+				RelativePath=".\3d\landscapevb_info.cpp"
 				>
 			</File>
 			<File
@@ -701,7 +715,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\patch.cpp"
+				RelativePath=".\3d\patch.cpp"
 				>
 			</File>
 			<File
@@ -709,15 +723,15 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\patch_lightmap.cpp"
+				RelativePath=".\3d\patch_lightmap.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\patch_noise.cpp"
+				RelativePath=".\3d\patch_noise.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\patch_rdr_pass.cpp"
+				RelativePath=".\3d\patch_rdr_pass.cpp"
 				>
 			</File>
 			<File
@@ -725,15 +739,15 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\patch_render.cpp"
+				RelativePath=".\3d\patch_render.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\patch_vegetable.cpp"
+				RelativePath=".\3d\patch_vegetable.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\patchdlm_context.cpp"
+				RelativePath=".\3d\patchdlm_context.cpp"
 				>
 			</File>
 			<File
@@ -741,7 +755,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\patchuv_locator.cpp"
+				RelativePath=".\3d\patchuv_locator.cpp"
 				>
 			</File>
 			<File
@@ -749,7 +763,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\tess_block.cpp"
+				RelativePath=".\3d\tess_block.cpp"
 				>
 			</File>
 			<File
@@ -757,7 +771,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\tess_face_priority_list.cpp"
+				RelativePath=".\3d\tess_face_priority_list.cpp"
 				>
 			</File>
 			<File
@@ -765,7 +779,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\tess_list.cpp"
+				RelativePath=".\3d\tess_list.cpp"
 				>
 			</File>
 			<File
@@ -773,7 +787,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\tessellation.cpp"
+				RelativePath=".\3d\tessellation.cpp"
 				>
 			</File>
 			<File
@@ -781,7 +795,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\texture_dlm.cpp"
+				RelativePath=".\3d\texture_dlm.cpp"
 				>
 			</File>
 			<File
@@ -789,7 +803,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\texture_far.cpp"
+				RelativePath=".\3d\texture_far.cpp"
 				>
 			</File>
 			<File
@@ -797,7 +811,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\texture_near.cpp"
+				RelativePath=".\3d\texture_near.cpp"
 				>
 			</File>
 			<File
@@ -805,7 +819,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\tile_color.cpp"
+				RelativePath=".\3d\tile_color.cpp"
 				>
 			</File>
 			<File
@@ -813,7 +827,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\tile_element.cpp"
+				RelativePath=".\3d\tile_element.cpp"
 				>
 			</File>
 			<File
@@ -821,7 +835,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\tile_light_influence.cpp"
+				RelativePath=".\3d\tile_light_influence.cpp"
 				>
 			</File>
 			<File
@@ -829,7 +843,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\tile_lumel.cpp"
+				RelativePath=".\3d\tile_lumel.cpp"
 				>
 			</File>
 			<File
@@ -837,7 +851,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\zone.cpp"
+				RelativePath=".\3d\zone.cpp"
 				>
 			</File>
 			<File
@@ -848,7 +862,7 @@
 				Name="zone_manager"
 				>
 				<File
-					RelativePath="3d\zone_manager.cpp"
+					RelativePath=".\3d\zone_manager.cpp"
 					>
 				</File>
 				<File
@@ -856,7 +870,7 @@
 					>
 				</File>
 				<File
-					RelativePath="3d\zone_search.cpp"
+					RelativePath=".\3d\zone_search.cpp"
 					>
 				</File>
 				<File
@@ -868,7 +882,7 @@
 				Name="tools"
 				>
 				<File
-					RelativePath="3d\instance_lighter.cpp"
+					RelativePath=".\3d\instance_lighter.cpp"
 					>
 				</File>
 				<File
@@ -876,7 +890,7 @@
 					>
 				</File>
 				<File
-					RelativePath="3d\zone_corner_smoother.cpp"
+					RelativePath=".\3d\zone_corner_smoother.cpp"
 					>
 				</File>
 				<File
@@ -884,7 +898,7 @@
 					>
 				</File>
 				<File
-					RelativePath="3d\zone_lighter.cpp"
+					RelativePath=".\3d\zone_lighter.cpp"
 					>
 				</File>
 				<File
@@ -892,7 +906,7 @@
 					>
 				</File>
 				<File
-					RelativePath="3d\zone_smoother.cpp"
+					RelativePath=".\3d\zone_smoother.cpp"
 					>
 				</File>
 				<File
@@ -900,7 +914,7 @@
 					>
 				</File>
 				<File
-					RelativePath="3d\zone_symmetrisation.cpp"
+					RelativePath=".\3d\zone_symmetrisation.cpp"
 					>
 				</File>
 				<File
@@ -908,7 +922,7 @@
 					>
 				</File>
 				<File
-					RelativePath="3d\zone_tgt_smoother.cpp"
+					RelativePath=".\3d\zone_tgt_smoother.cpp"
 					>
 				</File>
 				<File
@@ -921,7 +935,7 @@
 			Name="driver"
 			>
 			<File
-				RelativePath="3d\driver.cpp"
+				RelativePath=".\3d\driver.cpp"
 				>
 			</File>
 			<File
@@ -933,7 +947,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\dru.cpp"
+				RelativePath=".\3d\dru.cpp"
 				>
 			</File>
 			<File
@@ -941,7 +955,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\index_buffer.cpp"
+				RelativePath=".\3d\index_buffer.cpp"
 				>
 			</File>
 			<File
@@ -949,7 +963,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\light.cpp"
+				RelativePath=".\3d\light.cpp"
 				>
 			</File>
 			<File
@@ -957,7 +971,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\material.cpp"
+				RelativePath=".\3d\material.cpp"
 				>
 			</File>
 			<File
@@ -969,7 +983,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\shader.cpp"
+				RelativePath=".\3d\shader.cpp"
 				>
 			</File>
 			<File
@@ -977,7 +991,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\texture.cpp"
+				RelativePath=".\3d\texture.cpp"
 				>
 			</File>
 			<File
@@ -985,7 +999,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\vertex_buffer.cpp"
+				RelativePath=".\3d\vertex_buffer.cpp"
 				>
 			</File>
 			<File
@@ -993,7 +1007,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\vertex_program.cpp"
+				RelativePath=".\3d\vertex_program.cpp"
 				>
 			</File>
 			<File
@@ -1001,7 +1015,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\vertex_program_parse.cpp"
+				RelativePath=".\3d\vertex_program_parse.cpp"
 				>
 			</File>
 			<File
@@ -1013,7 +1027,7 @@
 			Name="font"
 			>
 			<File
-				RelativePath="3d\computed_string.cpp"
+				RelativePath=".\3d\computed_string.cpp"
 				>
 			</File>
 			<File
@@ -1021,7 +1035,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\font_generator.cpp"
+				RelativePath=".\3d\font_generator.cpp"
 				>
 			</File>
 			<File
@@ -1029,7 +1043,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\font_manager.cpp"
+				RelativePath=".\3d\font_manager.cpp"
 				>
 			</File>
 			<File
@@ -1037,7 +1051,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\text_context.cpp"
+				RelativePath=".\3d\text_context.cpp"
 				>
 			</File>
 			<File
@@ -1053,7 +1067,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\cube_grid.cpp"
+				RelativePath=".\3d\cube_grid.cpp"
 				>
 			</File>
 			<File
@@ -1061,7 +1075,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\fast_ptr_list.cpp"
+				RelativePath=".\3d\fast_ptr_list.cpp"
 				>
 			</File>
 			<File
@@ -1077,7 +1091,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\ptr_set.cpp"
+				RelativePath=".\3d\ptr_set.cpp"
 				>
 			</File>
 			<File
@@ -1085,7 +1099,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\quad_grid.cpp"
+				RelativePath=".\3d\quad_grid.cpp"
 				>
 			</File>
 			<File
@@ -1093,7 +1107,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\static_quad_grid.cpp"
+				RelativePath=".\3d\static_quad_grid.cpp"
 				>
 			</File>
 			<File
@@ -1105,7 +1119,7 @@
 			Name="tiles"
 			>
 			<File
-				RelativePath="3d\tile_bank.cpp"
+				RelativePath=".\3d\tile_bank.cpp"
 				>
 			</File>
 			<File
@@ -1113,7 +1127,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\tile_far_bank.cpp"
+				RelativePath=".\3d\tile_far_bank.cpp"
 				>
 			</File>
 			<File
@@ -1121,7 +1135,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\tile_noise_map.cpp"
+				RelativePath=".\3d\tile_noise_map.cpp"
 				>
 			</File>
 			<File
@@ -1129,7 +1143,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\tile_vegetable_desc.cpp"
+				RelativePath=".\3d\tile_vegetable_desc.cpp"
 				>
 			</File>
 			<File
@@ -1141,7 +1155,7 @@
 			Name="shapes"
 			>
 			<File
-				RelativePath="3d\flare_shape.cpp"
+				RelativePath=".\3d\flare_shape.cpp"
 				>
 			</File>
 			<File
@@ -1149,7 +1163,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mesh.cpp"
+				RelativePath=".\3d\mesh.cpp"
 				>
 			</File>
 			<File
@@ -1157,7 +1171,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mesh_base.cpp"
+				RelativePath=".\3d\mesh_base.cpp"
 				>
 			</File>
 			<File
@@ -1165,7 +1179,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mesh_blender.cpp"
+				RelativePath=".\3d\mesh_blender.cpp"
 				>
 			</File>
 			<File
@@ -1173,7 +1187,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mesh_block_manager.cpp"
+				RelativePath=".\3d\mesh_block_manager.cpp"
 				>
 			</File>
 			<File
@@ -1181,7 +1195,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mesh_geom.cpp"
+				RelativePath=".\3d\mesh_geom.cpp"
 				>
 			</File>
 			<File
@@ -1189,7 +1203,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mesh_morpher.cpp"
+				RelativePath=".\3d\mesh_morpher.cpp"
 				>
 			</File>
 			<File
@@ -1197,7 +1211,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mesh_mrm.cpp"
+				RelativePath=".\3d\mesh_mrm.cpp"
 				>
 			</File>
 			<File
@@ -1205,11 +1219,11 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mesh_mrm_skin.cpp"
+				RelativePath=".\3d\mesh_mrm_skin.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\mesh_mrm_skin_template.cpp"
+				RelativePath=".\3d\mesh_mrm_skin_template.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1261,7 +1275,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="3d\mesh_mrm_skinned.cpp"
+				RelativePath=".\3d\mesh_mrm_skinned.cpp"
 				>
 			</File>
 			<File
@@ -1269,7 +1283,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mesh_mrm_skinned_template.cpp"
+				RelativePath=".\3d\mesh_mrm_skinned_template.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1321,7 +1335,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="3d\mesh_multi_lod.cpp"
+				RelativePath=".\3d\mesh_multi_lod.cpp"
 				>
 			</File>
 			<File
@@ -1329,7 +1343,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mesh_vertex_program.cpp"
+				RelativePath=".\3d\mesh_vertex_program.cpp"
 				>
 			</File>
 			<File
@@ -1337,7 +1351,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\meshvp_per_pixel_light.cpp"
+				RelativePath=".\3d\meshvp_per_pixel_light.cpp"
 				>
 			</File>
 			<File
@@ -1345,7 +1359,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\meshvp_wind_tree.cpp"
+				RelativePath=".\3d\meshvp_wind_tree.cpp"
 				>
 			</File>
 			<File
@@ -1353,7 +1367,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mrm_level_detail.cpp"
+				RelativePath=".\3d\mrm_level_detail.cpp"
 				>
 			</File>
 			<File
@@ -1361,7 +1375,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\particle_system_shape.cpp"
+				RelativePath=".\3d\particle_system_shape.cpp"
 				>
 			</File>
 			<File
@@ -1369,7 +1383,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\raw_skin.cpp"
+				RelativePath=".\3d\raw_skin.cpp"
 				>
 			</File>
 			<File
@@ -1377,7 +1391,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\raw_skinned.cpp"
+				RelativePath=".\3d\raw_skinned.cpp"
 				>
 			</File>
 			<File
@@ -1385,7 +1399,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\seg_remanence_shape.cpp"
+				RelativePath=".\3d\seg_remanence_shape.cpp"
 				>
 			</File>
 			<File
@@ -1393,7 +1407,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\shadow_skin.cpp"
+				RelativePath=".\3d\shadow_skin.cpp"
 				>
 			</File>
 			<File
@@ -1401,7 +1415,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\shape.cpp"
+				RelativePath=".\3d\shape.cpp"
 				>
 			</File>
 			<File
@@ -1409,7 +1423,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\shape_bank.cpp"
+				RelativePath=".\3d\shape_bank.cpp"
 				>
 			</File>
 			<File
@@ -1417,7 +1431,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\shifted_triangle_cache.cpp"
+				RelativePath=".\3d\shifted_triangle_cache.cpp"
 				>
 			</File>
 			<File
@@ -1425,7 +1439,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\skeleton_shape.cpp"
+				RelativePath=".\3d\skeleton_shape.cpp"
 				>
 			</File>
 			<File
@@ -1433,7 +1447,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\tangent_space_build.cpp"
+				RelativePath=".\3d\tangent_space_build.cpp"
 				>
 			</File>
 			<File
@@ -1441,7 +1455,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\vertex_stream_manager.cpp"
+				RelativePath=".\3d\vertex_stream_manager.cpp"
 				>
 			</File>
 			<File
@@ -1449,7 +1463,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\water_shape.cpp"
+				RelativePath=".\3d\water_shape.cpp"
 				>
 			</File>
 			<File
@@ -1461,7 +1475,7 @@
 			Name="textures"
 			>
 			<File
-				RelativePath="3d\async_texture_block.cpp"
+				RelativePath=".\3d\async_texture_block.cpp"
 				>
 			</File>
 			<File
@@ -1469,7 +1483,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\async_texture_manager.cpp"
+				RelativePath=".\3d\async_texture_manager.cpp"
 				>
 			</File>
 			<File
@@ -1477,7 +1491,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\cube_map_builder.cpp"
+				RelativePath=".\3d\cube_map_builder.cpp"
 				>
 			</File>
 			<File
@@ -1485,7 +1499,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\fasthls_modifier.cpp"
+				RelativePath=".\3d\fasthls_modifier.cpp"
 				>
 			</File>
 			<File
@@ -1493,7 +1507,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\hls_color_texture.cpp"
+				RelativePath=".\3d\hls_color_texture.cpp"
 				>
 			</File>
 			<File
@@ -1501,7 +1515,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\hls_texture_bank.cpp"
+				RelativePath=".\3d\hls_texture_bank.cpp"
 				>
 			</File>
 			<File
@@ -1509,7 +1523,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\hls_texture_manager.cpp"
+				RelativePath=".\3d\hls_texture_manager.cpp"
 				>
 			</File>
 			<File
@@ -1517,7 +1531,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\texture_blank.cpp"
+				RelativePath=".\3d\texture_blank.cpp"
 				>
 			</File>
 			<File
@@ -1525,7 +1539,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\texture_blend.cpp"
+				RelativePath=".\3d\texture_blend.cpp"
 				>
 			</File>
 			<File
@@ -1533,7 +1547,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\texture_bloom.cpp"
+				RelativePath=".\3d\texture_bloom.cpp"
 				>
 			</File>
 			<File
@@ -1541,7 +1555,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\texture_bump.cpp"
+				RelativePath=".\3d\texture_bump.cpp"
 				>
 			</File>
 			<File
@@ -1549,7 +1563,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\texture_cube.cpp"
+				RelativePath=".\3d\texture_cube.cpp"
 				>
 			</File>
 			<File
@@ -1557,7 +1571,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\texture_emboss.cpp"
+				RelativePath=".\3d\texture_emboss.cpp"
 				>
 			</File>
 			<File
@@ -1565,7 +1579,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\texture_file.cpp"
+				RelativePath=".\3d\texture_file.cpp"
 				>
 			</File>
 			<File
@@ -1573,7 +1587,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\texture_font.cpp"
+				RelativePath=".\3d\texture_font.cpp"
 				>
 			</File>
 			<File
@@ -1581,7 +1595,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\texture_grouped.cpp"
+				RelativePath=".\3d\texture_grouped.cpp"
 				>
 			</File>
 			<File
@@ -1589,7 +1603,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\texture_mem.cpp"
+				RelativePath=".\3d\texture_mem.cpp"
 				>
 			</File>
 			<File
@@ -1597,7 +1611,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\texture_multi_file.cpp"
+				RelativePath=".\3d\texture_multi_file.cpp"
 				>
 			</File>
 			<File
@@ -1609,7 +1623,7 @@
 			Name="mrm"
 			>
 			<File
-				RelativePath="3d\mrm_builder.cpp"
+				RelativePath=".\3d\mrm_builder.cpp"
 				>
 			</File>
 			<File
@@ -1617,7 +1631,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mrm_internal.cpp"
+				RelativePath=".\3d\mrm_internal.cpp"
 				>
 			</File>
 			<File
@@ -1625,7 +1639,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mrm_mesh.cpp"
+				RelativePath=".\3d\mrm_mesh.cpp"
 				>
 			</File>
 			<File
@@ -1633,7 +1647,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mrm_parameters.cpp"
+				RelativePath=".\3d\mrm_parameters.cpp"
 				>
 			</File>
 			<File
@@ -1645,11 +1659,11 @@
 			Name="animation"
 			>
 			<File
-				RelativePath="3d\anim_ctrl.cpp"
+				RelativePath=".\3d\anim_ctrl.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\animatable.cpp"
+				RelativePath=".\3d\animatable.cpp"
 				>
 			</File>
 			<File
@@ -1657,7 +1671,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\animated_lightmap.cpp"
+				RelativePath=".\3d\animated_lightmap.cpp"
 				>
 			</File>
 			<File
@@ -1665,7 +1679,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\animated_material.cpp"
+				RelativePath=".\3d\animated_material.cpp"
 				>
 			</File>
 			<File
@@ -1673,7 +1687,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\animated_morph.cpp"
+				RelativePath=".\3d\animated_morph.cpp"
 				>
 			</File>
 			<File
@@ -1681,7 +1695,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\animated_value.cpp"
+				RelativePath=".\3d\animated_value.cpp"
 				>
 			</File>
 			<File
@@ -1689,7 +1703,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\animation.cpp"
+				RelativePath=".\3d\animation.cpp"
 				>
 			</File>
 			<File
@@ -1697,7 +1711,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\animation_optimizer.cpp"
+				RelativePath=".\3d\animation_optimizer.cpp"
 				>
 			</File>
 			<File
@@ -1705,7 +1719,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\animation_playlist.cpp"
+				RelativePath=".\3d\animation_playlist.cpp"
 				>
 			</File>
 			<File
@@ -1713,7 +1727,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\animation_set.cpp"
+				RelativePath=".\3d\animation_set.cpp"
 				>
 			</File>
 			<File
@@ -1721,11 +1735,11 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\animation_time.cpp"
+				RelativePath=".\3d\animation_time.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\bone.cpp"
+				RelativePath=".\3d\bone.cpp"
 				>
 			</File>
 			<File
@@ -1733,7 +1747,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\channel_mixer.cpp"
+				RelativePath=".\3d\channel_mixer.cpp"
 				>
 			</File>
 			<File
@@ -1741,7 +1755,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\key.cpp"
+				RelativePath=".\3d\key.cpp"
 				>
 			</File>
 			<File
@@ -1749,7 +1763,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\play_list_manager.cpp"
+				RelativePath=".\3d\play_list_manager.cpp"
 				>
 			</File>
 			<File
@@ -1757,7 +1771,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\skeleton_spawn_script.cpp"
+				RelativePath=".\3d\skeleton_spawn_script.cpp"
 				>
 			</File>
 			<File
@@ -1765,7 +1779,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\skeleton_weight.cpp"
+				RelativePath=".\3d\skeleton_weight.cpp"
 				>
 			</File>
 			<File
@@ -1773,11 +1787,11 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\target_anim_ctrl.cpp"
+				RelativePath=".\3d\target_anim_ctrl.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\track.cpp"
+				RelativePath=".\3d\track.cpp"
 				>
 			</File>
 			<File
@@ -1789,7 +1803,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\track_keyframer.cpp"
+				RelativePath=".\3d\track_keyframer.cpp"
 				>
 			</File>
 			<File
@@ -1797,7 +1811,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\track_sampled_common.cpp"
+				RelativePath=".\3d\track_sampled_common.cpp"
 				>
 			</File>
 			<File
@@ -1805,7 +1819,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\track_sampled_quat.cpp"
+				RelativePath=".\3d\track_sampled_quat.cpp"
 				>
 			</File>
 			<File
@@ -1813,7 +1827,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\track_sampled_quat_small_header.cpp"
+				RelativePath=".\3d\track_sampled_quat_small_header.cpp"
 				>
 			</File>
 			<File
@@ -1821,7 +1835,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\track_sampled_vector.cpp"
+				RelativePath=".\3d\track_sampled_vector.cpp"
 				>
 			</File>
 			<File
@@ -1833,7 +1847,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\transformable.cpp"
+				RelativePath=".\3d\transformable.cpp"
 				>
 			</File>
 			<File
@@ -1845,7 +1859,7 @@
 			Name="user_imp"
 			>
 			<File
-				RelativePath="3d\animation_set_user.cpp"
+				RelativePath=".\3d\animation_set_user.cpp"
 				>
 			</File>
 			<File
@@ -1853,7 +1867,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\cloud_scape_user.cpp"
+				RelativePath=".\3d\cloud_scape_user.cpp"
 				>
 			</File>
 			<File
@@ -1861,7 +1875,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\driver_user.cpp"
+				RelativePath=".\3d\driver_user.cpp"
 				>
 			</File>
 			<File
@@ -1869,19 +1883,19 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\driver_user2.cpp"
+				RelativePath=".\3d\driver_user2.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\frustum.cpp"
+				RelativePath=".\3d\frustum.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\height_map.cpp"
+				RelativePath=".\3d\height_map.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\instance_group_user.cpp"
+				RelativePath=".\3d\instance_group_user.cpp"
 				>
 			</File>
 			<File
@@ -1889,7 +1903,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\landscape_user.cpp"
+				RelativePath=".\3d\landscape_user.cpp"
 				>
 			</File>
 			<File
@@ -1897,11 +1911,11 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\landscapeig_manager.cpp"
+				RelativePath=".\3d\landscapeig_manager.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\light_user.cpp"
+				RelativePath=".\3d\light_user.cpp"
 				>
 			</File>
 			<File
@@ -1909,15 +1923,15 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\logic_info.cpp"
+				RelativePath=".\3d\logic_info.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\particle_system_sound_user.cpp"
+				RelativePath=".\3d\particle_system_sound_user.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\play_list_manager_user.cpp"
+				RelativePath=".\3d\play_list_manager_user.cpp"
 				>
 			</File>
 			<File
@@ -1925,7 +1939,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\play_list_user.cpp"
+				RelativePath=".\3d\play_list_user.cpp"
 				>
 			</File>
 			<File
@@ -1933,11 +1947,11 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\primitive_profile.cpp"
+				RelativePath=".\3d\primitive_profile.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\scene_user.cpp"
+				RelativePath=".\3d\scene_user.cpp"
 				>
 			</File>
 			<File
@@ -1945,11 +1959,11 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\scissor.cpp"
+				RelativePath=".\3d\scissor.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\shape_bank_user.cpp"
+				RelativePath=".\3d\shape_bank_user.cpp"
 				>
 			</File>
 			<File
@@ -1957,7 +1971,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\text_context_user.cpp"
+				RelativePath=".\3d\text_context_user.cpp"
 				>
 			</File>
 			<File
@@ -1965,7 +1979,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\texture_user.cpp"
+				RelativePath=".\3d\texture_user.cpp"
 				>
 			</File>
 			<File
@@ -1973,63 +1987,63 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\u_bone.cpp"
+				RelativePath=".\3d\u_bone.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\u_camera.cpp"
+				RelativePath=".\3d\u_camera.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\u_instance.cpp"
+				RelativePath=".\3d\u_instance.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\u_instance_material.cpp"
+				RelativePath=".\3d\u_instance_material.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\u_material.cpp"
+				RelativePath=".\3d\u_material.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\u_particle_system_instance.cpp"
+				RelativePath=".\3d\u_particle_system_instance.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\u_point_light.cpp"
+				RelativePath=".\3d\u_point_light.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\u_shape.cpp"
+				RelativePath=".\3d\u_shape.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\u_skeleton.cpp"
+				RelativePath=".\3d\u_skeleton.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\u_transform.cpp"
+				RelativePath=".\3d\u_transform.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\u_transformable.cpp"
+				RelativePath=".\3d\u_transformable.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\u_visual_collision_mesh.cpp"
+				RelativePath=".\3d\u_visual_collision_mesh.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\u_water.cpp"
+				RelativePath=".\3d\u_water.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\viewport.cpp"
+				RelativePath=".\3d\viewport.cpp"
 				>
 			</File>
 			<File
-				RelativePath="3d\visual_collision_entity_user.cpp"
+				RelativePath=".\3d\visual_collision_entity_user.cpp"
 				>
 			</File>
 			<File
@@ -2037,7 +2051,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\visual_collision_manager_user.cpp"
+				RelativePath=".\3d\visual_collision_manager_user.cpp"
 				>
 			</File>
 			<File
@@ -2045,7 +2059,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\water_env_map_user.cpp"
+				RelativePath=".\3d\water_env_map_user.cpp"
 				>
 			</File>
 			<File
@@ -2244,7 +2258,7 @@
 				Name="particles"
 				>
 				<File
-					RelativePath="3d\particle_system.cpp"
+					RelativePath=".\3d\particle_system.cpp"
 					>
 				</File>
 				<File
@@ -2252,7 +2266,7 @@
 					>
 				</File>
 				<File
-					RelativePath="3d\particle_system_manager.cpp"
+					RelativePath=".\3d\particle_system_manager.cpp"
 					>
 				</File>
 				<File
@@ -2260,7 +2274,7 @@
 					>
 				</File>
 				<File
-					RelativePath="3d\particle_system_process.cpp"
+					RelativePath=".\3d\particle_system_process.cpp"
 					>
 				</File>
 				<File
@@ -2268,7 +2282,7 @@
 					>
 				</File>
 				<File
-					RelativePath="3d\ps_allocator.cpp"
+					RelativePath=".\3d\ps_allocator.cpp"
 					>
 				</File>
 				<File
@@ -2284,7 +2298,7 @@
 					>
 				</File>
 				<File
-					RelativePath="3d\ps_located.cpp"
+					RelativePath=".\3d\ps_located.cpp"
 					>
 				</File>
 				<File
@@ -2304,7 +2318,7 @@
 					>
 				</File>
 				<File
-					RelativePath="3d\ps_util.cpp"
+					RelativePath=".\3d\ps_util.cpp"
 					>
 				</File>
 				<File
@@ -2315,7 +2329,7 @@
 					Name="particles_render"
 					>
 					<File
-						RelativePath="3d\ps_dot.cpp"
+						RelativePath=".\3d\ps_dot.cpp"
 						>
 					</File>
 					<File
@@ -2323,7 +2337,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_face.cpp"
+						RelativePath=".\3d\ps_face.cpp"
 						>
 					</File>
 					<File
@@ -2331,7 +2345,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_face_look_at.cpp"
+						RelativePath=".\3d\ps_face_look_at.cpp"
 						>
 					</File>
 					<File
@@ -2339,7 +2353,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_fan_light.cpp"
+						RelativePath=".\3d\ps_fan_light.cpp"
 						>
 					</File>
 					<File
@@ -2351,7 +2365,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_mesh.cpp"
+						RelativePath=".\3d\ps_mesh.cpp"
 						>
 					</File>
 					<File
@@ -2359,7 +2373,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_particle.cpp"
+						RelativePath=".\3d\ps_particle.cpp"
 						>
 					</File>
 					<File
@@ -2367,7 +2381,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_particle2.cpp"
+						RelativePath=".\3d\ps_particle2.cpp"
 						>
 					</File>
 					<File
@@ -2375,7 +2389,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_particle_basic.cpp"
+						RelativePath=".\3d\ps_particle_basic.cpp"
 						>
 					</File>
 					<File
@@ -2383,7 +2397,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_quad.cpp"
+						RelativePath=".\3d\ps_quad.cpp"
 						>
 					</File>
 					<File
@@ -2391,11 +2405,11 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_register_particles.cpp"
+						RelativePath=".\3d\ps_register_particles.cpp"
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_ribbon.cpp"
+						RelativePath=".\3d\ps_ribbon.cpp"
 						>
 					</File>
 					<File
@@ -2403,7 +2417,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_ribbon_base.cpp"
+						RelativePath=".\3d\ps_ribbon_base.cpp"
 						>
 					</File>
 					<File
@@ -2411,7 +2425,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_ribbon_look_at.cpp"
+						RelativePath=".\3d\ps_ribbon_look_at.cpp"
 						>
 					</File>
 					<File
@@ -2419,7 +2433,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_shockwave.cpp"
+						RelativePath=".\3d\ps_shockwave.cpp"
 						>
 					</File>
 					<File
@@ -2427,7 +2441,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_tail_dot.cpp"
+						RelativePath=".\3d\ps_tail_dot.cpp"
 						>
 					</File>
 					<File
@@ -2447,7 +2461,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_attrib_maker_bin_op.cpp"
+						RelativePath=".\3d\ps_attrib_maker_bin_op.cpp"
 						>
 					</File>
 					<File
@@ -2459,7 +2473,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_attrib_maker_helper.cpp"
+						RelativePath=".\3d\ps_attrib_maker_helper.cpp"
 						>
 					</File>
 					<File
@@ -2471,7 +2485,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_attrib_maker_template.cpp"
+						RelativePath=".\3d\ps_attrib_maker_template.cpp"
 						>
 					</File>
 					<File
@@ -2479,7 +2493,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_color.cpp"
+						RelativePath=".\3d\ps_color.cpp"
 						>
 					</File>
 					<File
@@ -2491,7 +2505,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_float.cpp"
+						RelativePath=".\3d\ps_float.cpp"
 						>
 					</File>
 					<File
@@ -2499,7 +2513,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_int.cpp"
+						RelativePath=".\3d\ps_int.cpp"
 						>
 					</File>
 					<File
@@ -2511,7 +2525,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_plane_basis_maker.cpp"
+						RelativePath=".\3d\ps_plane_basis_maker.cpp"
 						>
 					</File>
 					<File
@@ -2519,7 +2533,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_register_attribs.cpp"
+						RelativePath=".\3d\ps_register_attribs.cpp"
 						>
 					</File>
 					<File
@@ -2543,7 +2557,7 @@
 					Name="forces"
 					>
 					<File
-						RelativePath="3d\ps_force.cpp"
+						RelativePath=".\3d\ps_force.cpp"
 						>
 					</File>
 					<File
@@ -2551,7 +2565,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_register_forces.cpp"
+						RelativePath=".\3d\ps_register_forces.cpp"
 						>
 					</File>
 				</Filter>
@@ -2559,11 +2573,11 @@
 					Name="zones"
 					>
 					<File
-						RelativePath="3d\ps_register_zones.cpp"
+						RelativePath=".\3d\ps_register_zones.cpp"
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_zone.cpp"
+						RelativePath=".\3d\ps_zone.cpp"
 						>
 					</File>
 					<File
@@ -2575,7 +2589,7 @@
 					Name="emitters"
 					>
 					<File
-						RelativePath="3d\ps_emitter.cpp"
+						RelativePath=".\3d\ps_emitter.cpp"
 						>
 					</File>
 					<File
@@ -2583,7 +2597,7 @@
 						>
 					</File>
 					<File
-						RelativePath="3d\ps_register_emitters.cpp"
+						RelativePath=".\3d\ps_register_emitters.cpp"
 						>
 					</File>
 				</Filter>
@@ -2591,7 +2605,7 @@
 					Name="sounds"
 					>
 					<File
-						RelativePath="3d\ps_sound.cpp"
+						RelativePath=".\3d\ps_sound.cpp"
 						>
 					</File>
 					<File
@@ -2603,7 +2617,7 @@
 					Name="lights"
 					>
 					<File
-						RelativePath="3d\ps_light.cpp"
+						RelativePath=".\3d\ps_light.cpp"
 						>
 					</File>
 					<File
@@ -2616,7 +2630,7 @@
 				Name="2d"
 				>
 				<File
-					RelativePath="3d\deform_2d.cpp"
+					RelativePath=".\3d\deform_2d.cpp"
 					>
 				</File>
 				<File
@@ -2624,7 +2638,7 @@
 					>
 				</File>
 				<File
-					RelativePath="3d\heat_haze.cpp"
+					RelativePath=".\3d\heat_haze.cpp"
 					>
 				</File>
 				<File
@@ -2632,7 +2646,7 @@
 					>
 				</File>
 				<File
-					RelativePath="3d\motion_blur.cpp"
+					RelativePath=".\3d\motion_blur.cpp"
 					>
 				</File>
 				<File
@@ -2640,7 +2654,7 @@
 					>
 				</File>
 				<File
-					RelativePath="3d\quad_effect.cpp"
+					RelativePath=".\3d\quad_effect.cpp"
 					>
 				</File>
 				<File
@@ -2653,7 +2667,7 @@
 			Name="collisions"
 			>
 			<File
-				RelativePath="3d\camera_col.cpp"
+				RelativePath=".\3d\camera_col.cpp"
 				>
 			</File>
 			<File
@@ -2661,7 +2675,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\landscape_collision_grid.cpp"
+				RelativePath=".\3d\landscape_collision_grid.cpp"
 				>
 			</File>
 			<File
@@ -2669,7 +2683,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\mini_col.cpp"
+				RelativePath=".\3d\mini_col.cpp"
 				>
 			</File>
 			<File
@@ -2677,7 +2691,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\packed_world.cpp"
+				RelativePath=".\3d\packed_world.cpp"
 				>
 			</File>
 			<File
@@ -2685,7 +2699,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\packed_zone.cpp"
+				RelativePath=".\3d\packed_zone.cpp"
 				>
 			</File>
 			<File
@@ -2693,7 +2707,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\ray_mesh.cpp"
+				RelativePath=".\3d\ray_mesh.cpp"
 				>
 			</File>
 			<File
@@ -2701,7 +2715,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\shape_info.cpp"
+				RelativePath=".\3d\shape_info.cpp"
 				>
 			</File>
 			<File
@@ -2709,7 +2723,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\visual_collision_entity.cpp"
+				RelativePath=".\3d\visual_collision_entity.cpp"
 				>
 			</File>
 			<File
@@ -2717,7 +2731,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\visual_collision_manager.cpp"
+				RelativePath=".\3d\visual_collision_manager.cpp"
 				>
 			</File>
 			<File
@@ -2725,7 +2739,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\visual_collision_mesh.cpp"
+				RelativePath=".\3d\visual_collision_mesh.cpp"
 				>
 			</File>
 			<File
@@ -2737,7 +2751,7 @@
 			Name="clip_accelerator"
 			>
 			<File
-				RelativePath="3d\cluster.cpp"
+				RelativePath=".\3d\cluster.cpp"
 				>
 			</File>
 			<File
@@ -2745,7 +2759,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\portal.cpp"
+				RelativePath=".\3d\portal.cpp"
 				>
 			</File>
 			<File
@@ -2753,7 +2767,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\quad_grid_clip_cluster.cpp"
+				RelativePath=".\3d\quad_grid_clip_cluster.cpp"
 				>
 			</File>
 			<File
@@ -2761,7 +2775,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\quad_grid_clip_manager.cpp"
+				RelativePath=".\3d\quad_grid_clip_manager.cpp"
 				>
 			</File>
 			<File
@@ -2773,7 +2787,7 @@
 			Name="water"
 			>
 			<File
-				RelativePath="3d\water_env_map.cpp"
+				RelativePath=".\3d\water_env_map.cpp"
 				>
 			</File>
 			<File
@@ -2781,7 +2795,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\water_height_map.cpp"
+				RelativePath=".\3d\water_height_map.cpp"
 				>
 			</File>
 			<File
@@ -2789,7 +2803,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\water_pool_manager.cpp"
+				RelativePath=".\3d\water_pool_manager.cpp"
 				>
 			</File>
 			<File
@@ -2801,7 +2815,7 @@
 			Name="stripifier"
 			>
 			<File
-				RelativePath="3d\stripifier.cpp"
+				RelativePath=".\3d\stripifier.cpp"
 				>
 			</File>
 			<File
@@ -2813,7 +2827,7 @@
 			Name="vegetable"
 			>
 			<File
-				RelativePath="3d\vegetable.cpp"
+				RelativePath=".\3d\vegetable.cpp"
 				>
 			</File>
 			<File
@@ -2821,7 +2835,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\vegetable_blend_layer_model.cpp"
+				RelativePath=".\3d\vegetable_blend_layer_model.cpp"
 				>
 			</File>
 			<File
@@ -2829,7 +2843,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\vegetable_clip_block.cpp"
+				RelativePath=".\3d\vegetable_clip_block.cpp"
 				>
 			</File>
 			<File
@@ -2837,7 +2851,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\vegetable_def.cpp"
+				RelativePath=".\3d\vegetable_def.cpp"
 				>
 			</File>
 			<File
@@ -2845,7 +2859,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\vegetable_instance_group.cpp"
+				RelativePath=".\3d\vegetable_instance_group.cpp"
 				>
 			</File>
 			<File
@@ -2853,7 +2867,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\vegetable_light_ex.cpp"
+				RelativePath=".\3d\vegetable_light_ex.cpp"
 				>
 			</File>
 			<File
@@ -2861,7 +2875,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\vegetable_manager.cpp"
+				RelativePath=".\3d\vegetable_manager.cpp"
 				>
 			</File>
 			<File
@@ -2869,7 +2883,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\vegetable_quadrant.cpp"
+				RelativePath=".\3d\vegetable_quadrant.cpp"
 				>
 			</File>
 			<File
@@ -2877,7 +2891,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\vegetable_shape.cpp"
+				RelativePath=".\3d\vegetable_shape.cpp"
 				>
 			</File>
 			<File
@@ -2885,7 +2899,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\vegetable_sort_block.cpp"
+				RelativePath=".\3d\vegetable_sort_block.cpp"
 				>
 			</File>
 			<File
@@ -2893,7 +2907,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\vegetable_uv8.cpp"
+				RelativePath=".\3d\vegetable_uv8.cpp"
 				>
 			</File>
 			<File
@@ -2901,7 +2915,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\vegetablevb_allocator.cpp"
+				RelativePath=".\3d\vegetablevb_allocator.cpp"
 				>
 			</File>
 			<File
@@ -2913,7 +2927,7 @@
 			Name="util"
 			>
 			<File
-				RelativePath="3d\matrix_3x4.cpp"
+				RelativePath=".\3d\matrix_3x4.cpp"
 				>
 			</File>
 			<File
@@ -2921,7 +2935,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\radix_sort.cpp"
+				RelativePath=".\3d\radix_sort.cpp"
 				>
 			</File>
 			<File
@@ -2933,7 +2947,7 @@
 			Name="lighting"
 			>
 			<File
-				RelativePath="3d\ig_surface_light.cpp"
+				RelativePath=".\3d\ig_surface_light.cpp"
 				>
 			</File>
 			<File
@@ -2941,7 +2955,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\ig_surface_light_build.cpp"
+				RelativePath=".\3d\ig_surface_light_build.cpp"
 				>
 			</File>
 			<File
@@ -2949,7 +2963,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\light_contribution.cpp"
+				RelativePath=".\3d\light_contribution.cpp"
 				>
 			</File>
 			<File
@@ -2957,7 +2971,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\light_influence_interpolator.cpp"
+				RelativePath=".\3d\light_influence_interpolator.cpp"
 				>
 			</File>
 			<File
@@ -2965,7 +2979,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\lighting_manager.cpp"
+				RelativePath=".\3d\lighting_manager.cpp"
 				>
 			</File>
 			<File
@@ -2973,7 +2987,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\point_light.cpp"
+				RelativePath=".\3d\point_light.cpp"
 				>
 			</File>
 			<File
@@ -2981,7 +2995,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\point_light_named.cpp"
+				RelativePath=".\3d\point_light_named.cpp"
 				>
 			</File>
 			<File
@@ -2989,7 +3003,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\point_light_named_array.cpp"
+				RelativePath=".\3d\point_light_named_array.cpp"
 				>
 			</File>
 			<File
@@ -2997,7 +3011,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\surface_light_grid.cpp"
+				RelativePath=".\3d\surface_light_grid.cpp"
 				>
 			</File>
 			<File
@@ -3009,7 +3023,7 @@
 			Name="lod_systems"
 			>
 			<File
-				RelativePath="3d\coarse_mesh_build.cpp"
+				RelativePath=".\3d\coarse_mesh_build.cpp"
 				>
 			</File>
 			<File
@@ -3017,7 +3031,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\coarse_mesh_manager.cpp"
+				RelativePath=".\3d\coarse_mesh_manager.cpp"
 				>
 			</File>
 			<File
@@ -3025,7 +3039,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\lod_character_builder.cpp"
+				RelativePath=".\3d\lod_character_builder.cpp"
 				>
 			</File>
 			<File
@@ -3033,7 +3047,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\lod_character_instance.cpp"
+				RelativePath=".\3d\lod_character_instance.cpp"
 				>
 			</File>
 			<File
@@ -3041,7 +3055,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\lod_character_manager.cpp"
+				RelativePath=".\3d\lod_character_manager.cpp"
 				>
 			</File>
 			<File
@@ -3049,7 +3063,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\lod_character_shape.cpp"
+				RelativePath=".\3d\lod_character_shape.cpp"
 				>
 			</File>
 			<File
@@ -3057,7 +3071,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\lod_character_shape_bank.cpp"
+				RelativePath=".\3d\lod_character_shape_bank.cpp"
 				>
 			</File>
 			<File
@@ -3065,7 +3079,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\lod_character_texture.cpp"
+				RelativePath=".\3d\lod_character_texture.cpp"
 				>
 			</File>
 			<File
@@ -3077,7 +3091,7 @@
 			Name="cloud_scape"
 			>
 			<File
-				RelativePath="3d\cloud.cpp"
+				RelativePath=".\3d\cloud.cpp"
 				>
 			</File>
 			<File
@@ -3085,7 +3099,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\cloud_scape.cpp"
+				RelativePath=".\3d\cloud_scape.cpp"
 				>
 			</File>
 			<File
@@ -3093,7 +3107,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\noise_3d.cpp"
+				RelativePath=".\3d\noise_3d.cpp"
 				>
 			</File>
 			<File
@@ -3105,7 +3119,7 @@
 			Name="shadows"
 			>
 			<File
-				RelativePath="3d\shadow_map.cpp"
+				RelativePath=".\3d\shadow_map.cpp"
 				>
 			</File>
 			<File
@@ -3113,7 +3127,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\shadow_map_manager.cpp"
+				RelativePath=".\3d\shadow_map_manager.cpp"
 				>
 			</File>
 			<File
@@ -3121,7 +3135,7 @@
 				>
 			</File>
 			<File
-				RelativePath="3d\shadow_poly_receiver.cpp"
+				RelativePath=".\3d\shadow_poly_receiver.cpp"
 				>
 			</File>
 			<File
@@ -3130,7 +3144,7 @@
 			</File>
 		</Filter>
 		<File
-			RelativePath="3d\async_file_manager_3d.cpp"
+			RelativePath=".\3d\async_file_manager_3d.cpp"
 			>
 		</File>
 		<File
@@ -3138,7 +3152,7 @@
 			>
 		</File>
 		<File
-			RelativePath="3d\bloom_effect.cpp"
+			RelativePath=".\3d\bloom_effect.cpp"
 			>
 		</File>
 		<File
@@ -3146,7 +3160,7 @@
 			>
 		</File>
 		<File
-			RelativePath="3d\debug_vb.cpp"
+			RelativePath=".\3d\debug_vb.cpp"
 			>
 		</File>
 		<File
@@ -3154,7 +3168,7 @@
 			>
 		</File>
 		<File
-			RelativePath="3d\event_mouse_listener.cpp"
+			RelativePath=".\3d\event_mouse_listener.cpp"
 			>
 		</File>
 		<File
@@ -3162,7 +3176,7 @@
 			>
 		</File>
 		<File
-			RelativePath="3d\init_3d.cpp"
+			RelativePath=".\3d\init_3d.cpp"
 			>
 		</File>
 		<File
@@ -3170,7 +3184,7 @@
 			>
 		</File>
 		<File
-			RelativePath="3d\nelu.cpp"
+			RelativePath=".\3d\nelu.cpp"
 			>
 		</File>
 		<File
@@ -3182,7 +3196,7 @@
 			>
 		</File>
 		<File
-			RelativePath="3d\register_3d.cpp"
+			RelativePath=".\3d\register_3d.cpp"
 			>
 		</File>
 		<File
@@ -3190,7 +3204,7 @@
 			>
 		</File>
 		<File
-			RelativePath="3d\scene.cpp"
+			RelativePath=".\3d\scene.cpp"
 			>
 		</File>
 		<File
@@ -3198,7 +3212,7 @@
 			>
 		</File>
 		<File
-			RelativePath="3d\scene_group.cpp"
+			RelativePath=".\3d\scene_group.cpp"
 			>
 		</File>
 		<File
@@ -3206,7 +3220,7 @@
 			>
 		</File>
 		<File
-			RelativePath="3d\std3d.cpp"
+			RelativePath=".\3d\std3d.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3258,7 +3272,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="3d\std3d.h"
+			RelativePath=".\3d\std3d.h"
 			>
 		</File>
 	</Files>

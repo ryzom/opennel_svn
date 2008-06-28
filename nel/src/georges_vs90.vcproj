@@ -4,8 +4,8 @@
 	Version="9,00"
 	Name="georges"
 	ProjectGUID="{D430A4D6-9DCF-4252-B9D3-20EE5C2650A5}"
-	RootNamespace="georges"
-	TargetFrameworkVersion="131072"
+	RootNamespace="nlgeorges"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -43,13 +43,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -64,7 +64,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_d.lib"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_d.lib"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 			/>
 			<Tool
@@ -109,16 +110,16 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
+				Optimization="4"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;NL_DEBUG_FAST;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG;NL_DEBUG_FAST"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -133,7 +134,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_df.lib"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_df.lib"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 			/>
 			<Tool
@@ -180,13 +182,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;NL_STATIC;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG;NL_STATIC"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -201,7 +203,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_ds.lib"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_ds.lib"
 				IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
 			/>
 			<Tool
@@ -228,6 +231,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -246,7 +250,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="3"
+				Optimization="4"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
@@ -254,13 +258,13 @@
 				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;LIBXML_STATIC;ASSERT_THROW_EXCEPTION;FINAL_VERSION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;ASSERT_THROW_EXCEPTION;FINAL_VERSION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 			/>
 			<Tool
@@ -274,8 +278,10 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_r.lib"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace).lib"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				LinkTimeCodeGeneration="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -301,6 +307,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -319,16 +326,20 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="4"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;LIBXML_STATIC;ASSERT_THROW_EXCEPTION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;ASSERT_THROW_EXCEPTION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -343,8 +354,10 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_rd.lib"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_rd.lib"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				LinkTimeCodeGeneration="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -370,6 +383,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -388,16 +402,20 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="4"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;NL_STATIC;LIBXML_STATIC;ASSERT_THROW_EXCEPTION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;NL_STATIC;ASSERT_THROW_EXCEPTION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -412,8 +430,10 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_rds.lib"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_rds.lib"
 				IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
+				LinkTimeCodeGeneration="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -444,39 +464,39 @@
 			>
 		</File>
 		<File
-			RelativePath="georges\form_dfn.cpp"
+			RelativePath=".\georges\form_dfn.cpp"
 			>
 		</File>
 		<File
-			RelativePath="georges\form_dfn.h"
+			RelativePath=".\georges\form_dfn.h"
 			>
 		</File>
 		<File
-			RelativePath="georges\form_elm.cpp"
+			RelativePath=".\georges\form_elm.cpp"
 			>
 		</File>
 		<File
-			RelativePath="georges\form_elm.h"
+			RelativePath=".\georges\form_elm.h"
 			>
 		</File>
 		<File
-			RelativePath="georges\form_loader.cpp"
+			RelativePath=".\georges\form_loader.cpp"
 			>
 		</File>
 		<File
-			RelativePath="georges\form_loader.h"
+			RelativePath=".\georges\form_loader.h"
 			>
 		</File>
 		<File
-			RelativePath="georges\header.cpp"
+			RelativePath=".\georges\header.cpp"
 			>
 		</File>
 		<File
-			RelativePath="georges\header.h"
+			RelativePath=".\georges\header.h"
 			>
 		</File>
 		<File
-			RelativePath="georges\load_form.cpp"
+			RelativePath=".\georges\load_form.cpp"
 			>
 		</File>
 		<File
@@ -484,7 +504,7 @@
 			>
 		</File>
 		<File
-			RelativePath="georges\stdgeorges.cpp"
+			RelativePath=".\georges\stdgeorges.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -536,15 +556,15 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="georges\stdgeorges.h"
+			RelativePath=".\georges\stdgeorges.h"
 			>
 		</File>
 		<File
-			RelativePath="georges\type.cpp"
+			RelativePath=".\georges\type.cpp"
 			>
 		</File>
 		<File
-			RelativePath="georges\type.h"
+			RelativePath=".\georges\type.h"
 			>
 		</File>
 		<File

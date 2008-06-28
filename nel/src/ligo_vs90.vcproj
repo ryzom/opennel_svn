@@ -4,8 +4,8 @@
 	Version="9,00"
 	Name="ligo"
 	ProjectGUID="{005838BE-F505-4C8C-958A-5719BC0BD5E4}"
-	RootNamespace="ligo"
-	TargetFrameworkVersion="131072"
+	RootNamespace="nlligo"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -25,10 +25,25 @@
 			CharacterSet="2"
 			>
 			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -37,8 +52,34 @@
 				DebugInformationFormat="4"
 			/>
 			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_d.lib" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_d.lib"
+				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
@@ -51,11 +92,26 @@
 			CharacterSet="2"
 			>
 			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
+				Optimization="4"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;NL_DEBUG_FAST;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG;NL_DEBUG_FAST"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -64,8 +120,34 @@
 				DebugInformationFormat="3"
 			/>
 			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_df.lib" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_df.lib"
+				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
@@ -78,10 +160,25 @@
 			CharacterSet="2"
 			>
 			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;NL_STATIC;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG;NL_STATIC"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -90,8 +187,34 @@
 				DebugInformationFormat="4"
 			/>
 			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_ds.lib" IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_ds.lib"
+				IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
@@ -102,10 +225,26 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="3"
+				Optimization="4"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
@@ -113,7 +252,7 @@
 				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;LIBXML_STATIC;ASSERT_THROW_EXCEPTION;FINAL_VERSION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;ASSERT_THROW_EXCEPTION;FINAL_VERSION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -121,8 +260,35 @@
 				WarningLevel="3"
 			/>
 			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_r.lib" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace).lib"
+				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				LinkTimeCodeGeneration="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
@@ -133,14 +299,34 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="4"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;LIBXML_STATIC;ASSERT_THROW_EXCEPTION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;ASSERT_THROW_EXCEPTION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -148,8 +334,35 @@
 				DebugInformationFormat="3"
 			/>
 			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_rd.lib" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_rd.lib"
+				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				LinkTimeCodeGeneration="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
@@ -160,14 +373,34 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="4"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;NL_STATIC;LIBXML_STATIC;ASSERT_THROW_EXCEPTION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;NL_STATIC;ASSERT_THROW_EXCEPTION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="0"
@@ -175,8 +408,35 @@
 				DebugInformationFormat="3"
 			/>
 			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_rds.lib" IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_rds.lib"
+				IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
+				LinkTimeCodeGeneration="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 	</Configurations>
@@ -184,7 +444,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="ligo\ligo_config.cpp"
+			RelativePath=".\ligo\ligo_config.cpp"
 			>
 		</File>
 		<File
@@ -192,23 +452,23 @@
 			>
 		</File>
 		<File
-			RelativePath="ligo\ligo_error.cpp"
+			RelativePath=".\ligo\ligo_error.cpp"
 			>
 		</File>
 		<File
-			RelativePath="ligo\ligo_error.h"
+			RelativePath=".\ligo\ligo_error.h"
 			>
 		</File>
 		<File
-			RelativePath="ligo\ligo_material.cpp"
+			RelativePath=".\ligo\ligo_material.cpp"
 			>
 		</File>
 		<File
-			RelativePath="ligo\ligo_material.h"
+			RelativePath=".\ligo\ligo_material.h"
 			>
 		</File>
 		<File
-			RelativePath="ligo\primitive.cpp"
+			RelativePath=".\ligo\primitive.cpp"
 			>
 		</File>
 		<File
@@ -216,7 +476,7 @@
 			>
 		</File>
 		<File
-			RelativePath="ligo\primitive_class.cpp"
+			RelativePath=".\ligo\primitive_class.cpp"
 			>
 		</File>
 		<File
@@ -224,7 +484,7 @@
 			>
 		</File>
 		<File
-			RelativePath="ligo\primitive_configuration.cpp"
+			RelativePath=".\ligo\primitive_configuration.cpp"
 			>
 		</File>
 		<File
@@ -232,7 +492,7 @@
 			>
 		</File>
 		<File
-			RelativePath="ligo\primitive_utils.cpp"
+			RelativePath=".\ligo\primitive_utils.cpp"
 			>
 		</File>
 		<File
@@ -240,43 +500,43 @@
 			>
 		</File>
 		<File
-			RelativePath="ligo\transition.cpp"
+			RelativePath=".\ligo\transition.cpp"
 			>
 		</File>
 		<File
-			RelativePath="ligo\transition.h"
+			RelativePath=".\ligo\transition.h"
 			>
 		</File>
 		<File
-			RelativePath="ligo\zone_bank.cpp"
+			RelativePath=".\ligo\zone_bank.cpp"
 			>
 		</File>
 		<File
-			RelativePath="ligo\zone_bank.h"
+			RelativePath=".\ligo\zone_bank.h"
 			>
 		</File>
 		<File
-			RelativePath="ligo\zone_edge.cpp"
+			RelativePath=".\ligo\zone_edge.cpp"
 			>
 		</File>
 		<File
-			RelativePath="ligo\zone_edge.h"
+			RelativePath=".\ligo\zone_edge.h"
 			>
 		</File>
 		<File
-			RelativePath="ligo\zone_region.cpp"
+			RelativePath=".\ligo\zone_region.cpp"
 			>
 		</File>
 		<File
-			RelativePath="ligo\zone_region.h"
+			RelativePath=".\ligo\zone_region.h"
 			>
 		</File>
 		<File
-			RelativePath="ligo\zone_template.cpp"
+			RelativePath=".\ligo\zone_template.cpp"
 			>
 		</File>
 		<File
-			RelativePath="ligo\zone_template.h"
+			RelativePath=".\ligo\zone_template.h"
 			>
 		</File>
 	</Files>

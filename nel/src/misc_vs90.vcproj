@@ -4,8 +4,8 @@
 	Version="9,00"
 	Name="misc"
 	ProjectGUID="{44B21233-EFCC-4825-B5E5-3A3BD6CC5516}"
-	RootNamespace="misc"
-	TargetFrameworkVersion="131072"
+	RootNamespace="nlmisc"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -43,13 +43,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -65,7 +65,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="libxml2_a.lib"
-				OutputFile="..\lib\nl$(RootNamespace)_d.lib"
+				OutputFile="..\lib\$(RootNamespace)_d.lib"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 			/>
 			<Tool
@@ -110,16 +110,16 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
+				Optimization="4"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;NL_DEBUG_FAST;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG;NL_DEBUG_FAST"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -135,7 +135,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="libxml2_a.lib"
-				OutputFile="..\lib\nl$(RootNamespace)_df.lib"
+				OutputFile="..\lib\$(RootNamespace)_df.lib"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 			/>
 			<Tool
@@ -182,13 +182,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;NL_STATIC;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG;NL_STATIC"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -204,7 +204,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="libxml2_a.lib"
-				OutputFile="..\lib\nl$(RootNamespace)_ds.lib"
+				OutputFile="..\lib\$(RootNamespace)_ds.lib"
 				IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
 			/>
 			<Tool
@@ -231,6 +231,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -249,7 +250,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="3"
+				Optimization="4"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
@@ -257,13 +258,13 @@
 				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;LIBXML_STATIC;ASSERT_THROW_EXCEPTION;FINAL_VERSION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;ASSERT_THROW_EXCEPTION;FINAL_VERSION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 			/>
 			<Tool
@@ -278,8 +279,9 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="libxml2_a.lib"
-				OutputFile="..\lib\nl$(RootNamespace)_r.lib"
+				OutputFile="..\lib\$(RootNamespace).lib"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				LinkTimeCodeGeneration="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -305,6 +307,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -323,16 +326,20 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="4"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;LIBXML_STATIC;ASSERT_THROW_EXCEPTION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;ASSERT_THROW_EXCEPTION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -348,8 +355,9 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="libxml2_a.lib"
-				OutputFile="..\lib\nl$(RootNamespace)_rd.lib"
+				OutputFile="..\lib\$(RootNamespace)_rd.lib"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				LinkTimeCodeGeneration="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -375,6 +383,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -393,16 +402,20 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="4"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;NL_STATIC;LIBXML_STATIC;ASSERT_THROW_EXCEPTION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;NL_STATIC;ASSERT_THROW_EXCEPTION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -418,8 +431,9 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="libxml2_a.lib"
-				OutputFile="..\lib\nl$(RootNamespace)_rds.lib"
+				OutputFile="..\lib\$(RootNamespace)_rds.lib"
 				IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
+				LinkTimeCodeGeneration="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -453,7 +467,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\bit_mem_stream.cpp"
+				RelativePath=".\misc\bit_mem_stream.cpp"
 				>
 			</File>
 			<File
@@ -461,7 +475,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\class_registry.cpp"
+				RelativePath=".\misc\class_registry.cpp"
 				>
 			</File>
 			<File
@@ -469,7 +483,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\file.cpp"
+				RelativePath=".\misc\file.cpp"
 				>
 			</File>
 			<File
@@ -477,7 +491,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\i_xml.cpp"
+				RelativePath=".\misc\i_xml.cpp"
 				>
 			</File>
 			<File
@@ -485,7 +499,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\mem_stream.cpp"
+				RelativePath=".\misc\mem_stream.cpp"
 				>
 			</File>
 			<File
@@ -493,7 +507,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\o_xml.cpp"
+				RelativePath=".\misc\o_xml.cpp"
 				>
 			</File>
 			<File
@@ -501,7 +515,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\stream.cpp"
+				RelativePath=".\misc\stream.cpp"
 				>
 			</File>
 			<File
@@ -525,7 +539,7 @@
 			Name="config_file"
 			>
 			<File
-				RelativePath="misc\config_file\cf_gramatical.cpp"
+				RelativePath=".\misc\config_file\cf_gramatical.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -577,115 +591,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="misc\config_file\cf_gramatical.h"
+				RelativePath=".\misc\config_file\cf_gramatical.h"
 				>
 			</File>
 			<File
-				RelativePath="misc\config_file\cf_gramatical.yxx"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugFast|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugStatic|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="ReleaseDebug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="ReleaseDebugStatic|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="misc\config_file\cf_lexical.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugFast|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugStatic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="ReleaseDebug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="ReleaseDebugStatic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="misc\config_file\cf_lexical.lxx"
+				RelativePath=".\misc\config_file\cf_gramatical.yxx"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -737,7 +647,111 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="misc\config_file\config_file.cpp"
+				RelativePath=".\misc\config_file\cf_lexical.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DebugFast|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DebugStatic|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseDebug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseDebugStatic|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\misc\config_file\cf_lexical.lxx"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DebugFast|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DebugStatic|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseDebug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseDebugStatic|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\misc\config_file\config_file.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -797,7 +811,7 @@
 			Name="events"
 			>
 			<File
-				RelativePath="misc\event_emitter.cpp"
+				RelativePath=".\misc\event_emitter.cpp"
 				>
 			</File>
 			<File
@@ -805,7 +819,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\event_emitter_multi.cpp"
+				RelativePath=".\misc\event_emitter_multi.cpp"
 				>
 			</File>
 			<File
@@ -813,7 +827,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\event_listener.cpp"
+				RelativePath=".\misc\event_listener.cpp"
 				>
 			</File>
 			<File
@@ -821,7 +835,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\event_server.cpp"
+				RelativePath=".\misc\event_server.cpp"
 				>
 			</File>
 			<File
@@ -829,7 +843,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\events.cpp"
+				RelativePath=".\misc\events.cpp"
 				>
 			</File>
 			<File
@@ -837,7 +851,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\game_device_events.cpp"
+				RelativePath=".\misc\game_device_events.cpp"
 				>
 			</File>
 			<File
@@ -845,7 +859,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\mouse_smoother.cpp"
+				RelativePath=".\misc\mouse_smoother.cpp"
 				>
 			</File>
 			<File
@@ -856,7 +870,7 @@
 				Name="direct input"
 				>
 				<File
-					RelativePath="misc\di_event_emitter.cpp"
+					RelativePath=".\misc\di_event_emitter.cpp"
 					>
 				</File>
 				<File
@@ -867,27 +881,27 @@
 					Name="direct input devices"
 					>
 					<File
-						RelativePath="misc\di_game_device.cpp"
+						RelativePath=".\misc\di_game_device.cpp"
 						>
 					</File>
 					<File
-						RelativePath="misc\di_game_device.h"
+						RelativePath=".\misc\di_game_device.h"
 						>
 					</File>
 					<File
-						RelativePath="misc\di_keyboard_device.cpp"
+						RelativePath=".\misc\di_keyboard_device.cpp"
 						>
 					</File>
 					<File
-						RelativePath="misc\di_keyboard_device.h"
+						RelativePath=".\misc\di_keyboard_device.h"
 						>
 					</File>
 					<File
-						RelativePath="misc\di_mouse_device.cpp"
+						RelativePath=".\misc\di_mouse_device.cpp"
 						>
 					</File>
 					<File
-						RelativePath="misc\di_mouse_device.h"
+						RelativePath=".\misc\di_mouse_device.h"
 						>
 					</File>
 				</Filter>
@@ -896,7 +910,7 @@
 				Name="win32"
 				>
 				<File
-					RelativePath="misc\win_event_emitter.cpp"
+					RelativePath=".\misc\win_event_emitter.cpp"
 					>
 				</File>
 				<File
@@ -916,7 +930,7 @@
 					>
 				</File>
 				<File
-					RelativePath="misc\input_device.cpp"
+					RelativePath=".\misc\input_device.cpp"
 					>
 				</File>
 				<File
@@ -928,7 +942,7 @@
 					>
 				</File>
 				<File
-					RelativePath="misc\input_device_server.cpp"
+					RelativePath=".\misc\input_device_server.cpp"
 					>
 				</File>
 				<File
@@ -953,7 +967,7 @@
 			Name="memory"
 			>
 			<File
-				RelativePath="misc\block_memory.cpp"
+				RelativePath=".\misc\block_memory.cpp"
 				>
 			</File>
 			<File
@@ -961,7 +975,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\buf_fifo.cpp"
+				RelativePath=".\misc\buf_fifo.cpp"
 				>
 			</File>
 			<File
@@ -969,7 +983,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\contiguous_block_allocator.cpp"
+				RelativePath=".\misc\contiguous_block_allocator.cpp"
 				>
 			</File>
 			<File
@@ -977,7 +991,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\fast_mem.cpp"
+				RelativePath=".\misc\fast_mem.cpp"
 				>
 			</File>
 			<File
@@ -985,7 +999,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\fixed_size_allocator.cpp"
+				RelativePath=".\misc\fixed_size_allocator.cpp"
 				>
 			</File>
 			<File
@@ -993,7 +1007,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\heap_memory.cpp"
+				RelativePath=".\misc\heap_memory.cpp"
 				>
 			</File>
 			<File
@@ -1001,7 +1015,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\object_arena_allocator.cpp"
+				RelativePath=".\misc\object_arena_allocator.cpp"
 				>
 			</File>
 			<File
@@ -1009,7 +1023,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\object_vector.cpp"
+				RelativePath=".\misc\object_vector.cpp"
 				>
 			</File>
 			<File
@@ -1021,7 +1035,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\shared_memory.cpp"
+				RelativePath=".\misc\shared_memory.cpp"
 				>
 			</File>
 			<File
@@ -1033,7 +1047,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\stl_block_allocator.cpp"
+				RelativePath=".\misc\stl_block_allocator.cpp"
 				>
 			</File>
 			<File
@@ -1041,7 +1055,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\stl_block_list.cpp"
+				RelativePath=".\misc\stl_block_list.cpp"
 				>
 			</File>
 			<File
@@ -1049,7 +1063,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\tds.cpp"
+				RelativePath=".\misc\tds.cpp"
 				>
 			</File>
 			<File
@@ -1061,7 +1075,7 @@
 			Name="displayer"
 			>
 			<File
-				RelativePath="misc\displayer.cpp"
+				RelativePath=".\misc\displayer.cpp"
 				>
 			</File>
 			<File
@@ -1069,7 +1083,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\gtk_displayer.cpp"
+				RelativePath=".\misc\gtk_displayer.cpp"
 				>
 			</File>
 			<File
@@ -1077,7 +1091,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\log.cpp"
+				RelativePath=".\misc\log.cpp"
 				>
 			</File>
 			<File
@@ -1085,7 +1099,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\mem_displayer.cpp"
+				RelativePath=".\misc\mem_displayer.cpp"
 				>
 			</File>
 			<File
@@ -1093,7 +1107,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\win_displayer.cpp"
+				RelativePath=".\misc\win_displayer.cpp"
 				>
 			</File>
 			<File
@@ -1101,7 +1115,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\window_displayer.cpp"
+				RelativePath=".\misc\window_displayer.cpp"
 				>
 			</File>
 			<File
@@ -1113,7 +1127,7 @@
 			Name="strings"
 			>
 			<File
-				RelativePath="misc\diff_tool.cpp"
+				RelativePath=".\misc\diff_tool.cpp"
 				>
 			</File>
 			<File
@@ -1121,7 +1135,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\i18n.cpp"
+				RelativePath=".\misc\i18n.cpp"
 				>
 			</File>
 			<File
@@ -1137,7 +1151,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\string_common.cpp"
+				RelativePath=".\misc\string_common.cpp"
 				>
 			</File>
 			<File
@@ -1149,7 +1163,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\string_id_array.cpp"
+				RelativePath=".\misc\string_id_array.cpp"
 				>
 			</File>
 			<File
@@ -1157,7 +1171,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\string_mapper.cpp"
+				RelativePath=".\misc\string_mapper.cpp"
 				>
 			</File>
 			<File
@@ -1169,11 +1183,11 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\unicode.cpp"
+				RelativePath=".\misc\unicode.cpp"
 				>
 			</File>
 			<File
-				RelativePath="misc\words_dictionary.cpp"
+				RelativePath=".\misc\words_dictionary.cpp"
 				>
 			</File>
 			<File
@@ -1193,7 +1207,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\mutex.cpp"
+				RelativePath=".\misc\mutex.cpp"
 				>
 			</File>
 			<File
@@ -1201,7 +1215,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\p_thread.cpp"
+				RelativePath=".\misc\p_thread.cpp"
 				>
 			</File>
 			<File
@@ -1209,7 +1223,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\reader_writer.cpp"
+				RelativePath=".\misc\reader_writer.cpp"
 				>
 			</File>
 			<File
@@ -1217,7 +1231,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\task_manager.cpp"
+				RelativePath=".\misc\task_manager.cpp"
 				>
 			</File>
 			<File
@@ -1229,7 +1243,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\win_thread.cpp"
+				RelativePath=".\misc\win_thread.cpp"
 				>
 			</File>
 			<File
@@ -1241,7 +1255,7 @@
 			Name="time"
 			>
 			<File
-				RelativePath="misc\hierarchical_timer.cpp"
+				RelativePath=".\misc\hierarchical_timer.cpp"
 				>
 			</File>
 			<File
@@ -1249,7 +1263,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\stop_watch.cpp"
+				RelativePath=".\misc\stop_watch.cpp"
 				>
 			</File>
 			<File
@@ -1257,7 +1271,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\time_nl.cpp"
+				RelativePath=".\misc\time_nl.cpp"
 				>
 			</File>
 			<File
@@ -1269,7 +1283,7 @@
 			Name="files"
 			>
 			<File
-				RelativePath="misc\async_file_manager.cpp"
+				RelativePath=".\misc\async_file_manager.cpp"
 				>
 			</File>
 			<File
@@ -1277,7 +1291,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\md5.cpp"
+				RelativePath=".\misc\md5.cpp"
 				>
 			</File>
 			<File
@@ -1285,7 +1299,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\path.cpp"
+				RelativePath=".\misc\path.cpp"
 				>
 			</File>
 			<File
@@ -1293,7 +1307,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\sha1.cpp"
+				RelativePath=".\misc\sha1.cpp"
 				>
 			</File>
 			<File
@@ -1305,7 +1319,7 @@
 			Name="identifiers"
 			>
 			<File
-				RelativePath="misc\eid_translator.cpp"
+				RelativePath=".\misc\eid_translator.cpp"
 				>
 			</File>
 			<File
@@ -1313,7 +1327,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\entity_id.cpp"
+				RelativePath=".\misc\entity_id.cpp"
 				>
 			</File>
 			<File
@@ -1321,7 +1335,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\sheet_id.cpp"
+				RelativePath=".\misc\sheet_id.cpp"
 				>
 			</File>
 			<File
@@ -1333,7 +1347,7 @@
 			Name="math_and_3d"
 			>
 			<File
-				RelativePath="misc\aabbox.cpp"
+				RelativePath=".\misc\aabbox.cpp"
 				>
 			</File>
 			<File
@@ -1345,7 +1359,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\bitmap.cpp"
+				RelativePath=".\misc\bitmap.cpp"
 				>
 			</File>
 			<File
@@ -1353,11 +1367,11 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\bitmap_png.cpp"
+				RelativePath=".\misc\bitmap_png.cpp"
 				>
 			</File>
 			<File
-				RelativePath="misc\bsphere.cpp"
+				RelativePath=".\misc\bsphere.cpp"
 				>
 			</File>
 			<File
@@ -1373,7 +1387,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\eval_num_expr.cpp"
+				RelativePath=".\misc\eval_num_expr.cpp"
 				>
 			</File>
 			<File
@@ -1381,7 +1395,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\fast_floor.cpp"
+				RelativePath=".\misc\fast_floor.cpp"
 				>
 			</File>
 			<File
@@ -1389,7 +1403,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\geom_ext.cpp"
+				RelativePath=".\misc\geom_ext.cpp"
 				>
 			</File>
 			<File
@@ -1405,7 +1419,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\line.cpp"
+				RelativePath=".\misc\line.cpp"
 				>
 			</File>
 			<File
@@ -1413,7 +1427,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\matrix.cpp"
+				RelativePath=".\misc\matrix.cpp"
 				>
 			</File>
 			<File
@@ -1421,7 +1435,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\noise_value.cpp"
+				RelativePath=".\misc\noise_value.cpp"
 				>
 			</File>
 			<File
@@ -1429,7 +1443,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\plane.cpp"
+				RelativePath=".\misc\plane.cpp"
 				>
 			</File>
 			<File
@@ -1441,7 +1455,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\polygon.cpp"
+				RelativePath=".\misc\polygon.cpp"
 				>
 			</File>
 			<File
@@ -1449,7 +1463,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\quad.cpp"
+				RelativePath=".\misc\quad.cpp"
 				>
 			</File>
 			<File
@@ -1457,7 +1471,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\quat.cpp"
+				RelativePath=".\misc\quat.cpp"
 				>
 			</File>
 			<File
@@ -1469,7 +1483,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\rect.cpp"
+				RelativePath=".\misc\rect.cpp"
 				>
 			</File>
 			<File
@@ -1477,7 +1491,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\rgba.cpp"
+				RelativePath=".\misc\rgba.cpp"
 				>
 			</File>
 			<File
@@ -1485,7 +1499,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\triangle.cpp"
+				RelativePath=".\misc\triangle.cpp"
 				>
 			</File>
 			<File
@@ -1493,7 +1507,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\uv.cpp"
+				RelativePath=".\misc\uv.cpp"
 				>
 			</File>
 			<File
@@ -1501,7 +1515,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\value_smoother.cpp"
+				RelativePath=".\misc\value_smoother.cpp"
 				>
 			</File>
 			<File
@@ -1509,7 +1523,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\vector.cpp"
+				RelativePath=".\misc\vector.cpp"
 				>
 			</File>
 			<File
@@ -1517,7 +1531,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\vector_2d.cpp"
+				RelativePath=".\misc\vector_2d.cpp"
 				>
 			</File>
 			<File
@@ -1525,7 +1539,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\vector_2f.cpp"
+				RelativePath=".\misc\vector_2f.cpp"
 				>
 			</File>
 			<File
@@ -1533,7 +1547,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\vector_h.cpp"
+				RelativePath=".\misc\vector_h.cpp"
 				>
 			</File>
 			<File
@@ -1545,7 +1559,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\vectord.cpp"
+				RelativePath=".\misc\vectord.cpp"
 				>
 			</File>
 			<File
@@ -1569,7 +1583,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\command.cpp"
+				RelativePath=".\misc\command.cpp"
 				>
 			</File>
 			<File
@@ -1585,7 +1599,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\cpu_time_stat.cpp"
+				RelativePath=".\misc\cpu_time_stat.cpp"
 				>
 			</File>
 			<File
@@ -1593,7 +1607,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\progress_callback.cpp"
+				RelativePath=".\misc\progress_callback.cpp"
 				>
 			</File>
 			<File
@@ -1601,7 +1615,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\report.cpp"
+				RelativePath=".\misc\report.cpp"
 				>
 			</File>
 			<File
@@ -1609,7 +1623,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\system_info.cpp"
+				RelativePath=".\misc\system_info.cpp"
 				>
 			</File>
 			<File
@@ -1617,7 +1631,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\variable.cpp"
+				RelativePath=".\misc\variable.cpp"
 				>
 			</File>
 			<File
@@ -1629,7 +1643,7 @@
 			Name="cpp_extensions"
 			>
 			<File
-				RelativePath="misc\bit_set.cpp"
+				RelativePath=".\misc\bit_set.cpp"
 				>
 			</File>
 			<File
@@ -1637,7 +1651,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\class_id.cpp"
+				RelativePath=".\misc\class_id.cpp"
 				>
 			</File>
 			<File
@@ -1669,7 +1683,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\smart_ptr.cpp"
+				RelativePath=".\misc\smart_ptr.cpp"
 				>
 			</File>
 			<File
@@ -1693,7 +1707,7 @@
 			Name="misc"
 			>
 			<File
-				RelativePath="misc\algo.cpp"
+				RelativePath=".\misc\algo.cpp"
 				>
 			</File>
 			<File
@@ -1701,7 +1715,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\common.cpp"
+				RelativePath=".\misc\common.cpp"
 				>
 			</File>
 			<File
@@ -1709,7 +1723,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\debug.cpp"
+				RelativePath=".\misc\debug.cpp"
 				>
 			</File>
 			<File
@@ -1717,7 +1731,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\dynloadlib.cpp"
+				RelativePath=".\misc\dynloadlib.cpp"
 				>
 			</File>
 			<File
@@ -1729,7 +1743,7 @@
 				>
 			</File>
 			<File
-				RelativePath="misc\stdmisc.cpp"
+				RelativePath=".\misc\stdmisc.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1781,7 +1795,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="misc\stdmisc.h"
+				RelativePath=".\misc\stdmisc.h"
 				>
 			</File>
 			<File

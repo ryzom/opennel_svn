@@ -4,8 +4,8 @@
 	Version="9,00"
 	Name="pacs"
 	ProjectGUID="{D6D97977-3610-40EE-AD46-41DD758DE7EB}"
-	RootNamespace="pacs"
-	TargetFrameworkVersion="131072"
+	RootNamespace="nlpacs"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -43,13 +43,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -64,7 +64,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_d.lib" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_d.lib"
+				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -108,16 +110,16 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
+				Optimization="4"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;NL_DEBUG_FAST;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG;NL_DEBUG_FAST"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -132,7 +134,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_df.lib" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_df.lib"
+				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -178,13 +182,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;NL_STATIC;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG;NL_STATIC"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -199,7 +203,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_ds.lib" IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_ds.lib"
+				IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -225,6 +231,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -243,7 +250,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="3"
+				Optimization="4"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
@@ -251,13 +258,13 @@
 				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;LIBXML_STATIC;ASSERT_THROW_EXCEPTION;FINAL_VERSION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;ASSERT_THROW_EXCEPTION;FINAL_VERSION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 			/>
 			<Tool
@@ -271,7 +278,10 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_r.lib" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace).lib"
+				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				LinkTimeCodeGeneration="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -297,6 +307,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -315,16 +326,20 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="4"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;LIBXML_STATIC;ASSERT_THROW_EXCEPTION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;ASSERT_THROW_EXCEPTION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -339,7 +354,10 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_rd.lib" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_rd.lib"
+				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				LinkTimeCodeGeneration="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -365,6 +383,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -383,16 +402,20 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="4"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;NL_STATIC;LIBXML_STATIC;ASSERT_THROW_EXCEPTION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;NL_STATIC;ASSERT_THROW_EXCEPTION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="std$(RootNamespace).h"
+				PrecompiledHeaderThrough="std$(ProjectName).h"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -407,7 +430,10 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_rds.lib" IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_rds.lib"
+				IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
+				LinkTimeCodeGeneration="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -433,51 +459,51 @@
 			Name="static_collisions"
 			>
 			<File
-				RelativePath="pacs\chain_quad.cpp"
+				RelativePath=".\pacs\chain_quad.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\chain_quad.h"
+				RelativePath=".\pacs\chain_quad.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\collision_mesh_build.h"
+				RelativePath=".\pacs\collision_mesh_build.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\collision_surface_temp.cpp"
+				RelativePath=".\pacs\collision_surface_temp.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\collision_surface_temp.h"
+				RelativePath=".\pacs\collision_surface_temp.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\edge_collide.cpp"
+				RelativePath=".\pacs\edge_collide.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\edge_collide.h"
+				RelativePath=".\pacs\edge_collide.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\edge_quad.cpp"
+				RelativePath=".\pacs\edge_quad.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\edge_quad.h"
+				RelativePath=".\pacs\edge_quad.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\exterior_mesh.cpp"
+				RelativePath=".\pacs\exterior_mesh.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\exterior_mesh.h"
+				RelativePath=".\pacs\exterior_mesh.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\face_grid.h"
+				RelativePath=".\pacs\face_grid.h"
 				>
 			</File>
 		</Filter>
@@ -485,83 +511,83 @@
 			Name="dynamic_collisions"
 			>
 			<File
-				RelativePath="pacs\collision_callback.cpp"
+				RelativePath=".\pacs\collision_callback.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\collision_callback.h"
+				RelativePath=".\pacs\collision_callback.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\collision_desc.cpp"
+				RelativePath=".\pacs\collision_desc.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\collision_desc.h"
+				RelativePath=".\pacs\collision_desc.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\collision_ot.cpp"
+				RelativePath=".\pacs\collision_ot.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\collision_ot.h"
+				RelativePath=".\pacs\collision_ot.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\move_cell.cpp"
+				RelativePath=".\pacs\move_cell.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\move_cell.h"
+				RelativePath=".\pacs\move_cell.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\move_container.cpp"
+				RelativePath=".\pacs\move_container.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\move_container.h"
+				RelativePath=".\pacs\move_container.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\move_container_inline.h"
+				RelativePath=".\pacs\move_container_inline.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\move_element.cpp"
+				RelativePath=".\pacs\move_element.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\move_element.h"
+				RelativePath=".\pacs\move_element.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\move_element_inline.h"
+				RelativePath=".\pacs\move_element_inline.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\move_primitive.cpp"
+				RelativePath=".\pacs\move_primitive.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\move_primitive.h"
+				RelativePath=".\pacs\move_primitive.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\primitive_block.h"
+				RelativePath=".\pacs\primitive_block.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\primitive_block_pacs.cpp"
+				RelativePath=".\pacs\primitive_block_pacs.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\primitive_world_image.cpp"
+				RelativePath=".\pacs\primitive_world_image.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\primitive_world_image.h"
+				RelativePath=".\pacs\primitive_world_image.h"
 				>
 			</File>
 		</Filter>
@@ -569,59 +595,59 @@
 			Name="pathfinding"
 			>
 			<File
-				RelativePath="pacs\chain.cpp"
+				RelativePath=".\pacs\chain.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\chain.h"
+				RelativePath=".\pacs\chain.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\global_retriever.cpp"
+				RelativePath=".\pacs\global_retriever.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\global_retriever.h"
+				RelativePath=".\pacs\global_retriever.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\local_retriever.cpp"
+				RelativePath=".\pacs\local_retriever.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\local_retriever.h"
+				RelativePath=".\pacs\local_retriever.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\retrievable_surface.cpp"
+				RelativePath=".\pacs\retrievable_surface.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\retrievable_surface.h"
+				RelativePath=".\pacs\retrievable_surface.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\retriever_bank.cpp"
+				RelativePath=".\pacs\retriever_bank.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\retriever_bank.h"
+				RelativePath=".\pacs\retriever_bank.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\retriever_instance.cpp"
+				RelativePath=".\pacs\retriever_instance.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\retriever_instance.h"
+				RelativePath=".\pacs\retriever_instance.h"
 				>
 			</File>
 			<File
-				RelativePath="pacs\surface_quad.cpp"
+				RelativePath=".\pacs\surface_quad.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\surface_quad.h"
+				RelativePath=".\pacs\surface_quad.h"
 				>
 			</File>
 		</Filter>
@@ -661,11 +687,11 @@
 			Name="build"
 			>
 			<File
-				RelativePath="pacs\build_indoor.cpp"
+				RelativePath=".\pacs\build_indoor.cpp"
 				>
 			</File>
 			<File
-				RelativePath="pacs\build_indoor.h"
+				RelativePath=".\pacs\build_indoor.h"
 				>
 			</File>
 		</Filter>
@@ -674,11 +700,11 @@
 			>
 		</Filter>
 		<File
-			RelativePath="pacs\quad_grid.h"
+			RelativePath=".\pacs\quad_grid.h"
 			>
 		</File>
 		<File
-			RelativePath="pacs\stdpacs.cpp"
+			RelativePath=".\pacs\stdpacs.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -730,15 +756,15 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="pacs\stdpacs.h"
+			RelativePath=".\pacs\stdpacs.h"
 			>
 		</File>
 		<File
-			RelativePath="pacs\vector_2s.cpp"
+			RelativePath=".\pacs\vector_2s.cpp"
 			>
 		</File>
 		<File
-			RelativePath="pacs\vector_2s.h"
+			RelativePath=".\pacs\vector_2s.h"
 			>
 		</File>
 	</Files>

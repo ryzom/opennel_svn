@@ -4,8 +4,8 @@
 	Version="9,00"
 	Name="logic"
 	ProjectGUID="{0E723473-FDBB-48D7-8141-1273B917D681}"
-	RootNamespace="logic"
-	TargetFrameworkVersion="131072"
+	RootNamespace="nllogic"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -43,7 +43,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -62,7 +62,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_d.lib" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_d.lib"
+				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -106,10 +108,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
+				Optimization="4"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;NL_DEBUG_FAST;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG;NL_DEBUG_FAST"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -128,7 +130,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_df.lib" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_df.lib"
+				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -174,7 +178,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;_DEBUG;NL_STATIC;LIBXML_STATIC"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG;NL_STATIC"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -193,7 +197,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_ds.lib" IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_ds.lib"
+				IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -219,6 +225,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -237,7 +244,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="3"
+				Optimization="4"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
@@ -245,7 +252,7 @@
 				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;LIBXML_STATIC;ASSERT_THROW_EXCEPTION;FINAL_VERSION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;ASSERT_THROW_EXCEPTION;FINAL_VERSION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -263,7 +270,10 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_r.lib" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace).lib"
+				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				LinkTimeCodeGeneration="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -289,6 +299,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -307,11 +318,15 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="4"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;LIBXML_STATIC;ASSERT_THROW_EXCEPTION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;ASSERT_THROW_EXCEPTION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -329,7 +344,10 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_rd.lib" IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_rd.lib"
+				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+				LinkTimeCodeGeneration="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -355,6 +373,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -373,11 +392,15 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="4"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\include"
-				PreprocessorDefinitions="_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;NL_STATIC;LIBXML_STATIC;ASSERT_THROW_EXCEPTION"
+				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;NDEBUG;NL_RELEASE_DEBUG;NL_STATIC;ASSERT_THROW_EXCEPTION"
 				StringPooling="true"
 				ExceptionHandling="2"
 				RuntimeLibrary="0"
@@ -395,7 +418,10 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\nl$(RootNamespace)_rds.lib" IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
+				AdditionalDependencies=""
+				OutputFile="..\lib\$(RootNamespace)_rds.lib"
+				IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
+				LinkTimeCodeGeneration="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -421,7 +447,7 @@
 			Name="state"
 			>
 			<File
-				RelativePath="logic\logic_state.cpp"
+				RelativePath=".\logic\logic_state.cpp"
 				>
 			</File>
 			<File
@@ -433,7 +459,7 @@
 			Name="variable"
 			>
 			<File
-				RelativePath="logic\logic_variable.cpp"
+				RelativePath=".\logic\logic_variable.cpp"
 				>
 			</File>
 			<File
@@ -445,7 +471,7 @@
 			Name="event"
 			>
 			<File
-				RelativePath="logic\logic_event.cpp"
+				RelativePath=".\logic\logic_event.cpp"
 				>
 			</File>
 			<File
@@ -457,7 +483,7 @@
 			Name="condition"
 			>
 			<File
-				RelativePath="logic\logic_condition.cpp"
+				RelativePath=".\logic\logic_condition.cpp"
 				>
 			</File>
 			<File
@@ -466,7 +492,7 @@
 			</File>
 		</Filter>
 		<File
-			RelativePath="logic\logic_state_machine.cpp"
+			RelativePath=".\logic\logic_state_machine.cpp"
 			>
 		</File>
 		<File
