@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
@@ -20,6 +20,7 @@
 			OutputDirectory="..\..\..\..\obj\$(ConfigurationName)\$(ProjectName)"
 			IntermediateDirectory="..\..\..\..\obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\..\..\nel_vs90_d_dll.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -41,17 +42,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\..\include"
-				PreprocessorDefinitions="driver_direct3d_EXPORTS;LIBXML_STATIC;_USRDLL;WIN32;_DEBUG"
-				StringPooling="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				EnableFunctionLevelLinking="true"
+				PreprocessorDefinitions="driver_direct3d_EXPORTS"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="stddirect3d.h"
-				WarningLevel="3"
-				DebugInformationFormat="4"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -64,14 +58,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3dx9.lib d3d9.lib dinput8.lib dxguid.lib"
+				AdditionalDependencies="$(LibraryDirect3D9) $(LibraryDirectInput8)"
 				OutputFile="..\..\..\..\lib\$(RootNamespace)_d.dll"
-				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 				ModuleDefinitionFile=".\$(ProjectName).def"
-				GenerateDebugInformation="true"
-				RandomizedBaseAddress="1"
 				ImportLibrary="..\..\..\..\lib\$(RootNamespace)_d.lib"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -100,6 +90,7 @@
 			OutputDirectory="..\..\..\..\obj\$(ConfigurationName)\$(ProjectName)"
 			IntermediateDirectory="..\..\..\..\obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\..\..\nel_vs90_df_dll.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -121,18 +112,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="4"
-				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\..\..\..\include"
-				PreprocessorDefinitions="driver_direct3d_EXPORTS;LIBXML_STATIC;_USRDLL;WIN32;_DEBUG;NL_DEBUG_FAST"
-				StringPooling="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				EnableFunctionLevelLinking="true"
+				PreprocessorDefinitions="driver_direct3d_EXPORTS"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="stddirect3d.h"
-				WarningLevel="3"
-				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -145,18 +128,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				
-				
-				
-				AdditionalDependencies="d3dx9.lib d3d9.lib dinput8.lib dxguid.lib"
+				AdditionalDependencies="$(LibraryDirect3D9) $(LibraryDirectInput8)"
 				OutputFile="..\..\..\..\lib\$(RootNamespace)_df.dll"
-				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
 				ModuleDefinitionFile=".\$(ProjectName).def"
-				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(IntDir)\$(TargetName).pdb"
-				RandomizedBaseAddress="1"
 				ImportLibrary="..\..\..\..\lib\$(RootNamespace)_df.lib"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -185,6 +160,7 @@
 			OutputDirectory="..\..\..\..\obj\$(ConfigurationName)\$(ProjectName)"
 			IntermediateDirectory="..\..\..\..\obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
+			InheritedPropertySheets="..\..\..\nel_vs90_ds_lib.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -206,17 +182,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\..\include"
-				PreprocessorDefinitions="LIBXML_STATIC;_LIB;WIN32;_DEBUG;NL_STATIC"
-				StringPooling="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
-				EnableFunctionLevelLinking="true"
+				PreprocessorDefinitions="driver_direct3d_EXPORTS"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="stddirect3d.h"
-				WarningLevel="3"
-				DebugInformationFormat="4"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -229,9 +198,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="d3dx9.lib d3d9.lib dinput8.lib dxguid.lib"
+				AdditionalDependencies="$(LibraryDirect3D9) $(LibraryDirectInput8)"
 				OutputFile="..\..\..\..\lib\$(RootNamespace)_ds.lib"
-				IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -254,6 +222,7 @@
 			OutputDirectory="..\..\..\..\obj\$(ConfigurationName)\$(ProjectName)"
 			IntermediateDirectory="..\..\..\..\obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\..\..\nel_vs90_r_dll.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -275,22 +244,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="4"
-				InlineFunctionExpansion="2"
-				EnableIntrinsicFunctions="true"
-				FavorSizeOrSpeed="1"
-				OmitFramePointers="true"
-				EnableFiberSafeOptimizations="true"
-				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\..\..\..\include"
-				PreprocessorDefinitions="driver_direct3d_EXPORTS;LIBXML_STATIC;_USRDLL;WIN32;NDEBUG;ASSERT_THROW_EXCEPTION;FINAL_VERSION"
-				StringPooling="true"
-				ExceptionHandling="2"
-				RuntimeLibrary="2"
-				BufferSecurityCheck="false"
+				PreprocessorDefinitions="driver_direct3d_EXPORTS"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="stddirect3d.h"
-				WarningLevel="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -303,16 +260,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3dx9.lib d3d9.lib dinput8.lib dxguid.lib"
+				AdditionalDependencies="$(LibraryDirect3D9) $(LibraryDirectInput8)"
 				OutputFile="..\..\..\..\lib\$(RootNamespace)_r.dll"
-				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
 				ModuleDefinitionFile=".\$(ProjectName).def"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				LinkTimeCodeGeneration="1"
-				RandomizedBaseAddress="1"
 				ImportLibrary="..\..\..\..\lib\$(RootNamespace)_r.lib"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -341,6 +292,7 @@
 			OutputDirectory="..\..\..\..\obj\$(ConfigurationName)\$(ProjectName)"
 			IntermediateDirectory="..\..\..\..\obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\..\..\nel_vs90_rd_dll.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -362,22 +314,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="4"
-				InlineFunctionExpansion="2"
-				EnableIntrinsicFunctions="true"
-				FavorSizeOrSpeed="1"
-				OmitFramePointers="true"
-				EnableFiberSafeOptimizations="true"
-				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\..\..\..\include"
-				PreprocessorDefinitions="driver_direct3d_EXPORTS;LIBXML_STATIC;_USRDLL;WIN32;NDEBUG;NL_RELEASE_DEBUG;ASSERT_THROW_EXCEPTION"
-				StringPooling="true"
-				ExceptionHandling="2"
-				RuntimeLibrary="2"
+				PreprocessorDefinitions="driver_direct3d_EXPORTS"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="stddirect3d.h"
-				WarningLevel="3"
-				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -390,16 +330,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3dx9.lib d3d9.lib dinput8.lib dxguid.lib"
+				AdditionalDependencies="$(LibraryDirect3D9) $(LibraryDirectInput8)"
 				OutputFile="..\..\..\..\lib\$(RootNamespace)_rd.dll"
-				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
 				ModuleDefinitionFile=".\$(ProjectName).def"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				LinkTimeCodeGeneration="1"
-				RandomizedBaseAddress="1"
 				ImportLibrary="..\..\..\..\lib\$(RootNamespace)_rd.lib"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -428,6 +362,7 @@
 			OutputDirectory="..\..\..\..\obj\$(ConfigurationName)\$(ProjectName)"
 			IntermediateDirectory="..\..\..\..\obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
+			InheritedPropertySheets="..\..\..\nel_vs90_rds_lib.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -449,22 +384,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="4"
-				InlineFunctionExpansion="2"
-				EnableIntrinsicFunctions="true"
-				FavorSizeOrSpeed="1"
-				OmitFramePointers="true"
-				EnableFiberSafeOptimizations="true"
-				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\..\..\..\include"
-				PreprocessorDefinitions="LIBXML_STATIC;_WINDOWS;WIN32;NDEBUG;NL_RELEASE_DEBUG;NL_STATIC;ASSERT_THROW_EXCEPTION"
-				StringPooling="true"
-				ExceptionHandling="2"
-				RuntimeLibrary="0"
+				PreprocessorDefinitions="driver_direct3d_EXPORTS"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="stddirect3d.h"
-				WarningLevel="3"
-				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -477,9 +400,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="d3dx9.lib d3d9.lib dinput8.lib dxguid.lib"
+				AdditionalDependencies="$(LibraryDirect3D9) $(LibraryDirectInput8)"
 				OutputFile="..\..\..\..\lib\$(RootNamespace)_rds.lib"
-				IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
 			/>
 			<Tool
 				Name="VCALinkTool"
