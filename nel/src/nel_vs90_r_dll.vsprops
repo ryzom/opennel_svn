@@ -11,6 +11,6 @@
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		OutputFile="$(RootNamespace).dll"
+		OutputFile="$(RootNamespace)_r.dll"
 	/>
 </VisualStudioPropertySheet>

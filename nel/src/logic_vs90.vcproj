@@ -234,7 +234,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies=""
-				OutputFile="..\lib\$(RootNamespace).lib"
+				OutputFile="..\lib\$(RootNamespace)_r.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"

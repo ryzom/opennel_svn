@@ -242,7 +242,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="libxml2_a.lib"
-				OutputFile="..\lib\$(RootNamespace).lib"
+				OutputFile="..\lib\$(RootNamespace)_r.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
