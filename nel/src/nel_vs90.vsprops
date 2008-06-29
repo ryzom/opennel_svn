@@ -18,7 +18,7 @@
 	/>
 	<Tool
 		Name="VCLibrarianTool"
-		OutputFile="$(RootNamespace)_r.lib"
+		OutputFile="$(RootNamespace).lib"
 		SuppressStartupBanner="true"
 	/>
 	<Tool
@@ -27,7 +27,7 @@
 		OutputFile="$(RootNamespace).exe"
 		SuppressStartupBanner="true"
 		ProgramDatabaseFile="$(IntDir)\$(TargetName).pdb"
-		ImportLibrary="$(RootNamespace)_r.lib"
+		ImportLibrary="$(RootNamespace).lib"
 		TargetMachine="1"
 	/>
 	<UserMacro
