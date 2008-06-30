@@ -11,10 +11,10 @@
 		PreprocessorDefinitions="LIBXML_STATIC;WIN32"
 		StringPooling="true"
 		ExceptionHandling="2"
-		EnableEnhancedInstructionSet="0"
 		DisableLanguageExtensions="false"
 		WarningLevel="3"
 		SuppressStartupBanner="true"
+		EnableEnhancedInstructionSet="0"
 	/>
 	<Tool
 		Name="VCLibrarianTool"
@@ -24,11 +24,12 @@
 	<Tool
 		Name="VCLinkerTool"
 		AdditionalDependencies="Winmm.lib Odbc32.lib Odbccp32.lib Ws2_32.lib"
-		OutputFile="$(RootNamespace).exe"
+		IgnoreDefaultLibraryNames="LIBC.lib"
 		SuppressStartupBanner="true"
 		ProgramDatabaseFile="$(IntDir)\$(TargetName).pdb"
-		ImportLibrary="$(RootNamespace).lib"
 		TargetMachine="1"
+		OutputFile="$(RootNamespace).exe"
+		ImportLibrary="$(RootNamespace).lib"
 	/>
 	<UserMacro
 		Name="LibraryALUT"

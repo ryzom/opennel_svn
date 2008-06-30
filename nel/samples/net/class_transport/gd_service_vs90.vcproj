@@ -49,7 +49,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
-			WholeProgramOptimization="0"
+
 			>
 		</Configuration>
 		<Configuration
@@ -59,7 +59,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
-			WholeProgramOptimization="0"
+
 			>
 		</Configuration>
 		<Configuration
@@ -69,7 +69,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
-			WholeProgramOptimization="0"
+
 			>
 		</Configuration>
 	</Configurations>

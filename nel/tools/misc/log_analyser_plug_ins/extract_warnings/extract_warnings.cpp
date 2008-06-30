@@ -46,7 +46,7 @@ using namespace std;
 #include "nel/misc/app_context.h"
 
 // Using directly the log report class from nelns
-#include "../../nelns/admin_executor_service/log_report.h"
+#include "../../../../../nelns/admin_executor_service/log_report.h"
 
 #include <windows.h>
 
@@ -98,6 +98,7 @@ LOG_ANALYSER_PLUGIN_API bool doAnalyse( const std::vector<const char *>& vec, st
 	// ---
 
 	// Analyse warnings from vec
+	CLogReport MainLogReport;
 	MainLogReport.reset();
 	int nb = 0;
 	string line;

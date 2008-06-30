@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
@@ -17,9 +17,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="obj\$(ConfigurationName)\$(ProjectName)"
-			IntermediateDirectory="obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="..\..\..\src\nel_vs90_d_exe_windows.vsprops"
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -41,16 +40,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
-				PreprocessorDefinitions="_WINDOWS;WIN32;_DEBUG;LIBXML_STATIC"
-				StringPooling="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="std_afx.h"
-				WarningLevel="3"
-				DebugInformationFormat="4"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -63,13 +54,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=""
-				OutputFile="bin\$(RootNamespace)_d.exe"
-				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				RandomizedBaseAddress="1"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -95,9 +79,8 @@
 		</Configuration>
 		<Configuration
 			Name="DebugFast|Win32"
-			OutputDirectory="obj\$(ConfigurationName)\$(ProjectName)"
-			IntermediateDirectory="obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="..\..\..\src\nel_vs90_df_exe_windows.vsprops"
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -119,17 +102,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
-				InlineFunctionExpansion="1"
-				PreprocessorDefinitions="_WINDOWS;WIN32;_DEBUG;NL_DEBUG_FAST;LIBXML_STATIC"
-				StringPooling="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="std_afx.h"
-				WarningLevel="3"
-				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -142,13 +116,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=""
-				OutputFile="bin\$(RootNamespace)_df.exe"
-				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrt"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				RandomizedBaseAddress="1"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -174,9 +141,8 @@
 		</Configuration>
 		<Configuration
 			Name="DebugStatic|Win32"
-			OutputDirectory="obj\$(ConfigurationName)\$(ProjectName)"
-			IntermediateDirectory="obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="..\..\..\src\nel_vs90_ds_exe_windows.vsprops"
 			UseOfMFC="1"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -198,16 +164,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
-				PreprocessorDefinitions="_WINDOWS;WIN32;_DEBUG;NL_STATIC;LIBXML_STATIC"
-				StringPooling="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
-				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="std_afx.h"
-				WarningLevel="3"
-				DebugInformationFormat="4"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -220,13 +178,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=""
-				OutputFile="bin\$(RootNamespace)_ds.exe"
-				IgnoreDefaultLibraryNames="libcmt;msvcrt;msvcrtd"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				RandomizedBaseAddress="1"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -252,9 +203,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="obj\$(ConfigurationName)\$(ProjectName)"
-			IntermediateDirectory="obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="..\..\..\src\nel_vs90_r_exe_windows.vsprops"
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -276,21 +226,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="3"
-				InlineFunctionExpansion="2"
-				EnableIntrinsicFunctions="true"
-				FavorSizeOrSpeed="1"
-				OmitFramePointers="true"
-				EnableFiberSafeOptimizations="true"
-				WholeProgramOptimization="true"
-				PreprocessorDefinitions="_WINDOWS;WIN32;NDEBUG;ASSERT_THROW_EXCEPTION;FINAL_VERSION;LIBXML_STATIC"
-				StringPooling="true"
-				ExceptionHandling="2"
-				RuntimeLibrary="2"
-				BufferSecurityCheck="false"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="std_afx.h"
-				WarningLevel="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -303,15 +240,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=""
-				OutputFile="bin\$(RootNamespace).exe"
-				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				LinkTimeCodeGeneration="1"
-				RandomizedBaseAddress="1"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -337,9 +265,8 @@
 		</Configuration>
 		<Configuration
 			Name="ReleaseDebug|Win32"
-			OutputDirectory="obj\$(ConfigurationName)\$(ProjectName)"
-			IntermediateDirectory="obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="..\..\..\src\nel_vs90_rd_exe_windows.vsprops"
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -361,17 +288,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
-				InlineFunctionExpansion="2"
-				FavorSizeOrSpeed="1"
-				PreprocessorDefinitions="_WINDOWS;WIN32;NDEBUG;NL_RELEASE_DEBUG;ASSERT_THROW_EXCEPTION;LIBXML_STATIC"
-				StringPooling="true"
-				ExceptionHandling="2"
-				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="std_afx.h"
-				WarningLevel="3"
-				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -384,15 +302,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=""
-				OutputFile="bin\$(RootNamespace)_rd.exe"
-				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				RandomizedBaseAddress="1"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -418,9 +327,8 @@
 		</Configuration>
 		<Configuration
 			Name="ReleaseDebugStatic|Win32"
-			OutputDirectory="obj\$(ConfigurationName)\$(ProjectName)"
-			IntermediateDirectory="obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="..\..\..\src\nel_vs90_rds_exe_windows.vsprops"
 			UseOfMFC="1"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -442,17 +350,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
-				InlineFunctionExpansion="2"
-				FavorSizeOrSpeed="1"
-				PreprocessorDefinitions="_WINDOWS;WIN32;NDEBUG;NL_RELEASE_DEBUG;NL_STATIC;ASSERT_THROW_EXCEPTION;LIBXML_STATIC"
-				StringPooling="true"
-				ExceptionHandling="2"
-				RuntimeLibrary="0"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="std_afx.h"
-				WarningLevel="3"
-				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -465,15 +364,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=""
-				OutputFile="bin\$(RootNamespace)_rds.exe"
-				IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				RandomizedBaseAddress="1"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -550,23 +440,23 @@
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 			<File
-				RelativePath="cursor1.cur"
+				RelativePath=".\cursor1.cur"
 				>
 			</File>
 			<File
-				RelativePath="cursor2.cur"
+				RelativePath=".\cursor2.cur"
 				>
 			</File>
 			<File
-				RelativePath="icon1.ico"
+				RelativePath=".\icon1.ico"
 				>
 			</File>
 			<File
-				RelativePath="nevraxpill.ico"
+				RelativePath=".\nevraxpill.ico"
 				>
 			</File>
 			<File
-				RelativePath="object_viewer_exe.rc"
+				RelativePath=".\object_viewer_exe.rc"
 				>
 				<FileConfiguration
 					Name="DebugStatic|Win32"
@@ -595,11 +485,11 @@
 			>
 		</File>
 		<File
-			RelativePath="object_viewer_exe.cpp"
+			RelativePath=".\object_viewer_exe.cpp"
 			>
 		</File>
 		<File
-			RelativePath="std_afx.cpp"
+			RelativePath=".\std_afx.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -651,7 +541,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="std_afx.h"
+			RelativePath=".\std_afx.h"
 			>
 		</File>
 	</Files>

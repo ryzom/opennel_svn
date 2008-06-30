@@ -17,12 +17,12 @@
 		PreprocessorDefinitions="NDEBUG;ASSERT_THROW_EXCEPTION"
 		RuntimeLibrary="2"
 		BufferSecurityCheck="false"
-		OutputFile="$(RootNamespace)_r.lib"
 	/>
 	<Tool
 		Name="VCLibrarianTool"
 		IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
 		LinkTimeCodeGeneration="true"
+		OutputFile="$(RootNamespace)_r.lib"
 	/>
 	<Tool
 		Name="VCLinkerTool"

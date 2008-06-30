@@ -296,7 +296,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="version.lib libxml2_a.lib freetype.lib comctl32.lib bmm.lib core.lib geom.lib gfx.lib mesh.lib maxutil.lib maxscrpt.lib gup.lib paramblk2.lib winmm.lib ws2_32.lib"
-				OutputFile="..\..\plugin_max\lib\$(RootNamespace)_r.dlx"
+				OutputFile="..\..\plugin_max\lib\$(RootNamespace).dlx"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"

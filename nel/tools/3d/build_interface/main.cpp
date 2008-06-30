@@ -22,6 +22,7 @@ using namespace NLMISC;
 // ***************************************************************************
 //char sExeDir[MAX_PATH];
 std::string sExeDir;
+NLMISC::CApplicationContext _ApplicationContext;
 
 void outString (const string &sText)
 {
@@ -171,7 +172,6 @@ void enlargeCanvas (NLMISC::CBitmap &b)
 	putIn (&b, &b2, 0, 0);
 	b = b2;
 }
-
 
 // ***************************************************************************
 // main
