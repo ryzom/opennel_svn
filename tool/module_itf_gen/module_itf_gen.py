@@ -99,7 +99,8 @@ _HFileFooter += [ "/* end of file */" ]
 
 _CppFileHeader = [ ]
 _CppFileHeader += [ "#include <nel/misc/types_nl.h>"]
-_CppFileHeader += [ "#include \"{FILE_NAME}.h\""]
+# _CppFileHeader += [ "#include \"{FILE_NAME}.h\""]
+_CppFileHeader += [ "{FILE_HEADERINCLUDE}" ]
 _CppFileHeader += [ "" ]
 # _CppFileHeader += [ "// Project includes" ]
 # _CppFileHeader += [ "" ]
@@ -129,6 +130,8 @@ class CFile:
 	def __init__(self):
 		self.Name = "module_itf_gen"
 		self.Path = ""
+		self.PathToHeaderInclude = ""
+		self.PathToHeader = ""
 		self.Comment = "Generated module interface skeleton"
 		self.Namespace = "NLNET"
 		self.Product = "NEVRAX NEL"
@@ -142,6 +145,10 @@ class CFile:
 		self.NameCpp = self.Name + ".cpp"
 		self.NameH = self.Name + ".h"
 		self.HDefine = self.Namespace + "_" + self.Name.upper() + "_H"
+		if (self.PathToHeaderInclude == "") and (self.PathToHeader == ""):
+			self.HeaderInclude = "#include \"" + self.Name + ".h\""
+		else:
+			self.HeaderInclude = "#include <" + self.PathToHeader + self.Name + ".h>"
 	def buildLine(self, line):
 		newline = line.replace("{FILE_NAME}", self.Name)
 		newline = newline.replace("{FILE_PATH}", self.Path)
@@ -155,6 +162,7 @@ class CFile:
 		newline = newline.replace("{FILE_NAMECPP}", self.NameCpp)
 		newline = newline.replace("{FILE_NAMEH}", self.NameH)
 		newline = newline.replace("{FILE_HDEFINE}", self.HDefine)
+		newline = newline.replace("{FILE_HEADERINCLUDE}", self.HeaderInclude)
 		newline = newline.replace("{FILE_CURRENT}", self.Current)
 		return newline
 	def printComment(self, f, lines):
@@ -180,7 +188,7 @@ class CFile:
 	def writeH(self):
 		print "Generating Header file: " + self.Path + self.NameH
 		self.Current = self.NameH
-		f = open(self.Path + self.Current , 'w')
+		f = open(self.Path + self.PathToHeaderInclude + self.PathToHeader + self.Current , 'w')
 		self.writeFileHeader(f)
 		self.writeGenericCode(f, _WarningGeneratedFile)
 		print "Writing .h header to file"
@@ -424,16 +432,25 @@ class CMessage:
 	def writeHeaderSkelCallback(self, f):
 		print "writeHeaderSkelCallback: " + self.ShortName + ", " + self.LongName + ", " + self.DeclarationList
 		f.write("	/// " + self.Comment + newline) # todo: full comments including all param comments!!!!
-		f.write("	virtual void " + self.LongName + "(NLNET::IModuleProxy *sender, " + self.DeclarationList + ") =0;" + newline)
+		if self.DeclarationList == "":
+			f.write("	virtual void " + self.LongName + "(NLNET::IModuleProxy *sender) =0;" + newline)
+		else:
+			f.write("	virtual void " + self.LongName + "(NLNET::IModuleProxy *sender, " + self.DeclarationList + ") =0;" + newline)
 	def writeHeaderProxyFunction(self, f):
 		print "writeHeaderProxyFunction: " + self.ShortName + ", " + self.LongName
 		f.write("	/// " + self.Comment + newline) # todo: full comments including all param comments!!!!
-		f.write("	void " + self.LongName + "(NLNET::IModule *sender, " + self.DeclarationList + ");" + newline)
+		if self.DeclarationList == "":
+			f.write("	void " + self.LongName + "(NLNET::IModule *sender);" + newline)
+		else:
+			f.write("	void " + self.LongName + "(NLNET::IModule *sender, " + self.DeclarationList + ");" + newline)
 	def writeHeaderProxyBuilder(self, f):
 		print "writeHeaderProxyBuilder: " + self.ShortName + ", " + self.LongName
 		f.write("	/// " + self.Comment + newline) # todo: full comments including all param comments!!!!
 		f.write("	/// Message serializer. Return the message received in reference for easier integration." + newline)
-		f.write("	static const NLNET::CMessage &buildMessageFor_" + self.LongName + "(NLNET::CMessage &__message, " + self.DeclarationList + ");" + newline)
+		if self.DeclarationList == "":
+			f.write("	static const NLNET::CMessage &buildMessageFor_" + self.LongName + "(NLNET::CMessage &__message);" + newline)
+		else:
+			f.write("	static const NLNET::CMessage &buildMessageFor_" + self.LongName + "(NLNET::CMessage &__message, " + self.DeclarationList + ");" + newline)
 	def writeCppSkelHandler(self, f, itf):
 		print "writeCppSkelHandler: " + self.ShortName + ", " + self.LongName
 		f.write("		res = handlers.insert(std::make_pair(std::string(\"" + self.ShortName + "\"), &" + itf.SkelClass + "::" + self.LongName + "_skel));" + newline)
@@ -448,23 +465,35 @@ class CMessage:
 		for param in self.Params:
 			f.write("	" + param.Type + " " + param.Name + ";" + newline)
 			f.write("	nlRead(__message, " + param.SerialType + ", " + param.SerialReadName + ");" + newline)
-		f.write("	" + self.LongName + "(sender, " + self.ParamList + ");" + newline)
+		if self.ParamList == "":
+			f.write("	" + self.LongName + "(sender);" + newline)
+		else:
+			f.write("	" + self.LongName + "(sender, " + self.ParamList + ");" + newline)
 		f.write("}" + newline)
 		f.write("" + newline)
 	def writeCppProxyFunction(self, f, itf):
 		print "writeCppProxyFunction: " + self.ShortName + ", " + self.LongName
-		f.write("void " + itf.ProxyClass + "::" + self.LongName + "(NLNET::IModule *sender, " + self.DeclarationList + ")" + newline)
+		if self.DeclarationList == "":
+			f.write("void " + itf.ProxyClass + "::" + self.LongName + "(NLNET::IModule *sender)" + newline)
+		else:
+			f.write("void " + itf.ProxyClass + "::" + self.LongName + "(NLNET::IModule *sender, " + self.DeclarationList + ")" + newline)
 		f.write("{" + newline)
 		f.write("	if (_LocalModuleSkel && _LocalModule->isImmediateDispatchingSupported())" + newline)
 		f.write("	{" + newline)
 		f.write("		// Immediate local synchronous dispatching." + newline)
-		f.write("		_LocalModuleSkel->" + self.LongName + "(_ModuleProxy->getModuleGateway()->getPluggedModuleProxy(sender), " + self.ParamList + ");" + newline)
+		if self.ParamList == "":
+			f.write("		_LocalModuleSkel->" + self.LongName + "(_ModuleProxy->getModuleGateway()->getPluggedModuleProxy(sender));" + newline)
+		else:
+			f.write("		_LocalModuleSkel->" + self.LongName + "(_ModuleProxy->getModuleGateway()->getPluggedModuleProxy(sender), " + self.ParamList + ");" + newline)
 		f.write("	}" + newline)
 		f.write("	else" + newline)
 		f.write("	{" + newline)
 		f.write("		// Send the message for remote dispatching and execution or local queing." + newline)
 		f.write("		NLNET::CMessage __message;" + newline)
-		f.write("		buildMessageFor_" + self.LongName + "(__message, " + self.ParamList + ");" + newline)
+		if self.ParamList == "":
+			f.write("		buildMessageFor_" + self.LongName + "(__message);" + newline)
+		else:
+			f.write("		buildMessageFor_" + self.LongName + "(__message, " + self.ParamList + ");" + newline)
 		f.write("		_ModuleProxy->sendModuleMessage(sender, __message);" + newline)
 		f.write("	}" + newline)
 		f.write("}" + newline)
@@ -472,7 +501,10 @@ class CMessage:
 	def writeCppProxyBuilder(self, f, itf):
 		print "writeCppProxyBuilder: " + self.ShortName + ", " + self.LongName
 		f.write("// Message serializer. Return the message received in reference for easier integration." + newline)
-		f.write("const NLNET::CMessage &" + itf.ProxyClass + "::buildMessageFor_" + self.LongName + "(NLNET::CMessage &__message, " + self.DeclarationList + ")" + newline)
+		if self.DeclarationList == "":
+			f.write("const NLNET::CMessage &" + itf.ProxyClass + "::buildMessageFor_" + self.LongName + "(NLNET::CMessage &__message)" + newline)
+		else:
+			f.write("const NLNET::CMessage &" + itf.ProxyClass + "::buildMessageFor_" + self.LongName + "(NLNET::CMessage &__message, " + self.DeclarationList + ")" + newline)
 		f.write("{" + newline)
 		f.write("	__message.setType(\"" + self.ShortName + "\");" + newline)
 		for param in self.Params:
