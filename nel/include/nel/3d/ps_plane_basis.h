@@ -86,11 +86,8 @@ struct CPlaneBasis
 
 inline bool operator<(const CPlaneBasis &p1, const CPlaneBasis &p2)
 {
-	if (p1.X < p2.X) return true ;
-	if (p1.X == p2.X) return false ;
-	if (p1.Y < p2.Y) return true ;
-	if (p1.Y == p2.Y) return false ;
-	return true ;
+	if (p1.X != p2.X) return p1.X < p2.X;
+	return p1.Y < p2.Y;
 }
 
 
