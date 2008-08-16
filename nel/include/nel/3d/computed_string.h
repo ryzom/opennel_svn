@@ -112,16 +112,14 @@ public:
 
 	uint getIndex(uint i) const
 	{
-		// if(i>=0 && i<_indexedColors.size())
 		if(i<_indexedColors.size())
 			return _indexedColors[i].Index;
 
-		return UINT_MAX; //-1;
+		return UINT_MAX;
 	}
 
 	const CRGBA & getColor(uint i) const
 	{
-		//if(i>=0 && i<_indexedColors.size())
 		if(i<_indexedColors.size())
 			return _indexedColors[i].Color;
 
@@ -130,7 +128,6 @@ public:
 
 	const SLetterColor & getLetterColor(uint i) const
 	{
-		//if(i>=0 && i<_indexedColors.size())
 		if(i<_indexedColors.size())
 			return _indexedColors[i];
 
