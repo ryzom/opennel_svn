@@ -40,7 +40,7 @@ namespace NL3D {
 class CPSDirection
 {
 public :
-	virtual ~CPSDirection() {};
+	virtual ~CPSDirection() {}
 	virtual void setDir(const NLMISC::CVector &v) = 0;
 	virtual NLMISC::CVector getDir(void) const = 0;
 	virtual bool supportGlobalVectorValue() const { return false; }

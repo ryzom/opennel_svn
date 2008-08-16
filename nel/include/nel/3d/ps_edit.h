@@ -61,7 +61,7 @@ namespace NL3D {
 
 struct IPSMover
 {
-	virtual ~IPSMover() {};
+	virtual ~IPSMover() {}
 	
 	/** Send back true if uniform scaling can be applied
 	 *  If it sends false, uniform scaling leads to undefine results

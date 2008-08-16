@@ -48,7 +48,7 @@ class CBigFile
 	NLMISC_SAFE_SINGLETON_DECL(CBigFile);
 
 	CBigFile() {}
-	~CBigFile() {};
+	~CBigFile() {}
 
 public:
 	// release memory

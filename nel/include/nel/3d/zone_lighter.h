@@ -346,7 +346,7 @@ public:
 	static bool isLightableShape(IShape &shape);
 
 	// Progress callback
-	virtual void progress (const char *message, float progress) {};
+	virtual void progress (const char *message, float progress) {}
 
 	// Compute shadow attenuation
 	float attenuation (const CVector &pos, const CZoneLighter::CLightDesc &description);

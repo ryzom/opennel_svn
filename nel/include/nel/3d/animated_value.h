@@ -47,7 +47,7 @@ namespace NL3D
 class IAnimatedValue
 {
 public:
-	virtual ~IAnimatedValue() {};
+	virtual ~IAnimatedValue() {}
 
 	/** 
 	  * The blend method. This method blend two the animated values and store the result

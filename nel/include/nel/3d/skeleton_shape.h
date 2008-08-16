@@ -107,7 +107,7 @@ public:
 	NLMISC_DECLARE_CLASS(CSkeletonShape);
 
 	/// flush textures used by this shape.
-	virtual void				flushTextures (IDriver &driver, uint selectedTexture) {};
+	virtual void				flushTextures (IDriver &driver, uint selectedTexture) {}
 
 	// @}
 

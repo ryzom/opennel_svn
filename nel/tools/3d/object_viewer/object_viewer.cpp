@@ -181,8 +181,8 @@ public:
 	{
 		MainFrame=NULL;	
 	};
-	virtual ~CObjView() {};
-	virtual void OnDraw (CDC *) {};
+	virtual ~CObjView() {}
+	virtual void OnDraw (CDC *) {}
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC) 
 	{ 
 		return FALSE; 

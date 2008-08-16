@@ -301,7 +301,7 @@ public:
 
 	 /// setup the functor object. The default does nothing
 
-	 virtual void setupFunctor(uint32 index) {};
+	 virtual void setupFunctor(uint32 index) {}
 
 protected:
 	
@@ -310,9 +310,9 @@ protected:
 
 	
 		
-	virtual void newElement(const CPSEmitterInfo &info) { };
-	virtual void deleteElement(uint32 index) {};	
-	virtual void resize(uint32 size) {};
+	virtual void newElement(const CPSEmitterInfo &info) {}
+	virtual void deleteElement(uint32 index) {}
+	virtual void resize(uint32 size) {}
 
 
 };

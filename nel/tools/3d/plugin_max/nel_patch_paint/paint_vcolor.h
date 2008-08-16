@@ -18,7 +18,7 @@ class CVertexColorFrozed
 {
 public:
 	// Constructors
-	CVertexColorFrozed () {};
+	CVertexColorFrozed () {}
 	CVertexColorFrozed (EPM_PaintTile *tile, int s, int t)
 	{
 		Tile = tile;

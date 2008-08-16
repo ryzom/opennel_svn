@@ -819,8 +819,8 @@ public:
 private:
 
 	// No copy operators available
-	void		operator=(const CVertexBufferReadWrite& other) {};
-	CVertexBufferReadWrite(const CVertexBufferReadWrite& other) {};
+	void		operator=(const CVertexBufferReadWrite& other) {}
+	CVertexBufferReadWrite(const CVertexBufferReadWrite& other) {}
 
 	CVertexBuffer		*_Parent;
 	uint				_First, _Last;
@@ -877,8 +877,8 @@ public:
 private:
 	
 	// No copy operators available
-	void		operator=(const CVertexBufferRead& other) {};
-	CVertexBufferRead(const CVertexBufferRead& other) {};
+	void		operator=(const CVertexBufferRead& other) {}
+	CVertexBufferRead(const CVertexBufferRead& other) {}
 
 	const CVertexBuffer		*_Parent;
 };

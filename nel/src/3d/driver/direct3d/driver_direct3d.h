@@ -819,7 +819,7 @@ public:
 	virtual	void			getDepthRange(float &znear, float &zfar) const;
 	
 	// todo hulud d3d buffers
-	virtual void			getZBuffer (std::vector<float>  &zbuffer) {};
+	virtual void			getZBuffer (std::vector<float>  &zbuffer) {}
 	virtual void			getBufferPart (CBitmap &bitmap, NLMISC::CRect &rect);	// Only 32 bits back buffer supported
 	
 	// return true if driver support Bloom effect.
@@ -923,7 +923,7 @@ public:
 	virtual void			enableLight (uint8 num, bool enable=true);
 	virtual void			setLightMapDynamicLight (bool enable, const CLight& light);
 	// todo hulud d3d light
-	virtual void			setPerPixelLightingLight(CRGBA diffuse, CRGBA specular, float shininess) {};
+	virtual void			setPerPixelLightingLight(CRGBA diffuse, CRGBA specular, float shininess) {}
 	virtual void			setAmbientColor (CRGBA color);
 
 	// Fog
@@ -943,7 +943,7 @@ public:
 	// todo hulud d3d adressing mode
 	virtual bool			isTextureAddrModeSupported(CMaterial::TTexAddressingMode mode) const {return false;};
 	// todo hulud d3d adressing mode
-	virtual void			setMatrix2DForTextureOffsetAddrMode(const uint stage, const float mat[4]) {};
+	virtual void			setMatrix2DForTextureOffsetAddrMode(const uint stage, const float mat[4]) {}
 
 	// EMBM support	
 	virtual bool			supportEMBM() const;	

@@ -207,7 +207,6 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
-
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -269,7 +268,6 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
-
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -331,7 +329,6 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
-
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -683,6 +680,14 @@
 		<File
 			RelativePath=".\net\net_manager.cpp"
 			>
+			<FileConfiguration
+				Name="DebugStatic|Win32"
+				ExcludedFromBuild="true"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+				/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\include\nel\net\net_manager.h"

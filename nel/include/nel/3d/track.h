@@ -64,7 +64,7 @@ public:
 	/**
 	  * Virtual destructor.
 	  */
-	virtual ~ITrack() {};
+	virtual ~ITrack() {}
 
 	/**
 	  * Evaluation of the value of the track for this time.

@@ -60,7 +60,7 @@ namespace NLPACS
 class IObjectViewer
 {
 public:
-	virtual ~IObjectViewer () {};
+	virtual ~IObjectViewer () {}
 
 	// Init the UI
 	virtual bool initUI (HWND parent=NULL)=0;

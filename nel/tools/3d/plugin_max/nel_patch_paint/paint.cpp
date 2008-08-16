@@ -2557,7 +2557,7 @@ int offsetOther[4]={ 0, (nVOther-1)*MAX_TILE_IN_PATCH, (nVOther-1)*MAX_TILE_IN_P
 
 struct callThread
 {
-	callThread (std::vector<EPM_Mesh>&	vectMesh) : VectMesh (vectMesh) {};
+	callThread (std::vector<EPM_Mesh>&	vectMesh) : VectMesh (vectMesh) {}
 	EPM_PaintMouseProc		*eproc;
 	PaintPatchMod			*pobj;
 	CVector					center;
