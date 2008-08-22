@@ -14,7 +14,7 @@
 		OmitFramePointers="true"
 		EnableFiberSafeOptimizations="true"
 		PreprocessorDefinitions="NDEBUG;ASSERT_THROW_EXCEPTION;FINAL_VERSION"
-		RuntimeLibrary="2"
+		RuntimeLibrary="0"
 		BufferSecurityCheck="false"
 	/>
 	<Tool
@@ -23,7 +23,8 @@
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		IgnoreDefaultLibraryNames="libcmt;libcmtd;msvcrtd"
+		OutputFile="$(RootNamespace).lib"
+		IgnoreDefaultLibraryNames="libcmtd;msvcrt;msvcrtd"
 		OptimizeReferences="2"
 		EnableCOMDATFolding="2"
 	/>

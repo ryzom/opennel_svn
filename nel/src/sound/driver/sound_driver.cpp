@@ -134,6 +134,9 @@ ISoundDriver	*ISoundDriver::createDriver(bool useEax, IStringMapperProvider *str
 	case DriverDSound:
 		driverName = "DirectSound";
 		break;
+	case DriverXAudio2:
+		driverName = "XAudio2";
+		break;
 	default:
 		driverName = "UNKNOWN";
 	}
@@ -180,9 +183,18 @@ ISoundDriver	*ISoundDriver::createDriver(bool useEax, IStringMapperProvider *str
 #		error "Driver name not define for this platform"
 #endif
 		break;
+	case DriverXAudio2:
+#ifdef NL_OS_WINDOWS
+		dllName = "nel_drv_xaudio2_win";
+#elif defined (NL_OS_UNIX)
+		nlerror("DriverXAudio2 doesn't exist on Unix because it requires DirectX");
+#else
+#		error "Driver name not define for this platform"
+#endif
+		break;
 	default:
 #ifdef NL_OS_WINDOWS
-		dllName = "nel_drv_dsound_win";
+		dllName = "nel_drv_fmod_win";
 #elif defined (NL_OS_UNIX)
 		dllName = "nel_drv_openal";
 #else

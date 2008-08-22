@@ -1,0 +1,451 @@
+/**
+ * \file source_xaudio2.cpp
+ * \brief CSourceXAudio2
+ * \date 2008-08-20 15:53GMT
+ * \author Jan Boon (Kaetemi)
+ * CSourceXAudio2
+ * 
+ * $Id$
+ */
+
+/* 
+ * Copyright (C) 2008  Jan Boon (Kaetemi)
+ * 
+ * This file is part of NLSOUND XAudio2 Driver.
+ * NLSOUND XAudio2 Driver is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 2 of
+ * the License, or (at your option) any later version.
+ * 
+ * NLSOUND XAudio2 Driver is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NLSOUND XAudio2 Driver; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301 USA.
+ */
+
+#include "stdxaudio2.h"
+#include "source_xaudio2.h"
+
+// Project includes
+//#include "buffer_xaudio2.h"
+#include "listener_xaudio2.h"
+
+// NeL includes
+#include <nel/misc/hierarchical_timer.h>
+#include <nel/misc/debug.h>
+
+// STL includes
+#include <cfloat>
+#include <algorithm>
+
+using namespace std;
+using namespace NLMISC;
+
+namespace NLSOUND {
+
+CSourceXAudio2::CSourceXAudio2(CSoundDriverXAudio2 *soundDriver) 
+: _SoundDriver(soundDriver), _SampleVoice(NULL), _NextBuffer(NULL), _HasBuffer(false), 
+_Doppler(1.0), _Pitch(1.0), _IsPlaying(false), _IsLooping(false)
+{
+	nlwarning("Inititializing CSourceXAudio2");
+
+	memset(&_Emitter, 0, sizeof(_Emitter));
+	_Emitter.ChannelCount = 1;
+	_Emitter.CurveDistanceScaler = FLT_MIN;
+}
+
+CSourceXAudio2::~CSourceXAudio2()
+{
+	nlwarning("Destroying CSourceXAudio2");
+
+	release();
+}
+
+void CSourceXAudio2::release() // called by driver :)
+{
+	_SoundDriver->destroySampleVoice(_SampleVoice, true); _SampleVoice = NULL;
+	_SoundDriver->removeSource(this);
+}
+
+/// Commit all the changes made to 3D settings of listener and sources
+void CSourceXAudio2::commit3DChanges()
+{
+	if (_HasBuffer && _IsPlaying/* && _SampleVoice->getBuffer()*/)
+	{
+		X3DAudioCalculate(_SoundDriver->getX3DAudio(), 
+			_SoundDriver->getListener()->getListener(), &_Emitter, 
+			X3DAUDIO_CALCULATE_MATRIX | X3DAUDIO_CALCULATE_DOPPLER, 
+			_SoundDriver->getDSPSettings());
+		_SampleVoice->getSourceVoice()->SetOutputMatrix(
+			// _SoundDriver->getMasteringVoice(),
+			_SoundDriver->getListener()->getSubmixVoice(), 
+			_SoundDriver->getDSPSettings()->SrcChannelCount, 
+			_SoundDriver->getDSPSettings()->DstChannelCount, 
+			_SoundDriver->getDSPSettings()->pMatrixCoefficients);
+		// nldebug("left: %f, right %f", _SoundDriver->getDSPSettings()->pMatrixCoefficients[0], _SoundDriver->getDSPSettings()->pMatrixCoefficients[1]);
+		_Doppler = _SoundDriver->getDSPSettings()->DopplerFactor;
+		_SampleVoice->setPitch(_Doppler * _Pitch);
+	}
+
+	// todo: reverb? ^^
+}
+
+void CSourceXAudio2::cbVoiceProcessingPassStart()
+{    
+	
+}
+
+void CSourceXAudio2::cbVoiceProcessingPassEnd()
+{ 
+	
+}
+
+void CSourceXAudio2::cbStreamEnd()
+{ 
+	
+}
+
+void CSourceXAudio2::cbBufferStart(CBufferXAudio2 *pBufferContext)
+{    
+	////// update buffer frequency :) todo: take into account other frequency modifiers!!
+	// done in sample voice class :)
+	////IBuffer *buffer = (IBuffer *)pBufferContext; // loool
+	////_SourceVoice->SetFrequencyRatio((double)((CBufferXAudio2 *)buffer)->getFreq() 
+	////	/ (double)NLSOUND_XAUDIO2_SOURCE_SAMPLES_PER_SEC);
+	////// check how SetFrequencyRatio can be used to change the pitch vs changing bitrate/speed!!!!
+	////// note: nel change pitch does change speed in other drivers too, so SetFreq is ok. :)
+}
+
+void CSourceXAudio2::cbBufferEnd(CBufferXAudio2 *pBufferContext)
+{ 
+	// if need to change format, call destroy with stop set to false !!!
+	_Mutex.enter(); // _NextBuffer, startNextBuffer, _HasBuffer
+	if (_NextBuffer) startNextBuffer();
+	else _HasBuffer = false;
+	_Mutex.leave();
+}
+
+void CSourceXAudio2::cbLoopEnd(CBufferXAudio2 *pBufferContext)
+{    
+	
+}
+
+void CSourceXAudio2::cbVoiceError(CBufferXAudio2 *pBufferContext, HRESULT Error)
+{ 
+	////nlwarning(NLSOUND_XAUDIO2_PREFIX "CSourceXAudio2::OnVoiceError");
+	////nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	////release();
+	////init();
+	////// todo: put everything back in as it should!
+}
+
+/// \name Initialization
+//@{
+/** Set the buffer that will be played (no streaming)
+ * If the buffer is stereo, the source mode becomes stereo and the source relative mode is on,
+ * otherwise the source is considered as a 3D source.
+ */
+void CSourceXAudio2::setStaticBuffer(IBuffer *buffer)
+{
+	_Mutex.enter(); // _NextBuffer, startNextBuffer, _HasBuffer
+	_NextBuffer = (CBufferXAudio2 *)buffer;
+	if (!_HasBuffer) 
+	{
+		_HasBuffer = true;
+		startNextBuffer();
+	}
+	_Mutex.leave();
+
+	
+	/*nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	return;*/
+}
+
+void CSourceXAudio2::startNextBuffer() // note: called from callback !!! -- don't flush buffer & must call from mutexed!
+{
+	if (_SampleVoice)
+	{
+		if (_SampleVoice->getFormat() != _NextBuffer->getFormat())
+		{
+			// remove this debug info, or glitches may happen on sound
+			nlwarning(NLSOUND_XAUDIO2_PREFIX "_SampleVoice->getFormat() != _NextBuffer->getFormat()");
+			_SoundDriver->destroySampleVoice(_SampleVoice, false);
+			_SampleVoice = _SoundDriver->createSampleVoice(this, _NextBuffer->getFormat());
+			// check if isplaying !! 
+			_SampleVoice->getSourceVoice()->Start(0);
+		}
+	}
+	else _SampleVoice = _SoundDriver->createSampleVoice(this, _NextBuffer->getFormat());
+
+// exitloop
+	// todo :: use XAUDIO2_DEVICE_DETAILS maybe :)
+
+	XAUDIO2_BUFFER xbuffer;
+	xbuffer.AudioBytes = _NextBuffer->getSize();
+	xbuffer.Flags = 0;
+	xbuffer.LoopBegin = 0;
+	xbuffer.LoopCount = XAUDIO2_LOOP_INFINITE; // todo: handle looping etc in sample_voice_xaudio2 ... _IsLooping ? XAUDIO2_LOOP_INFINITE : 0;
+	xbuffer.LoopLength = 0;
+	xbuffer.pAudioData = _NextBuffer->getData();
+	xbuffer.pContext = _NextBuffer; // neat :)
+	xbuffer.PlayBegin = 0;
+	xbuffer.PlayLength = 0;
+
+	_SampleVoice->getSourceVoice()->SubmitSourceBuffer(&xbuffer);
+
+	_NextBuffer = NULL;
+	// _HasBuffer = true; // is called from setStaticBuffer :)
+}
+
+/// Return the buffer, or NULL if streaming is used.
+IBuffer *CSourceXAudio2::getStaticBuffer()
+{
+	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	return 0; // current or next buffer??
+}
+
+///** Set the sound loader that will be used to stream in the data to play
+// * If the buffer is stereo, the source mode becomes stereo and the source relative mode is on,
+// * otherwise the source is considered as a 3D source.
+// */
+//void CSourceXAudio2::setStreamLoader(ILoader *loader) { _Loader = loader; }
+//@}
+
+
+/// \name Playback control
+//@{
+/// Set looping on/off for future playbacks (default: off)
+void CSourceXAudio2::setLooping(bool l)
+{
+	// todo: check if fmod also assumes "future playbacks"
+	_IsLooping = l;
+}
+
+/// Return the looping state
+bool CSourceXAudio2::getLooping() const
+{
+	return _IsLooping;
+}
+
+/** Play the static buffer (or stream in and play).
+ *	This method can return false if the sample for this sound is unloaded.
+ */
+bool CSourceXAudio2::play()
+{
+	_IsPlaying = true;
+	commit3DChanges(); // ensure awesomeness :)
+	return SUCCEEDED(_SampleVoice->getSourceVoice()->Start(0)); 
+	// TODO: check if sample loaded or something
+	// return true;
+	/*nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	return false;*/
+}
+
+/// Stop playing
+void CSourceXAudio2::stop()
+{
+	_IsPlaying = false;
+	if (FAILED(_SampleVoice->getSourceVoice()->Stop(0))) 
+		nlwarning(NLSOUND_XAUDIO2_PREFIX "FAILED Stop");
+	if (FAILED(_SampleVoice->getSourceVoice()->FlushSourceBuffers())) 
+		nlwarning(NLSOUND_XAUDIO2_PREFIX "FAILED FlushSourceBuffers");
+	// some more stuff too yeah
+	//nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	//return;
+}
+
+/// Pause. Call play() to resume.
+void CSourceXAudio2::pause()
+{
+	if (FAILED(_SampleVoice->getSourceVoice()->Stop(0))) 
+		nlwarning(NLSOUND_XAUDIO2_PREFIX "FAILED Stop"); // yep, that's all there is to it =)
+	//nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	//return;
+}
+
+/// Return the playing state
+bool CSourceXAudio2::isPlaying() const
+{
+	return _IsPlaying && _HasBuffer;// && !_IsPaused;
+	//nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	//return false;
+}
+
+/// Return true if playing is finished or stop() has been called.
+bool CSourceXAudio2::isStopped() const
+{
+	return !_IsPlaying || !_HasBuffer;
+	//nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	//return false;
+}
+
+/// Update the source (e.g. continue to stream the data in)
+bool CSourceXAudio2::update()
+{
+	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	return false;
+}
+
+/// Returns the number of milliseconds the source has been playing
+uint32 CSourceXAudio2::getTime()
+{
+	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	return 0;
+}
+//@}
+
+/// \name Source properties
+//@{
+/** Set the position vector (default: (0,0,0)).
+ * 3D mode -> 3D position
+ * st mode -> x is the pan value (from left (-1) to right (1)), set y and z to 0
+ */
+void CSourceXAudio2::setPos(const NLMISC::CVector& pos, bool deffered) // todo: deffered until when?
+{
+	_Pos = pos; // getPos() sucks
+	NLSOUND_XAUDIO2_X3DAUDIO_VECTOR_FROM_VECTOR(_Emitter.Position, pos);
+}
+
+/** Get the position vector.
+ * See setPos() for details.
+ */
+const NLMISC::CVector &CSourceXAudio2::getPos() const
+{
+	return _Pos;
+}
+
+/// Set the velocity vector (3D mode only, ignored in stereo mode) (default: (0,0,0))
+void CSourceXAudio2::setVelocity(const NLMISC::CVector& vel, bool deferred) // todo: deffered until when?
+{
+	NLSOUND_XAUDIO2_X3DAUDIO_VECTOR_FROM_VECTOR(_Emitter.Velocity, vel);
+}
+
+/// Get the velocity vector
+void CSourceXAudio2::getVelocity(NLMISC::CVector& vel) const
+{
+	NLSOUND_XAUDIO2_VECTOR_FROM_X3DAUDIO_VECTOR(vel, _Emitter.Velocity);
+}
+
+/// Set the direction vector (3D mode only, ignored in stereo mode) (default: (0,0,0) as non-directional)
+void CSourceXAudio2::setDirection(const NLMISC::CVector& dir)
+{
+	NLSOUND_XAUDIO2_X3DAUDIO_VECTOR_FROM_VECTOR(_Emitter.OrientFront, dir);
+	//nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	//return; // direction? :x
+}
+
+/// Get the direction vector
+void CSourceXAudio2::getDirection(NLMISC::CVector& dir) const
+{
+	NLSOUND_XAUDIO2_VECTOR_FROM_X3DAUDIO_VECTOR(dir, _Emitter.OrientFront);
+	//nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	//return;
+}
+
+/** Set the gain (volume value inside [0 , 1]). (default: 1)
+ * 0.0 -> silence
+ * 0.5 -> -6dB
+ * 1.0 -> no attenuation
+ * values > 1 (amplification) not supported by most drivers
+ */
+void CSourceXAudio2::setGain(float gain)
+{
+	_SampleVoice->getSourceVoice()->SetVolume(gain);
+}
+
+/// Get the gain
+float CSourceXAudio2::getGain() const
+{
+	float volume;
+	_SampleVoice->getSourceVoice()->GetVolume(&volume);
+	return volume;
+}
+
+/** Shift the frequency. 1.0f equals identity, each reduction of 50% equals a pitch shift
+ * of one octave. 0 is not a legal value.
+ */
+void CSourceXAudio2::setPitch(float pitch)
+{
+	_Pitch = pitch;
+	_SampleVoice->setPitch(_Pitch * _Doppler);
+}
+
+/// Get the pitch
+float CSourceXAudio2::getPitch() const
+{
+	return _Pitch;
+}
+
+/// Set the source relative mode. If true, positions are interpreted relative to the listener position
+void CSourceXAudio2::setSourceRelativeMode(bool mode)
+{
+	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented"); // else use listener at pos 0
+	return;
+}
+
+/// Get the source relative mode
+bool CSourceXAudio2::getSourceRelativeMode() const
+{
+	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	return false;
+}
+
+/// Set the min and max distances (default: 1, MAX_FLOAT) (3D mode only)
+void CSourceXAudio2::setMinMaxDistances(float mindist, float maxdist, bool deferred)
+{
+	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	return;
+}
+
+/// Get the min and max distances
+void CSourceXAudio2::getMinMaxDistances(float& mindist, float& maxdist) const
+{
+	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	return;
+}
+
+/// Set the cone angles (in radian) and gain (in [0 , 1]) (default: 2PI, 2PI, 0)
+void CSourceXAudio2::setCone(float innerAngle, float outerAngle, float outerGain)
+{
+	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	return;
+}
+
+/// Get the cone angles (in radian)
+void CSourceXAudio2::getCone(float& innerAngle, float& outerAngle, float& outerGain) const
+{
+	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	return;
+}
+
+/// Set any EAX source property if EAX available
+void CSourceXAudio2::setEAXProperty(uint prop, void *value, uint valuesize)
+{
+	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	return;
+}
+
+///** Set the alpha value for the volume-distance curve
+// *
+// *	Usefull only if MANUAL_ROLLOFF==1. value from -1 to 1 (default 0)
+// * 
+// *  alpha.0: the volume will decrease linearly between 0dB and -100 dB
+// *  alpha = 1.0: the volume will decrease linearly between 1.0 and 0.0 (linear scale)
+// *  alpha = -1.0: the volume will decrease inversely with the distance (1/dist). This
+// *                is the default used by DirectSound/OpenAL
+// * 
+// *  For any other value of alpha, an interpolation is be done between the two
+// *  adjacent curves. For example, if alpha equals 0.5, the volume will be halfway between
+// *  the linear dB curve and the linear amplitude curve.
+// */
+///// 
+//void setAlpha(double a) {  }
+
+} /* namespace NLSOUND */
+
+/* end of file */
