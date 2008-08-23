@@ -55,8 +55,25 @@ _Doppler(1.0), _Pitch(1.0), _IsPlaying(false), _IsLooping(false)
 	nlwarning("Inititializing CSourceXAudio2");
 
 	memset(&_Emitter, 0, sizeof(_Emitter));
+
+	_Emitter.OrientFront.x = 0.0f;
+	_Emitter.OrientFront.y = 0.0f;
+	_Emitter.OrientFront.z = 0.0f;
+	_Emitter.OrientTop.x = 0.0f;
+	_Emitter.OrientTop.y = 0.0f;
+	_Emitter.OrientTop.z = 0.0f;
+	_Emitter.Position.x = 0.0f;
+	_Emitter.Position.y = 0.0f;
+	_Emitter.Position.z = 0.0f;
+	_Emitter.Velocity.x = 0.0f;
+	_Emitter.Velocity.y = 0.0f;
+	_Emitter.Velocity.z = 0.0f;
 	_Emitter.ChannelCount = 1;
-	_Emitter.CurveDistanceScaler = FLT_MIN;
+	_Emitter.InnerRadius = 0.0f;
+	_Emitter.InnerRadiusAngle = 0.0f;
+	_Emitter.ChannelRadius = 0.0f;
+	_Emitter.CurveDistanceScaler = 1.0f;
+	_Emitter.DopplerScaler = 1.0f;
 }
 
 CSourceXAudio2::~CSourceXAudio2()
@@ -68,7 +85,7 @@ CSourceXAudio2::~CSourceXAudio2()
 
 void CSourceXAudio2::release() // called by driver :)
 {
-	_SoundDriver->destroySampleVoice(_SampleVoice, true); _SampleVoice = NULL;
+	delete _SampleVoice; _SampleVoice = NULL; // delete instead of putting back into pool
 	_SoundDriver->removeSource(this);
 }
 
@@ -95,7 +112,7 @@ void CSourceXAudio2::commit3DChanges()
 	// todo: reverb? ^^
 }
 
-void CSourceXAudio2::cbVoiceProcessingPassStart()
+void CSourceXAudio2::cbVoiceProcessingPassStart(uint32 BytesRequired)
 {    
 	
 }

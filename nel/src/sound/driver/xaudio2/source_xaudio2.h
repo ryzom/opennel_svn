@@ -88,7 +88,7 @@ public:
 
 	// XAudio2 Callbacks
     // Called just before this voice's processing pass begins.
-    void cbVoiceProcessingPassStart();
+    void cbVoiceProcessingPassStart(uint32 BytesRequired);
     // Called just after this voice's processing pass ends.
     void cbVoiceProcessingPassEnd();
     // Called when this voice has just finished playing a buffer stream

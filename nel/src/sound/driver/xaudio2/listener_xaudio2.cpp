@@ -52,7 +52,19 @@ CListenerXAudio2::CListenerXAudio2(CSoundDriverXAudio2 *soundDriver)
 	HRESULT hr;
 	memset(&_Listener, 0, sizeof(_Listener));
 	memset(&_VoiceSends, 0, sizeof(_VoiceSends));
-	
+
+	_Listener.OrientFront.x = 0.0f;
+	_Listener.OrientFront.y = 0.0f;
+	_Listener.OrientFront.z = 0.0f;
+	_Listener.OrientTop.x = 0.0f;
+	_Listener.OrientTop.y = 0.0f;
+	_Listener.OrientTop.z = 0.0f;
+	_Listener.Position.x = 0.0f;
+	_Listener.Position.y = 0.0f;
+	_Listener.Position.z = 0.0f;
+	_Listener.Velocity.x = 0.0f;
+	_Listener.Velocity.y = 0.0f;
+	_Listener.Velocity.z = 0.0f;	
 
 	XAUDIO2_VOICE_DETAILS voice_details;
 	soundDriver->getMasteringVoice()->GetVoiceDetails(&voice_details);

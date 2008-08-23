@@ -99,10 +99,10 @@ void CSampleVoiceXAudio2::updatePitch()
 	}
 }
 
-void CSampleVoiceXAudio2::OnVoiceProcessingPassStart()
+void CSampleVoiceXAudio2::OnVoiceProcessingPassStart(UINT32 BytesRequired)
 {    
 	CSourceXAudio2 *owner = _Owner;
-	if (owner) owner->cbVoiceProcessingPassStart();
+	if (owner) owner->cbVoiceProcessingPassStart(BytesRequired);
 }
 
 void CSampleVoiceXAudio2::OnVoiceProcessingPassEnd()

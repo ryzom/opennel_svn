@@ -53,6 +53,7 @@ namespace NLSOUND {
 class CSampleVoiceXAudio2 : IXAudio2VoiceCallback
 {
 	friend class CSoundDriverXAudio2;
+	friend class CSourceXAudio2;
 
 protected:
 	// far pointers
@@ -86,7 +87,7 @@ private:
 
 	// XAudio2 Callbacks
     // Called just before this voice's processing pass begins.
-    STDMETHOD_(void, OnVoiceProcessingPassStart) (THIS);
+    STDMETHOD_(void, OnVoiceProcessingPassStart) (THIS_ UINT32 BytesRequired);
     // Called just after this voice's processing pass ends.
     STDMETHOD_(void, OnVoiceProcessingPassEnd) (THIS);
     // Called when this voice has just finished playing a buffer stream
