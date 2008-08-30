@@ -128,7 +128,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(LibraryX3DAudio)"
+				AdditionalDependencies="$(LibraryX3DAudio) $(LibraryLibVorbisFile)"
 				OutputFile="..\..\..\..\lib\$(RootNamespace)_df.dll"
 				ModuleDefinitionFile=".\$(ProjectName).def"
 				ImportLibrary="..\..\..\..\lib\$(RootNamespace)_df.lib"
@@ -423,40 +423,84 @@
 	<References>
 	</References>
 	<Files>
-		<File
-			RelativePath=".\buffer_xaudio2.cpp"
+		<Filter
+			Name="nlsound"
 			>
-		</File>
-		<File
-			RelativePath=".\buffer_xaudio2.h"
+			<File
+				RelativePath=".\music_buffer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\music_buffer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\music_buffer_vorbis.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\music_buffer_vorbis.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="music"
 			>
-		</File>
+			<File
+				RelativePath=".\music_channel_xaudio2.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\music_channel_xaudio2.h"
+				>
+			</File>
+			<File
+				RelativePath=".\music_voice_xaudio2.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\music_voice_xaudio2.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="sfx"
+			>
+			<File
+				RelativePath=".\buffer_xaudio2.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\buffer_xaudio2.h"
+				>
+			</File>
+			<File
+				RelativePath=".\listener_xaudio2.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\listener_xaudio2.h"
+				>
+			</File>
+			<File
+				RelativePath=".\sample_voice_xaudio2.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\sample_voice_xaudio2.h"
+				>
+			</File>
+			<File
+				RelativePath=".\source_xaudio2.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\source_xaudio2.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\driver_xaudio2.def"
-			>
-		</File>
-		<File
-			RelativePath=".\listener_xaudio2.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\listener_xaudio2.h"
-			>
-		</File>
-		<File
-			RelativePath=".\music_voice_xaudio2.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\music_voice_xaudio2.h"
-			>
-		</File>
-		<File
-			RelativePath=".\sample_voice_xaudio2.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\sample_voice_xaudio2.h"
 			>
 		</File>
 		<File
@@ -465,14 +509,6 @@
 		</File>
 		<File
 			RelativePath=".\sound_driver_xaudio2.h"
-			>
-		</File>
-		<File
-			RelativePath=".\source_xaudio2.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\source_xaudio2.h"
 			>
 		</File>
 		<File

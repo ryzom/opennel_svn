@@ -35,6 +35,7 @@
 #include "sample_voice_xaudio2.h"
 #include "listener_xaudio2.h"
 #include "source_xaudio2.h"
+#include "music_channel_xaudio2.h"
 
 // NeL includes
 #include "../sound_driver.h"
@@ -157,6 +158,10 @@ CSoundDriverXAudio2::CSoundDriverXAudio2(bool useEax,
 	_DSPSettings.DstChannelCount = voice_details.InputChannels; // ?! // how many speakers do you have
 	_DSPSettings.pMatrixCoefficients = new FLOAT32[_DSPSettings.SrcChannelCount * _DSPSettings.DstChannelCount];
 
+	// Music Channels
+	_MusicChannels.push_back(new CMusicChannelXAudio2(this));
+	_MusicChannels.push_back(new CMusicChannelXAudio2(this));
+
 	_SoundDriverOk = true;
 }
 
@@ -176,13 +181,21 @@ void CSoundDriverXAudio2::release()
 
 	// Driver (listeners etc todo)
 	// Stop any played music
-	//for(uint i= 0;i<NumMusicChannel;i++)
-	//	stopMusic(i, 0);	
-	// Assure that the remaining sources have released all their channels before closing
-	set<CSourceXAudio2*>::iterator it(_Sources.begin()), end(_Sources.end());
-	for (; it != end; ++it)
 	{
-		(*it)->release(); // WARNING: The sources are NOT DELETED automagically!
+		vector<CMusicChannelXAudio2*>::iterator it(_MusicChannels.begin()), end(_MusicChannels.end());
+		for (; it != end; ++it)
+		{
+			delete *it;
+		}
+		_MusicChannels.clear();
+	}
+	// Assure that the remaining sources have released all their channels before closing
+	{
+		set<CSourceXAudio2*>::iterator it(_Sources.begin()), end(_Sources.end());
+		for (; it != end; ++it)
+		{
+			(*it)->release(); // WARNING: The sources are NOT DELETED automagically!
+		}
 	}
 	// Stop the listener
 	_Listener->release(); // LISTENER AND SOURCES DELETED AT NLSOUND USER LEVEL
@@ -356,8 +369,8 @@ void CSoundDriverXAudio2::displayBench(NLMISC::CLog *log)
  */
 bool CSoundDriverXAudio2::playMusic(uint channel, NLMISC::CIFile &file, uint xFadeTime, bool loop)
 {
-	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return false;
+	_MusicChannels[channel]->play(file, xFadeTime, loop);
+	return true; // todo
 }
 
 /** Play some music asynchronously (.mp3 etc...) (implemented in fmod only)
@@ -376,8 +389,8 @@ bool CSoundDriverXAudio2::playMusic(uint channel, NLMISC::CIFile &file, uint xFa
  */
 bool CSoundDriverXAudio2::playMusicAsync(uint channel, const std::string &path, uint xFadeTime, uint fileOffset, uint fileSize, bool loop)
 {
-	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return false;
+	_MusicChannels[channel]->play(path, xFadeTime, fileOffset, fileSize, loop);
+	return true;
 }
 
 /** Stop the music previously loaded and played (the Memory is also freed)

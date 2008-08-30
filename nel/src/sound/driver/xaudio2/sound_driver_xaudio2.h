@@ -67,6 +67,7 @@ namespace NLSOUND {
 	class IBuffer;
 	class CListenerXAudio2;
 	class CSampleVoiceXAudio2;
+	class CMusicChannelXAudio2;
 
 ////// ***************************************************************************
 /////*
@@ -104,6 +105,8 @@ protected:
 	std::set<CSourceXAudio2 *> _Sources;
 	/// Array with the allocated unused "destroyed" sample voices only
 	std::set<CSampleVoiceXAudio2 *> _SampleVoices;
+	/// Array with the allocated music channels
+	std::vector<CMusicChannelXAudio2 *> _MusicChannels;
 
 	// instances
 	/// If XAudio2 is fully initialized.

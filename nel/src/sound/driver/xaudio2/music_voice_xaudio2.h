@@ -1,7 +1,7 @@
 /**
  * \file music_voice_xaudio2.h
  * \brief CMusicVoiceXAudio2
- * \date 2008-08-21 09:56GMT
+ * \date 2008-08-30 13:32GMT
  * \author Jan Boon (Kaetemi)
  * CMusicVoiceXAudio2
  * 
@@ -38,25 +38,62 @@
 
 // STL includes
 
+namespace NLMISC {
+	class CIFile;
+}
+
 namespace NLSOUND {
+	class IMusicBuffer;
 
 /**
  * \brief CMusicVoiceXAudio2
- * \date 2008-08-21 09:56GMT
+ * \date 2008-08-30 13:32GMT
  * \author Jan Boon (Kaetemi)
  * CMusicVoiceXAudio2
  */
-class CMusicVoiceXAudio2
+class CMusicVoiceXAudio2 : IXAudio2VoiceCallback
 {
 protected:
+	// far pointers
+	CSoundDriverXAudio2 *_SoundDriver;
+	
 	// pointers
-	// ...
+	IMusicBuffer *_MusicBuffer;
+	IXAudio2SourceVoice *_SourceVoice;
 	
 	// instances
-	// ...
+	uint8 _Buffer[16 * 1024]; // no specific reason, lol
+	uint32 _BufferPos; // 0
 public:
 	CMusicVoiceXAudio2();
 	virtual ~CMusicVoiceXAudio2();
+	void init(CSoundDriverXAudio2 *soundDriver);
+	void reset();
+
+	void play(const std::string &streamName, NLMISC::IStream *stream, bool loop);
+
+private:
+	// XAudio2 Callbacks
+    // Called just before this voice's processing pass begins.
+    STDMETHOD_(void, OnVoiceProcessingPassStart) (THIS_ UINT32 BytesRequired);
+    // Called just after this voice's processing pass ends.
+    STDMETHOD_(void, OnVoiceProcessingPassEnd) (THIS);
+    // Called when this voice has just finished playing a buffer stream
+    // (as marked with the XAUDIO2_END_OF_STREAM flag on the last buffer).
+    STDMETHOD_(void, OnStreamEnd) (THIS);
+    // Called when this voice is about to start processing a new buffer.
+    STDMETHOD_(void, OnBufferStart) (THIS_ void* pBufferContext);
+    // Called when this voice has just finished processing a buffer.
+    // The buffer can now be reused or destroyed.
+    STDMETHOD_(void, OnBufferEnd) (THIS_ void* pBufferContext);
+    // Called when this voice has just reached the end position of a loop.
+    STDMETHOD_(void, OnLoopEnd) (THIS_ void* pBufferContext);
+    // Called in the event of a critical error during voice processing,
+    // such as a failing XAPO or an error from the hardware XMA decoder.
+    // The voice may have to be destroyed and re-created to recover from
+    // the error.  The callback arguments report which buffer was being
+    // processed when the error occurred, and its HRESULT code.
+    STDMETHOD_(void, OnVoiceError) (THIS_ void* pBufferContext, HRESULT Error);
 }; /* class CMusicVoiceXAudio2 */
 
 } /* namespace NLSOUND */
