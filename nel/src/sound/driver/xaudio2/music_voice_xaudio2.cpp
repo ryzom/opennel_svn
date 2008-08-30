@@ -79,14 +79,22 @@ void CMusicVoiceXAudio2::play(const std::string &streamName, NLMISC::IStream *st
 	
 	WAVEFORMATEX wfe;
 	wfe.cbSize = 0;
-	wfe.wFormatTag = WAVE_FORMAT_PCM;
+	wfe.wFormatTag = WAVE_FORMAT_PCM; // todo: getFormat();
 	wfe.nChannels = _MusicBuffer->getChannels();
 	wfe.wBitsPerSample = _MusicBuffer->getBitsPerSample();
 	wfe.nSamplesPerSec = _MusicBuffer->getSamplesPerSec();
 	wfe.nBlockAlign = wfe.nChannels * wfe.wBitsPerSample / 8;
 	wfe.nAvgBytesPerSec = wfe.nSamplesPerSec * wfe.nBlockAlign;
 
-	if (FAILED(hr = _SoundDriver->getXAudio2()->CreateSourceVoice(&_SourceVoice, &wfe, 0, XAUDIO2_DEFAULT_FREQ_RATIO, this, NULL, NULL)))
+	XAUDIO2_VOICE_DETAILS voice_details;
+	_SoundDriver->getMasteringVoice()->GetVoiceDetails(&voice_details);
+
+	nlinfo(NLSOUND_XAUDIO2_PREFIX "Creating music voice with %u channels, %u bits per sample, %u samples per sec, "
+		"on mastering voice with %u channels, %u samples per sec", 
+		(uint32)wfe.nChannels, (uint32)wfe.wBitsPerSample, (uint32)wfe.nSamplesPerSec, 
+		(uint32)voice_details.InputChannels, (uint32)voice_details.InputSampleRate);
+
+	if (FAILED(hr = _SoundDriver->getXAudio2()->CreateSourceVoice(&_SourceVoice, &wfe, XAUDIO2_VOICE_NOPITCH, 1.0f, this, NULL, NULL)))
 	{ nlerror(NLSOUND_XAUDIO2_PREFIX "FAILED CreateSourceVoice"); return; }
 
 	_SourceVoice->Start(0);
@@ -126,6 +134,7 @@ void CMusicVoiceXAudio2::OnVoiceProcessingPassStart(UINT32 BytesRequired)
 			else
 			{
 				IMusicBuffer::destroy(_MusicBuffer); _MusicBuffer = NULL;
+				_SourceVoice->Discontinuity();
 			}
 		}
 	}

@@ -61,9 +61,13 @@ protected:
 	// instances
 	OggVorbis_File _OggVorbisFile;
 	bool _Loop;
+	uint32 _StreamSize;
 public:
 	CMusicBufferVorbis(NLMISC::IStream *stream, bool loop);
 	virtual ~CMusicBufferVorbis();
+
+	inline NLMISC::IStream *getStream() { return _Stream; }
+	inline uint32 getStreamSize() { return _StreamSize; }
 
 	virtual uint32 getRequiredBytes();
 	virtual uint32 getNextBytes(uint8 *buffer, uint32 minimum, uint32 maximum);

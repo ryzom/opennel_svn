@@ -120,6 +120,10 @@ __declspec(dllexport) ISoundDriver::TDriver NLSOUND_getDriverType()
 
 // ******************************************************************
 
+//static XAUDIO2_DEBUG_CONFIGURATION NLSOUND_XAUDIO2_DEBUG_CONFIGURATION = {
+//  ~XAUDIO2_LOG_FUNC_CALLS & ~XAUDIO2_LOG_LOCKS & ~XAUDIO2_LOG_MEMORY, 0, true, true, true, true
+//};
+
 CSoundDriverXAudio2::CSoundDriverXAudio2(bool useEax, 
 	ISoundDriver::IStringMapperProvider *stringMapper, bool forceSoftwareBuffer) 
 	: _StringMapper(stringMapper), _XAudio2(NULL), _MasteringVoice(NULL), 
@@ -144,7 +148,10 @@ CSoundDriverXAudio2::CSoundDriverXAudio2(bool useEax,
 	// XAudio2
 	if (FAILED(hr = XAudio2Create(&_XAudio2, flags, XAUDIO2_DEFAULT_PROCESSOR)))
 		{ release(); nlerror(NLSOUND_XAUDIO2_PREFIX "XAudio2 failed to initialize. Please install the latest version of the DirectX End-User Runtimes. HRESULT: %u", (uint32)hr); return; }
-	if (FAILED(hr = _XAudio2->CreateMasteringVoice(&_MasteringVoice)))
+	
+	//_XAudio2->SetDebugConfiguration(&NLSOUND_XAUDIO2_DEBUG_CONFIGURATION);
+
+	if (FAILED(hr = _XAudio2->CreateMasteringVoice(&_MasteringVoice, 0, 44100, 0, 0, NULL)))
 		{ release(); nlerror(NLSOUND_XAUDIO2_PREFIX "FAILED(_XAudio2->CreateMasteringVoice(&_MasteringVoice)) HRESULT: %u", (uint32)hr); return; }
 	
 	// X3DAudio

@@ -46,44 +46,14 @@ namespace NLSOUND {
 
 size_t vorbisReadFunc(void *ptr, size_t size, size_t nmemb, void *datasource)
 {
-	//CIFile *ifile = (CIFile *)datasource;
-	NLMISC::IStream *stream = (NLMISC::IStream *)datasource;
+	CMusicBufferVorbis *music_buffer_vorbis = (CMusicBufferVorbis *)datasource;
+	NLMISC::IStream *stream = music_buffer_vorbis->getStream();
 	nlassert(stream->isReading());
-	//stream->serialBuffer
-	//if (ifile->eof()) { nlwarning("ifile->eof()"); return 0; }
-	try
-	{
-		stream->serialBuffer((uint8 *)ptr, size * nmemb);
-	}
-	catch (EReadError)
-	{
-		for (uint32 i = 0; i < size * nmemb; ++i)
-		{
-			try
-			{
-				stream->serial(((uint8 *)ptr)[i]);
-			}
-			catch (EReadError)
-			{
-				return i;
-			}
-		}
-	}
-	catch (EStreamOverflow)
-	{
-		for (uint32 i = 0; i < size * nmemb; ++i)
-		{
-			try
-			{
-				stream->serial(((uint8 *)ptr)[i]);
-			}
-			catch (EStreamOverflow)
-			{
-				return i;
-			}
-		}
-	}
-	return size * nmemb;
+	uint32 length = size * nmemb;
+	if (length > music_buffer_vorbis->getStreamSize() - stream->getPos())
+		length = music_buffer_vorbis->getStreamSize() - stream->getPos();
+	stream->serialBuffer((uint8 *)ptr, length);
+	return length;
 }
 
 //int vorbisSeekFunc(void *datasource, ogg_int64_t offset, int whence)
@@ -97,22 +67,26 @@ size_t vorbisReadFunc(void *ptr, size_t size, size_t nmemb, void *datasource)
 //	NLMISC::IStream *stream = (NLMISC::IStream *)datasource;
 //}
 
-//long vorbisTellFunc(void *datasource)
-//{
-//	CIFile *ifile = (CIFile *)datasource;
-//	return ifile->getFileSize();
-//}
+long vorbisTellFunc(void *datasource)
+{
+	CMusicBufferVorbis *music_buffer_vorbis = (CMusicBufferVorbis *)datasource;
+	return (long)music_buffer_vorbis->getStreamSize();
+}
 
 static ov_callbacks OV_CALLBACKS_NLMISC_STREAM = {
   (size_t (*)(void *, size_t, size_t, void *))  vorbisReadFunc,
   (int (*)(void *, ogg_int64_t, int))           NULL, //vorbisSeekFunc,
   (int (*)(void *))                             NULL, //vorbisCloseFunc,
-  (long (*)(void *))                            NULL, //vorbisTellFunc
+  (long (*)(void *))                            vorbisTellFunc
 };
 
 CMusicBufferVorbis::CMusicBufferVorbis(NLMISC::IStream *stream, bool loop) : _Stream(stream), _Loop(loop)
 {
-	ov_open_callbacks(stream, &_OggVorbisFile, NULL, 0, OV_CALLBACKS_NLMISC_STREAM);
+	ov_open_callbacks(this, &_OggVorbisFile, NULL, 0, OV_CALLBACKS_NLMISC_STREAM);
+	sint pos = stream->getPos();
+	stream->seek(0, NLMISC::IStream::end);
+	_StreamSize = stream->getPos();
+	stream->seek(pos, NLMISC::IStream::begin);
 }
 
 CMusicBufferVorbis::~CMusicBufferVorbis()
@@ -132,8 +106,12 @@ uint32 CMusicBufferVorbis::getNextBytes(uint8 *buffer, uint32 minimum, uint32 ma
 	uint32 bytes_read = 0;
 	do
 	{
-		// signed 16-bit little-endian samples
-		int br = ov_read(&_OggVorbisFile, (char *)buffer, maximum - bytes_read, 0, getBitsPerSample() == 8 ? 1 : 2, 1, &current_section);
+		// signed 16-bit or unsigned 8-bit little-endian samples
+		int br = ov_read(&_OggVorbisFile, (char *)&buffer[bytes_read], maximum - bytes_read, 
+			0, // Specifies big or little endian byte packing. 0 for little endian, 1 for b ig endian. Typical value is 0.
+			getBitsPerSample() == 8 ? 1 : 2, 
+			getBitsPerSample() == 8 ? 0 : 1, // Signed or unsigned data. 0 for unsigned, 1 for signed. Typically 1.
+			&current_section);
 		if (br <= 0) { nlwarning("ov_read: %i", br); break; }
 		bytes_read += (uint32)br;
 	} while (bytes_read < minimum);
