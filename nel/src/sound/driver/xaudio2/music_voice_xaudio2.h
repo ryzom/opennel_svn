@@ -33,6 +33,7 @@
 #include "stdxaudio2.h"
 
 // Project includes
+#include "music_buffer.h" // ../
 
 // NeL includes
 
@@ -64,6 +65,7 @@ protected:
 	// instances
 	uint8 _Buffer[16 * 1024]; // no specific reason, lol
 	uint32 _BufferPos; // 0
+	float _Gain;
 public:
 	CMusicVoiceXAudio2();
 	virtual ~CMusicVoiceXAudio2();
@@ -71,6 +73,12 @@ public:
 	void reset();
 
 	void play(const std::string &streamName, NLMISC::IStream *stream, bool loop);
+	void stop();
+	void pause();
+	void resume();
+	inline bool isEnded() { if (_MusicBuffer && _SourceVoice) return _MusicBuffer->isMusicEnded(); else return true; }
+	inline float getLength() { if (_MusicBuffer) return _MusicBuffer->getLength(); else return .0f; } // in seconds
+	inline void setVolume(float gain) { _Gain = gain; if (_SourceVoice) { _SourceVoice->SetVolume(gain); } } // 1.0 normal
 
 private:
 	// XAudio2 Callbacks

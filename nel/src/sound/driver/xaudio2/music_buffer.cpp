@@ -55,7 +55,7 @@ IMusicBuffer::~IMusicBuffer()
 	
 }
 
-IMusicBuffer *IMusicBuffer::create(const std::string &streamName, NLMISC::IStream *stream, bool loop)
+IMusicBuffer *IMusicBuffer::createMusicBuffer(const std::string &streamName, NLMISC::IStream *stream, bool loop)
 {
 	vector<std::string> filename;
 	explode<std::string>(streamName, ".", filename, true);

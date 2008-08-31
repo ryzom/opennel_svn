@@ -34,7 +34,6 @@
 // Project includes
 
 // NeL includes
-#include "music_buffer.h" // ../
 #include <nel/misc/file.h>
 
 // STL includes
@@ -45,7 +44,7 @@ using namespace NLMISC;
 namespace NLSOUND {
 
 CMusicVoiceXAudio2::CMusicVoiceXAudio2() 
-: _MusicBuffer(NULL), _SourceVoice(NULL), _BufferPos(0), _SoundDriver(NULL)
+: _MusicBuffer(NULL), _SourceVoice(NULL), _BufferPos(0), _SoundDriver(NULL), _Gain(1.0)
 {
 	// call init before using :)
 }
@@ -64,8 +63,8 @@ void CMusicVoiceXAudio2::init(CSoundDriverXAudio2 *soundDriver)
 void CMusicVoiceXAudio2::reset()
 {
 	if (_SourceVoice) { _SourceVoice->DestroyVoice(); _SourceVoice = NULL; }
-	if (_MusicBuffer) { IMusicBuffer::destroy(_MusicBuffer); _MusicBuffer = NULL; }
-	memset(_Buffer, 0, sizeof(_Buffer));
+	if (_MusicBuffer) { IMusicBuffer::destroyMusicBuffer(_MusicBuffer); _MusicBuffer = NULL; }
+	// memset(_Buffer, 0, sizeof(_Buffer));
 	_BufferPos = 0;
 }
 
@@ -75,7 +74,7 @@ void CMusicVoiceXAudio2::play(const std::string &streamName, NLMISC::IStream *st
 
 	reset();
 
-	_MusicBuffer = IMusicBuffer::create(streamName, stream, loop);
+	_MusicBuffer = IMusicBuffer::createMusicBuffer(streamName, stream, loop);
 	
 	WAVEFORMATEX wfe;
 	wfe.cbSize = 0;
@@ -96,8 +95,24 @@ void CMusicVoiceXAudio2::play(const std::string &streamName, NLMISC::IStream *st
 
 	if (FAILED(hr = _SoundDriver->getXAudio2()->CreateSourceVoice(&_SourceVoice, &wfe, XAUDIO2_VOICE_NOPITCH, 1.0f, this, NULL, NULL)))
 	{ nlerror(NLSOUND_XAUDIO2_PREFIX "FAILED CreateSourceVoice"); return; }
+	_SourceVoice->SetVolume(_Gain);
 
 	_SourceVoice->Start(0);
+}
+
+void CMusicVoiceXAudio2::pause()
+{
+	_SourceVoice->Stop(0);
+}
+
+void CMusicVoiceXAudio2::resume()
+{
+	_SourceVoice->Start(0);
+}
+
+void CMusicVoiceXAudio2::stop()
+{
+	reset();
 }
 
 void CMusicVoiceXAudio2::OnVoiceProcessingPassStart(UINT32 BytesRequired)
@@ -133,7 +148,7 @@ void CMusicVoiceXAudio2::OnVoiceProcessingPassStart(UINT32 BytesRequired)
 			}
 			else
 			{
-				IMusicBuffer::destroy(_MusicBuffer); _MusicBuffer = NULL;
+				IMusicBuffer::destroyMusicBuffer(_MusicBuffer); _MusicBuffer = NULL;
 				_SourceVoice->Discontinuity();
 			}
 		}

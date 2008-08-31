@@ -68,11 +68,13 @@ public:
 	virtual uint16 getChannels() =0;
 	virtual uint32 getSamplesPerSec() =0;
 	virtual uint16 getBitsPerSample() =0;
+	virtual bool isMusicEnded() =0;
+	virtual float getLength() =0; // total time in seconds
 
 	/// create may return NULL if unknown extension
-	static IMusicBuffer *create(const std::string &streamName, NLMISC::IStream *stream, bool loop);
-	inline static void destroy(IMusicBuffer *musicBuffer) { musicBuffer->destroy(); }
-	inline void destroy() { delete this; }
+	static IMusicBuffer *createMusicBuffer(const std::string &streamName, NLMISC::IStream *stream, bool loop);
+	inline static void destroyMusicBuffer(IMusicBuffer *musicBuffer) { musicBuffer->destroyMusicBuffer(); }
+	inline void destroyMusicBuffer() { delete this; }
 }; /* class IMusicBuffer */
 
 } /* namespace NLSOUND */

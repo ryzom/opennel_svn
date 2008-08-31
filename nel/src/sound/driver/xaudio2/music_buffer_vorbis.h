@@ -61,6 +61,7 @@ protected:
 	// instances
 	OggVorbis_File _OggVorbisFile;
 	bool _Loop;
+	bool _IsMusicEnded;
 	uint32 _StreamSize;
 public:
 	CMusicBufferVorbis(NLMISC::IStream *stream, bool loop);
@@ -74,6 +75,8 @@ public:
 	virtual uint16 getChannels();
 	virtual uint32 getSamplesPerSec();
 	virtual uint16 getBitsPerSample();
+	virtual bool isMusicEnded();
+	virtual float getLength();
 }; /* class CMusicBufferVorbis */
 
 } /* namespace NLSOUND */

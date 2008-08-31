@@ -47,7 +47,6 @@ namespace NLSOUND {
  * \author Jan Boon (Kaetemi)
  * CMusicChannelXAudio2
  * channel has 2 voices to fade between
- * todo: one voice with manual calculations
  */
 class CMusicChannelXAudio2
 {
@@ -56,14 +55,35 @@ protected:
 	// ...
 	
 	// instances
+	bool _Fading;
+	//bool _Playing;
+	uint8 _Active; // 0 voice 0, 1 voice 1
+	float _Balance; // balance between two voices 0.0 voice 0, 1.0 voice 1
+	float _Gain; // 0.0 to 1.0
+	float _FadeTime; // total time for fade
 	CMusicVoiceXAudio2 _MusicVoices[2]; // two voices to fade between
-	NLMISC::IStream *_Streams[2];
+	NLMISC::IStream *_Streams[2]; // streams to delete
 public:
 	CMusicChannelXAudio2(CSoundDriverXAudio2 *soundDriver);
 	virtual ~CMusicChannelXAudio2();
 
 	void play(NLMISC::CIFile &file, uint xFadeTime, bool loop);
 	void play(const std::string &path, uint xFadeTime, uint fileOffset, uint fileSize, bool loop);
+	void stop(uint fadeTimeMs);
+	inline void pause() { /*_Playing = false; */_MusicVoices[0].pause(); _MusicVoices[1].pause(); };
+	inline void resume() {/* _Playing = true; */_MusicVoices[0].resume(); _MusicVoices[1].resume(); };
+	inline bool isEnded() { return _MusicVoices[_Active].isEnded(); }
+	inline float getLength() { return _MusicVoices[_Active].getLength(); } // in seconds
+	inline void setVolume(float gain) { _Gain = gain; updateVolume(); } // 1.0 normal
+	inline void setBalance(float balance) { _Balance = balance; updateVolume(); } // 0.0 0, 1.0 1
+	inline uint8 getActive() const { return _Active; }
+	inline uint8 getInactive() const { return _Active ? 0 : 1; }
+
+	void update(float dt);
+
+private:
+	inline void updateVolume() { _MusicVoices[0].setVolume((1.0f - _Balance) * _Gain); _MusicVoices[1].setVolume(_Balance * _Gain); };
+	void switchVoice(uint fadeTime);
 }; /* class CMusicChannelXAudio2 */
 
 } /* namespace NLSOUND */

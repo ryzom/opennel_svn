@@ -38,7 +38,7 @@
 //#include "music_channel_xaudio2.h"
 
 // NeL includes
-// ...
+#include <nel/misc/time_nl.h>
 
 // STL includes
 #include <iostream>
@@ -113,6 +113,8 @@ protected:
 	bool _SoundDriverOk;
 	/// If CoInitializeEx has been called.
 	bool _CoInitOk;
+	/// Last update time.
+	NLMISC::TTime _LastTime;
 
 	// other
 	/// Initialization Handle of X3DAudio

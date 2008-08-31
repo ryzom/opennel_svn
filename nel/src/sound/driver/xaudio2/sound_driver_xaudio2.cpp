@@ -169,6 +169,9 @@ CSoundDriverXAudio2::CSoundDriverXAudio2(bool useEax,
 	_MusicChannels.push_back(new CMusicChannelXAudio2(this));
 	_MusicChannels.push_back(new CMusicChannelXAudio2(this));
 
+	// Time
+	_LastTime = NLMISC::CTime::getLocalTime();
+
 	_SoundDriverOk = true;
 }
 
@@ -307,7 +310,7 @@ uint CSoundDriverXAudio2::countMaxSources()
 {
 	return 0xC0FFEE;
 	// return I_HAVE_NO_FUCKING_IDEA;
-	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
 	return NULL;
 }
 
@@ -334,35 +337,46 @@ bool CSoundDriverXAudio2::readRawBuffer(IBuffer *destbuffer, const std::string &
 /// Commit all the changes made to 3D settings of listener and sources
 void CSoundDriverXAudio2::commit3DChanges()
 {
-	/*nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return;*/
-	std::set<CSourceXAudio2 *>::iterator it(_Sources.begin()), end(_Sources.end());
-	for (; it != end; ++it) (*it)->commit3DChanges();
+	TTime current_time = NLMISC::CTime::getLocalTime();
+	TTime delta_time = current_time - _LastTime;
+	float dtf = ((float)delta_time) / 1000.f;
+	// Sync up sources & listener 3d position.
+	{
+		std::set<CSourceXAudio2 *>::iterator it(_Sources.begin()), end(_Sources.end());
+		for (; it != end; ++it) (*it)->commit3DChanges();
+	}
+	// Update music faders
+	{
+		std::vector<CMusicChannelXAudio2 *>::iterator it(_MusicChannels.begin()), end(_MusicChannels.end());
+		for (; it != end; ++it) (*it)->update(dtf);
+	}
+	_LastTime = current_time;
 }
 
 /// Write information about the driver to the output stream.
 void CSoundDriverXAudio2::writeProfile(std::string& out)
 {
-	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	out = NLSOUND_XAUDIO2_NAME "\n---\nlalalalalaaaa";
 	return;
 }
 
-// Does not create a sound loader
+// Does not create a sound loader .. what does it do then?
 void CSoundDriverXAudio2::startBench()
 {
-	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
 	return;
 }
 
 void CSoundDriverXAudio2::endBench()
 {
-	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
 	return;
 }
 
 void CSoundDriverXAudio2::displayBench(NLMISC::CLog *log)
 {
-	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
 	return;
 }
 
@@ -406,8 +420,7 @@ bool CSoundDriverXAudio2::playMusicAsync(uint channel, const std::string &path, 
  */
 void CSoundDriverXAudio2::stopMusic(uint channel, uint xFadeTime)
 {
-	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return;
+	_MusicChannels[channel]->stop(xFadeTime);
 }
 
 /** Pause the music previously loaded and played (the Memory is not freed)
@@ -415,8 +428,7 @@ void CSoundDriverXAudio2::stopMusic(uint channel, uint xFadeTime)
  */
 void CSoundDriverXAudio2::pauseMusic(uint channel)
 {
-	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return;
+	_MusicChannels[channel]->pause();
 }
 
 /** Resume the music previously paused
@@ -424,8 +436,7 @@ void CSoundDriverXAudio2::pauseMusic(uint channel)
  */
 void CSoundDriverXAudio2::resumeMusic(uint channel)
 {
-	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return;
+	_MusicChannels[channel]->resume();
 }
 
 /** Get the song title. Returns false if the song is not found or the function is not implemented. 
@@ -433,7 +444,7 @@ void CSoundDriverXAudio2::resumeMusic(uint channel)
  */
 bool CSoundDriverXAudio2::getSongTitle(const std::string &filename, std::string &result, uint fileOffset, uint fileSize)
 {
-	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
 	return false;
 }
 
@@ -443,8 +454,7 @@ bool CSoundDriverXAudio2::getSongTitle(const std::string &filename, std::string 
  */
 bool CSoundDriverXAudio2::isMusicEnded(uint channel)
 {
-	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return false;
+	return _MusicChannels[channel]->isEnded();
 }
 
 /** Return the total length (in second) of the music currently played
@@ -452,8 +462,7 @@ bool CSoundDriverXAudio2::isMusicEnded(uint channel)
  */
 float CSoundDriverXAudio2::getMusicLength(uint channel)
 {
-	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return 0.0;
+	return _MusicChannels[channel]->getLength();
 }
 
 /** Set the music volume (if any music played). (volume value inside [0 , 1]) (default: 1)
@@ -462,8 +471,7 @@ float CSoundDriverXAudio2::getMusicLength(uint channel)
  */
 void CSoundDriverXAudio2::setMusicVolume(uint channel, float gain)
 {
-	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return;
+	_MusicChannels[channel]->setVolume(gain);
 }
 
 /// Remove a buffer (should be called by the friend destructor of the buffer class)

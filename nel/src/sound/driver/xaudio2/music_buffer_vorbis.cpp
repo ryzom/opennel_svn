@@ -56,37 +56,63 @@ size_t vorbisReadFunc(void *ptr, size_t size, size_t nmemb, void *datasource)
 	return length;
 }
 
-//int vorbisSeekFunc(void *datasource, ogg_int64_t offset, int whence)
-//{
-//	CIFile *ifile = (CIFile *)datasource;
-//	return 0;
-//}
+int vorbisSeekFunc(void *datasource, ogg_int64_t offset, int whence)
+{
+	if (whence == SEEK_CUR && offset == 0)
+	{
+		// nlwarning("This seek call doesn't do a damn thing, wtf.");
+		return 0; // ooookkaaaaaayyy
+	}
+
+	CMusicBufferVorbis *music_buffer_vorbis = (CMusicBufferVorbis *)datasource;
+
+	NLMISC::IStream::TSeekOrigin origin;
+	switch (whence)
+	{
+	case SEEK_SET:
+		origin = NLMISC::IStream::begin;
+		break;
+	case SEEK_CUR:
+		origin = NLMISC::IStream::current;
+		break;
+	case SEEK_END:
+		origin = NLMISC::IStream::end;
+		break;
+	default:
+		// nlwarning("Seeking to fake origin.");
+		return -1;
+	}
+
+	if (music_buffer_vorbis->getStream()->seek(offset, origin)) return 0;
+	else return -1;
+}
 
 //int vorbisCloseFunc(void *datasource)
 //{
-//	NLMISC::IStream *stream = (NLMISC::IStream *)datasource;
+//	//CMusicBufferVorbis *music_buffer_vorbis = (CMusicBufferVorbis *)datasource;
 //}
 
 long vorbisTellFunc(void *datasource)
 {
 	CMusicBufferVorbis *music_buffer_vorbis = (CMusicBufferVorbis *)datasource;
-	return (long)music_buffer_vorbis->getStreamSize();
+	return (long)music_buffer_vorbis->getStream()->getPos();
 }
 
 static ov_callbacks OV_CALLBACKS_NLMISC_STREAM = {
   (size_t (*)(void *, size_t, size_t, void *))  vorbisReadFunc,
-  (int (*)(void *, ogg_int64_t, int))           NULL, //vorbisSeekFunc,
+  (int (*)(void *, ogg_int64_t, int))          vorbisSeekFunc,
   (int (*)(void *))                             NULL, //vorbisCloseFunc,
   (long (*)(void *))                            vorbisTellFunc
 };
 
-CMusicBufferVorbis::CMusicBufferVorbis(NLMISC::IStream *stream, bool loop) : _Stream(stream), _Loop(loop)
+CMusicBufferVorbis::CMusicBufferVorbis(NLMISC::IStream *stream, bool loop) 
+: _Stream(stream), _Loop(loop), _StreamSize(0), _IsMusicEnded(false)
 {
-	ov_open_callbacks(this, &_OggVorbisFile, NULL, 0, OV_CALLBACKS_NLMISC_STREAM);
 	sint pos = stream->getPos();
 	stream->seek(0, NLMISC::IStream::end);
 	_StreamSize = stream->getPos();
 	stream->seek(pos, NLMISC::IStream::begin);
+	ov_open_callbacks(this, &_OggVorbisFile, NULL, 0, OV_CALLBACKS_NLMISC_STREAM);
 }
 
 CMusicBufferVorbis::~CMusicBufferVorbis()
@@ -99,10 +125,11 @@ uint32 CMusicBufferVorbis::getRequiredBytes()
 	return 0; // no minimum requirement of bytes to buffer out
 }
 
-int current_section = 0; // ???
 uint32 CMusicBufferVorbis::getNextBytes(uint8 *buffer, uint32 minimum, uint32 maximum)
 {
-	nlassert(minimum <= maximum);
+	int current_section = 0; // ???
+	nlassert(!_IsMusicEnded); // shouldn't be called anymore normally when ended
+	nlassert(minimum <= maximum); // can't have this..
 	uint32 bytes_read = 0;
 	do
 	{
@@ -112,8 +139,28 @@ uint32 CMusicBufferVorbis::getNextBytes(uint8 *buffer, uint32 minimum, uint32 ma
 			getBitsPerSample() == 8 ? 1 : 2, 
 			getBitsPerSample() == 8 ? 0 : 1, // Signed or unsigned data. 0 for unsigned, 1 for signed. Typically 1.
 			&current_section);
-		if (br <= 0) { nlwarning("ov_read: %i", br); break; }
-		bytes_read += (uint32)br;
+		// nlinfo("current_section: %i", current_section);
+		if (br <= 0) 
+		{ 
+			if (br == 0)
+			{
+				if (_Loop)
+				{
+					ov_pcm_seek(&_OggVorbisFile, 0);
+					//_Stream->seek(0, NLMISC::IStream::begin);
+				}
+				else 
+				{
+					_IsMusicEnded = true;
+					break; 
+				}
+			}
+			else
+			{
+				nlwarning("ov_read: %i", br);
+			}
+		}
+		else bytes_read += (uint32)br;
 	} while (bytes_read < minimum);
 	return bytes_read;
 }
@@ -133,6 +180,16 @@ uint32 CMusicBufferVorbis::getSamplesPerSec()
 uint16 CMusicBufferVorbis::getBitsPerSample()
 {
 	return 16;
+}
+
+bool CMusicBufferVorbis::isMusicEnded()
+{
+	return _IsMusicEnded;
+}
+
+float CMusicBufferVorbis::getLength()
+{
+	return (float)ov_time_total(&_OggVorbisFile, -1);
 }
 
 } /* namespace NLSOUND */
