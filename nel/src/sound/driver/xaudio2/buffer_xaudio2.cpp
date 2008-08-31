@@ -111,7 +111,7 @@ void CBufferXAudio2::setFormat(TSampleFormat format, uint freq)
 /// Set the buffer size and fill the buffer.  Return true if ok. Call setFormat() first.
 bool CBufferXAudio2::fillBuffer(void *src, uint32 bufsize)
 {
-	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
 	return false;
 }
 
@@ -124,8 +124,29 @@ uint32 CBufferXAudio2::getSize() const
 /// Return the duration (in ms) of the sample in the buffer
 float CBufferXAudio2::getDuration() const
 {
-	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return .0f;
+	// from NLSOUND DSound Driver, Copyright (C)  2001 Nevrax Ltd.
+
+    float frames = (float) _Size;
+
+    switch (_Format) 
+	{
+    case Mono8:
+        break;
+    case Mono16ADPCM:
+        frames *= 2.0f;
+        break;
+    case Mono16:
+        frames /= 2.0f;
+        break;
+    case Stereo8:
+        frames /= 2.0f;
+        break;
+    case Stereo16:
+        frames /= 4.0f;
+        break;
+    }
+
+    return 1000.0f * frames / (float) _Freq;
 }
 
 /// Return true if the buffer is stereo, false if mono
@@ -185,8 +206,29 @@ bool CBufferXAudio2::isBufferLoaded()
  */
 uint32 CBufferXAudio2::getBufferADPCMEncoded(std::vector<uint8> &result)
 {
-	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return 0;
+	// from NLSOUND DSound Driver, Copyright (C)  2001 Nevrax Ltd.
+	// from NLSOUND FMod Driver, Copyright (C)  2001 Nevrax Ltd.
+
+	// Prepare empty result
+	result.clear();
+
+	// Verify Buffer
+	if (!_Data) return 0;
+	if (_Format != Mono16) return 0;
+
+	// Allocate ADPCM dest
+	uint32 nbSample = _Size / 2;
+	nbSample &= 0xfffffffe;
+	result.resize(nbSample / 2);
+
+	// Encode
+	TADPCMState	state;
+	state.PreviousSample = 0;
+	state.StepIndex = 0;
+	encodeADPCM((sint16*)_Data, &result[0], nbSample, state);
+
+	// Return result
+	return nbSample;
 }
 
 /** Unoptimized utility function designed to build Mono 16 bits encoded sample bank file.
@@ -194,8 +236,43 @@ uint32 CBufferXAudio2::getBufferADPCMEncoded(std::vector<uint8> &result)
  */
 uint32 CBufferXAudio2::getBufferMono16(std::vector<sint16> &result)
 {
-	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return 0;
+	// from NLSOUND DSound Driver, Copyright (C)  2001 Nevrax Ltd.
+
+	result.clear();
+
+	if (!_Data) return 0;
+
+	if (_Format == Mono16)
+	{
+		uint nbSample = _Size / 2;
+		nbSample &= 0xfffffffe;
+
+		result.reserve(nbSample);
+		result.insert(result.begin(), (sint16*)_Data, ((sint16*)_Data) + nbSample);
+
+		return nbSample;
+	}
+	else if (_Format == Stereo16)
+	{
+		uint nbSample = _Size/4;
+		nbSample &= 0xfffffffe;
+
+		struct TFrame
+		{
+			sint16	Channel1;
+			sint16	Channel2;
+		};
+		result.reserve(nbSample);
+		TFrame *frame = (TFrame *)_Data;
+		for (uint i=0; i<nbSample; ++i)
+		{
+			result[i] = (sint16)(((sint32)frame->Channel1 + (sint32)frame->Channel2) / 2);
+		}
+
+		return nbSample;
+	}
+	else
+		return 0;
 }
 
 } /* namespace NLSOUND */

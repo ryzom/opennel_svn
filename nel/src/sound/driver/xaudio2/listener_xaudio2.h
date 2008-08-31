@@ -64,6 +64,12 @@ protected:
 	bool _ListenerOk; //R
 	/// Reference to the Submix Voice
 	XAUDIO2_VOICE_SENDS _VoiceSends;
+
+	// user vars
+	/// Doppler scaler, set by user
+	float _DopplerScaler;
+	/// Distance/Roloff scaler
+	float _DistanceScaler;
 public:
 	CListenerXAudio2(CSoundDriverXAudio2 *soundDriver);
 	virtual ~CListenerXAudio2();
@@ -73,6 +79,8 @@ public:
 	inline X3DAUDIO_LISTENER *getListener() { return &_Listener; }
 	inline IXAudio2SubmixVoice *getSubmixVoice() { return _SubmixVoice; }
 	inline XAUDIO2_VOICE_SENDS *getVoiceSends() { return &_VoiceSends; }
+	inline float getDopplerScaler() { return _DopplerScaler; }
+	inline float getDistanceScaler() { return _DistanceScaler; }
 
 	/// \name Listener properties
 	//@{

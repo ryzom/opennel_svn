@@ -45,7 +45,7 @@ using namespace NLMISC;
 namespace NLSOUND {
 
 CListenerXAudio2::CListenerXAudio2(CSoundDriverXAudio2 *soundDriver)
-: _SubmixVoice(NULL), _ListenerOk(false), _SoundDriver(soundDriver)
+: _SubmixVoice(NULL), _ListenerOk(false), _SoundDriver(soundDriver), _DopplerScaler(1.0f), _DistanceScaler(1.0f)
 {
 	nlwarning("Initializing CListenerXAudio2");
 
@@ -57,14 +57,14 @@ CListenerXAudio2::CListenerXAudio2(CSoundDriverXAudio2 *soundDriver)
 	_Listener.OrientFront.y = 0.0f;
 	_Listener.OrientFront.z = 0.0f;
 	_Listener.OrientTop.x = 0.0f;
-	_Listener.OrientTop.y = 0.0f;
+	_Listener.OrientTop.y = 1.0f;
 	_Listener.OrientTop.z = 0.0f;
 	_Listener.Position.x = 0.0f;
 	_Listener.Position.y = 0.0f;
 	_Listener.Position.z = 0.0f;
 	_Listener.Velocity.x = 0.0f;
 	_Listener.Velocity.y = 0.0f;
-	_Listener.Velocity.z = 0.0f;	
+	_Listener.Velocity.z = 0.0f;
 
 	XAUDIO2_VOICE_DETAILS voice_details;
 	soundDriver->getMasteringVoice()->GetVoiceDetails(&voice_details);
@@ -169,17 +169,13 @@ float CListenerXAudio2::getGain() const
 /// Set the doppler factor (default: 1) to exaggerate or not the doppler effect
 void CListenerXAudio2::setDopplerFactor(float f)
 {
-	// there's a setting for this in xaudio2 or x3daudio ... somewhere
-	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return;
-	//_SubmixVoice->set
+	_DopplerScaler = f;
 }
 
 /// Set the rolloff factor (default: 1) to scale the distance attenuation effect
 void CListenerXAudio2::setRolloffFactor(float f)
 {
-	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return;
+	_DistanceScaler = f;
 }
 
 /// Set DSPROPERTY_EAXLISTENER_ENVIRONMENT and DSPROPERTY_EAXLISTENER_ENVIRONMENTSIZE if EAX available (see EAX listener properties)

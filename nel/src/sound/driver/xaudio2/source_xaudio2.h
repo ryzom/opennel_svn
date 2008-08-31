@@ -57,13 +57,14 @@ protected:
 	// far pointers
 	CSoundDriverXAudio2 *_SoundDriver; // not changed at runtime
 	CBufferXAudio2 *_NextBuffer; // MT
+	CBufferXAudio2 *_HasBuffer; // MT
 
 	// pointers
 	CSampleVoiceXAudio2 *_SampleVoice; // MT
 	
 	// instances // dont need 3dchanged, remove
 	/*bool _SourceOk; */ //bool _3DChanged;
-	bool _HasBuffer; // MT
+	// bool _HasBuffer; // MT
 	NLMISC::CMutex _Mutex;/*, _IsPaused*/;
 	float _Doppler;
 	X3DAUDIO_EMITTER _Emitter;
@@ -71,8 +72,9 @@ protected:
 	// user vars
 	float _Pitch;
 	bool _IsPlaying;
-	bool _IsLooping;
+	bool _IsLooping; // MT
 	NLMISC::CVector _Pos; // getPos sucks
+	bool _Relative; // sources relative to listener position (listener + source = actual source location)
 private:
 	// call only when entered mutex!
 	void startNextBuffer(); // MT

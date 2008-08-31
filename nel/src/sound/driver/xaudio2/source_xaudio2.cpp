@@ -49,8 +49,8 @@ using namespace NLMISC;
 namespace NLSOUND {
 
 CSourceXAudio2::CSourceXAudio2(CSoundDriverXAudio2 *soundDriver) 
-: _SoundDriver(soundDriver), _SampleVoice(NULL), _NextBuffer(NULL), _HasBuffer(false), 
-_Doppler(1.0), _Pitch(1.0), _IsPlaying(false), _IsLooping(false)
+: _SoundDriver(soundDriver), _SampleVoice(NULL), _NextBuffer(NULL), _HasBuffer(NULL), 
+_Doppler(1.0), _Pitch(1.0), _IsPlaying(false), _IsLooping(false), _Relative(false)
 {
 	nlwarning("Inititializing CSourceXAudio2");
 
@@ -92,10 +92,18 @@ void CSourceXAudio2::release() // called by driver :)
 /// Commit all the changes made to 3D settings of listener and sources
 void CSourceXAudio2::commit3DChanges()
 {
+	// todo: stereo buffers go directly to the speakers
+
 	if (_HasBuffer && _IsPlaying/* && _SampleVoice->getBuffer()*/)
 	{
+		_Emitter.DopplerScaler = _SoundDriver->getListener()->getDopplerScaler();
+		_Emitter.CurveDistanceScaler = _SoundDriver->getListener()->getDistanceScaler();
+
 		X3DAudioCalculate(_SoundDriver->getX3DAudio(), 
-			_SoundDriver->getListener()->getListener(), &_Emitter, 
+			_Relative 
+				? _SoundDriver->getEmptyListener() // position is relative to listener (we use 0pos listener)
+				: _SoundDriver->getListener()->getListener(), // position is absolute
+			&_Emitter, 
 			X3DAUDIO_CALCULATE_MATRIX | X3DAUDIO_CALCULATE_DOPPLER, 
 			_SoundDriver->getDSPSettings());
 		_SampleVoice->getSourceVoice()->SetOutputMatrix(
@@ -143,7 +151,22 @@ void CSourceXAudio2::cbBufferEnd(CBufferXAudio2 *pBufferContext)
 	// if need to change format, call destroy with stop set to false !!!
 	_Mutex.enter(); // _NextBuffer, startNextBuffer, _HasBuffer
 	if (_NextBuffer) startNextBuffer();
-	else _HasBuffer = false;
+	else if (_IsLooping && pBufferContext == _HasBuffer) // loop was called after setting buffer without looping, resume buffer
+	{
+		XAUDIO2_BUFFER xbuffer;
+		xbuffer.AudioBytes = _HasBuffer->getSize();
+		xbuffer.Flags = 0;
+		xbuffer.LoopBegin = 0;
+		xbuffer.LoopCount =  XAUDIO2_LOOP_INFINITE;
+		xbuffer.LoopLength = 0;
+		xbuffer.pAudioData = _HasBuffer->getData();
+		xbuffer.pContext = _HasBuffer;
+		xbuffer.PlayBegin = 0;
+		xbuffer.PlayLength = 0;
+
+		_SampleVoice->getSourceVoice()->SubmitSourceBuffer(&xbuffer);
+	}
+	else _HasBuffer = NULL;
 	_Mutex.leave();
 }
 
@@ -173,7 +196,7 @@ void CSourceXAudio2::setStaticBuffer(IBuffer *buffer)
 	_NextBuffer = (CBufferXAudio2 *)buffer;
 	if (!_HasBuffer) 
 	{
-		_HasBuffer = true;
+		_HasBuffer = _NextBuffer;
 		startNextBuffer();
 	}
 	_Mutex.leave();
@@ -185,6 +208,8 @@ void CSourceXAudio2::setStaticBuffer(IBuffer *buffer)
 
 void CSourceXAudio2::startNextBuffer() // note: called from callback !!! -- don't flush buffer & must call from mutexed!
 {
+	if (!_NextBuffer) return;
+
 	if (_SampleVoice)
 	{
 		if (_SampleVoice->getFormat() != _NextBuffer->getFormat())
@@ -199,14 +224,11 @@ void CSourceXAudio2::startNextBuffer() // note: called from callback !!! -- don'
 	}
 	else _SampleVoice = _SoundDriver->createSampleVoice(this, _NextBuffer->getFormat());
 
-// exitloop
-	// todo :: use XAUDIO2_DEVICE_DETAILS maybe :)
-
 	XAUDIO2_BUFFER xbuffer;
 	xbuffer.AudioBytes = _NextBuffer->getSize();
 	xbuffer.Flags = 0;
 	xbuffer.LoopBegin = 0;
-	xbuffer.LoopCount = XAUDIO2_LOOP_INFINITE; // todo: handle looping etc in sample_voice_xaudio2 ... _IsLooping ? XAUDIO2_LOOP_INFINITE : 0;
+	xbuffer.LoopCount = _IsLooping ? XAUDIO2_LOOP_INFINITE : 0;
 	xbuffer.LoopLength = 0;
 	xbuffer.pAudioData = _NextBuffer->getData();
 	xbuffer.pContext = _NextBuffer; // neat :)
@@ -222,8 +244,7 @@ void CSourceXAudio2::startNextBuffer() // note: called from callback !!! -- don'
 /// Return the buffer, or NULL if streaming is used.
 IBuffer *CSourceXAudio2::getStaticBuffer()
 {
-	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return 0; // current or next buffer??
+	return _HasBuffer;
 }
 
 ///** Set the sound loader that will be used to stream in the data to play
@@ -236,11 +257,25 @@ IBuffer *CSourceXAudio2::getStaticBuffer()
 
 /// \name Playback control
 //@{
-/// Set looping on/off for future playbacks (default: off)
+/// Set looping on/off for future playbacks (default: off) // doesn't seem to be future playbacks though >_>
 void CSourceXAudio2::setLooping(bool l)
 {
-	// todo: check if fmod also assumes "future playbacks"
-	_IsLooping = l;
+	if (_IsLooping != l)
+	{
+		if (l)
+		{
+			_Mutex.enter();
+			_IsLooping = true;
+			_Mutex.leave();
+		}
+		else
+		{
+			_Mutex.enter();
+			_IsLooping = false;
+			_Mutex.leave();
+			_SampleVoice->getSourceVoice()->ExitLoop();
+		}
+	}
 }
 
 /// Return the looping state
@@ -256,24 +291,21 @@ bool CSourceXAudio2::play()
 {
 	_IsPlaying = true;
 	commit3DChanges(); // ensure awesomeness :)
-	return SUCCEEDED(_SampleVoice->getSourceVoice()->Start(0)); 
-	// TODO: check if sample loaded or something
-	// return true;
-	/*nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return false;*/
+	return SUCCEEDED(_SampleVoice->getSourceVoice()->Start(0));
 }
 
 /// Stop playing
 void CSourceXAudio2::stop()
 {
 	_IsPlaying = false;
+	_Mutex.enter();
+	_HasBuffer = NULL;
+	_NextBuffer = NULL;
+	_Mutex.leave();
 	if (FAILED(_SampleVoice->getSourceVoice()->Stop(0))) 
 		nlwarning(NLSOUND_XAUDIO2_PREFIX "FAILED Stop");
 	if (FAILED(_SampleVoice->getSourceVoice()->FlushSourceBuffers())) 
 		nlwarning(NLSOUND_XAUDIO2_PREFIX "FAILED FlushSourceBuffers");
-	// some more stuff too yeah
-	//nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	//return;
 }
 
 /// Pause. Call play() to resume.
@@ -281,31 +313,24 @@ void CSourceXAudio2::pause()
 {
 	if (FAILED(_SampleVoice->getSourceVoice()->Stop(0))) 
 		nlwarning(NLSOUND_XAUDIO2_PREFIX "FAILED Stop"); // yep, that's all there is to it =)
-	//nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	//return;
 }
 
 /// Return the playing state
 bool CSourceXAudio2::isPlaying() const
 {
 	return _IsPlaying && _HasBuffer;// && !_IsPaused;
-	//nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	//return false;
 }
 
 /// Return true if playing is finished or stop() has been called.
 bool CSourceXAudio2::isStopped() const
 {
 	return !_IsPlaying || !_HasBuffer;
-	//nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	//return false;
 }
 
 /// Update the source (e.g. continue to stream the data in)
 bool CSourceXAudio2::update()
 {
-	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return false;
+	return true; // nothing to do here :)
 }
 
 /// Returns the number of milliseconds the source has been playing
@@ -352,16 +377,12 @@ void CSourceXAudio2::getVelocity(NLMISC::CVector& vel) const
 void CSourceXAudio2::setDirection(const NLMISC::CVector& dir)
 {
 	NLSOUND_XAUDIO2_X3DAUDIO_VECTOR_FROM_VECTOR(_Emitter.OrientFront, dir);
-	//nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	//return; // direction? :x
 }
 
 /// Get the direction vector
 void CSourceXAudio2::getDirection(NLMISC::CVector& dir) const
 {
 	NLSOUND_XAUDIO2_VECTOR_FROM_X3DAUDIO_VECTOR(dir, _Emitter.OrientFront);
-	//nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	//return;
 }
 
 /** Set the gain (volume value inside [0 , 1]). (default: 1)
@@ -401,15 +422,13 @@ float CSourceXAudio2::getPitch() const
 /// Set the source relative mode. If true, positions are interpreted relative to the listener position
 void CSourceXAudio2::setSourceRelativeMode(bool mode)
 {
-	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented"); // else use listener at pos 0
-	return;
+	_Relative = mode;
 }
 
 /// Get the source relative mode
 bool CSourceXAudio2::getSourceRelativeMode() const
 {
-	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return false;
+	return _Relative;
 }
 
 /// Set the min and max distances (default: 1, MAX_FLOAT) (3D mode only)

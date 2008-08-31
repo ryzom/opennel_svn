@@ -134,6 +134,20 @@ CSoundDriverXAudio2::CSoundDriverXAudio2(bool useEax,
 
 	memset(&_X3DAudioHandle, 0, sizeof(_X3DAudioHandle));
 	memset(&_DSPSettings, 0, sizeof(_DSPSettings));
+	memset(&_EmptyListener, 0, sizeof(_EmptyListener));
+
+	_EmptyListener.OrientFront.x = 0.0f;
+	_EmptyListener.OrientFront.y = 0.0f;
+	_EmptyListener.OrientFront.z = 1.0f;
+	_EmptyListener.OrientTop.x = 0.0f;
+	_EmptyListener.OrientTop.y = 1.0f;
+	_EmptyListener.OrientTop.z = 0.0f;
+	_EmptyListener.Position.x = 0.0f;
+	_EmptyListener.Position.y = 0.0f;
+	_EmptyListener.Position.z = 0.0f;
+	_EmptyListener.Velocity.x = 0.0f;
+	_EmptyListener.Velocity.y = 0.0f;
+	_EmptyListener.Velocity.z = 0.0f;
 
 	// Windows
 #ifdef NL_OS_WINDOWS // CoInitializeEx not on xbox, lol

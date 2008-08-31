@@ -115,6 +115,8 @@ protected:
 	bool _CoInitOk;
 	/// Last update time.
 	NLMISC::TTime _LastTime;
+	/// Empty 3D Listener
+	X3DAUDIO_LISTENER _EmptyListener;
 
 	// other
 	/// Initialization Handle of X3DAudio
@@ -132,6 +134,7 @@ public:
 	inline IStringMapperProvider *getStringMapper() { return _StringMapper; }
 	inline X3DAUDIO_HANDLE &getX3DAudio() { return _X3DAudioHandle; }
 	inline X3DAUDIO_DSP_SETTINGS *getDSPSettings() { return &_DSPSettings; }
+	inline X3DAUDIO_LISTENER *getEmptyListener() { return &_EmptyListener; }
 
 	CSampleVoiceXAudio2 *createSampleVoice(CSourceXAudio2 *owner, TSampleFormat format); // checks pool
 	void destroySampleVoice(CSampleVoiceXAudio2 *sampleVoice, bool stop); // doesn't really destroy
