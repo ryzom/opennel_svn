@@ -60,7 +60,7 @@ protected:
 	CBufferXAudio2 *_HasBuffer; // MT
 
 	// pointers
-	CSampleVoiceXAudio2 *_SampleVoice; // MT
+	CSampleVoiceXAudio2 *_SampleVoice; // MT, once set never becomes NULL until destruct of class
 	
 	// instances // dont need 3dchanged, remove
 	/*bool _SourceOk; */ //bool _3DChanged;
@@ -70,7 +70,10 @@ protected:
 	X3DAUDIO_EMITTER _Emitter;
 
 	// user vars
+	float _MinDistance;
+	float _MaxDistance;
 	float _Pitch;
+	float _Gain;
 	bool _IsPlaying;
 	bool _IsLooping; // MT
 	NLMISC::CVector _Pos; // getPos sucks

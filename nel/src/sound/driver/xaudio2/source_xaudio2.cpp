@@ -31,8 +31,7 @@
 /*
  * TODO:
  *  - Curve
- *    - setMinMaxDistances
- *    - getMinMaxDistances
+ *    - _MaxDistance (silence sound after max distance, not required really)
  *  - Cone
  *    - setCone
  *    - getCone
@@ -58,6 +57,7 @@
 // STL includes
 #include <cfloat>
 #include <algorithm>
+#include <limits>
 
 using namespace std;
 using namespace NLMISC;
@@ -66,7 +66,8 @@ namespace NLSOUND {
 
 CSourceXAudio2::CSourceXAudio2(CSoundDriverXAudio2 *soundDriver) 
 : _SoundDriver(soundDriver), _SampleVoice(NULL), _NextBuffer(NULL), _HasBuffer(NULL), 
-_Doppler(1.0), _Pitch(1.0), _IsPlaying(false), _IsLooping(false), _Relative(false)
+_Doppler(1.0f), _Pitch(1.0f), _IsPlaying(false), _IsLooping(false), _Relative(false), _Gain(1.0f), 
+_MinDistance(1.0f), _MaxDistance(numeric_limits<float>::max())
 {
 	nlwarning("Inititializing CSourceXAudio2");
 
@@ -74,9 +75,9 @@ _Doppler(1.0), _Pitch(1.0), _IsPlaying(false), _IsLooping(false), _Relative(fals
 
 	_Emitter.OrientFront.x = 0.0f;
 	_Emitter.OrientFront.y = 0.0f;
-	_Emitter.OrientFront.z = 0.0f;
+	_Emitter.OrientFront.z = 1.0f;
 	_Emitter.OrientTop.x = 0.0f;
-	_Emitter.OrientTop.y = 0.0f;
+	_Emitter.OrientTop.y = 1.0f;
 	_Emitter.OrientTop.z = 0.0f;
 	_Emitter.Position.x = 0.0f;
 	_Emitter.Position.y = 0.0f;
@@ -101,39 +102,48 @@ CSourceXAudio2::~CSourceXAudio2()
 
 void CSourceXAudio2::release() // called by driver :)
 {
-	delete _SampleVoice; _SampleVoice = NULL; // delete instead of putting back into pool
+	if (_SampleVoice)
+	{
+		_SampleVoice->setOwner(NULL); // make sure no more callbacks arrive here while releasing
+		delete _SampleVoice; _SampleVoice = NULL; // delete instead of putting back into pool
+	}
 	_SoundDriver->removeSource(this);
 }
 
 /// Commit all the changes made to 3D settings of listener and sources
 void CSourceXAudio2::commit3DChanges()
 {
-	// todo: stereo buffers go directly to the speakers
-
 	if (_HasBuffer && _IsPlaying/* && _SampleVoice->getBuffer()*/)
 	{
-		_Emitter.DopplerScaler = _SoundDriver->getListener()->getDopplerScaler();
-		_Emitter.CurveDistanceScaler = _SoundDriver->getListener()->getDistanceScaler();
+		nlassert(_SampleVoice);
+		
+		// Only mono buffers get 3d sound, stereo buffers go directly to the speakers.
+		if (_SampleVoice->getFormat() != Stereo16 && _SampleVoice->getFormat() != Stereo8)
+		{
+			_Emitter.DopplerScaler = _SoundDriver->getListener()->getDopplerScaler();
+			_Emitter.CurveDistanceScaler = _MinDistance * _SoundDriver->getListener()->getDistanceScaler(); // might be just _MinDistance, not sure, compare with fmod driver
+			// _MaxDistance not implemented (basically cuts off sound beyond maxdistance)
 
-		X3DAudioCalculate(_SoundDriver->getX3DAudio(), 
-			_Relative 
-				? _SoundDriver->getEmptyListener() // position is relative to listener (we use 0pos listener)
-				: _SoundDriver->getListener()->getListener(), // position is absolute
-			&_Emitter, 
-			X3DAUDIO_CALCULATE_MATRIX | X3DAUDIO_CALCULATE_DOPPLER, 
-			_SoundDriver->getDSPSettings());
-		_SampleVoice->getSourceVoice()->SetOutputMatrix(
-			// _SoundDriver->getMasteringVoice(),
-			_SoundDriver->getListener()->getSubmixVoice(), 
-			_SoundDriver->getDSPSettings()->SrcChannelCount, 
-			_SoundDriver->getDSPSettings()->DstChannelCount, 
-			_SoundDriver->getDSPSettings()->pMatrixCoefficients);
-		// nldebug("left: %f, right %f", _SoundDriver->getDSPSettings()->pMatrixCoefficients[0], _SoundDriver->getDSPSettings()->pMatrixCoefficients[1]);
-		_Doppler = _SoundDriver->getDSPSettings()->DopplerFactor;
-		_SampleVoice->setPitch(_Doppler * _Pitch);
+			X3DAudioCalculate(_SoundDriver->getX3DAudio(), 
+				_Relative 
+					? _SoundDriver->getEmptyListener() // position is relative to listener (we use 0pos listener)
+					: _SoundDriver->getListener()->getListener(), // position is absolute
+				&_Emitter, 
+				X3DAUDIO_CALCULATE_MATRIX | X3DAUDIO_CALCULATE_DOPPLER, 
+				_SoundDriver->getDSPSettings());
+			_SampleVoice->getSourceVoice()->SetOutputMatrix(
+				// _SoundDriver->getMasteringVoice(),
+				_SoundDriver->getListener()->getSubmixVoice(), 
+				_SoundDriver->getDSPSettings()->SrcChannelCount, 
+				_SoundDriver->getDSPSettings()->DstChannelCount, 
+				_SoundDriver->getDSPSettings()->pMatrixCoefficients);
+			// nldebug("left: %f, right %f", _SoundDriver->getDSPSettings()->pMatrixCoefficients[0], _SoundDriver->getDSPSettings()->pMatrixCoefficients[1]);
+			_Doppler = _SoundDriver->getDSPSettings()->DopplerFactor;
+			_SampleVoice->setPitch(_Doppler * _Pitch);
+		}
 	}
 
-	// todo: reverb? ^^
+	// todo: reverb & delay? ^^
 }
 
 void CSourceXAudio2::cbVoiceProcessingPassStart(uint32 BytesRequired)
@@ -180,7 +190,7 @@ void CSourceXAudio2::cbBufferEnd(CBufferXAudio2 *pBufferContext)
 		xbuffer.PlayBegin = 0;
 		xbuffer.PlayLength = 0;
 
-		_SampleVoice->getSourceVoice()->SubmitSourceBuffer(&xbuffer);
+		if (_SampleVoice) _SampleVoice->getSourceVoice()->SubmitSourceBuffer(&xbuffer);
 	}
 	else _HasBuffer = NULL;
 	_Mutex.leave();
@@ -226,19 +236,28 @@ void CSourceXAudio2::startNextBuffer() // note: called from callback !!! -- don'
 {
 	if (!_NextBuffer) return;
 
+	bool change = false;
 	if (_SampleVoice)
 	{
 		if (_SampleVoice->getFormat() != _NextBuffer->getFormat())
 		{
 			// remove this debug info, or glitches may happen on sound
 			nlwarning(NLSOUND_XAUDIO2_PREFIX "_SampleVoice->getFormat() != _NextBuffer->getFormat()");
-			_SoundDriver->destroySampleVoice(_SampleVoice, false);
-			_SampleVoice = _SoundDriver->createSampleVoice(this, _NextBuffer->getFormat());
-			// check if isplaying !! 
-			_SampleVoice->getSourceVoice()->Start(0);
+			_SoundDriver->destroySampleVoice(_SampleVoice, false); // don't set to null!
+			change = true;
 		}
 	}
-	else _SampleVoice = _SoundDriver->createSampleVoice(this, _NextBuffer->getFormat());
+	else { change = true; }
+	if (change)
+	{
+		// update values to new voice
+		_SampleVoice = _SoundDriver->createSampleVoice(this, _NextBuffer->getFormat());
+		_SampleVoice->getSourceVoice()->SetVolume(_Gain);
+		if (_SampleVoice->getFormat() != Stereo16 && _SampleVoice->getFormat() != Stereo8)
+			_SampleVoice->setPitch(_Pitch * _Doppler);
+		else _SampleVoice->setPitch(_Pitch);
+		if (_IsPlaying) _SampleVoice->getSourceVoice()->Start(0);
+	}
 
 	XAUDIO2_BUFFER xbuffer;
 	xbuffer.AudioBytes = _NextBuffer->getSize();
@@ -304,31 +323,38 @@ bool CSourceXAudio2::getLooping() const
  *	This method can return false if the sample for this sound is unloaded.
  */
 bool CSourceXAudio2::play()
-{
-	_IsPlaying = true;
-	commit3DChanges(); // ensure awesomeness :)
-	return SUCCEEDED(_SampleVoice->getSourceVoice()->Start(0));
+{	
+	if (_SampleVoice)
+	{
+		_IsPlaying = true;
+		commit3DChanges(); // ensure awesomeness :)
+		return SUCCEEDED(_SampleVoice->getSourceVoice()->Start(0));
+	}
+	return false;
 }
 
 /// Stop playing
 void CSourceXAudio2::stop()
 {
 	_IsPlaying = false;
-	_Mutex.enter();
-	_HasBuffer = NULL;
-	_NextBuffer = NULL;
-	_Mutex.leave();
-	if (FAILED(_SampleVoice->getSourceVoice()->Stop(0))) 
-		nlwarning(NLSOUND_XAUDIO2_PREFIX "FAILED Stop");
-	if (FAILED(_SampleVoice->getSourceVoice()->FlushSourceBuffers())) 
-		nlwarning(NLSOUND_XAUDIO2_PREFIX "FAILED FlushSourceBuffers");
+	if (_SampleVoice)
+	{
+		_Mutex.enter();
+		_HasBuffer = NULL;
+		_NextBuffer = NULL;
+		_Mutex.leave();
+		if (FAILED(_SampleVoice->getSourceVoice()->Stop(0))) 
+			nlwarning(NLSOUND_XAUDIO2_PREFIX "FAILED Stop");
+		if (FAILED(_SampleVoice->getSourceVoice()->FlushSourceBuffers())) 
+			nlwarning(NLSOUND_XAUDIO2_PREFIX "FAILED FlushSourceBuffers");
+	}
 }
 
 /// Pause. Call play() to resume.
 void CSourceXAudio2::pause()
 {
 	if (FAILED(_SampleVoice->getSourceVoice()->Stop(0))) 
-		nlwarning(NLSOUND_XAUDIO2_PREFIX "FAILED Stop"); // yep, that's all there is to it =)
+		nlwarning(NLSOUND_XAUDIO2_PREFIX "FAILED Stop");
 }
 
 /// Return the playing state
@@ -409,15 +435,14 @@ void CSourceXAudio2::getDirection(NLMISC::CVector& dir) const
  */
 void CSourceXAudio2::setGain(float gain)
 {
-	_SampleVoice->getSourceVoice()->SetVolume(gain);
+	_Gain = gain;
+	if (_SampleVoice) _SampleVoice->getSourceVoice()->SetVolume(gain);
 }
 
 /// Get the gain
 float CSourceXAudio2::getGain() const
 {
-	float volume;
-	_SampleVoice->getSourceVoice()->GetVolume(&volume);
-	return volume;
+	return _Gain;
 }
 
 /** Shift the frequency. 1.0f equals identity, each reduction of 50% equals a pitch shift
@@ -426,7 +451,12 @@ float CSourceXAudio2::getGain() const
 void CSourceXAudio2::setPitch(float pitch)
 {
 	_Pitch = pitch;
-	_SampleVoice->setPitch(_Pitch * _Doppler);
+	if (_SampleVoice)
+	{
+		if (_SampleVoice->getFormat() != Stereo16 && _SampleVoice->getFormat() != Stereo8)
+			_SampleVoice->setPitch(_Pitch * _Doppler);
+		else _SampleVoice->setPitch(_Pitch);
+	}
 }
 
 /// Get the pitch
@@ -447,24 +477,32 @@ bool CSourceXAudio2::getSourceRelativeMode() const
 	return _Relative;
 }
 
+//nd_sources_df.exe : ----- setMinMaxDistances 1.200000, 1000.000000 ----
+//df.exe :            ------- setCone 6.283185, 6.283185 ,0.000010 ----
+//nd_sources_df.exe : ----- setMinMaxDistances 5.000000, 50.000000 -----
+//df.exe :             ----- setCone 6.283185, 6.283185 ,0.000010 ------
+
 /// Set the min and max distances (default: 1, MAX_FLOAT) (3D mode only)
 void CSourceXAudio2::setMinMaxDistances(float mindist, float maxdist, bool deferred)
 {
-	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return;
+	nlinfo("setMinMaxDistances %f, %f", mindist, maxdist);
+	_MinDistance = mindist;
+	_MaxDistance = maxdist;
 }
 
 /// Get the min and max distances
 void CSourceXAudio2::getMinMaxDistances(float& mindist, float& maxdist) const
 {
-	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return;
+	mindist = _MinDistance;
+	maxdist = _MaxDistance;
 }
 
 /// Set the cone angles (in radian) and gain (in [0 , 1]) (default: 2PI, 2PI, 0)
 void CSourceXAudio2::setCone(float innerAngle, float outerAngle, float outerGain)
 {
 	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
+	nlinfo("setCone %f, %f ,%f", innerAngle, outerAngle, outerGain); // outerGain -> inverse to negative (silence the sound)
+	//_Emitter
 	return;
 }
 
