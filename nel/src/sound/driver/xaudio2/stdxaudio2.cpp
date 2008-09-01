@@ -29,3 +29,5 @@
  */
 
 #include "stdxaudio2.h"
+
+/* end of file */

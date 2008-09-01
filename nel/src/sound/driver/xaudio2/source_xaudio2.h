@@ -68,6 +68,7 @@ protected:
 	NLMISC::CMutex _Mutex;/*, _IsPaused*/;
 	float _Doppler;
 	X3DAUDIO_EMITTER _Emitter;
+	X3DAUDIO_CONE _Cone;
 
 	// user vars
 	float _MinDistance;

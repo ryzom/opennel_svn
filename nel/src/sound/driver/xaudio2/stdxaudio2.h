@@ -50,7 +50,4 @@
 // STL includes
 #include <iostream>
 
-//#ifdef NL_OS_WINDOWS
-//#	pragma include_alias(<xaudio2.h>, <xaudio23\xaudio2.h>)
-//#endif
-// now this can be useful for tr1 ^^'
+/* end of file */

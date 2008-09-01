@@ -32,9 +32,6 @@
  * TODO:
  *  - Curve
  *    - _MaxDistance (silence sound after max distance, not required really)
- *  - Cone
- *    - setCone
- *    - getCone
  *  - EAX
  *    - setEAXProperty
  *  - Time
@@ -72,6 +69,16 @@ _MinDistance(1.0f), _MaxDistance(numeric_limits<float>::max())
 	nlwarning("Inititializing CSourceXAudio2");
 
 	memset(&_Emitter, 0, sizeof(_Emitter));
+	memset(&_Cone, 0, sizeof(_Cone));
+
+	_Cone.InnerAngle = X3DAUDIO_2PI;
+    _Cone.OuterAngle = X3DAUDIO_2PI;
+	_Cone.InnerVolume = 1.0f;
+    _Cone.OuterVolume = 0.0f;
+    _Cone.InnerLPF = 1.0f;
+    _Cone.OuterLPF = 0.0f;
+    _Cone.InnerReverb = 1.0f;
+    _Cone.OuterReverb = 0.0f;
 
 	_Emitter.OrientFront.x = 0.0f;
 	_Emitter.OrientFront.y = 0.0f;
@@ -91,6 +98,7 @@ _MinDistance(1.0f), _MaxDistance(numeric_limits<float>::max())
 	_Emitter.ChannelRadius = 0.0f;
 	_Emitter.CurveDistanceScaler = 1.0f;
 	_Emitter.DopplerScaler = 1.0f;
+	_Emitter.pCone = &_Cone;
 }
 
 CSourceXAudio2::~CSourceXAudio2()
@@ -500,17 +508,18 @@ void CSourceXAudio2::getMinMaxDistances(float& mindist, float& maxdist) const
 /// Set the cone angles (in radian) and gain (in [0 , 1]) (default: 2PI, 2PI, 0)
 void CSourceXAudio2::setCone(float innerAngle, float outerAngle, float outerGain)
 {
-	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	nlinfo("setCone %f, %f ,%f", innerAngle, outerAngle, outerGain); // outerGain -> inverse to negative (silence the sound)
-	//_Emitter
-	return;
+	nlinfo("setCone %f, %f ,%f", innerAngle, outerAngle, outerGain);
+	_Cone.InnerAngle = innerAngle;
+	_Cone.OuterAngle = outerAngle;
+	_Cone.OuterVolume = outerGain;
 }
 
 /// Get the cone angles (in radian)
 void CSourceXAudio2::getCone(float& innerAngle, float& outerAngle, float& outerGain) const
 {
-	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return;
+	innerAngle = _Cone.InnerAngle;
+	outerAngle = _Cone.OuterAngle;
+	outerGain = _Cone.OuterVolume;
 }
 
 /// Set any EAX source property if EAX available
