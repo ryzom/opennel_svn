@@ -28,6 +28,16 @@
  * MA 02110-1301 USA.
  */
 
+/*
+ * TODO:
+ *  - Profile
+ *    - writeProfile
+ *  - Bench
+ *    - startBench
+ *    - endBench
+ *    - displayBench
+ */
+
 #include "stdxaudio2.h"
 #include "sound_driver_xaudio2.h"
 
@@ -394,9 +404,9 @@ void CSoundDriverXAudio2::displayBench(NLMISC::CLog *log)
 	return;
 }
 
-/** Play some music syncrhonously (.mp3 etc...) (implemented in fmod only)
+/** Play some music syncrhonously (.ogg etc...) (implemented in fmod only)
  *	FMOD: The File is loaded synchronously in memory, but decompressed by FMod in a thread
- *	Hence if the mp3 fileSize is 5 Mb, it will take only 5 Mb in memory (not the decompressed 40 Mb size)
+ *	Hence if the ogg fileSize is 5 Mb, it will take only 5 Mb in memory (not the decompressed 40 Mb size)
  *	NB: if an old music was played, it is first stop with stopMusic()
  *	\param channel up to 2 channels are available for now 0 and 1 (any other value will fail), so that 2 music can be played concurently
  *	\param CIFile opened file (must use a CIFile if for instance you want to load from a BNP, and CBigFile is static....)
@@ -408,22 +418,24 @@ bool CSoundDriverXAudio2::playMusic(uint channel, NLMISC::CIFile &file, uint xFa
 	return true; // todo
 }
 
-/** Play some music asynchronously (.mp3 etc...) (implemented in fmod only)
+/** Play some music asynchronously (.ogg etc...) (implemented in fmod only)
  *	FMOD: the file is load asynchronously
  *	NB: if an old music was played, it is first stop with stopMusic()
  *	\param channel up to 2 channels are available for now 0 and 1 (any other value will fail), so that 2 music can be played concurently	 *	\param path full file path (no CPath::lookup is done since static)
  *	\param xFadeTime if not 0 the old music played is not stoped imediatly but a cross-fade of xFadeTime (in ms) is made between the 2.
- *	\param fileOffset and fileSize: if not 0, use it to load a .mp3 that reside in a BNP. 
+ *	\param fileOffset and fileSize: if not 0, use it to load a .ogg that reside in a BNP. 
  *		the offset and size have to be retrieved with CBigFile methods. 
  *		e.g.: use either 
- *			playMusicAsync("C:/test/mymusic.mp3");
+ *			playMusicAsync("C:/test/mymusic.ogg");
  *		or
- * 			playMusicAsync("C:/test/mydata.bnp", offsetOfMp3InBnp, sizeOfMp3InBnp);
+ * 			playMusicAsync("C:/test/mydata.bnp", offsetOfOggInBnp, sizeOfOggInBnp);
  *		Notice that you must give the full path of the bnp (eg: "C:/test/mydata.bnp") in path.
  *	\param loop must be true to play the music in loop. 
  */
 bool CSoundDriverXAudio2::playMusicAsync(uint channel, const std::string &path, uint xFadeTime, uint fileOffset, uint fileSize, bool loop)
 {
+	if (!CFile::fileExists(path)) { _MusicChannels[channel]->stop(xFadeTime); return false; }
+
 	_MusicChannels[channel]->play(path, xFadeTime, fileOffset, fileSize, loop);
 	return true;
 }
@@ -458,8 +470,14 @@ void CSoundDriverXAudio2::resumeMusic(uint channel)
  */
 bool CSoundDriverXAudio2::getSongTitle(const std::string &filename, std::string &result, uint fileOffset, uint fileSize)
 {
-	// -- nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return false;
+	std::string filepath = CPath::lookup(filename, false);
+	if (!CFile::fileExists(filepath)) return false;
+	
+	CIFile *ifile = new CIFile(filepath);
+	ifile->seek(fileOffset, NLMISC::IStream::begin);
+	bool res = IMusicBuffer::getSongTitle(CFile::getFilename(filepath), ifile, result);
+	delete ifile;
+	return res;
 }
 
 /** Return true if a song is finished.

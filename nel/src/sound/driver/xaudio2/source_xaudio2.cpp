@@ -28,6 +28,22 @@
  * MA 02110-1301 USA.
  */
 
+/*
+ * TODO:
+ *  - Curve
+ *    - setMinMaxDistances
+ *    - getMinMaxDistances
+ *  - Cone
+ *    - setCone
+ *    - getCone
+ *  - EAX
+ *    - setEAXProperty
+ *  - Time
+ *    - getTime
+ */
+
+// curve cone eax time
+
 #include "stdxaudio2.h"
 #include "source_xaudio2.h"
 

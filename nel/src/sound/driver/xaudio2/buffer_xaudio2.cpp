@@ -28,6 +28,17 @@
  * MA 02110-1301 USA.
  */
 
+/*
+ * TODO:
+ *  - ADPCM
+ *    - ADPCMWAVEFORMAT
+ *  - Fill More
+ *    - fillBuffer
+ *    - isFillMoreSupported
+ *    - setSize
+ *    - fillMore
+ */
+
 #include "stdxaudio2.h"
 #include "buffer_xaudio2.h"
 
@@ -65,22 +76,6 @@ CBufferXAudio2::~CBufferXAudio2()
 
 bool CBufferXAudio2::readWavBuffer(const std::string &name, uint8 *wavData, uint dataSize)
 {
-	nlerror(NLSOUND_XAUDIO2_PREFIX "not implemented");
-	return false;
-}
-
-bool CBufferXAudio2::readRawBuffer(const std::string &name, uint8 *rawData, uint dataSize, TSampleFormat format, uint32 frequency)
-{
-	// Free any existing _Data if it exists
-	delete[] _Data; _Data = NULL;
-
-	// Copy stuff from params
-	_Format = format;
-	_Size = dataSize;
-	_Data = new BYTE[dataSize];
-	memcpy(_Data, rawData, dataSize);
-	_Freq = frequency;
-
 	// "Allocate the sample" buffer or something
 	static NLMISC::TStringId empty(CSoundDriverXAudio2::getInstance()->getStringMapper()->map(""));
 	NLMISC::TStringId nameId = CSoundDriverXAudio2::getInstance()->getStringMapper()->map(CFile::getFilenameWithoutExtension(name));
@@ -88,6 +83,128 @@ bool CBufferXAudio2::readRawBuffer(const std::string &name, uint8 *rawData, uint
 	if (nameId != empty) nlassertex(nameId == _Name, ("The preset buffer name doesn't match!"));
 	_Name = nameId;
 
+	// Free any existing _Data if it exists
+	delete[] _Data; _Data = NULL;
+
+	// Create mmio stuff
+	MMIOINFO mmioinfo;
+	memset(&mmioinfo, 0, sizeof(MMIOINFO));
+	mmioinfo.fccIOProc = FOURCC_MEM;
+	mmioinfo.pchBuffer = (HPSTR)wavData;
+	mmioinfo.cchBuffer = dataSize;
+	HMMIO hmmio = mmioOpen(NULL, &mmioinfo, MMIO_READ | MMIO_DENYWRITE);
+	if (!hmmio) { throw ESoundDriver("Failed to open the file"); }
+
+	// Find wave
+	MMCKINFO mmckinforiff;
+	memset(&mmckinforiff, 0, sizeof(MMCKINFO));
+	mmckinforiff.fccType = mmioFOURCC('W', 'A', 'V', 'E');
+	if (mmioDescend(hmmio, &mmckinforiff, NULL, MMIO_FINDRIFF) != MMSYSERR_NOERROR) { mmioClose(hmmio, 0); throw ESoundDriver("mmioDescend WAVE failed"); }
+
+	// Find fmt
+	MMCKINFO mmckinfofmt;
+	memset(&mmckinfofmt, 0, sizeof(MMCKINFO));
+	mmckinfofmt.ckid = mmioFOURCC('f', 'm', 't', ' '); 
+	if (mmioDescend(hmmio, &mmckinfofmt, &mmckinforiff, MMIO_FINDCHUNK) != MMSYSERR_NOERROR) { mmioClose(hmmio, 0); throw ESoundDriver("mmioDescend fmt failed"); }
+	WAVEFORMATEX *wavefmt = (WAVEFORMATEX *)(&wavData[mmckinfofmt.dwDataOffset]);
+	if (mmioAscend(hmmio, &mmckinfofmt, 0) != MMSYSERR_NOERROR) { mmioClose(hmmio, 0); throw ESoundDriver("mmioAscend fmt failed"); }
+
+	// Find data
+	MMCKINFO mmckinfodata;
+	memset(&mmckinfodata, 0, sizeof(MMCKINFO));
+	mmckinfodata.ckid = mmioFOURCC('d', 'a', 't', 'a');
+	if (mmioDescend(hmmio, &mmckinfodata, &mmckinforiff, MMIO_FINDCHUNK) != MMSYSERR_NOERROR) { mmioClose(hmmio, 0); throw ESoundDriver("mmioDescend data failed"); }
+	BYTE *wavedata = (BYTE *)(&wavData[mmckinfodata.dwDataOffset]);
+	if (mmioAscend(hmmio, &mmckinfodata, 0) != MMSYSERR_NOERROR) { mmioClose(hmmio, 0); throw ESoundDriver("mmioAscend data failed"); }
+
+	// Close mmio
+	mmioClose(hmmio, 0);
+
+	// Get format
+	switch (wavefmt->nChannels)
+	{
+	case 1:
+		switch (wavefmt->wFormatTag)
+		{
+		case WAVE_FORMAT_PCM:
+			switch (wavefmt->wBitsPerSample)
+			{
+			case 8:
+				_Format = Mono8;
+				break;
+			case 16:
+				_Format = Mono16;
+				break;
+			default:
+				throw ESoundDriver(toString("wBitsPerSample invalid (%i)", (sint32)wavefmt->wBitsPerSample));
+			}
+			break;
+		case WAVE_FORMAT_ADPCM:
+			switch (wavefmt->wBitsPerSample)
+			{
+			case 16:
+				_Format = Mono16ADPCM;
+				break;
+			default:
+				throw ESoundDriver(toString("wBitsPerSample invalid (%i)", (sint32)wavefmt->wBitsPerSample));
+			}
+			break;
+		default:
+			throw ESoundDriver(toString("wFormatTag invalid (%i)", (sint32)wavefmt->wFormatTag));
+		}
+		break;
+	case 2:
+		switch (wavefmt->wFormatTag)
+		{
+		case WAVE_FORMAT_PCM:
+			switch (wavefmt->wBitsPerSample)
+			{
+			case 8:
+				_Format = Stereo8;
+				break;
+			case 16:
+				_Format = Stereo16;
+				break;
+			default:
+				throw ESoundDriver(toString("wBitsPerSample invalid (%i)", (sint32)wavefmt->wBitsPerSample));
+			}
+			break;
+		default:
+			throw ESoundDriver(toString("wFormatTag invalid (%i)", (sint32)wavefmt->wFormatTag));
+		}
+		break;
+	default:
+		throw ESoundDriver(toString("nChannels invalid (%i)", (sint32)wavefmt->nChannels));
+	}
+
+	// Get frequency
+	_Freq = wavefmt->nSamplesPerSec;
+
+	// Copy stuff
+	_Size = mmckinfodata.cksize;
+	_Data = new uint8[_Size];
+	CFastMem::memcpy(_Data, wavedata, _Size);
+	return true;
+}
+
+bool CBufferXAudio2::readRawBuffer(const std::string &name, uint8 *rawData, uint dataSize, TSampleFormat format, uint32 frequency)
+{
+	// "Allocate the sample" buffer or something
+	static NLMISC::TStringId empty(CSoundDriverXAudio2::getInstance()->getStringMapper()->map(""));
+	NLMISC::TStringId nameId = CSoundDriverXAudio2::getInstance()->getStringMapper()->map(CFile::getFilenameWithoutExtension(name));
+	// If name has been preset, it must match.
+	if (nameId != empty) nlassertex(nameId == _Name, ("The preset buffer name doesn't match!"));
+	_Name = nameId;
+
+	// Free any existing _Data if it exists
+	delete[] _Data; _Data = NULL;
+
+	// Copy stuff from params
+	_Format = format;
+	_Size = dataSize;
+	_Data = new BYTE[dataSize];
+	CFastMem::memcpy(_Data, rawData, dataSize);
+	_Freq = frequency;
 	return true;
 }
 
@@ -126,14 +243,14 @@ float CBufferXAudio2::getDuration() const
 {
 	// from NLSOUND DSound Driver, Copyright (C)  2001 Nevrax Ltd.
 
-    float frames = (float) _Size;
+    float frames = (float)_Size;
 
     switch (_Format) 
 	{
     case Mono8:
         break;
     case Mono16ADPCM:
-        frames *= 2.0f;
+        frames *= 2.0f; // don't think this is right...
         break;
     case Mono16:
         frames /= 2.0f;
@@ -146,7 +263,7 @@ float CBufferXAudio2::getDuration() const
         break;
     }
 
-    return 1000.0f * frames / (float) _Freq;
+    return 1000.0f * frames / (float)_Freq;
 }
 
 /// Return true if the buffer is stereo, false if mono

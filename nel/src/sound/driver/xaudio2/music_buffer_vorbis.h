@@ -38,7 +38,14 @@
 // NeL includes
 
 // 3rd Party includes
+#ifdef NL_OS_WINDOWS
+#	pragma warning( push )
+#	pragma warning( disable : 4244 )
+#endif
 #include <vorbis/vorbisfile.h>
+#ifdef NL_OS_WINDOWS
+#	pragma warning( pop )
+#endif
 
 // STL includes
 
@@ -66,6 +73,8 @@ protected:
 public:
 	CMusicBufferVorbis(NLMISC::IStream *stream, bool loop);
 	virtual ~CMusicBufferVorbis();
+
+	static bool getSongTitle(const std::string &fileName, NLMISC::IStream *stream, std::string &result);
 
 	inline NLMISC::IStream *getStream() { return _Stream; }
 	inline uint32 getStreamSize() { return _StreamSize; }

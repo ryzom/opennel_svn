@@ -28,6 +28,12 @@
  * MA 02110-1301 USA.
  */
 
+/*
+ * TODO:
+ *  - ADPCM
+ *    - ADPCMWAVEFORMAT
+ */
+
 #include "stdxaudio2.h"
 #include "sample_voice_xaudio2.h"
 
@@ -54,7 +60,7 @@ CSampleVoiceXAudio2::CSampleVoiceXAudio2(CSourceXAudio2 *owner, TSampleFormat fo
 
 	HRESULT hr;
 
-	WAVEFORMATEX wfe;
+	WAVEFORMATEX wfe; // todo: ADPCMWAVEFORMAT // wSamplesPerBlock // wNumCoef // aCoef
 	wfe.cbSize = 0;
 
 	nlassert(format == Mono16 || format == Mono16ADPCM || format == Mono16 || format == Stereo16 || format == Stereo8);

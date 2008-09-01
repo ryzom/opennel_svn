@@ -28,6 +28,13 @@
  * MA 02110-1301 USA.
  */
 
+/*
+ * TODO:
+ *  - EAX
+ *    - setEnvironment
+ *    - setEAXProperty
+ */
+
 #include "stdxaudio2.h"
 #include "listener_xaudio2.h"
 
@@ -55,7 +62,7 @@ CListenerXAudio2::CListenerXAudio2(CSoundDriverXAudio2 *soundDriver)
 
 	_Listener.OrientFront.x = 0.0f;
 	_Listener.OrientFront.y = 0.0f;
-	_Listener.OrientFront.z = 0.0f;
+	_Listener.OrientFront.z = 1.0f;
 	_Listener.OrientTop.x = 0.0f;
 	_Listener.OrientTop.y = 1.0f;
 	_Listener.OrientTop.z = 0.0f;

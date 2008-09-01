@@ -55,16 +55,36 @@ IMusicBuffer::~IMusicBuffer()
 	
 }
 
-IMusicBuffer *IMusicBuffer::createMusicBuffer(const std::string &streamName, NLMISC::IStream *stream, bool loop)
+std::string IMusicBuffer::getFileExtension(const std::string &fileName)
 {
 	vector<std::string> filename;
-	explode<std::string>(streamName, ".", filename, true);
+	explode<std::string>(fileName, ".", filename, true);
+	return toLower(filename[filename.size() - 1]);
+}
+
+bool IMusicBuffer::getSongTitle(const std::string &fileName, NLMISC::IStream *stream, std::string &result)
+{
+	std::string file_ext = getFileExtension(fileName);
+	if (file_ext == "ogg")
+	{
+		return CMusicBufferVorbis::getSongTitle(fileName, stream, result);
+	}
+	else
+	{
+		nlwarning("Music file extension unknown: '%s'", file_ext.c_str());
+		result = fileName;
+		return false;
+	}
+}
+
+IMusicBuffer *IMusicBuffer::createMusicBuffer(const std::string &streamName, NLMISC::IStream *stream, bool loop)
+{
 	if (!stream)
 	{
 		nlwarning("Stream is NULL");
 		return NULL;
 	}
-	std::string file_ext = toLower(filename[filename.size() - 1]);
+	std::string file_ext = getFileExtension(streamName);
 	if (file_ext == "ogg")
 	{
 		return new CMusicBufferVorbis(stream, loop);

@@ -71,10 +71,15 @@ public:
 	virtual bool isMusicEnded() =0;
 	virtual float getLength() =0; // total time in seconds
 
+	static bool getSongTitle(const std::string &fileName, NLMISC::IStream *stream, std::string &result);
+
 	/// create may return NULL if unknown extension
 	static IMusicBuffer *createMusicBuffer(const std::string &streamName, NLMISC::IStream *stream, bool loop);
 	inline static void destroyMusicBuffer(IMusicBuffer *musicBuffer) { musicBuffer->destroyMusicBuffer(); }
 	inline void destroyMusicBuffer() { delete this; }
+
+private:
+	static std::string getFileExtension(const std::string &fileName);
 }; /* class IMusicBuffer */
 
 } /* namespace NLSOUND */
